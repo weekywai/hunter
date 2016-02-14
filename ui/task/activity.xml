@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'activity'" name="'shopView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" name="'allTip'" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'任 务'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<VBox skinName="'rewardImg7'" topPt="25" >
+		<Button name="'lianxudengr'" defaults="'rewardBtn1,HightLight'" align="'center,middle'" leftPt="9" topPt="10" on-click="
+			#ViewStack(taskLine).show('taskLine1');
+		">
+			<Text defaults="'Gold'" format-size="35" text="'主线任务'"/>
+		</Button>
+		<Button name="'huoyuedu'" defaults="'rewardBtn2,HightLight'" align="'center,middle'" leftPt="7.5" topPt="63.5" on-click="
+			#ViewStack(taskLine).show('taskLine2');
+		">
+			<Text defaults="'Green'" format-size="35" text="'支线任务'"/>
+		</Button>
+	</VBox>
+	<Bmp skinName="'rewardImg1'" rightPt="0" bottomPt="11"/>
+	<!--<ViewStack id="'taskLine'" widthPt="100" heightPt="100" leftPt="9" topPt="23" trans:Fade-duration="0.1">-->
+	<ViewStack id="'taskLine'" widthPt="100" heightPt="100" leftPt="9" topPt="23" >
+		<Scroll name="'taskLine1'" widthPt="100" heightPt="66"  defaults="'Screen,Level1'" >
+			<VBox name="'task1'" widthPt="100">
+				<!--<meta:repeat counter="cnt" times="10">
+					<meta:include name="'list'+cnt" src="ui/task/task2.xml"/>
+				</meta:repeat>-->
+			</VBox>
+		</Scroll>
+		<Scroll name="'taskLine2'" widthPt="100" heightPt="66" defaults="'Screen,Level1'" >
+			<VBox name="'task2'" widthPt="100">
+				<!--<meta:repeat counter="cnt" times="10">
+					<meta:include name="'list'+cnt" src="ui/task/task1.xml"/>
+				</meta:repeat>-->
+			</VBox>
+		</Scroll>
+	</ViewStack>
+</Widget>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Box id="'resurrection'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
+	<Widget skinName="'SuerPopupBg'" w="718" h="332">
+		<Button name="'closeBtn'" rightPt="7" topPt="90" text="'退出'"
+			defaults="'submitBtn,HightLight'" 
+		/>
+		<Button name="'suerBtn'" leftPt="7" topPt="90" text="'是'"
+			defaults="'submitBtn,HightLight'" 
+		/>	
+		
+		<Box widthPt="100" heightPt="100" align="'center,middle'">
+			<Text name="'Load'" defaults="'TitleWrite'" format-size="36" text="@msg" format-align="'center'" />
+		</Box>
+		
+	</Widget>
+	
+</Box>

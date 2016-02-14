@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--<HBox widthPt="100">
+	<Widget skinName="'storeImg1'">
+		<Box name="'goodsImg'" skinName="'forgeImg12'"topPt="17.5" leftPt="4">-->
+			<!--<Bmp src="'ui/105.png'"/>-->
+<!--		</Box>
+		<Text name="'goodsName'" defaults="'OftenD'" text="'装备名称'" topPt="25" leftPt="18.5" />
+		<HBox childPadding="5" topPt="52" leftPt="20">
+			<Text name="'typeTxt'" defaults="'BlueShadow'" format-size="19" text="'攻击'"/>
+			<Text name="'typeValue'" defaults="'RedShadow'" format-size="19" text="'检测检测'"/>
+		</HBox>
+		<HBox childPadding="5" topPt="63" leftPt="20">
+			<Text name="'characterTxt'" defaults="'BlueShadow'" format-size="19" text="'特性'"/>
+			<Text name="'characterDesc'" defaults="'Small'" format-size="19" text="'检测字体'"/>
+		</HBox>
+		<Text name="'material'" topPt="53" leftPt="20" defaults="'Desc'" text="''" w="115" h="30"/>
+		<Text defaults="'SmallBull'" text="'特性描述'" topPt="11" leftPt="42"/>
+		<Text name="'description'" defaults="'Yellow1'" autoWordWrap="true" format-size="18" w="270" text="'描述'" topPt="35" leftPt="41" />
+		<Text name="'level'" defaults="'Green'" text="' '"  topPt="10" leftPt="12" />
+		<Text name="'Lv'" defaults="'Gold'" text="'Lv80/90'"  topPt="65" leftPt="5" />
+		<Bmp skinName="'storeImg2'" leftPt="-1" topPt="22"/>
+		<Bmp name="'color'" skinName="'storelvImg1'" leftPt="35.3" topPt="35"/>
+		<VBox topPt="38" rightPt="6" align="'right,bottom'">
+			<Text name="'goodsNum'" defaults="'Green'" text="'0/10'" topPt="30" leftPt="40"/>
+			<Button name="'buyBtn'" defaults="'Givebtn,HightLight'" leftPt="13" />		
+			
+			<HBox childPadding="5" rightPt="0">
+				<Text name="'bulletTxt'" defaults="'Green'" text="'子弹数 0/0'" visible="false"/>
+				<Button name="'rechargeOneBtn'" text="'购买弹夹'" defaults="'Givebtn,HightLight'" leftPt="13" visible="false" />
+				<Button name="'rechargeBtn'" text="'补满子弹'" defaults="'Givebtn,HightLight'" leftPt="13" visible="false" />	
+			</HBox>
+		</VBox>
+	</Widget>
+</HBox>-->
+
+<Widget widthPt="100" skinName="'storeBtn8'">
+	<Radio name="'weaponRadio'" defaults="'storeScroll'"  group="'group2'" widthPt="100" >
+		<HBox name="'weaponBmp'" widthPt="100" align="'middle,center'">
+			<Text name="'text'" text="''" defaults="'OftenD'" mouseEnabled="false"/>
+			<!--<Bmp skinName="'qiang1'" leftPt="20" topPt="10" scaleX="0.35" scaleY="0.35" mouseEnabled="false"/>-->
+		</HBox>
+	</Radio>	
+</Widget>

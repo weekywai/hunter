@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--BOSS框-->	
+<Widget name="'bossBar'" widthPt="100" skinName="'fightImg12'" rightPt="-100" topPt="0" on-display="$this.rightPt=-100.5;$this.tween(0.6, {rightPt:2});" >
+	<Progress name="'bossHP'" w="385" h="18" skin:Paint-color="0x111122" bar-skin:Gradient-colors = "[0x22ea27, 0x229500]"
+skin:Paint-corners="[25]"  bar-skin:Gradient-corners="[25]"  scaleX="-1" value="100" rightPt="-43" topPt="35"/>
+	<Text name="'hpPercent'" defaults="'YellowShadow'" leftPt="32" topPt="32" format-size="18" text="'100/100'"/>
+	<Text name="'name'" defaults="'Title'" leftPt="8" topPt="17" format-size="20" text="'BOSS nmae'"/>
+	<!--BOSS头像-->
+	<!--<Bmp name="'headIco'" widthPt="100" skinName="'fightImg13'" rightPt="4.5" topPt="24.3" />-->
+</Widget>

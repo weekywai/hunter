@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Floating id="'bieId'" name="'biePopup'" widthPt="100" heightPt="100"  skin:Paint-color = "0x000000" skin:Paint-alpha = "0.5" on-resize=" 
+		$this.scaleContent = $Lib.current.stage.stageWidth / 1280;" mouseEnabled="true">
+    <ViewStack id="'floatBie'"  wrap="true" widthPt="100" heightPt="100"  on-display="$this.show(@content);"   >
+		
+		<Box id="'noviceCourse'" name="'noviceCourseView'" widthPt="100" heightPt="100" defaults="'Screen,Level1'" topPt="20" leftPt="10"  scaleX="0.8" scaleY="0.8" >
+			
+			<Widget name="'noviceWidget1'" skinName="'SuerPopupBg'" w="918" h="483">
+				<Button name="'payBmp'" defaults="'payBtn,HightLight'" rightPt="-5" topPt="-70"   visible="false" />
+				<Button name="'payBmp2'" defaults="'payBtn,HightLight'" rightPt="-5" topPt="20"  visible="false" />
+				<Button name="'leftBmp'" defaults="'zhuangbeiBtn,HightLight'"  leftPt="3" topPt="-30" visible="false" />
+				<Button name="'rightBmp'" defaults="'zhuangbeiBtn,HightLight'"  rightPt="4.5" topPt="-30" visible="false" />
+				<Bmp name="'Karina'" skinName="'actorImg2'" leftPt="-6" topPt="-15"/> 
+				<Bmp name="'KarinaName'" skinName="'noviceImg6'" leftPt="4" bottomPt="2" scaleX="0.9" scaleY="0.9"/> 
+				<Text name="'noviceName'" text="@msg" autoWordWrap="true" w="440" defaults="'Write'" topPt="25" leftPt="30" />
+				<Button name="'noviceCourseBtn'" rightPt="3" topPt="70" scaleX="0.8" scaleY="0.8" defaults="'submitBtn,HightLight'" visible="false"/>
+				<Button name="'shouziBtn'" defaults="'shouziBtn,HightLight'"  rightPt="10" topPt="64" visible="false" align="'top,left'">
+					<Widget mouseEnabled="false">
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat();" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.2);" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.4);" />
+					</Widget>
+				</Button>
+			</Widget>
+		</Box>
+		
+		<Box id="'noviceCourseCopy'" name="'noviceCourseViewCopy'" widthPt="100" heightPt="100" defaults="'Screen,Level1'"  topPt="20" leftPt="20"  scaleX="0.8" scaleY="0.8" >
+			
+			<Widget name="'noviceWidget2'" skinName="'SuerPopupBg'"  w="918" h="483">
+				<Text name="'noviceText'" text="@msg" autoWordWrap="true" w="440" defaults="'Write'" topPt="25" leftPt="18" />
+				<Button name="'shouziBtnCopy'" defaults="'shouziBtn,HightLight'"  leftPt="-42" topPt="95"  align="'top,left'">
+					<Widget leftPt="0" topPt="0" mouseEnabled="false">
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat();" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.2);" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.4);" />
+					</Widget>
+				</Button>
+				<Button name="'shouziBtnCopy2'" defaults="'shouziBtn,HightLight'"  leftPt="-28" topPt="107"  visible="false" align="'top,left'">
+					<Widget leftPt="0" topPt="0" mouseEnabled="false">
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat();" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.2);" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.4);" />
+					</Widget>
+				</Button>
+				<Bmp name="'KarinaCopy'" skinName="'actorImg2'" scaleX="-1" rightPt="-40" topPt="-15" /> 
+				<Bmp name="'KarinaNameCopy'" skinName="'noviceImg6'" rightPt="3" bottomPt="2" scaleX="0.9" scaleY="0.9" />
+			</Widget>
+		</Box>
+		<Box id="'noviceCourseCopy2'" name="'noviceCourseViewCopy2'" widthPt="100" heightPt="100" defaults="'Screen,Level1'"   scaleX="0.8" scaleY="0.8" >
+			<Widget name="'noviceWidget3'" widthPt="100" heightPt="100" >
+				<Button name="'payBmp3'" defaults="'payBtn,HightLight'" rightPt="-10" topPt="50"   visible="false" />
+				<Button name="'shouziBtn3'" defaults="'shouziBtn,HightLight'"  rightPt="10" topPt="64"  visible="false" align="'top,left'">
+					<Widget leftPt="0" topPt="0" mouseEnabled="false">
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat();" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.2);" />
+						<Bmp skinName="'noviceImg10'" left="-22" top="-22" on-display="$this.tween(0.6,{alpha:0,scaleX:3,scaleY:3,x:-73,y:-73}).repeat().delay(0.4);" />
+					</Widget>
+				</Button>
+			</Widget>
+		</Box>
+    </ViewStack>
+</Floating>

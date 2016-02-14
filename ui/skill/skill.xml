@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'skill'" name="'skillView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'技 能'" defaults="'Tip'" topPt="6" />
+	</VBox >
+	<HBox align="'center,top'" topPt="19" childPadding="-33">
+		<VBox name="'skill1'" skinName="'skillImg1'" align="'center,middle'" >
+			<VBox name="'detail'" skinName="'skillImg11'" w="275" h="196" topPt="92" align="'center,top'" visible="false">
+				<Text name="'prop'" defaults="'TopMenu'" format-size="26" text="'能量消耗:5\n冷却时间:3\n'" />
+				<Text name="'des'" defaults="'TopMenu'" format-size="20" w="180" label-wordWrap="true" text="'使用手榴弹攻击10码内所以敌人，造成3倍武器攻击伤害'" />
+			</VBox>
+			<Text name="'intro'" defaults="'TopMenu'" topPt="6" format-size="20" align="'top,center'" text="'已解锁'"/>
+			<Button name="'skillImg1'" defaults="'skill1,HightLight'" topPt="18"/>
+			<Button name="'skill_Btn1'" defaults="'skillBtn'" align="'center,middle'" topPt="77" >
+				<Text defaults="'Gold'" format-size="30" text="'手榴弹'"/>
+			</Button>
+		</VBox>
+		<VBox name="'skill2'" skinName="'skillImg1'" align="'center,middle'" >
+			<VBox name="'detail'" skinName="'skillImg11'" w="275" h="196" topPt="92" align="'center,top'" visible="false">
+				<Text name="'prop'" defaults="'TopMenu'" format-size="26" text="'能量消耗:20\n冷却时间:8\n'" />
+				<Text name="'des'" defaults="'TopMenu'" format-size="20" w="180" label-wordWrap="true" text="'求救总部释放远程武器支持，对所有敌人造成10倍武器攻击的伤害'" />
+			</VBox>
+			<Text name="'intro'" defaults="'TopMenu'" topPt="6" format-size="20" text="'充值任意金额'"/>
+			<Button name="'skillImg2'" defaults="'skill2,HightLight'" topPt="18" />
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="1.5" scaleY="1.5" leftPt="38" topPt="29" visible="true" mouseEnabled="false"></Bmp>
+			<Button name="'skill_Btn2'" defaults="'skillBtn'" align="'center,middle'" topPt="77" >
+				<Text defaults="'Gold'" format-size="30" text="'空中支援'"/>
+			</Button>
+		</VBox>	
+		<VBox name="'skill3'" skinName="'skillImg1'"  align="'center,middle'">
+			<VBox name="'detail'" skinName="'skillImg11'" w="275" h="196" topPt="92" align="'center,top'" visible="false">
+				<Text name="'prop'" defaults="'TopMenu'" format-size="26" text="'能量消耗:25\n冷却时间:10\n'" />
+				<Text name="'des'" defaults="'TopMenu'" format-size="20" w="180" label-wordWrap="true" text="'进入暴走状态，攻击和攻击速度增加100%，持续15秒'" />
+			</VBox>
+			<Text name="'intro'" defaults="'TopMenu'" topPt="6" format-size="20" text="'累计充值10元'"/>
+			<Button name="'skillImg3'" defaults="'skill3,HightLight'" topPt="18" />
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="1.5" scaleY="1.5" leftPt="38" topPt="29" visible="true" mouseEnabled="false"></Bmp>
+			<Button name="'skill_Btn3'" defaults="'skillBtn'" align="'center,middle'" topPt="77" >
+				<Text defaults="'Gold'" format-size="30" text="'超级火力'"/>
+			</Button>
+		</VBox>	
+		<VBox name="'skill4'" skinName="'skillImg1'"  align="'center,middle'">
+			<VBox name="'detail'" skinName="'skillImg11'" w="275" h="196" topPt="92" align="'center,top'" visible="false">
+				<Text name="'prop'" defaults="'TopMenu'" format-size="26" text="'能量消耗:50\n冷却时间:15\n'" />
+				<Text name="'des'" defaults="'TopMenu'" format-size="20" w="180" label-wordWrap="true" text="'免疫一切伤害，持续10秒'" />
+			</VBox>
+			<Text name="'intro'" defaults="'TopMenu'" topPt="6" format-size="20" text="'累计充值50元'"/>
+			<Button name="'skillImg4'" defaults="'skill4,HightLight'" topPt="18" />
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="1.5" scaleY="1.5" leftPt="38" topPt="29" visible="true" mouseEnabled="false"></Bmp>
+			<Button name="'skill_Btn4'" defaults="'skillBtn'" align="'center,middle'" topPt="77" >
+			<Text defaults="'Gold'" format-size="30" text="'离子护罩'"/>
+		</Button>
+		</VBox>	
+		<VBox name="'skill5'" skinName="'skillImg1'"  align="'center,middle'">
+			<VBox name="'detail'" skinName="'skillImg11'" w="275" h="196" topPt="92" align="'center,top'" visible="false">
+				<Text name="'prop'" defaults="'TopMenu'" format-size="26" text="'能量消耗:80\n冷却时间:30\n'" />
+				<Text name="'des'" defaults="'TopMenu'" format-size="20" w="180" label-wordWrap="true" text="'恢复50%的生命值'" />
+			</VBox>
+			<Text name="'intro'" defaults="'TopMenu'" topPt="6" format-size="20" text="'累计充值100元'"/>
+			<Button name="'skillImg5'" defaults="'skill5,HightLight'" topPt="18" />
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="1.5" scaleY="1.5" leftPt="38" topPt="29" visible="true" mouseEnabled="false"></Bmp>
+			<Button name="'skill_Btn5'" defaults="'skillBtn'" align="'center,middle'" topPt="77" >
+				<Text defaults="'Gold'" format-size="30" text="'治愈'"/>
+			</Button>
+		</VBox>	
+	</HBox>
+	
+	
+	
+	
+	
+	
+	
+	<!--技能锁-->
+	<!--<Bmp name="'skill1'" skinName="'skillImg9'" scaleX="1.5" scaleY="1.5" topPt="25" leftPt="7.6" visible="true" ></Bmp>-->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!--<Button name="'selectEquip'" defaults="'selectBoxBtn,HightLight'" align="'left,top'" topPt="30" leftPt="31.3"></Button>-->
+</Widget>

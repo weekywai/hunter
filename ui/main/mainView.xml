@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'UIMain'" name="'mainView'" widthPt="100" heightPt="100" >
+	<!--模型舞台-->
+	<Widget name="'modelStage'" topPt="60" leftPt="35">
+		
+	</Widget>
+	<!--上下角色属性on-display="var player:SpriteActor = new SpriteActor('armature/actor/','model');$this.addChild(player);"-->
+	<Widget widthPt="100" heightPt="100" topPt="0.5" leftPt="14">
+		<Widget skinName="'mainImg27'" leftPt="8" topPt="25.5">
+			<Button name="'leftEquipBtn'" defaults="'mainEquipBtn,HightLight'" align="'center,middle'" leftPt="15" topPt="12">
+			</Button>
+		</Widget>
+		<Widget skinName="'mainImg27'" leftPt="51.5" topPt="25.5">
+			<Button name="'rightEquipBtn'" defaults="'mainEquipBtn,HightLight'" align="'center,middle'" leftPt="15" topPt="12">
+			</Button>
+		</Widget>
+		<!--<Widget skinName="'mainImg8'" topPt="8.5">-->
+		<VBox skinName="'mainImg8'" topPt="8.5">
+			<Text name="'playerName'" text="'角色：'" label-multiline="false" defaults="'Title'" topPt="35" leftPt="15" />
+			<Text text="'战力：'" defaults="'Title'" label-multiline="false"  topPt="35" leftPt="53.5" />
+			<Text name="'Att'" text="'0'" defaults="'Title'" label-multiline="false" topPt="37" leftPt="63" />
+			<!--<Text text="'生命：'" label-multiline="false" defaults="'Title'" topPt="35" leftPt="69" />
+			<Text name="'HP'" label-multiline="false" text="'0'" defaults="'Title'" topPt="37" leftPt="78" />-->
+		</VBox>
+		<!--</Widget>-->
+		<Widget skinName="'mainImg9'" bottom="0" >
+			<Text name="'attType'" text="'武器攻击'" label-multiline="false" defaults="'TitleWrite'" topPt="60" leftPt="15.5" />
+			<Text name="'defensType'" text="'角色生命'" label-multiline="false" defaults="'TitleWrite'" topPt="60" leftPt="51" />
+			<Bmp name="'attValue'" skinName="'mainImg10'" topPt="60" leftPt="29.5" />
+			<Bmp name="'defensValue'" skinName="'mainImg10'" topPt="60" leftPt="65.5" />
+		</Widget>
+	</Widget>
+	<!--四大按钮-->
+	
+	<VBox childPadding="40" topPt="22" leftPt="0" widthPt="100" heightPt="100" align="'left,top'">
+		<Widget skinName="'mainImg2'">
+			<Radio name="'leftUpBtn_1'" defaults="'RaidoUp'" group="'group1'" leftPt="22" topPt="17" on-click="
+				var vs = #ViewStack(mainFourBtn);
+                if( !Std.is(vs.trans, $Fade) ){
+                    vs.trans = new $Fade();
+                    vs.trans.duration = 0.1;
+                }
+				vs.show('leftUpBtn');
+				"
+				/>
+			<Bmp skinName="'mainImg4'" leftPt="38" topPt="36" mouseEnabled="false" />
+			<!--<ViewStack id="'aaaa'" wrap="true" widthPt="100" h="500" trans:Fade-duration="1" overflow="false">-->
+				
+			<!--</ViewStack>-->
+		</Widget>
+		<Widget skinName="'mainImg3'">
+			<Radio name="'leftDownBtn_1'" defaults="'RaidoDown'" group="'group1'" leftPt="22" topPt="11" on-click="
+				var vs = #ViewStack(mainFourBtn);
+                if( !Std.is(vs.trans, $Fade) ){
+                    vs.trans = new $Fade();
+                    vs.trans.duration = 0.1;
+                }
+				vs.show('leftDownBtn');
+				"/>
+			<Bmp skinName="'mainImg5'" leftPt="38" topPt="30" mouseEnabled="false"/>
+			
+		</Widget>
+	</VBox>
+	
+	<VBox childPadding="40" topPt="22" leftPt="100" widthPt="100" heightPt="100" align="'left,top'" scaleX="-1">
+		<Widget skinName="'mainImg2'">
+			<Radio name="'rightUpBtn_1'" defaults="'RaidoUp'" group="'group1'" leftPt="21" topPt="17" on-click="
+				var vs = #ViewStack(mainFourBtn);
+                if( !Std.is(vs.trans, $Fade) ){
+                    vs.trans = new $Fade();
+                    vs.trans.duration = 0;
+                }
+				vs.show('rightUpBtn');
+				"/>
+			<Bmp skinName="'mainImg7'" scaleX="-1" leftPt="73" topPt="37" mouseEnabled="false" />
+			
+		</Widget>
+		<Widget skinName="'mainImg3'" >
+			<Radio name="'rightDownBtn_1'" defaults="'RaidoDown'" group="'group1'" leftPt="22" topPt="12" on-click="
+				var vs = #ViewStack(mainFourBtn);
+                if( !Std.is(vs.trans, $Fade) ){
+                    vs.trans = new $Fade();
+                    vs.trans.duration = 0;
+                }
+				vs.show('rightDownBtn');
+				"/>
+			<Bmp skinName="'mainImg6'" scaleX="-1" leftPt="75" topPt="28" mouseEnabled="false"/>
+		</Widget>
+	</VBox>
+	
+	<ViewStack id="'mainFourBtn'" widthPt="100" heightPt="100">
+		<Widget name="'kong'"></Widget>
+		<Widget name="'leftUpBtn'" widthPt="100" heightPt="100">
+			<Bmp  skinName="'mainImg12'" topPt="40" leftPt="21" scaleX="-1" />
+			<!--<Bmp  skinName="'mainImg14'" topPt="42" leftPt="16" />-->
+			<!--商城 --活动 -->
+			<Button name="'shopBtn'" defaults="'mainFunBtn_1,HightLight'" leftPt="12.8" topPt="45.5" align="'center,middle'" >   
+				<Bmp skinName="'mainImg17'" mouseEnabled="false" />
+			</Button>
+			<!--任务-->
+			<!--<Button defaults="'mainFunBtn_2,HightLight'" leftPt="16.5" topPt="56.5" align="'center,middle'" on-click="
+				var mainStack = #MainStack(allView);
+				mainStack.show('task');
+				
+				">
+				<Bmp skinName="'mainImg26'" mouseEnabled="false" />
+			</Button>-->
+			<!--奖励-->
+			<Button name="'rewardBtn'" defaults="'mainFunBtn_3,HightLight'" leftPt="22.5" topPt="58.7" align="'center,middle'" >
+				<Bmp skinName="'mainImg16'" mouseEnabled="false" />
+			</Button>
+		</Widget>
+		<Widget name="'leftDownBtn'" widthPt="100" heightPt="100" >
+			<Bmp  skinName="'mainImg13'" topPt="46.7" leftPt="21" scaleX="-1" />
+			<!--<Bmp  skinName="'mainImg15'" topPt="78" leftPt="34" scaleX="-1" scaleY="-1"  />-->
+			<!--消息-->
+			<Button name="'newsBtn'" defaults="'mainRDBtn_1,HightLight'" leftPt="15.5" topPt="60" align="'center,middle'" >
+				<Bmp skinName="'mainImg21'" mouseEnabled="false" />
+			</Button>
+			<!--设置-->
+			<Button name="'gameSetBtn'" defaults="'mainRDBtn_3,HightLight'" leftPt="25.5" topPt="50" align="'center,middle'">
+				<Bmp skinName="'mainImg22'" mouseEnabled="false" />
+			</Button>
+		</Widget>
+		<Widget name="'rightUpBtn'" widthPt="100" heightPt="100">
+			<Bmp  skinName="'mainImg12'" topPt="39" rightPt="12" />
+			<!--<Bmp  skinName="'mainImg15'" topPt="50" leftPt="70.7" />-->
+			<!--闯关-->
+			<Button name="'battleBtn'" defaults="'mainFunBtn_1,HightLight,icoPosition'" rightPt="1" topPt="47" scaleX="-1"  />
+			<Bmp skinName="'mainImg24'" mouseEnabled="false" rightPt="16.5" topPt="53" />
+			
+			<!--无尽 -- 副本-->
+			<Button name="'endlessBtn'" defaults="'mainFunBtn_3,HightLight'" rightPt="14" topPt="60" scaleX="-1" />
+			<Bmp skinName="'mainImg25'" mouseEnabled="false" rightPt="25.5" topPt="65" />
+		</Widget>
+		<Widget name="'rightDownBtn'" widthPt="100" heightPt="100">
+			<Bmp  skinName="'mainImg13'" topPt="46.5" leftPt="79.2" />
+			<!--<Bmp  skinName="'mainImg14'" topPt="84.5" leftPt="84.3" scaleY="-1" scaleX="-1" />-->
+			<!--强化   锻造-->
+			<!--<Button name="'strengthenBtn'" defaults="'mainRDBtn_2,HightLight'" rightPt="0.3" topPt="49.5" scaleX="-1" />
+			<Bmp skinName="'mainImg20'" mouseEnabled="false" rightPt="17" topPt="56" />-->
+			<!--仓库-->
+			<!--<Button name="'warehouseBtn'" defaults="'mainRDBtn_1,HightLight'" rightPt="2.3" topPt="68.5" scaleX="-1" />
+			<Bmp skinName="'mainImg19'" mouseEnabled="false"  rightPt="18" topPt="74.5"/>-->
+			<Button name="'warehouseBtn'" defaults="'mainRDBtn_1,HightLight'" rightPt="2.3" topPt="55" scaleX="-1" />
+			<Bmp skinName="'mainImg19'" mouseEnabled="false"  rightPt="18" topPt="61"/>
+			<!--进阶   技能-->
+			<!--<Button name="'skillBtn'" defaults="'mainRDBtn_3,HightLight'" rightPt="15" topPt="58.5" scaleX="-1"/>
+			<Bmp skinName="'mainImg18'" mouseEnabled="false"  rightPt="26" topPt="63"/>-->
+		</Widget>
+	</ViewStack>
+	<!--界面加载-->
+	<MainStack id="'allView'" widthPt="100" heightPt="100" topPt="11">
+		<!--<meta:include src="ui/reward/reward.xml"/>-->
+	</MainStack>
+</Widget>

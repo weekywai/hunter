@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'failure'" widthPt="100" heightPt="100" skinName="'bgFail'">
+	<meta:repeat counter="cnt" times="4">
+		<Bmp skinName="'alertImg9'" leftPt="10" topPt="50" on-display="
+		var hw = 128;
+		var hh = 88.5;
+		var bmpW = Math.random()*($Lib.current.stage.stageWidth-hw*4)+hw*2;
+		var bmpH = Math.random()*($Lib.current.stage.stageHeight-hh*4)+hh*2;
+		$this.left= bmpW;
+		$this.top = bmpH;
+		$this.scaleX=$this.scaleY=0.1;
+		$this.alpha=0;
+		//$this.rotation = Math.random()*360;
+		$this.tween(0.1,{scaleX:1,scaleY:1,alpha:1,x:$this.x-hw,y:$this.y-hh}).delay(Math.random()*0.5);
+		" />
+	</meta:repeat>
+	<VBox widthPt="100" heightPt="100" childPadding="5">
+		<Bmp skinName="'alertImg11'" />
+		<Box skinName="'alertImg4'">
+			<Bmp skinName="'alertImg5'"/>
+		</Box>
+		<HBox childPadding="5">
+			<Bmp skinName="'forgeImg23'"/>
+			<Bmp skinName="'forgeImg23'"/>
+			<Bmp skinName="'forgeImg23'"/>
+		</HBox>
+		<!--<HBox leftPt="35.8" topPt="40" childPadding="2">
+			<Bmp skinName="'forgeImg22'"/>
+			<Bmp skinName="'forgeImg22'"/>
+			<Bmp skinName="'forgeImg22'"/>
+		</HBox>-->
+		<Box skinName="'alertImg6'" >
+			<!--<Bmp skinName="'alertImg5'"/>-->
+			<Text defaults="'Win'" text="'继续努力！'"/>
+		</Box>
+	</VBox>
+	<Button name="'suerBtn'" defaults="'settlementSubmitBtn,HightLight'" align="'center,middle'" rightPt="4" topPt="83" on-click="$this.getParent('popup').free();">
+		<Bmp skinName="'alertImg8'" mouseEnabled="false"/>
+	</Button>
+</Widget>

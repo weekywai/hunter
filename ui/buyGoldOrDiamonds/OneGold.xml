@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox widthPt="100">
+	<!--<Widget skinName="'storeImg1'">
+		<Bmp name="'img'" skinName="'forgeImg12'"topPt="17.5" leftPt="4"/>
+		<Bmp name="'img'" skinName="'hunImg3'" topPt="23" leftPt="5.5"/>
+		<Text name="'give'" defaults="'OftenC'" text="'加送xx%'" topPt="26" leftPt="21"/>
+		<VBox topPt="52" leftPt="19">
+			<Text name="'goldnum'" defaults="'YellowShadow'" text="'金币数'" format-size="18"  />
+			<Text name="'cost'" defaults="'Yellow1'" text="'花费钻石xx颗'" format-size="18" topPt="63"/>
+		</VBox>
+		<Text defaults="'SmallBull'" text="'特性描述'" topPt="11" leftPt="42"/>
+		<Text name="'goldGroup'" defaults="'Yellow1'" topPt="41" leftPt="40" autoWordWrap="true" w="270" text="'购买xx金币'"/>
+		<Box leftPt="-4" topPt="22" childPadding="-59">
+			<Bmp skinName="'shopImg2'" />
+			<Text name="'discountValue'" defaults="'Small'" text="''"/>
+		</Box>
+		<Widget topPt="52" rightPt="23">
+			<Button name="'buyBtn'" defaults="'Givebtn,HightLight'" text="'购买'" />
+		</Widget>
+	</Widget>-->
+	<Widget skinName="'storeImg1'">
+		<Bmp name="'img'" skinName="'forgeImg12'" topPt="17.5" leftPt="4"/>
+		<Bmp name="'img'" skinName="'hunImg3'" topPt="23" leftPt="5.5"/>
+		<Text name="'give'" defaults="'OftenC'" text="'加送100%'" topPt="26" leftPt="21" />
+		<Text name="'cost'" defaults="'Yellow1'" text="'花费钻石xx颗'" topPt="54" leftPt="18"/>
+		<Text defaults="'SmallBull'" text="'特性描述'" topPt="11" leftPt="42"/>
+		<Text name="'goldGroup'" defaults="'YellowShadow'" text="'可获得钻石'"topPt="54" leftPt="40" />
+		<!--<Text name="'level'" defaults="'Green'" text="'+99'"  topPt="10" leftPt="10" />
+		<Text name="'Lv'" defaults="'Green'" text="'Lv80/90'"  topPt="65" leftPt="5" />-->
+		<Box leftPt="-4" topPt="22" childPadding="-59">
+			<Bmp skinName="'shopImg2'" />
+			<Text name="'discountValue'" defaults="'Small'" text="''"/>
+		</Box>
+		<Widget topPt="52" rightPt="23">
+			<Button name="'buyBtn'" defaults="'Givebtn,HightLight'" text="'购买'" />
+		</Widget>
+	</Widget>
+</HBox>

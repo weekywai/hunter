@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'news'" name="'newsView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'消 息'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<Scroll id="'newsTrun'" name="'Storehouse'" topPt="15" heightPt="75" defaults="'Screen,Level1'">
+		<VBox name="'newsVBox'" widthPt="100" childPadding="0" >
+			<!--<meta:repeat counter="cnt" times="10">
+				<meta:include name="'list'+cnt" src="ui/news/oneNews.xml"/>
+			</meta:repeat>-->
+		</VBox>
+	</Scroll>
+	<VBox topPt="22" leftPt="2" childPadding="300">
+		<Button defaults="'TurnPage,HightLight'" on-click="#Scroll(newsTrun).scrollY+=156;" />
+		<Button defaults="'TurnPage,HightLight'" scaleY="-1" on-click="#Scroll(newsTrun).scrollY-=156;" />
+	</VBox>
+</Widget>	

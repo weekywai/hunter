@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Floating id="'loginStart'" widthPt="100" heightPt="100" align="'top'" skinName="'bgStart'" renderTo="'UIRoot'" >
+    <!-- Screens holder -->
+	<ViewStack id="'start'" widthPt="100" heightPt="100" trans:Slide-direction="'left'" trans:Slide-duration="0.2" >
+		<Widget name="'select'" widthPt="100" heightPt="100">
+			<Bmp skinName="'actorImg1'" leftPt="5" bottomPt="0"/>
+			<Bmp skinName="'startImg2'" rightPt="4" topPt="10"/>
+			<Button name="'loginBtn_1'" defaults="'login,HightLight'" on-click="#ViewStack(start).show('login');" rightPt="8" bottomPt="14" />
+		</Widget>
+			<meta:include src="ui/login/createName.xml"/>
+			<!--<meta:include src="ui/login/noviceCourse.xml"/>-->
+	</ViewStack>
+</Floating>

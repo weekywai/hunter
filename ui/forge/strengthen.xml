@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'strengthen'" widthPt="100" heightPt="100" >
+	<!--<Text name="'goodsName'" defaults="'Blue'" format-size="30" leftPt="-26.3" topPt="2" text="''"/>
+	<Button name="'selectStrEquip'" defaults="'selectBoxBtn,HightLight'" align="'center,middle'" text="'点击选择装备'" topPt="8" leftPt="-30.5" />
+	<Widget name="'effPanel'" topPt="-2" leftPt="-33.8"/>
+	<HBox leftPt="-28" topPt="44" childPadding="10">
+		<Text name="'typeName'" defaults="'BlueShadow'" format-size="20" text="''"/>
+		<Text name="'typeValue'" defaults="'Red'" format-size="20" text="''"/>
+		<Text name="'level'" defaults="'Blue'" format-size="30" text="''"/>
+	</HBox>
+	<Button name="'suerLevel'" defaults="'strengtheBtn,HightLight'" align="'center,middle'" leftPt="-33" topPt="51">
+		<Bmp skinName="'forgeImg16'" mouseEnabled="false"/>
+	</Button>-->
+	<Text name="'needExp'" defaults="'Blue'" leftPt="10" topPt="99" text="'升级还需经验'"/>
+	<Text name="'needAllExp'" defaults="'Blue'" leftPt="50" topPt="99" text="'满级还需经验'"/>
+	<Progress name="'expValue'" topPt="108" leftPt="10" h="14" defaults="'ProgerssBar'" />
+	<Scroll id="'strengthenTrun'"  name="'decomposition'" topPt="1.5" leftPt="-1" defaults="'Screen,Level1'" w="740" h="359" skin:Paint-color="0xAAAAAA" skin:Paint-alpha="0">
+		<Widget name="'listPanel'" widthPt="100" heightPt="100" leftPt="0" w="740" h="359">
+			<!--<meta:repeat counter="cnt" times="4">
+				<meta:include name="'list'+cnt" src="ui/forge/oneGoods.xml"/>
+			</meta:repeat>-->
+		</Widget>
+	</Scroll>
+	
+	<!--<Text name="'needGolds'" defaults="'Gold2'" format-size="20" leftPt="-24" topPt="62.5" text="'消耗金币:0'" align="'center,middle'"/>-->
+</Widget>

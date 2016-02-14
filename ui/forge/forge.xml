@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'forge'" name="'forgeView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'强 化'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<!--装备背景-->
+	<Widget skinName= "'forgeImg6'" leftPt="0" topPt="20" widthPt="100" heightPt="100">
+		<Text name="'goodsName'" defaults="'Blue'" format-size="30" leftPt="21" topPt="8" w="250" align="'center,middle'" text="'装备'"/>
+		<Button name="'selectStrEquip'" defaults="'selectBoxBtn,HightLight'" align="'center,middle'" text="'点击选择装备'" leftPt="20" topPt="18" />
+		
+		<HBox topPt="68" childPadding="10" leftPt="26">
+			<Text name="'typeName'" defaults="'BlueShadow'" format-size="20" text="'攻击'"/>
+			<Text name="'typeValue'" defaults="'Red'" format-size="20" text="'+888'"/>
+			<Text name="'level'" defaults="'Blue'" format-size="30" text="'LV:88'"/>
+		</HBox>
+		<Button name="'submit'" defaults="'strengtheBtn,HightLight'" align="'center,middle'" leftPt="12" topPt="78.5">
+			<Bmp name="'btnSkin'" skinName="'forgeImg16'" mouseEnabled="false"/>
+		</Button>
+	</Widget>
+	<Widget name="'effPanel'" topPt="28" leftPt="4"/>
+	<Text name="'needGolds'" defaults="'Gold2'" format-size="20" topPt="85" leftPt="10" text="'消耗金币:0'" align="'center,middle'"/>
+	<!--材料背景及材料数据on-display="$GameProcess.root.notify($MsgUI.Strengthen);"-->
+	<!--<Widget skinName= "'forgeImg3'" right="0" topPt="14"/>-->
+	<Widget skinName= "'forgeImg3'" right="0" topPt="14" widthPt="100" heightPt="100">
+		<TabStack name="'tabForge'" defaults="'Forge'" leftPt="7" topPt="0" tabBar-paddingLeft="27" widthPt="100" heightPt="100">
+			<!--<TabPage defaults="'None'" title-w="65" />-->
+			<TabPage  name="'strengthenTab'"
+				defaults="'TabPages,HightLight'" 
+				title-text    = "'升 级'"
+			>
+				<meta:include src="ui/forge/strengthen.xml" />
+			</TabPage>
+			<TabPage defaults="'None'" title-skinName="'forgeImg4'" /><!--间隔-->
+			<TabPage name="'advancedTab'"
+				defaults="'TabPages,HightLight'"
+				title-text    = "'进 化'"
+			>
+				<meta:include src="ui/forge/advanced.xml" />
+			</TabPage>
+			<!--<TabPage defaults="'None'" title-w="32" />
+			<TabPage name="'evolutionTab'"
+				defaults="'TabPages,HightLight'"
+				title-text    = "'进 阶'"
+			>
+				<meta:include src="ui/forge/evolution.xml" />
+			</TabPage>-->
+			<TabPage defaults="'None'" title-skinName="'forgeImg4'" /><!--间隔-->
+			<TabPage name="'decompositionTab'"
+				defaults="'TabPages,HightLight'"
+				title-text    = "'分 解'"
+			>
+				<meta:include src="ui/forge/decomposition.xml" />
+			</TabPage>
+		</TabStack>
+	</Widget>
+</Widget>

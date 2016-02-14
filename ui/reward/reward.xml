@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'reward'" name="'rewardView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'奖 励'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	
+	<VBox skinName="'rewardImg7'" topPt="25" >
+		<Button name="'lianxudengr'" defaults="'rewardBtn1,HightLight'" align="'center,middle'" leftPt="9" topPt="10" on-click="
+			#ViewStack(rewardWindow).show('logday');
+		">
+			<Text defaults="'Gold'" format-size="35" text="'连续登入'"/>
+		</Button>
+		<Button name="'huoyuedu'" defaults="'rewardBtn2,HightLight'" align="'center,middle'" leftPt="7.5" topPt="63.5" on-click="
+			#ViewStack(rewardWindow).show('reward2');
+		">
+			<Text defaults="'Green'" format-size="35" text="'活跃度'"/>
+		</Button>
+	</VBox>
+	<Bmp widthPt="100" heightPt="100" skinName="'rewardImg1'"  rightPt="0" bottomPt="11"/>
+	<!--<ViewStack id="'rewardWindow'" widthPt="100" heightPt="100" leftPt="9" topPt="23" trans:Fade-duration="0.2">-->
+	<ViewStack id="'rewardWindow'" widthPt="100" heightPt="100" leftPt="9" topPt="23" >
+		<Scroll name="'logday'" widthPt="100" heightPt="66"  defaults="'Screen,Level1'">
+			<VBox name="'reward1'" widthPt="100">
+				<!--<meta:repeat counter="cnt" times="10">
+					<meta:include name="'list'+cnt" src="ui/reward/REwindow1.xml"/>
+				</meta:repeat>-->
+			</VBox>
+		</Scroll>
+		<VBox name="'reward2'" widthPt="100" heightPt="66"> 
+			<meta:include src="ui/reward/REwindow2.xml"/>
+		</VBox>
+	</ViewStack>
+</Widget>

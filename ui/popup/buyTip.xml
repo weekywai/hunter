@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Box id="'flagTip'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
+	<Widget skinName="'SuerPopupBg'" w="1023" h="542">
+		<Button name="'noBtn'" rightPt="7" topPt="90" text="'否'"
+			defaults="'submitBtn,HightLight'" 
+		/>
+		<Button name="'yesBtn'" leftPt="7" topPt="90" text="'是'"
+			defaults="'submitBtn,HightLight'" 
+		/>
+		<Box widthPt="100" heightPt="100">
+			<Text name="'tipTxt'" defaults="'TitleWrite'" format-size="34" label-width="650" label-wordWrap="true" text="@msg" align="'center,top'" />
+		</Box>
+	</Widget>
+</Box>

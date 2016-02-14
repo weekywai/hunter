@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'through'" name="'throughtView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox name="'worldMap'">
+		<HBox>
+		<Bmp skinName="'throughImgTL'" />
+		<Bmp skinName="'throughImgTR'" />
+		</HBox>
+		<HBox>
+		<Bmp skinName="'throughImgBL'" />
+		<Bmp skinName="'throughImgBR'" />
+		</HBox>
+	</VBox>
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'闯 关'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<Scroll id="'throughTrun'" name="'throughTrunName'" topPt="5" widthPt="100"  defaults="'Screen,Level1'">
+		<Widget name="'scrollPanel'" w="$Lib.current.stage.stageWidth" >
+			<!--<Button name="'t1'" defaults="'throughBtn1,HightLight'" leftPt="10" topPt="40" text="'第一关'" />
+			<Button name="'t2'" defaults="'throughBtn2,HightLight'" leftPt="30" topPt="70" text="'第二关'"  />
+			<Button name="'t3'" defaults="'throughBtn1,HightLight'" leftPt="45" topPt="30" text="'第三关'"  />
+			<Button name="'t4'" defaults="'throughBtn2,HightLight'" leftPt="60" topPt="60" text="'第四关'"  />
+			<Button name="'t5'" defaults="'throughBtn3,HightLight'" leftPt="78" topPt="40" text="'第五关'"  />-->
+		</Widget>
+		<Widget widthPt="100" heightPt="100">
+			<!--<Button defaults="'TurnPage,HightLight'" on-click="#Scroll(houseTrun).scrollY+=156;" />
+			<Button defaults="'TurnPage,HightLight'" scaleY="-1" on-click="#Scroll(houseTrun).scrollY-=156;" />-->
+			<Button name="'leftBtn'" defaults="'TurnPage,HightLight'" leftPt="1" topPt="60"  rotation="-90"/>
+			<Button name="'rightBtn'" defaults="'TurnPage,HightLight'" rightPt="-12" topPt="35" rotation="90"/>
+		</Widget>
+	</Scroll>
+	
+</Widget>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox name="'lable2'" widthPt="100" topPt="22" childPadding="-160" align="'center,middle'">
+	<Widget leftPt="10" skinName="'rewardImg8'">
+		<HBox leftPt="11" topPt="34" w="480" h="40" childPadding="10" skin:Paint-color="0" skin:Paint-corners="[20]" align="'left,middle'">
+			<Text name="'msg'" defaults="'Gold2'" format-size="26" text="'完成3次副本挑战'" />
+			<Text defaults="'Blue'"   text="'活跃度'" format-size="18" />
+			<Text name="'lively'" defaults="'Green1'"  text="'+80'" />
+			<Text name="'part'" defaults="'Green1'" format-size="30" text="'1/3'" />
+		</HBox>
+	</Widget>
+	<Button name="'livelyBtn'" defaults="'None,HightLight'" text="'来一局'" />
+</HBox>

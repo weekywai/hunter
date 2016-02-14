@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'decomposition'" widthPt="100" heightPt="100">
+	<Scroll id="'decompositionTrun'" name="'decomposition'" topPt="1.5" leftPt="-1" defaults="'Screen,Level1'" w="740" h="363">
+		<Widget name="'listPanel'" leftPt="3" w="740" h="730"></Widget>
+	</Scroll>
+	
+	<!--<Button name="'suerDecom'" defaults="'strengtheBtn,HightLight'" align="'center,middle'" leftPt="-33" topPt="51">
+		<Bmp skinName="'forgeImg25'" mouseEnabled="false"/>
+	</Button>
+	<Text defaults="'Gold2'" format-size="30" leftPt="-31" topPt="20" text="'分解后道具将消失，\n同时获得对应品质\n的材料'" align="'center,middle'"/>-->
+</Widget>

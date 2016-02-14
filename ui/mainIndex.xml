@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Floating id="'main'" widthPt="100" heightPt="100" align="'top'" skinName="'bgMain'"  renderTo="'UIRoot'"  on-display="#Floating(loading).hide();">
+	<meta:include src="ui/main/main.xml"/>
+</Floating>

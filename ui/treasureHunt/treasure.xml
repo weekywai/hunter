@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget skinName="'hunImg1'">
+	<Bmp skinName="'forgeImg15'" scaleX="0.6" scaleY="0.6" leftPt="6.5" topPt="16.5" />
+	<Bmp skinName="'hunImg4'" scaleX="1.3" scaleY="1.3" leftPt="8.5" topPt="24.5" />
+	<Text name="'name'" defaults="'OftenD'" text="'中级宝箱'" leftPt="26" topPt="22" />
+	<Text name="'intro'" defaults="'BlueShadow'" text="'可获赠一次开启宝箱的机会，宝箱中可开出所有品质的装备。'" format-size="18" autoWordWrap="true" w="120" h="100" leftPt="23" topPt="44" />
+	<Text name="'des'" defaults="'Yellow1'" text="'再购买5次，开启宝箱必然获得紫色装备。'" autoWordWrap="true" w="245" leftPt="45" topPt="46" />
+	<VBox leftPt="78" topPt="52" align="'center,middle'" childPadding="8">
+		<Text name="'price'" defaults="'Yellow1'" text="'98钻石'" />
+		<Button name="'buyBtn'"  defaults="'Givebtn,HightLight'" text="'一次寻宝'"/>
+	</VBox>
+</Widget>

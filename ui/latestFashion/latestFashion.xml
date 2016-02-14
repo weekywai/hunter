@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'latestFashion'" name="'latestFashionView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text text="'时 装'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<HBox childPadding="10" widthPt="100" heightPt="100" topPt="-7">
+		<Widget name="'fashion1'" skinName="'fashionImg1'">
+			<Widget name="'leftModel'" leftPt="19" topPt="26"/>
+			<Text name="'leftName'" defaults="'LatestName'" text="''" rightPt="10" topPt="80" />
+			<Button name="'leftBtn'" leftPt="26" topPt="86" text="'蛇叔'" defaults="'submitBtn,HightLight'" />
+		</Widget>
+		<Widget skinName="'SuerPopupBg'" w="796" h="419">
+			<Button name="'getBtn'" rightPt="7" topPt="90" text="'立即获得'" defaults="'submitBtn,HightLight'" />
+			<Box widthPt="100" heightPt="100">
+				<Text name="'tipTxt'" defaults="'TitleWrite'" format-size="30" w="600" align="'center,top'" />
+			</Box>
+		</Widget>
+	</HBox>
+</Widget>

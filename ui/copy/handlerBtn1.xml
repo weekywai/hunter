@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Button name="'handlerBtn'" defaults="'throughBtn1'" align="'center,middle'" >
+	<Widget widthPt="100" heightPt="100" mouseEnabled="false">
+	<Bmp name="'lock'" skinName="'skillImg9'"  topPt="16" leftPt="23" />
+	<Text name="'missionName'" defaults="'Blue'" format-size="22" text="'1.2'" leftPt="10" topPt="64" w="100" align="'center,top'"/>
+	</Widget>
+</Button>

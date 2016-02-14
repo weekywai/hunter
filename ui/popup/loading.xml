@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--<Floating id="'loading'" widthPt="100" heightPt="100"  skin:Paint-color = "0x000000" skin:Paint-alpha = "0.7" on-resize="
+		$this.scaleContent = $Lib.current.stage.stageWidth / 1280;">-->
+	<Widget widthPt="100" heightPt="100" skinName="'alertImg2'">
+		<Bmp skinName="'alertImg1'" leftPt="50" topPt="48" mouseEnabled="true"  on-click="$this.getParent('popup').free();" on-display="$this.tween(0.6,{rotation:360}).repeat();" />
+		
+		<Text defaults="'Load'" w="500" leftPt="45" topPt="60" label-wordWrap="true" text="@msg" />
+		
+	</Widget>
+<!--</Floating>-->

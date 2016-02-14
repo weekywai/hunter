@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Floating id="'dialogue'" widthPt="100" heightPt="100" on-resize="
+		$this.scaleContent = $Lib.current.stage.stageWidth/ 1280;" 
+		on-create="" >
+	<Widget widthPt="100" heightPt="100">
+		<Box skinName="'PopupBg'" w="1280" h="240" bottomPt="0">
+			<Text name="'content'" defaults="'TitleWrite'" w="900" label-wordWrap="true" text="''" />
+		</Box>
+		<Bmp name="'guidL'" skinName="'actorImg2'" scaleX="0.8" scaleY="0.8" bottomPt="13" leftPt="5" visible="false" />
+		<Bmp name="'guidR'" skinName="'actorImg2'" scaleX="-0.8" scaleY="0.8" bottomPt="13" rightPt="-20" visible="false"/>
+		<Bmp name="'lead'" skinName="'actorImg1'" scaleX="0.7" scaleY="0.7" bottomPt="0" leftPt="2" visible="false"/>
+		<Bmp name="'boss'" skinName="'actorImg3'" scaleX="0.8" scaleY="0.8" bottomPt="14"  rightPt="-7" visible="false"/>
+	</Widget>
+</Floating>

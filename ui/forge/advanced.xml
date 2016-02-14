@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'advanced'" widthPt="100" heightPt="100">
+	<!--<Text name="'goodsName'" defaults="'Blue'" format-size="30" leftPt="-26.3" topPt="2" text="''"/>
+	<Button name="'selectEquip'" defaults="'selectBoxBtn,HightLight'" align="'center,middle'" text="'点击选择装备'"  topPt="8" leftPt="-30.5"/>
+	<Widget name="'effPanel'" topPt="-2" leftPt="-33.8"/>
+	<HBox leftPt="-28" topPt="44" childPadding="10">
+		<Text name="'typeName'" defaults="'BlueShadow'" format-size="20" text="''"/>
+		<Text name="'typeValue'" defaults="'Red'" format-size="20" text="''"/>
+		<Text name="'level'" defaults="'Blue'" format-size="30" text="''"/>
+	</HBox>-->
+	<Scroll id="'advanceTrun'" name="'advance'" topPt="1.5" leftPt="-1" defaults="'Screen,Level1'" w="740" h="363">
+		<Widget name="'listPanel'" leftPt="3" w="740" h="730">
+			<!--<meta:repeat counter="cnt" times="4">
+				<meta:include name="'list'+cnt" src="ui/forge/oneGoods.xml"/>
+			</meta:repeat>-->
+		</Widget>
+	</Scroll>
+	
+	<Text name="'tiptxt'" defaults="'Tiptxt'" format-size="30" leftPt="11" topPt="20" text="'满级'" visible="false" />
+	<!--<Button name="'suerAdvance'" defaults="'strengtheBtn,HightLight'" align="'center,middle'" leftPt="-33" topPt="51">
+		<Bmp skinName="'forgeImg24'" mouseEnabled="false"/>
+	</Button>
+	<Text name="'needGolds'" defaults="'Gold2'" format-size="20" leftPt="-24" topPt="62.5" text="'消耗金币:0'" align="'center,middle'"/>-->
+</Widget>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget name="'goodsBox'" widthPt="100" heightPt="100" skinName="'forgeImg11'">
+	<Bmp name="'img'" skinName="'forgeImg12'" leftPt="30" topPt="15" />
+	<VBox topPt="20" left="28" childPadding="0">
+		<Bmp  skinName="'forgeImg19'"/>
+		<Bmp  skinName="'forgeImg19'"/>
+		<Bmp  skinName="'forgeImg19'"/>
+	</VBox>
+	<VBox topPt="20" leftPt="28" childPadding="0">
+		<Bmp name="'star1'" skinName="'forgeImg13'" visible="false"/>
+		<Bmp name="'star2'" skinName="'forgeImg13'" visible="false" />
+		<Bmp name="'star3'" skinName="'forgeImg13'" visible="false"/>
+	</VBox>
+	<!--<Text name="'goodsNum'" defaults="'Blue'" rightPt="5" text="''" />-->
+	<Text name="'strLv'" defaults="'BlueShadow'" format-size="18" topPt="73" leftPt="44" text="'LV: 1'" />
+	<Text name="'goodsName'" defaults="'Title'" format-size="24" topPt="88" leftPt="23" align="'center,middle'" w="150" text="'装备名称'" />
+	<Bmp name="'equipBmp'"/>
+	<Text name="'goodsNum'" defaults="'Gold2'" rightPt="27" topPt="58" text="'x1'" />
+	<Text name="'selectTxt'" defaults="'Select'" topPt="45" leftPt="10" text="'已选择'" visible="false" />
+</Widget>

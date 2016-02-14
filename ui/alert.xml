@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Floating name="'popup'" widthPt="100" heightPt="100"  skin:Paint-color = "0x000000" skin:Paint-alpha = "0.5"  on-resize=" 
+		$this.scaleContent = $Lib.current.stage.stageWidth / 1280;">
+    <ViewStack id="'floatStack'"  wrap="true" widthPt="100" heightPt="100"  on-display="$this.show(@content);"   >
+		<Widget name="'tipPopup'" widthPt="100" heightPt="100" >
+			<meta:include src="ui/popup/tipPopup.xml"/>
+		</Widget>
+		<Widget name="'onBattle'" widthPt="100"  heightPt="100">
+			<meta:include src="ui/popup/onBattle.xml"/>
+		</Widget>
+		<Widget name="'overcome'" widthPt="100" heightPt="100">
+			<meta:include src="ui/popup/overcomeView.xml"/>
+		</Widget>
+		<Widget name="'failure'" widthPt="100" heightPt="100">
+			<meta:include src="ui/popup/failureView.xml"/>
+		</Widget>
+		<Widget name="'buyTip'" widthPt="100" heightPt="100">
+			<meta:include src="ui/popup/buyTip.xml"/>
+		</Widget>
+		<Widget name="'resurrection'" widthPt="100" heightPt="100">
+			<meta:include src="ui/popup/resurrectionTip.xml"/>
+		</Widget>
+		<Widget name="'gainGoods'" widthPt="100" heightPt="100">
+			<meta:include src="ui/popup/gainGoods.xml"/>
+		</Widget>
+		<Widget name="'loading'" widthPt="100" heightPt="100">
+			<meta:include src="ui/popup/loading.xml"/>
+		</Widget>
+    </ViewStack>
+</Floating>

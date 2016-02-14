@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Box id="'createPlayer'" name="'createName'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
+	<Widget w="1023" h="542" skinName="'SuerPopupBg'">
+		<VBox widthPt="100" heightPt="100">
+			<Widget topPt="25">
+				<Text defaults="'Title'" text="'输入昵称'" leftPt="12" topPt="23"/>
+				<InputText name="'inputName'" label-multiline="false" w="350" defaults="'Write'" text="'输入昵称'" topPt="63" leftPt="13"/>
+				<Button name="'randName'" defaults="'createNameBtn,HightLight'" rightPt="2" topPt="46"/>
+			</Widget>
+		</VBox>
+		<Button name="'bark'"  rightPt="-1" topPt="6" defaults="'closeBtn,HightLight'" on-click="#ViewStack(start).show('select');"/>
+		<Button name="'submitName'" rightPt="7" bottomPt="-6" text="'登陆'" defaults="'submitBtn,HightLight'"/>
+	</Widget>
+</Box>

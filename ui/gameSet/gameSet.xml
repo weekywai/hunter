@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'gameSet'" name="'gameSetView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text text="'设 置'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<HBox leftPt="30" topPt="25" childPadding="20">
+		<Bmp skinName="'settingImg2'"/>
+		<VBox skinName="'settingImg1'">
+			<Switch name="'Sound'" defaults="'Circle'" />
+		</VBox>
+	</HBox>
+	<HBox leftPt="30" topPt="45" childPadding="20">
+		<Bmp skinName="'settingImg3'"/>
+		<VBox skinName="'settingImg1'">
+			<Switch name="'BGM'" defaults="'Circle'" />
+		</VBox>
+	</HBox>
+	<Button name="'help'" defaults="'submitBtn,HightLight'" text="'帮助'" leftPt="40" topPt="60" />
+</Widget>

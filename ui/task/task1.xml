@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox name="'task1'" widthPt="100" childPadding="-160" align="'center,middle'">
+	<VBox skinName="'rewardImg8'" leftPt="10" align="'left,middle'" >
+		<Widget topPt="26"  w="200" h="30" leftPt="11" skin:Paint-color="0" skin:Paint-corners="[20]">
+			<Text name="'taskname'" defaults="'Orange'" format-size="20" leftPt="5" text="'通关关卡'"/>
+		</Widget>
+		<Widget topPt="49"  w="480" h="30" leftPt="11" skin:Paint-color="0" skin:Paint-corners="[20]">
+			<Text name="'task_msg'" defaults="'Yellow1'" format-size="24" leftPt="1" text="'通过此关卡 可激活下一关'"/>
+		</Widget>
+	</VBox>
+	<Button name="'receiveBtn'" defaults="'None,HightLight'" text="'前往'" />
+</HBox>

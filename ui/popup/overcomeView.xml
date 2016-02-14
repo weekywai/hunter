@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget name="'overcomeName'" id="'overcome'" widthPt="100" heightPt="100" skinName="'bgWin'">
+	<VBox widthPt="100" heightPt="100">
+		<Bmp skinName="'alertImg3'" />
+		<Box skinName="'alertImg6'" >
+			<Bmp skinName="'alertImg5'"/>
+		</Box>
+		<!--<HBox leftPt="36" childPadding="5">
+			<Bmp skinName="'forgeImg23'"/>
+			<Bmp skinName="'forgeImg23'"/>
+			<Bmp skinName="'forgeImg23'"/>
+		</HBox>-->
+		<!--<HBox leftPt="36" childPadding="1" align="'left,top'">
+			<Bmp skinName="'forgeImg23'"/>
+			<Bmp skinName="'forgeImg23'"/>
+			<Bmp skinName="'forgeImg23'"/>
+		</HBox>-->
+		<HBox leftPt="36" childPadding="1" align="'left,top'">
+			<Widget skinName="'forgeImg23'">
+				<Bmp name="'star1'" skinName="'forgeImg22'" visible="false" />
+			</Widget>
+			<Widget skinName="'forgeImg23'">
+				<Bmp name="'star2'" skinName="'forgeImg22'" visible="false"/>
+			</Widget>
+			<Widget skinName="'forgeImg23'">
+				<Bmp name="'star3'" skinName="'forgeImg22'" visible="false"/>
+			</Widget>			
+		</HBox>
+		<Box skinName="'alertImg4'" >
+			<Text text="'闯关成功，继续努力'" defaults="'Win'" />
+		</Box>
+		<!--<Box skinName="'alertImg6'" leftPt="19" topPt="55">
+
+		</Box>-->
+		<HBox name="'goodsBox'" widthPt="100">
+			<!--<Bmp skinName="'alertImg7'"></Bmp>
+			<Bmp skinName="'alertImg7'"></Bmp>
+			<Bmp skinName="'alertImg7'"></Bmp>
+			<Bmp skinName="'alertImg7'"></Bmp>-->
+		</HBox>		
+	</VBox>
+	<Button name="'submit'" defaults="'settlementSubmitBtn,HightLight'" align="'center,middle'" rightPt="4" topPt="83">
+		<Bmp skinName="'alertImg8'" mouseEnabled="false"/>
+	</Button>
+</Widget>

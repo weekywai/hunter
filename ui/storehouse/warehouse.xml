@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'warehouse'" name="'warehouseView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+<!--	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'仓 库'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<Scroll id="'houseTrun'" name="'Storehouse'" topPt="15" heightPt="55" defaults="'Screen'">
+		<VBox name="'scrollPanel'" widthPt="100" childPadding="0" >-->
+			<!--<meta:repeat counter="cnt" times="10">
+				<meta:include name="'list'+cnt" src="ui/storehouse/OneList.xml"/>
+			</meta:repeat>-->
+<!--		</VBox>
+	</Scroll>
+	<VBox topPt="22" leftPt="2" childPadding="300">
+		<Button defaults="'TurnPage,HightLight'" on-click="#Scroll(houseTrun).scrollY+=156;" />
+		<Button defaults="'TurnPage,HightLight'" scaleY="-1" on-click="#Scroll(houseTrun).scrollY-=156;" />
+	</VBox>-->
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'仓 库'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<VBox widthPt="100" heightPt="100" leftPt="2" topPt="22" align="'top,left'" childPadding="0">
+		<!--<Widget skinName="'storeBtn6'">
+			<Radio name="'knifeTab'" defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'近战'" />
+		</Widget>	-->
+		<Widget skinName="'storeBtn6'">
+			<Radio name="'gunTab'" defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'枪械'"/>
+		</Widget>	
+		<Widget skinName="'storeBtn6'">
+			<Radio name="'armorTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'防具'"/>
+		</Widget>	
+		<!--<Widget skinName="'storeBtn6'">
+			<Radio name="'petTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'僚机'"/>
+		</Widget>	-->
+		<Widget skinName="'storeBtn6'">
+			<Radio name="'propTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'材料'"/>
+		</Widget>	
+    </VBox>	
+	
+	
+	<Widget name="'materialPanel'" skinName="'storeImg15'" widthPt="66" heightPt="60" leftPt="13" topPt="15" >
+		<VBox widthPt="100" heightPt="100" topPt="12" childPadding="50" align="'center,top'">
+			<Text text="'进阶材料'" defaults="'Gold2'" format-size="30" align="'center,middle'"/>
+			<HBox childPadding="100" align="'center,middle'">
+				<VBox childPadding="5" align="'center,middle'">
+					<Text text="'1级合金'" defaults="'Tip'" format-size="20" align="'center,middle'"/>
+					<Box skinName="'forgelvImg1'" align="'center,middle'">
+						<Bmp skinName="'forgelvBImg5'"/>
+					</Box>			
+					<Text name="'materialNum1'" text="'X 0'" defaults="'Tip'" format-size="20" align="'center,middle'"/>
+				</VBox>
+				<VBox childPadding="5" align="'center,middle'">
+					<Text text="'2级合金'" defaults="'Tip'" format-size="20" align="'center,middle'"/>
+					<Box skinName="'forgelvImg2'" align="'center,middle'">
+						<Bmp skinName="'forgelvBImg6'"/>
+					</Box>			
+					<Text name="'materialNum2'" text="'X 0'" defaults="'Tip'" format-size="20" align="'center,middle'"/>
+				</VBox>
+				<VBox childPadding="5" align="'center,middle'">
+					<Text text="'3级合金'" defaults="'Tip'" format-size="20" align="'center,middle'"/>
+					<Box skinName="'forgelvImg3'" align="'center,middle'">
+						<Bmp skinName="'forgelvBImg7'"/>
+					</Box>			
+					<Text name="'materialNum3'" text="'X 0'" defaults="'Tip'" format-size="20" align="'center,middle'"/>
+				</VBox>
+			</HBox>	
+			<Text text="'提示：分解装备可获得对应品质的进阶材料'" defaults="'OftenC'" format-size="20" align="'center,middle'"/>
+		</VBox>
+		
+	</Widget>		
+
+	<Widget name="'equipPanel'" skinName="'storeImg15'" widthPt="66" heightPt="60" leftPt="13" topPt="15" >
+		<VBox name="'itemlist'" widthPt="20" heightPt="20" leftPt="60" topPt="30" childPadding="12" align="'top,left'">
+			<HBox widthPt="100" heightPt="20" childPadding="10" align="'top,left'">
+				<Text name="'item0'" text="'武器伤害'" defaults="'Tip'" format-size="20" align="'left,middle'"/>
+				<Text name="'description0'" text="'400~700'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+			</HBox>
+			<HBox widthPt="100" heightPt="20" childPadding="10" align="'top,left'">
+				<Text name="'item1'" text="'射速'" defaults="'Tip'" format-size="20" align="'left,middle'"/>
+				<Text name="'description1'" text="'中'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+			</HBox>
+			<HBox widthPt="100" heightPt="20" childPadding="10" align="'top,left'">
+				<Text name="'item2'" text="'子弹数'" defaults="'Tip'" format-size="20" align="'left,middle'"/>
+				<Text name="'description2'" text="'300/450'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+			</HBox>
+			<HBox widthPt="100" heightPt="20" childPadding="10" align="'top,left'">
+				<Text name="'item3'" text="'特性'" defaults="'Tip'" format-size="20" align="'left,middle'"/>
+				<Text name="'description3'" text="'穿透'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+			</HBox>
+			<HBox widthPt="100" heightPt="20" childPadding="10" align="'top,left'">
+				<Text name="'item4'" text="'消耗'" defaults="'Tip'" format-size="20" align="'left,middle'"/>
+				<Text name="'description4'" text="'2000/5000'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>	
+				<Bmp name="'moneyBmp'" skinName="'storeImg9'" scaleX="0.6" scaleY="0.6"/>
+			</HBox>
+		</VBox>
+		
+		<!--<HBox widthPt="40" heightPt="10" leftPt="38" topPt="12" align="'middle,left'" childPadding="10">
+			<Text text="'LV:4'" defaults="'Gold2'" format-size="30" align="'center,middle'"/>
+			<Bmp skinName="'xingxing'" />
+			<Bmp skinName="'xingxing'" />
+			<Bmp skinName="'xingxing'" />
+			<Bmp skinName="'xingxing'" />
+		</HBox>-->
+		
+		<Text name="'weaponName'" text="'这是一把枪'" widthPt="100" heightPt="10" topPt="12" defaults="'Gold2'" format-size="30" align="'center,middle'"/>
+		
+		<Widget name="'weaponBmp'" leftPt="15" topPt="25"/>
+		<!--<Bmp name="'weaponBmp'" skinName="'qiang1'" leftPt="15" topPt="25"/>-->
+		<Text name="'description'" text="''" widthPt="40" leftPt="18" topPt="68" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+			
+		
+		<!--<Widget widthPt="50" heightPt="4" leftPt="25" topPt="65" >
+			<Bmp skinName="'storeImg11'" widthPt="100" heightPt="100" leftPt="0" topPt="0"/>
+				
+			<HBox widthPt="100" heightPt="100" leftPt="0" topPt="0" align="'left,middle'" childPadding="0">		
+				<Bmp skinName="'storeImg12'" />
+				<Bmp skinName="'storeImg12'" />
+				<Bmp skinName="'storeImg12'" />
+				<Bmp skinName="'storeImg12'" />
+			</HBox>		
+		</Widget>-->
+		
+		<HBox widthPt="100" heightPt="100" leftPt="37" topPt="76" childPadding="10" align="'top,left'">
+			<Text text="'LV:'" defaults="'Gold2'" format-size="20" align="'center,middle'"/>
+			<Text name="'strengthenLv'" text="'4/5'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+		</HBox>
+		
+		<Widget widthPt="80" heightPt="20" leftPt="12" topPt="80" >
+			<!--<Button name="'maxStrengt henBtn'" defaults="'glodbtn,HightLight'" text="'一键强化'" leftPt="60" bottomPt="0"/>-->
+		
+			<HBox childPadding="0" align="'top,left'" >
+				<Button name="'dressBtn'" defaults="'Givebtn,HightLight'" text="'装备'" />
+				<Button name="'strengthenBtn'" defaults="'Givebtn,HightLight'" text="'强化'" />	
+				<Button name="'decomposeBtn'" text="'分解'" defaults="'Givebtn,HightLight'"  />	
+				<Button name="'rechargeOneBtn'" text="'购买弹夹'" defaults="'Givebtn,HightLight'"  />
+				<!--<Button name="'rechargeBtn'" text="'补满子弹'" defaults="'Givebtn,HightLight'"  />-->											
+				<!--<Text name="'bulletTxt'" defaults="'Green'" text="'子弹数 0/0'" />-->				
+			</HBox>
+			<Text name="'dressedBmp'" skinName="'storeBtn2'" text="'已装备'" leftPt="0" topPt="0" defaults="'Gold2'" format-size="28" align="'center,middle'" mouseEnabled="false" />
+			<Text name="'maxStrengthenBmp'" skinName="'storeBtn2'" text="'强化满级'" leftPt="24" topPt="0" defaults="'Gold2'" format-size="28" align="'center,middle'" mouseEnabled="false" />
+			
+		</Widget>
+		
+	</Widget>
+	
+<!--	<Scroll id="'houseTrun'" skinName="'storeImg4'" leftPt="78" topPt="15" defaults="'Screen'">-->
+	<Widget widthPt="100" heightPt="100" leftPt="78" topPt="10">
+		<Bmp skinName="'storeImg4'" widthPt="32" heightPt="70"/>
+		<Scroll id="'houseTrun'" widthPt="17" heightPt="52.5" leftPt="2" topPt="8.5" defaults="'Screen'">
+			<VBox name="'scrollPanel'" widthPt="100" childPadding="0" >
+				<!--<meta:repeat counter="cnt" times="10">
+					<meta:include name="'list'+cnt" src="ui/storehouse/OneList.xml"/>
+				</meta:repeat>-->
+			</VBox>
+		</Scroll>
+	</Widget>
+	
+	
+<!--	<HBox widthPt="100" heightPt="100" leftPt="0" topPt="-10" align="'bottom,center'" childPadding="20">
+		<Widget widthPt="100" skinName="'storeBtn13'">
+			<Radio skinName="'storeBtn13'"  group="'group3'" widthPt="100" />	
+			<Bmp skinName="'qiang1'" leftPt="10" topPt="25" scaleX="0.2" scaleY="0.2" mouseEnabled="false"/>
+		</Widget>
+		<Widget widthPt="100" skinName="'storeBtn13'">
+			<Radio skinName="'storeBtn13'"  group="'group3'" widthPt="100" />	
+			<Bmp skinName="'qiang1'" leftPt="10" topPt="25" scaleX="0.2" scaleY="0.2" mouseEnabled="false"/>
+		</Widget>
+		<Widget widthPt="100" skinName="'storeBtn13'">
+			<Radio skinName="'storeBtn13'"  group="'group3'" widthPt="100" />	
+			<Bmp skinName="'qiang1'" leftPt="10" topPt="25" scaleX="0.2" scaleY="0.2" mouseEnabled="false"/>
+		</Widget>		
+    </HBox>	-->
+	<!--<VBox topPt="22" leftPt="2" childPadding="300">
+		<Button defaults="'TurnPage,HightLight'" on-click="#Scroll(houseTrun).scrollY+=156;" />
+		<Button defaults="'TurnPage,HightLight'" scaleY="-1" on-click="#Scroll(houseTrun).scrollY-=156;" />
+	</VBox>-->
+	<HBox name="'weaponPanel'" bottomPt="11" widthPt="100" heightPt="100" childPadding="30" align="'bottom,center'">
+		<HBox childPadding="5" align="'top,left'">
+			<Text text="'使\n用\n中'" defaults="'RedShadow'" />
+			<Button name="'startWeapon'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+		</HBox>
+		<HBox childPadding="5" align="'top,left'">
+			<Text text="'备\n用'" defaults="'YellowShadow'" />
+			<Button name="'weapon1'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+			<Button name="'weapon2'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+		</HBox>		
+	</HBox>	
+			
+</Widget>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Floating id="'root'" widthPt="100" heightPt="100" on-resize="$this.scaleContent = $Lib.current.stage.stageWidth/ 1280;">
+	<Widget id="'UIRoot'" widthPt="100" heightPt="100"></Widget>
+</Floating>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Skins>
+	<goods_cs:Img src="'icon/00.png'" />
+	<!--主背景-->
+	<bgMain:Img src="'ui/bg/background.jpg'" scaleImg="true" keepAspect="true" crop="true"  />
+	<!--登录 login: loginBtn -->
+	<!--<bgLogin:Img src="'ui/bg/biankuang.png'"/>-->
+	<bgWin:Img src="'ui/bg/shenglibeijing.jpg'" scaleImg="true" keepAspect="true" />
+	<bgFail:Img src="'ui/bg/sibaibeijing.jpg'" scaleImg="true" keepAspect="true" />
+	<bgStart:Img src="'ui/bg/beijing.jpg'" scaleImg="true" />
+	<viewBgImg:Img src="'ui/bg/biaozhundikuang.jpg'" scaleImg="true" keepAspect="true" />
+	<startImg2:Img src="'ui/login/biaoti.png'" />
+	
+	<loginBtn1:Img src="'ui/login/dengluzhanghao.png'"/>
+	<loginBtn3:Img src="'ui/login/Xanniu.png'"/>
+	<loginBtn4:Img src="'ui/login/quedinganniu.png'"/>
+	<loginBtn5:Img src="'ui/login/shaizi.png'"/>	
+		
+	<!--仓库资源 store: storeBtn storeText -->
+	<storeImg1:Img src="'ui/storehouse/zhubiaoqian.png'"/>
+	<storeImg2:Img src="'ui/storehouse/bai2.png'"/>
+	<storeImg3:Img src="'ui/storehouse/xiaoxikuang.png'"/>
+	<storelvImg1:Img src="'ui/storehouse/bai1.png'"/>
+	<storelvImg2:Img src="'ui/storehouse/lv1.png'"/>
+	<storelvImg3:Img src="'ui/storehouse/lan1.png'"/>
+	<storelvImg4:Img src="'ui/storehouse/zi1.png'"/>
+	
+	
+	<storeBtn1:Img src="'ui/storehouse/fanyeanniu.png'"/>
+	<storeBtn2:Img src="'ui/storehouse/tongyonganniu2.png'"/>
+	<fashionImg1:Img src="'ui/storehouse/anwutai.png'"/>
+	<fashionImg2:Img src="'ui/storehouse/liangwutai.png'"/>
+	
+	<!--new-------------------------------------------------------------------------------->
+	<storeBtn4:Img src="'ui/storehouse/storehouse/anniu1-2.png'"/>
+	<storeBtn5:Img src="'ui/storehouse/storehouse/anniu1-3.png'"/>
+	<storeBtn6:Img src="'ui/storehouse/storehouse/anniu1-4.png'"/>
+	<storeBtn7:Img src="'ui/storehouse/storehouse/anniu2-1.png'"/>
+	<storeBtn8:Img src="'ui/storehouse/storehouse/anniu2-2.png'"/>
+	<storeBtn9:Img src="'ui/storehouse/storehouse/anniu3-1.png'"/>
+	<storeBtn10:Img src="'ui/storehouse/storehouse/anniu3-2.png'"/>
+	<storeBtn11:Img src="'ui/storehouse/storehouse/anniu4.png'"/>
+	<storeBtn12:Img src="'ui/storehouse/storehouse/anniu4-1.png'"/>
+	<storeBtn13:Img src="'ui/storehouse/storehouse/anniu5.png'"/>
+	
+	<storeBtn14:Img src="'ui/storehouse/storehouse/pinzhi1.png'" />
+	<storeBtn15:Img src="'ui/storehouse/storehouse/pinzhi2.png'" />
+	<storeBtn16:Img src="'ui/storehouse/storehouse/pinzhi3.png'" />
+	<storeBtn17:Img src="'ui/storehouse/storehouse/pinzhi4.png'" />
+	
+	<!--<storeImg4:Img src="'ui/storehouse/storehouse/beijingban1.png'"/>-->
+	<storeImg4:Slice9
+		src="'ui/storehouse/storehouse/beijingban1.png'"
+		slice="[396, 397, 221, 231]"
+	/>
+	<storeImg5:Img src="'ui/storehouse/storehouse/BG.png'" scaleImg="true" keepAspect="true" crop="true"/>
+	<storeImg6:Img src="'ui/storehouse/storehouse/fangyucao.png'" />
+	<storeImg7:Img src="'ui/storehouse/storehouse/gongnenglan.png'" />
+	<storeImg8:Img src="'ui/storehouse/storehouse/goumaianniu.png'" />
+	<storeImg9:Img src="'ui/storehouse/storehouse/jinbi.png'" />
+	<storeImg10:Img src="'ui/storehouse/storehouse/shanghaicao.png'" />
+	
+	<storeImg11:Img src="'ui/storehouse/storehouse/shengjicao.png'" />
+	<storeImg12:Img src="'ui/storehouse/storehouse/shengjicao1-1.png'" />
+	<storeImg13:Img src="'ui/storehouse/storehouse/suo.png'" />
+	<storeImg14:Img src="'ui/storehouse/storehouse/tili.png'" />
+	<!--<storeImg15:Img src="'ui/storehouse/storehouse/wuqiban.png'" scaleImg="true"/>-->
+	<storeImg15:Slice9
+		src="'ui/storehouse/storehouse/wuqiban.png'" 
+		slice="[396, 397, 221, 231]"
+	/>
+	<storeImg16:Img src="'ui/storehouse/storehouse/xuanzhongkuang.png'" />
+	
+	
+	
+	
+	<qiang1:Img src="'ui/storehouse/storehouse/qiang1.png'"/>
+	<qiang2:Img src="'ui/storehouse/storehouse/qiang2.png'"/>
+	<qiang3:Img src="'ui/storehouse/storehouse/qiang3.png'"/>
+	<qiang4:Img src="'ui/storehouse/storehouse/qiang4.png'"/>
+	<qiang5:Img src="'ui/storehouse/storehouse/qiang5.png'"/>
+	<qiang6:Img src="'ui/storehouse/storehouse/qiang6.png'"/>
+	<qiang7:Img src="'ui/storehouse/storehouse/qiang7.png'"/>
+	<qiang8:Img src="'ui/storehouse/storehouse/qiang8.png'"/>
+	<qiang9:Img src="'ui/storehouse/storehouse/qiang9.png'"/>
+	<!--------------------------------------------------------------------------------------->
+	
+	<!--主界面 main: mainBtn mainImg-->
+	<mainImg1:Img src="'ui/main/fanhuijiantou.png'"/>
+	<mainImg2:Img src="'ui/main/shangdianshianniu1-1.png'"/>
+	<mainImg3:Img src="'ui/main/xiadianshianniu1-1.png'"/>
+	<mainImg4:Img src="'ui/main/jiangli1.png'"/>
+	<mainImg5:Img src="'ui/main/xitong1.png'"/>
+	<mainImg6:Img src="'ui/main/peiyang1.png'"/>
+	<mainImg7:Img src="'ui/main/chuzhan1.png'"/>
+	<mainImg8:Img src="'ui/main/shangdixinxilan.png'"/>
+	<mainImg9:Img src="'ui/main/xiadixinxilan.png'"/>
+	<mainImg10:Img src="'ui/main/nengliangtiao.png'"/>
+	<mainImg12:Img src="'ui/main/shangguangmang.png'"/>
+	<mainImg13:Img src="'ui/main/xiaguangmang.png'"/>
+	<mainImg14:Img src="'ui/main/guanganniu4.png'"/>
+	<mainImg15:Img src="'ui/main/guanganniu5.png'"/>
+	<mainImg16:Img src="'ui/main/jiangli.png'"/>
+	<mainImg17:Img src="'ui/main/shangdian.png'"/>
+	<mainImg18:Img src="'ui/main/jineng.png'"/>
+	<mainImg19:Img src="'ui/main/cangku.png'"/>
+	<mainImg20:Img src="'ui/main/duanzao.png'"/>
+	<mainImg21:Img src="'ui/main/xiaoxi.png'"/>
+	<mainImg22:Img src="'ui/main/shezhi.png'"/>
+	<mainImg23:Img src="'ui/main/zhuxian.png'"/>
+	<mainImg24:Img src="'ui/main/chuangguan.png'"/>
+	<mainImg25:Img src="'ui/main/wujin.png'"/>
+	<mainImg27:Img src="'ui/main/zhujiemiantubiao.png'"/>
+	
+	<mainTopBg:Slice3 src="'ui/main/shangmianditu.png'" slice = "[0.67, 0.1, 0.32]"/>
+	<mainTop1:Img src="'ui/main/shangmianditu.png'"/>
+	<mainTop2:Img src="'ui/main/dianchitubiao.png'"/>
+	<mainTop3:Img src="'ui/main/huobi2.png'"/>
+	<mainTop4:Img src="'ui/main/zuanshi2.png'"/>
+	<mainTop5:Img src="'ui/main/shangmianditu2.png'"/>
+	
+	<TipBgImg:Img src="'ui/main/ditukuangbian.png'"/>
+	<TipBgImg1:Img src="'ui/main/showtips.png'"/>
+	
+	<mainBtn1:Img src="'ui/main/plusButton.png'"/>
+	<mainBtn2:Img src="'ui/main/duobaoanniu.png'"/>
+	<mainBtn3:Img src="'ui/main/chongzhianniu.png'"/>
+	<mainBtn4:Img src="'ui/main/zuoyoujinshuanniupingmu1.png'"/>
+	<mainBtn5:Img src="'ui/main/zuoyoujinshuanniu2.png'"/>
+	<mainBtn6:Img src="'ui/main/shangdianshianniupingmu1.png'"/>
+	<mainBtn7:Img src="'ui/main/xiadianshianniupingmu1.png'"/>
+	<mainBtn8:Img src="'ui/main/shangdianshianniupingmu2.png'"/>
+	<mainBtn9:Img src="'ui/main/guanganniu1.png'"/>
+	<mainBtn10:Img src="'ui/main/guanganniu2.png'"/>
+	<mainBtn11:Img src="'ui/main/guanganniu3.png'"/>
+	<mainBtn12:Img src="'ui/main/mainBtn1.png'"/>
+	<mainBtn13:Img src="'ui/main/mainBtn2.png'"/>
+	<mainBtn14:Img src="'ui/main/mainBtn3.png'"/>
+	
+	<!--寻宝 sreasureHunt: hunImg-->
+	<hunImg1:Img src="'ui/treasureHunt/shangchengdikuang.png'"/>
+	<hunImg2:Img src="'icon/o012.png'"/>
+	<hunImg3:Img src="'icon/o011.png'"/>
+	<hunImg4:Img src="'icon/baoxiang.png'"/>
+	<!--锻造 forge: forgeImg forgeBtn-->
+	<forgeImg2:Img src="'ui/forge/xiaokuang3.png'"/>
+	<forgeImg3:Img src="'ui/forge/zhuangbeiqianghuakuang2.png'"/>
+	<forgeImg4:Img src="'ui/forge/an.png'"/>
+	<forgeImg5:Img src="'ui/forge/xiaokuang4.png'"/>
+	<forgeImg6:Img src="'ui/forge/zhuangbeiqianghuakuang1.png'"/>
+	<forgeImg7:Img src="'ui/forge/qianghua.png'"/>
+	<forgeImg8:Img src="'ui/forge/jinjie.png'"/>
+	<forgeImg9:Img src="'ui/forge/jinhua.png'"/>
+	<forgeImg10:Img src="'ui/forge/fenjie.png'"/>
+	<forgeImg11:Img src="'ui/forge/tubiaodakuangshengxing1.png'"/>
+	<forgeImg12:Img src="'ui/forge/tubiaodakuang2.png'"/>
+	<forgeImg13:Img src="'ui/forge/xingxing.png'"/>
+	<forgeImg15:Img src="'ui/forge/tubiaodakuang.png'"/>
+	<forgeImg16:Img src="'ui/forge/qianghau.png'"/>
+	<forgeImg17:Img src="'ui/forge/jingyandikuang2.png'"/>
+	<forgeImg18:Img src="'ui/forge/huangsitiao.png'"/>
+	<forgeImg19:Img src="'ui/forge/xingxing2.png'"/>
+	<forgeImg20:Img src="'ui/forge/qiang.png'"/>
+	<forgeImg21:Img src="'ui/forge/jinjie2.png'"/>
+	<forgeImg22:Img src="'ui/forge/daxingxing.png'"/>
+	<forgeImg23:Img src="'ui/forge/daxingxing2.png'"/>
+	<forgeImg24:Img src="'ui/forge/jinhua2.png'"/>
+	<forgeImg25:Img src="'ui/forge/fenjie2.png'"/>
+	<forgeBtn3:Img src="'ui/forge/wupingqianghuaanniu.png'"/>
+	<forgelvImg1:Img src="'ui/forge/1.png'"/>
+	<forgelvImg2:Img src="'ui/forge/2.png'"/>
+	<forgelvImg3:Img src="'ui/forge/3.png'"/>
+	<forgelvImg4:Img src="'ui/forge/4.png'"/>
+	<forgelvBImg1:Img src="'ui/forge/1_2.png'"/>
+	<forgelvBImg2:Img src="'ui/forge/2_2.png'"/>
+	<forgelvBImg3:Img src="'ui/forge/3_2.png'"/>
+	<forgelvBImg4:Img src="'ui/forge/4_2.png'"/>
+	<forgelvBImg5:Img src="'icon/o004.png'"/>
+	<forgelvBImg6:Img src="'icon/o002.png'"/>
+	<forgelvBImg7:Img src="'icon/o003.png'"/>
+	<!--闯关 through:  throughImg-->
+	<throughImgTL:Img src="'ui/through/ditubeijing01.jpg'"/>
+	<throughImgTR:Img src="'ui/through/ditubeijing02.jpg'"/>
+	<throughImgBL:Img src="'ui/through/ditubeijing03.jpg'"/>
+	<throughImgBR:Img src="'ui/through/ditubeijing04.jpg'"/>
+	<throughImg1:Img src="'ui/through/jingyingfuben.png'"/>
+	<throughImg2:Img src="'ui/through/putongfuben.png'"/>
+	<throughImg3:Img src="'ui/through/boss-suo.png'"/>
+	<throughImg4:Img src="'ui/through/kuang.png'"/>
+	<throughImg5:Img src="'ui/through/guankasuo.png'"/>
+	<throughImg6:Img src="'ui/through/putongfuben2.png'"/>
+	
+	<throughImg8:Img src="'ui/through/zhongxingxing.png'"/>
+	<throughImg10:Img src="'ui/through/zensongtili.png'"/>
+	
+	<!--技能 skill: skillImg-->
+	<skillImg1:Img src="'ui/skill/jinengkuang.png'" />
+	<skillImg2:Img src="'ui/skill/atubiaobeijingkuang.png'" />
+	<skillImg3:Img src="'ui/skill/ahuisekuang.png'" />
+	<skillImg4:Img src="'ui/skill/zhadan.png'" />
+	<skillImg5:Img src="'ui/skill/shandian.png'" />
+	<skillImg6:Img src="'ui/skill/chaojihuoli.png'" />
+	<skillImg7:Img src="'ui/skill/wudi.png'" />
+	<skillImg8:Img src="'ui/skill/zhiyu.png'" />
+	<skillImg9:Img src="'ui/skill/jinengsuo2.png'" />
+	<skillImg10:Img src="'ui/skill/anniu.png'" />
+	<skillImg11:Img src="'ui/skill/jinenshuoming.png'" />
+	
+	
+	<!--副本 ectype:  ectypeImg-->
+	<ectypeImg1:Img src="'ui/ectype/fubenmoshikuang.png'"/>
+	<ectypeImg3:Img src="'ui/ectype/hujiafuben.png'"/>
+	<ectypeImg4:Img src="'ui/ectype/jinbifuben.png'"/>
+	<ectypeImg5:Img src="'ui/ectype/wujinfuben.png'"/>
+	<ectypeImg6:Img src="'ui/ectype/wuqifuben.png'"/>
+	<ectypeImg7:Img src="'ui/ectype/hujiatubiao.png'"/>
+	<ectypeImg8:Img src="'ui/ectype/jingbitubiao.png'"/>
+	<ectypeImg9:Img src="'ui/ectype/wujingtubiao.png'"/>
+	<ectypeImg10:Img src="'ui/ectype/wuqitubiao.png'"/>
+	
+	<!--商城  --活动 shop: shopImg-->
+	<shopImg2:Img src="'ui/shop/fujiabiaoqian2.png'"/>
+	
+	<!--奖励 reward: rewardImg-->
+	<rewardImg1:Img src="'ui/reward/beijingkuang-1.png'"/>
+	<rewardImg2:Img src="'ui/reward/anniu-xia.png'"/>
+	<rewardImg3:Img src="'ui/reward/anniu-shang.png'"/>
+	<rewardImg4:Img src="'ui/reward/baoxiang.png'"/>
+	<rewardImg5:Img src="'ui/reward/zhuanshi.png'"/>
+	<rewardImg6:Img src="'ui/reward/jinbi.png'"/>
+	<rewardImg7:Img src="'ui/reward/anniu.png'"/>
+	<rewardImg8:Img src="'ui/reward/lingqulan.png'"/>
+	
+	<!--alert提示框 alert-->
+	<alertImg1:Img src="'ui/alert/jiazaidengdaiquan.png'" />
+	<alertImg2:Img src="'ui/alert/jiazaikuang.png'" />
+	<alertImg3:Img src="'ui/alert/settlement/shengli.png'" />
+	<alertImg4:Img src="'ui/alert/settlement/toumingkuang2.png'" />
+	<alertImg5:Img src="'ui/alert/settlement/bencifenshu.png'" />
+	<alertImg6:Img src="'ui/alert/settlement/toumingkuang1.png'" />
+	<alertImg7:Img src="'ui/alert/settlement/wupingdikuang.png'" />
+	<alertImg8:Img src="'ui/alert/settlement/qudidng.png'" />
+	<alertImg9:Img src="'ui/alert/settlement/danhen1.png'" />
+	<alertImg10:Img src="'ui/alert/settlement/danhen2.png'" />
+	<alertImg11:Img src="'ui/alert/settlement/shibaiziti.png'" />
+	<alertBtn1:Img src="'ui/alert/settlement/pingjiaanniu.png'" />
+	<alertBtn2:Img src="'ui/alert/kuang.png'" />
+	
+	<!--战斗控制界面-->
+	<controllerImg1:Img src="'ui/controller/controlDir.png'"/>
+	<controllerBtn3:Img src="'ui/controller/tiaoyue.png'"/>
+	
+	<fightImg1:Img src="'ui/fight/jineng1.png'" />
+	<fightImg2:Img src="'ui/fight/jineng2.png'" />
+	<fightImg3:Img src="'ui/fight/jineng3.png'" />
+	<fightImg4:Img src="'ui/fight/jineng4.png'" />
+	<fightImg5:Img src="'ui/fight/jineng5.png'" />	
+	<fightImg6:Img src="'ui/fight/buffkuang.png'" />
+	<fightImg7:Img src="'ui/fight/controlDir.png'" />
+	<fightImg8:Img src="'ui/fight/jiesexuetiao.png'" />
+	<fightImg9:Img src="'ui/fight/juesekuang.png'" />
+	<fightImg10:Img src="'ui/fight/go.png'" />
+	<fightImg11:Img src="'ui/fight/tiaoyue.png'" />
+	<fightImg12:Img src="'ui/fight/BOSSkuang.png'" />
+	<fightImg13:Img src="'ui/fight/sheji.png'" />
+	<fightImg14:Img src="'ui/fight/jinengsuo.png'" />
+	<fightImg15:Img src="'ui/fight/zanting.png'" />
+	<fightThumb1:Img src="'ui/fight/renwu.png'" />
+	<fightThumb2:Img src="'ui/fight/qiang.png'" />
+	
+	<fightImg18:Img src="'ui/fight/kandao.png'" />
+	<fightImg19:Img src="'ui/fight/quanbinggongji.png'" />
+	<fightImg20:Img src="'ui/fight/renwukuang.png'" />
+	<fightImg21:Img src="'ui/fight/xuechaodi.png'" />
+	<fightImg22:Img src="'ui/fight/jingyantiaodi.png'" />
+	
+	<fightTip1:Img src="'ui/fight/tongguan01.png'" />
+	<fightTip2:Img src="'ui/fight/tongguan02.png'" />
+	
+	<skillBtn1:Img src="'ui/fight/zadanjineng.png'" />
+	<skillBtn2:Img src="'ui/fight/shandian.png'" />
+	<skillBtn3:Img src="'ui/fight/chaojihuoli.png'" />
+	<skillBtn4:Img src="'ui/fight/wudi.png'" />
+	<skillBtn5:Img src="'ui/fight/zhiliao.png'" />
+	<skillGBtn1:Img src="'ui/fight/zhadan02.png'" />
+	<skillGBtn2:Img src="'ui/fight/shandian02.png'" />
+	<skillGBtn3:Img src="'ui/fight/chaojihuoli02.png'" />
+	<skillGBtn4:Img src="'ui/fight/wudi02.png'" />
+	<skillGBtn5:Img src="'ui/fight/zhiyu02.png'" />
+
+	<noviceImg1:Img src="'ui/noviceCourse/duihuakuan.png'" />
+	<noviceImg2:Img src="'ui/noviceCourse/quedinganniu.png'" />
+	<noviceImg3:Img src="'ui/noviceCourse/shouzi.png'" />
+	<noviceImg6:Img src="'ui/noviceCourse/wenzi.png'" />
+	<noviceImg7:Img src="'ui/noviceCourse/tipkuang1.png'" />	
+	<noviceImg8:Img src="'ui/noviceCourse/tipkuang2.png'" />	
+	<noviceImg9:Img src="'ui/noviceCourse/tipkuang3.png'" />
+	<noviceImg10:Img src="'ui/noviceCourse/shouzhi03.png'" />
+	
+	<settingImg1:Img src="'ui/setting/huadao.png'" />
+	<settingImg2:Img src="'ui/setting/youxiyingxiao.png'" />
+	<settingImg3:Img src="'ui/setting/beijingyinyue.png'" />
+	<settingImg4:Img src="'ui/setting/on.png'" />
+	<settingImg5:Img src="'ui/setting/off.png'" />
+	
+	<actorImg1:Img src="'ui/login/renwu.png'" />
+	<actorImg2:Img src="'ui/noviceCourse/zihuiguan.png'" />
+	<actorImg3:Img src="'ui/noviceCourse/boss.png'" />
+	
+	<LoginEdge:Slice9
+		src="'ui/alert/jiazaikuang.png'" 
+		slice="[100, 120, 132, 148]"
+	/>
+	<SuerPopupBg:Img src = "'ui/alert/xiaokuang.png'" scaleImg="true" keepAspect="true" />
+	
+	<PopupBg:Slice9
+		src="'ui/alert/xiaokuang.png'" 
+		slice="[396, 397, 221, 231]"
+	/>
+	
+	
+</Skins> 

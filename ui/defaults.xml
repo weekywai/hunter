@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defaults>
+	<Text>
+		<!--登录帐号密码-->
+		<Write
+			 filters="[new openfl.filters.GlowFilter(0x000000,1,3,3,6)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="32"
+            format-color="0xFFFFFF"
+            format-bold="true"
+		/>
+		<Tip
+			filters="[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 4, 4, 20)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="42"
+            format-color="0x00f7ff"
+            format-bold="false"
+		/>
+		<!-- 仓库列表 new openfl.filters.GlowFilter(0x000000,1,5,5,3)!-->
+		<Title
+            filters="[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 4, 4, 20)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="28"
+            format-color="0x81faf5"
+            format-bold="false"
+        />
+		<TitleWrite
+            filters="[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.6, 4, 4, 20)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="28"
+            format-color="0xffffff"
+            format-bold="false"
+        />
+		<Label
+			filters = "[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 5, 5, 6)]"
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="32"
+            format-color="0x81faf5"
+            format-bold="false"
+			
+		/>
+		<Small
+            filters="[new openfl.filters.GlowFilter(0x000000,0.8,6,6,3)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="20"
+            format-color="0xefb933"
+            format-bold="false"
+        />
+		<Green
+			filters="[new openfl.filters.GlowFilter(0x000000,1,3,3,6)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0x32ff7f"
+            format-bold="false"
+		/>
+		<Gold
+			filters="[new openfl.filters.GlowFilter(0x000000,1,3,3,6)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0xFFD927"
+            format-bold="false"
+		/>
+		<SmallBull
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="18"
+            format-color="0x814e15"
+            format-bold="false"
+		/>
+		<Desc
+			filters="[new openfl.filters.GlowFilter(0x000000,0.8,3,2,3)]"
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="17"
+            format-color="0xFFD132"
+            format-bold="false"
+			label-wordWrap = "true"
+		/>
+		<Blue
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0x87fffb"
+            format-bold="false"
+		/>
+		<Red
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0xff0000"
+            format-bold="false"
+		/>
+		<Gray
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			format-size="24"
+            format-color="0x939393"
+            format-bold="false"
+			label-selectable="false"
+		/>
+		<Yellow1
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			format-size="24"
+            format-color="0xfff4da"
+            format-bold="false"
+			label-selectable="false"
+		/>
+		<Orange
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0xff7e02"
+            format-bold="false"
+		/>
+		<BlueShadow
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0x11c9ff"
+            format-bold="false"
+		/>
+		<RedShadow
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0xf62521"
+            format-bold="false"
+		/>
+		<YellowShadow
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0xffd035"
+            format-bold="false"
+		/>
+		<Gold2
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="20"
+            format-color="0xfeff5a"
+            format-bold="false"
+		/>
+		<!-- 战斗界面 !-->
+		<Yellow
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0xebdf62"
+            format-bold="true"
+		/>
+		<!-- 战斗结束 !-->
+		<Win
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="26"
+            format-color="0xe2cd4e"
+            format-bold="true"
+		/>
+		<!-- 主控制 !-->
+		<TopMenu 
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			format-size="28"
+            format-color="0xFFFFFF"
+            format-bold="false"
+			label-selectable="false"
+			paddingLeft="10"
+		/>
+		<!--常用字体属性-->
+		<OftenA
+			format-size="24"
+            format-color="0x4760FF"
+            format-bold="false"
+			label-selectable="false"
+		/>
+		<OftenB
+			filters="[new openfl.filters.DropShadowFilter(2, 45, 0x000000, 1, 3, 3, 1)]"
+			format-size="24"
+            format-color="0x00D0F5"
+            format-bold="false"
+			label-selectable="false"
+			
+		/>
+		<OftenC
+			filters = "[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 5, 5, 6)]"
+			format-size="28"
+            format-color="0xF104E1"
+            format-bold="false"
+			label-selectable="false"
+		/>
+		<OftenD
+			filters = "[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 5, 5, 6)]"
+			format-size="30"
+            format-color="0xF0B505"
+            format-bold="false"
+			label-selectable="false"
+		/>
+		<Green1
+            label-selectable="false"
+            mouseEnabled="false"
+            format-size="24"
+            format-color="0x00FA2A"
+            format-bold="false"
+		/>
+		<!--通用提示框红色文字-->
+		<Tiptxt
+			filters = "[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 5, 5, 6)]"
+			label-selectable="false"
+            mouseEnabled="false"
+            format-size="40"
+            format-color="0xff0000"
+            format-bold="false"
+		/>
+		<Load
+			format-size="38"
+            format-color="0x00D0F5"
+            format-bold="true"
+			label-selectable="false"
+		/>
+		<Select
+			format-size="38"
+            format-color="0xff0000"
+            format-bold="true"
+			label-selectable="false"
+		/>
+		<!--时装-->
+		<LatestName
+			format-size="38"
+            format-color="0xFFB300"
+            format-bold="false"
+			label-selectable="false"
+			filters="[new openfl.filters.GlowFilter(0x000000,1,3,3,6)]"
+		/>
+		<TestRed
+			format-size="36"
+            format-color="0xFF0000"
+            format-bold="false"
+			label-selectable="false"
+			filters="[new openfl.filters.GlowFilter(0x000000,1,3,3,6)]"
+		/>
+		
+	</Text>
+	<!--filters="[new openfl.filters.GlowFilter(0x000000,1,3,3,2)]"-->
+	<InputText>
+		<Write
+            format-size="30"
+            format-color="0xBDBDBD"
+            format-bold="false"
+		/>
+	</InputText>
+	<Radio>
+		<RaidoUp
+			states-up-ico-src   = "'ui/main/shangdianshianniupingmu1.png'"
+            states-down-ico-src = "'ui/main/shangdianshianniupingmu2.png'"
+		/>
+		<RaidoDown
+			states-up-ico-src   = "'ui/main/xiadianshianniupingmu1.png'"
+            states-down-ico-src = "'ui/main/xiadianshianniupingmu2.png'"
+		/>
+	</Radio>
+	<TabPage>
+		<TabPages
+			title-format-size="28"
+            title-format-color="0x9496aa"
+            title-format-bold="false"
+			title-highlightFormat-color = "0x81faf5"
+            title-highlightFormat-bold  = "false"
+            title-highlightFormat-size  = "28"
+            title-highlightOnSelect     = "true"
+            title-states-up-skinName    = "'forgeImg5'"
+            title-states-down-skinName  = "'forgeImg2'"
+			title-label-filters="[new openfl.filters.DropShadowFilter(0, 45, 0x000000, 0.7, 4, 4, 20)]"
+		/>
+	</TabPage>
+	<!--进度条-->
+	<Progress>
+		<ProgerssBar
+			w="590"
+			h="25"
+			max="100"
+			skin:Paint-border="2"
+			skin:Paint-color="0x666666"
+			skin:Paint-corners="[10]"
+			skin:Paint-alpha="0.2"
+
+			bar-skin:Gradient-colors = "[0xffff00,0xFF9300]"
+			bar-skin:Gradient-corners="[10]"
+		/>
+	</Progress>
+		
+	<Button>
+	</Button>
+	
+	<!--<Control>
+        <Default skin:Paint-corners="[20]"/>
+    </Control>-->
+	
+	
+</Defaults>

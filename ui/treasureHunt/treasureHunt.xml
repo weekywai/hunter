@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'treasureHunt'" name="'treasureHuntView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'寻 宝'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<VBox name="'content'" childPadding="-20" widthPt="100" heightPt="100">
+	</VBox>
+</Widget>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Box widthPt="100" heightPt="100" defaults="'Screen,Level1'">
+	<Widget w="800" h="426" skinName="'SuerPopupBg'">
+	<!--<Widget w="768" h="407" skinName="'SuerPopupBg'">-->
+		
+		<Button rightPt="-3" topPt="6" defaults="'closeBtn,HightLight'"on-click="$this.getParent('popup').free();"/>
+		<Button rightPt="8" bottomPt="-11" text="'确定'" defaults="'submitBtn,HightLight'" on-click="$this.getParent('popup').free();"/>
+		<Box widthPt="100" heightPt="100">
+			<Text defaults="'TitleWrite'" label-wordWrap="true" text="@msg" w="760" align="'center,top'"/>
+		</Box>
+	</Widget>
+</Box>

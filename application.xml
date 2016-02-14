@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
+	<meta title="MetalWarrior" package="com.metal.MetalWarrior" version="1.0.0" company="weeky" />
+	
+	<!-- output -->
+	<app main="Main" file="MetalWarrior" path="bin" />
+	
+	
+	
+	<android target-sdk-version="19" />
+	<window background="#000000" fps="60" />
+	<window width="1280" height="720" unless="mobile" />
+	<window width="0" height="0" if="mobile" />
+	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
+	
+	<template path="tmp/GameActivity.java" rename="src/org/haxe/lime/GameActivity.java" if="android" />
+	
+	<!--<haxeflag name="--macro" value="com.metal.example.Init.init()"/>-->
+	<!-- sprite 渲染地图-->
+	<haxedef name="spriteRenderer" />
+	<haxedef name="actuate_manual_update" />
+	
+	<set name="openfl-legacy" />
+	<config:hxtelemetry host="192.168.1.100" allocations="true" />
+	<!-- classpath, haxe libs -->
+	<source path="src" />
+	<haxelib name="openfl" />
+	<haxelib name="actuate" />
+	<!--<haxelib name="tweenx" />-->
+	<haxelib name="hscript" />
+	<!--<haxelib name="stablexui" />-->
+	<haxelib name="format" />
+	<haxelib name="dconsole" />
+	<haxelib name="crashdumper" unless="neko,flash"/>
+	<haxelib name="HxTelemetry" />
+	<haxedef name="HXCPP_STACK_LINE" unless="neko,flash"/>
+	<haxedef name="HXCPP_STACK_TRACE" unless="neko,flash"/>
+	<haxedef name="HXCPP_TELEMETRY" />
+	
+	
+	<!--icon-->
+	<!--<icon path="assets/openfl.svg" />-->
+	<icon path="assets/32.png" size="32" />
+	<icon path="assets/64.png" size="64" />
+	<icon path="assets/72.png" size="72" />
+	<icon path="assets/128.png" size="128" />
+	<!-- assets -->
+	<assets path="assets" rename="" include="*.xml" />
+	<assets path="assets/ui" rename="ui" include="*.gif|*.png|*.jpg|*.xml|*.css|*.bin|*.ttf"/>
+	<assets path="assets/proto" rename="proto" include="*.xml|*.bin|*.json|*.txt"/>
+	
+	<!--<assets path="assets/particles" rename="particles" include="*.plist|*.png" />-->
+	<assets path="assets/model" rename="model" include="*.png|*.jpg|*.xml|*.plist|*.bin|*.atlas|*.json"/>
+	<assets path="assets/maps" rename="map" include="*.xml|*.tmx|*.bin|*.png|*.jpg|*.tsx"/>
+	<assets path="assets/effect" rename="effect" include="*.xml|*.plist|*.bin|*.png|*.jpg|*.atlas|*.json"/>
+	<assets path="assets/bullet" rename="bullet" include="*.xml|*.plist|*.bin|*.png|*.jpg|*.atlas|*.json"/>
+	
+	<assets path="assets/audio" rename="sfx" include="*.mp3|*.wav" if="flash" />
+	<assets path="assets/audio" rename="sfx" include="*.wav|*.ogg" unless="flash" />
+	<assets path="assets/icon" rename="icon" include="*.png|*.jpg"/>
+	<assets path="assets/font" rename="font" include="*.ttf|*.ttf.hash|*.png|*.otf" />
+	<assets path="assets/graphics" rename="graphics" include="*.png|*.jpg|*.xml" if="debug"/>
+	<!-- optimize output 
+	<haxeflag name="-dce full" /> -->
+	
+</project>

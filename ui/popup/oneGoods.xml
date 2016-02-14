@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget name="'goodsBox'" widthPt="100" heightPt="100" skinName="'forgeImg12'">
+	<Bmp name="'img'" skinName="'forgeImg12'" leftPt="2" topPt="2" />
+	<!--<VBox topPt="15" left="-10" childPadding="7">
+		<Bmp  skinName="'forgeImg19'"/>
+		<Bmp  skinName="'forgeImg19'"/>
+		<Bmp  skinName="'forgeImg19'"/>
+	</VBox>
+	<VBox topPt="15" left="-10" childPadding="7">
+		<Bmp name="'star1'" skinName="'forgeImg13'" visible="false"/>
+		<Bmp name="'star2'" skinName="'forgeImg13'" visible="false" />
+		<Bmp name="'star3'" skinName="'forgeImg13'" visible="false"/>
+	</VBox>-->
+	<Text name="'goodsName'" defaults="'Blue'" topPt="100" align="'center,middle'" w="120" text="'装备名称'" />
+	<Bmp name="'equipBmp'"/>
+	<Text name="'goodsNum'" defaults="'Gold2'" rightPt="27" topPt="59" text="'x1'" />
+	<!--<Text name="'selectTxt'" defaults="'Select'" topPt="45" leftPt="10" text="'已选择'" visible="false" />-->
+</Widget>

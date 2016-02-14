@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox widthPt="100" >
+	<Widget skinName="'storeImg1'">
+		<Bmp name="'img'" skinName="'forgeImg12'" topPt="17.5" leftPt="4"/>
+		<Bmp name="'img'" skinName="'hunImg2'" topPt="23" leftPt="5.5"/>
+		<Text name="'give'" defaults="'OftenC'" text="'加送100%'" topPt="26" leftPt="21" />
+		<Text name="'rmb'" defaults="'Yellow1'" text="'人民币5元'" topPt="54" leftPt="18"/>
+		<Text defaults="'SmallBull'" text="'特性描述'" topPt="11" leftPt="42"/>
+		<Text name="'desc'" defaults="'YellowShadow'" text="'可获得钻石'"topPt="54" leftPt="40" />
+		<!--<Text name="'level'" defaults="'Green'" text="'+99'"  topPt="10" leftPt="10" />
+		<Text name="'Lv'" defaults="'Green'" text="'Lv80/90'"  topPt="65" leftPt="5" />-->
+		<Box leftPt="-4" topPt="22" childPadding="-59">
+			<Bmp skinName="'shopImg2'" />
+			<Text name="'discountValue'" defaults="'Small'" text="''"/>
+		</Box>
+		<Widget topPt="52" rightPt="23">
+			<Button name="'buyBtn'" defaults="'Givebtn,HightLight'" text="'购买'" />
+		</Widget>
+	</Widget>
+</HBox>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox widthPt="100">
+	<Widget skinName="'storeImg1'">
+		<Text defaults="'OftenD'" text="'奖励标题'" topPt="20" leftPt="24"/>
+		<HBox childPadding="5" topPt="48" leftPt="24">
+			<Text defaults="'Title'" text="'贵族等级'"/>
+			<Text name="'att'" defaults="'Small'" text="'99999'"/>
+		</HBox>
+		<HBox childPadding="5" topPt="65" leftPt="22">
+			<Text defaults="'Title'" text="'勋章等级'"/>
+			<Text name="'Characteristic'" defaults="'Small'" text="'99999'"/>
+		</HBox>
+		<VBox childPadding="5" topPt="55" leftPt="53">
+			<Text defaults="'OftenD'" text="'名次：1000'"/>
+			<!--<Text name="'desc'" defaults="'Small'" text="'描述描述'"/>-->
+		</VBox>
+		<Text name="'level'" defaults="'OftenD'" text="'vip10'"  topPt="0" leftPt="0" />
+	</Widget>
+	<Widget topPt="9.5">
+		<Button defaults="'Givebtn,HightLight'"topPt="33" leftPt="11" align="'center,middle'">
+			<Bmp skinName="'throughImg10'" scaleX="0.9" scaleY="0.9"/>
+		</Button>
+		
+	</Widget>
+</HBox>

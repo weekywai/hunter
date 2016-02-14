@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'pay'" name="'payView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="-2">
+		<Text text="'充 值'" defaults="'Tip'" topPt="20" />
+	</VBox>
+	
+</Widget>

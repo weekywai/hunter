@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox widthPt="100" childPadding="-160" align="'center,middle'">
+	<Widget skinName="'rewardImg8'">
+		<!--<Widget skinName="'skillImg2'" leftPt="10" topPt="30" scaleX="0.5" scaleY="0.5" >
+			<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+				<Bmp skinName="'rewardImg4'"/>
+			</Box>
+		</Widget>-->
+		<!--<Text defaults="'Gold2'" format-size="30" leftPt="5" topPt="50" text="'奖励钻石与金币'"/>-->
+		
+		<Widget skinName="'skillImg2'" leftPt="14" topPt="24" scaleX="0.7" scaleY="0.7" >
+			<Box skinName="'skillImg3'" leftPt="4" topPt="3">
+				<Bmp skinName="'rewardImg5'"/>
+			</Box>
+		</Widget>
+		<Text name="'jewel'" defaults="'Gold2'" format-size="30" leftPt="25" topPt="38" text="'+10000'"/>
+		
+		<Widget skinName="'skillImg2'" leftPt="40" topPt="24" scaleX="0.7" scaleY="0.7" >
+			<Box skinName="'skillImg3'" leftPt="4" topPt="3">
+				<Bmp skinName="'rewardImg6'"/>
+			</Box>
+		</Widget>
+		<Text name="'gold'" defaults="'Gold2'" format-size="30" leftPt="50" topPt="38" text="'+10000'"/>
+	</Widget>
+	<VBox >
+		<Text name="'day'" defaults="'YellowShadow'" text="'第1天'" topPt="30" />
+		<Button name="'getBtn'" defaults="'None,HightLight'" leftPt="13" text="'领取'" />
+	</VBox>
+</HBox>

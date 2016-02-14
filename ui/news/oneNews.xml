@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox widthPt="100">
+	<Widget skinName="'storeImg3'">
+		<Text defaults="'TitleWrite'" text="'封测奖励'" topPt="22" leftPt="13"/>
+		<HBox childPadding="0" topPt="54" leftPt="16">
+			<Text defaults="'Yellow1'" format-size="20" text="'奖励'"/>
+			<Text name="'Characteristic'" defaults="'YellowShadow'" format-size="20" text="'100000金币'"/>
+		</HBox>
+		<VBox childPadding="5" topPt="40" leftPt="43">
+			<Text name="'desc'" defaults="'Yellow1'" text="'所有玩家'"/>
+		</VBox>
+		<Text defaults="'SmallBull'" text="'奖励条件'" topPt="7" leftPt="41"/>
+		<Button name="'newsBtn'" defaults="'Givebtn,HightLight'" topPt="50" rightPt="6" text="'领取'" />
+	</Widget>
+</HBox>

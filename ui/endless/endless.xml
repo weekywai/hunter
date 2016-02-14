@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'endless'" name="'ectypeView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text text="'副 本'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<HBox widthPt="100" heightPt="100" topPt="0">
+		<Widget w="281" h="321">
+			<Bmp skinName="'skillImg1'" topPt="69" scaleY="-1" />
+		</Widget>
+		<Widget w="281" h="321">
+			<Bmp skinName="'skillImg1'" topPt="17"/>
+		</Widget>
+		<Widget w="281" h="321">
+			<Bmp skinName="'skillImg1'" topPt="17"/>
+		</Widget>
+		<Widget w="281" h="321">
+			<Bmp skinName="'skillImg1'" topPt="69" scaleY="-1" />
+		</Widget>
+	</HBox>
+	<HBox widthPt="100" heightPt="100">
+		<VBox align="'center,top'" topPt="18"  childPadding="30" w="281" h="321">
+			<Bmp skinName="'ectypeImg5'" />
+			<Button name="'endlessBtn'" defaults="'ectypeBtn,HightLight'" align="'center,middle'" >
+				<Bmp skinName="'ectypeImg9'" />
+			</Button>
+		</VBox>
+		<VBox align="'center,top'" topPt="43" childPadding="12" w="281" h="321">
+			<Button name="'weaponsBtn'" defaults="'ectypeBtn,HightLight'" align="'center,middle'" topPt="20">
+				<Bmp skinName="'ectypeImg10'"/>
+			</Button>
+			<Bmp skinName="'ectypeImg6'"/>
+		</VBox>
+		<VBox align="'center,top'" topPt="43" childPadding="12" w="281" h="321">
+			<Button name="'goldBtn'" defaults="'ectypeBtn,HightLight'" align="'center,middle'" >
+				<Bmp skinName="'ectypeImg8'"/>
+			</Button>
+			<Bmp skinName="'ectypeImg4'"/>
+		</VBox>
+		<VBox align="'center,top'" topPt="18" childPadding="30" w="281" h="321">
+			<Bmp skinName="'ectypeImg3'"/>
+			<Button name="'ormorBtn'" defaults="'ectypeBtn,HightLight'" align="'center,middle'" >
+				<Bmp skinName="'ectypeImg7'"/>
+			</Button>
+		</VBox>
+	</HBox>
+</Widget>

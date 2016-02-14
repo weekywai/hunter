@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Box id="'onBattle'" widthPt="100" heightPt="100">
+	<Widget w="1023" h="542" skinName="'SuerPopupBg'">
+		<VBox childPadding="30" widthPt="100" heightPt="100" topPt="-8">
+			<Widget skinName="'throughImg4'" topPt="21">
+				<HBox childPadding="30" leftPt="10" topPt="16" align="'left,top'">
+					<Text name="'throughName'" defaults="'OftenD'" text="'第一关'" leftPt="31" topPt="11"/>
+					<!--<Bmp skinName="'throughImg8'"/>
+					<Bmp skinName="'throughImg8'"/>
+					<Bmp skinName="'throughImg8'"/>-->
+					<HBox childPadding="30" align="'left,top'" scaleX="0.55" scaleY="0.55">
+						<Widget skinName="'forgeImg23'">
+							<Bmp name="'star1'" skinName="'forgeImg22'" visible="false" />
+						</Widget>
+						<Widget skinName="'forgeImg23'">
+							<Bmp name="'star2'" skinName="'forgeImg22'" visible="false"/>
+						</Widget>
+						<Widget skinName="'forgeImg23'">
+							<Bmp name="'star3'" skinName="'forgeImg22'" visible="false"/>
+						</Widget>			
+					</HBox>				
+				</HBox>
+				<VBox childPadding="6" leftPt="15" topPt="45" align="'center,middle'">
+					<Text name="'desc'" defaults="'OftenB'" text="'普通关卡'"/>
+					<Text name="'vit'" defaults="'OftenB'" text="'消耗体力：10'"/>
+				</VBox>
+			<!--<Slice3 />  -->
+				<VBox widthPt="100" leftPt="47" topPt="35">
+					<Text name="'uint'" defaults="'Yellow1'" text="''" leftPt="6"/>
+					<Text name="'bossName'" defaults="'Yellow1'" text="'BOSSName'" leftPt="4"/>
+					<Text name="'bossFeature'" defaults="'Yellow1'" text="'BOSSName'" leftPt="2"/>
+				</VBox>
+				<VBox topPt="35" leftPt="50" childPadding="0" align="'top,left'">
+					<HBox childPadding="5" align="'left'">
+						<Bmp skinName="'throughImg8'"/>
+						<Text name="'condition0'" defaults="'OftenB'" text="'通关血量不低于10%'" align="'left'"/>
+					</HBox>
+					<HBox childPadding="5" align="'left'">
+						<Bmp skinName="'throughImg8'"/>
+						<Text name="'condition1'" defaults="'OftenB'" text="'在1:00内通关'" align="'left'"/>
+					</HBox>
+					<HBox childPadding="5" align="'left'">
+						<Bmp skinName="'throughImg8'"/>
+						<Text name="'condition2'" defaults="'OftenB'" text="'复活次数不超过3次'" align="'left'"/>
+					</HBox>					
+				</VBox>	
+			</Widget>				
+			<VBox topPt="52" childPadding="29">
+				<Text defaults="'TitleWrite'"  text="'特殊掉落'"/>
+				<HBox name="'drop'" childPadding="5" widthPt="100" heightPt="100" topPt="51" />
+			</VBox>
+		</VBox>
+		<Button name="'close'"  rightPt="-1" topPt="6" defaults="'closeBtn,HightLight'" />
+		<Button name="'submit'" rightPt="7" bottomPt="-6" text="'开始'" defaults="'submitBtn,HightLight'"/>
+	</Widget>
+</Box>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'gold'" name="'goldView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text name="'tipsName'" text="'购买金币'" defaults="'Tip'" topPt="6" />
+	</VBox>
+	<Scroll id="'goldTrun'" name="'scrollPanel'" topPt="15" leftPt="2" heightPt="75" defaults="'Screen,level1'">
+		<VBox name="'box'" widthPt="100" childPadding="0" >
+			<!--<meta:repeat counter="cnt" times="10">
+				<meta:include name="'list'+cnt" src="ui/buyGoldOrDiamonds/OneGold.xml"/>
+			</meta:repeat>-->
+		</VBox>
+	</Scroll>
+	<VBox topPt="22" leftPt="2" childPadding="300">
+		<Button defaults="'TurnPage,HightLight'" on-click="#Scroll(goldTrun).scrollY+=156;" />
+		<Button defaults="'TurnPage,HightLight'" scaleY="-1" on-click="#Scroll(goldTrun).scrollY-=156;" />
+	</VBox>
+</Widget>

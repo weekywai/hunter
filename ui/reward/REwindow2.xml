@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget widthPt="100" heightPt="100">
+	<Widget widthPt="75" heightPt="100" leftPt="15">
+		<Text name="'currActieNum'" defaults="'Blue'" leftPt="10" topPt="2" text="'当前活跃度(50/100)'"/>
+		<Progress name="'livelyNum'" w="690" h="20" leftPt="9" topPt="12" value="0"></Progress>
+		<!--<HBox leftPt="20" topPt="9" childPadding="20">
+			<meta:repeat counter="cnt" times="5">
+				<Widget skinName="'skillImg2'"   scaleX="0.5" scaleY="0.5" >
+					<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+					<Bmp name="'lively1'" skinName="'rewardImg5'"/>
+					</Box>
+					<Text  defaults="'Green1'"  text="''+20*cnt" />
+				</Widget>
+			</meta:repeat>
+		</HBox>-->
+		
+		<Widget skinName="'skillImg2'" leftPt="20" topPt="9" scaleX="0.5" scaleY="0.5" >
+			<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+				<Bmp name="'lively1'" skinName="'rewardImg5'"/>
+			</Box>
+		</Widget>
+		<Text defaults="'Green1'" leftPt="21.5" topPt="18" text="'20'" />
+		<Widget skinName="'skillImg2'" leftPt="35" topPt="9" scaleX="0.5" scaleY="0.5" >
+			<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+				<Bmp name="'lively2'" skinName="'rewardImg5'"/>
+			</Box>
+		</Widget>
+		<Text defaults="'Green1'" leftPt="36.5" topPt="18" text="'40'" />
+		
+		<Widget skinName="'skillImg2'" leftPt="50" topPt="9" scaleX="0.5" scaleY="0.5" >
+			<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+				<Bmp name="'lively3'" skinName="'rewardImg5'"/>
+			</Box>
+		</Widget>
+		<Text defaults="'Green1'" leftPt="51.5" topPt="18" text="'60'" />
+		
+		<Widget skinName="'skillImg2'" leftPt="65" topPt="9" scaleX="0.5" scaleY="0.5" >
+			<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+				<Bmp name="'lively4'" skinName="'rewardImg5'"/>
+			</Box>
+		</Widget>
+		<Text defaults="'Green1'" leftPt="66.5" topPt="18" text="'80'" />
+		
+		<Widget skinName="'skillImg2'" leftPt="80" topPt="9" scaleX="0.5" scaleY="0.5" >
+			<Box skinName="'skillImg3'" leftPt="5" topPt="3.5">
+				<Bmp name="'lively5'" skinName="'rewardImg5'"/>
+			</Box>
+		</Widget>
+		<Text defaults="'Green1'" leftPt="80.5" topPt="18" text="'100'" />
+	</Widget>
+	<Scroll name="'logday'" widthPt="100" heightPt="74" topPt="25" defaults="'Screen,Level1'">
+		<VBox name="'reward2-1'" widthPt="100">
+			<!--<meta:repeat counter="cnt" times="10">
+				<meta:include name="'list'+cnt" src="ui/reward/reward2-1.xml"/>
+			</meta:repeat>-->
+		</VBox>
+	</Scroll>
+	<!--<VBox name="'reward2-1'" widthPt="100" topPt="22">
+		<meta:include src="ui/reward/reward2-1.xml" />
+	</VBox>-->
+
+</Widget>

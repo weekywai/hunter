@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HBox widthPt="100">
+	<Widget skinName="'storeImg1'">
+		<HBox childPadding="5" topPt="48" leftPt="24">
+			<Text defaults="'Title'" text="'攻击'"/>
+			<Text name="'att'" defaults="'Small'" text="'检测检测'"/>
+		</HBox>
+		<HBox childPadding="5" topPt="65" leftPt="22">
+			<Text defaults="'Title'" text="'特性'"/>
+			<Text name="'Characteristic'" defaults="'Small'" text="'检测字体'"/>
+		</HBox>
+		<VBox childPadding="5" topPt="48" leftPt="53">
+			<Text defaults="'Title'" text="'特性描述'"/>
+			<Text name="'desc'" defaults="'Small'" text="'描述描述'"/>
+		</VBox>
+		<!--<Text name="'level'" defaults="'Green'" text="'+99'"  topPt="10" leftPt="10" />
+		<Text name="'Lv'" defaults="'Green'" text="'Lv80/90'"  topPt="65" leftPt="5" />-->
+		<Bmp skinName="'shopImg2'" topPt="2" leftPt="-4" />
+		<Text name="'discountValue'" defaults="'Small'" text="'7.5'" topPt="3" leftPt="-1" />
+		<Text name="'discount'" defaults="'Small'" text="'折'"  topPt="17" leftPt="-2" />
+		<Bmp skinName="'shopImg3'" leftPt="67" topPt="17" />
+		<Text name="'countdown'" defaults="'Small'" text="'倒计时: 00:00:10'"  leftPt="69" topPt="20" />
+	</Widget>
+	<Widget topPt="10">
+		<Button defaults="'Givebtn,HightLight'"topPt="33" leftPt="11" text="'购买'" />
+	</Widget>
+</HBox>

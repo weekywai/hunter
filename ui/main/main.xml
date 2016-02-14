@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Widget id="'topview'" name="'main'" widthPt="100" heightPt="100">
+	<ViewStack id="'content'" widthPt="100" heightPt="100">
+		<meta:include src="ui/main/mainView.xml"/>
+	</ViewStack>
+	<HBox id="'topMenu'"skinName="'mainTop1'" align="'top,left'" paddingTop="3" paddingLeft="40" >
+		<Widget h="55" w="242">
+			<Bmp skinName="'mainTop2'" topPt="22" leftPt="8"/>
+			<Text name="'vitTxt'" text="'200/200'" topPt="22" leftPt="20" defaults="'TopMenu'"/>
+			<Button name="'buyVitBtn'" defaults="'Plus,HightLight'" rightPt="0" topPt="12"/>
+		</Widget>
+		<Widget h="55" w="242">
+			<Bmp skinName="'mainTop3'" topPt="22" leftPt="9"/>
+			<Text name="'jinbikuang'" topPt="22" leftPt="23" text="'0'" defaults="'TopMenu'"/>
+			<Button name="'BuyGoldBtn'" defaults="'Plus,HightLight'" rightPt="0" topPt="12"/>
+		</Widget>
+		<Widget h="55" w="230">
+			<Bmp skinName="'mainTop4'" topPt="24" leftPt="11"/>
+			<Text name="'zuanshikuang'" topPt="22" leftPt="24" text="'0'" defaults="'TopMenu'"/>
+			<Button name="'BuyDiamondsBtn'" defaults="'Plus,HightLight'" rightPt="0" topPt="12" />
+		</Widget>
+		
+		<HBox skinName="'mainTop5'" rightPt="2">
+			<Button name="'huntBtn'" defaults="'Treasure,HightLight'" leftPt="1.5" topPt="12" />
+			<Button name="'payBtn'" defaults="'Recharge,HightLight'" rightPt="2" topPt="12"/>
+			<Button name="'hintBtn'" defaults="'payBtn,HightLight'" leftPt="1" topPt="10" scaleX="0.8" scaleY="0.7"  mouseEnabled="false" visible="false" />
+		</HBox>
+	</HBox>
+	<!--返回按钮-->
+	<Widget name="'backBtn'" skinName="'mainBtn5'" leftPt="0" topPt="10">
+		<Button name="'leftBtn'" defaults="'mainBackBtn,HightLight'" align="'center,middle'" leftPt="17" topPt="18"/>
+		<Bmp skinName="'mainImg1'" leftPt="40" topPt="34" mouseEnabled="false" />
+	</Widget>
+	<Widget name="'returnBtnBg'" skinName="'mainBtn5'" rightPt="-15" topPt="10" scaleX="-1">
+		<Button name="'rightBtn'" defaults="'mainBackBtn,HightLight'" align="'right'"  leftPt="17" topPt="18"/>
+		<Text text="'角 色'" defaults="'Label'" scaleX="-1" leftPt="74" topPt="34" label-mouseEnabled="false"/>
+	</Widget>
+</Widget>

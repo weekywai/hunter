@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Floating id="'controller'" widthPt="100" heightPt="100" renderTo="'UIRoot'" >
+	<Widget name="'content'" widthPt="100" heightPt="100">
+		
+		<!---->
+		<!--角色-->
+		<Widget name="'playerBar'" widthPt="100" skinName="'fightImg9'" topPt="0.5">					
+		<!--leftPt="-208.5" on-display="$this.tween(0.5,{scaleX:1,scaleY:1,alpha:1,x:0,y:0}).delay(0.5);#Floating(loading).hide();">-->
+									
+			<!--角色血条-->
+			<VBox leftPt="33" topPt="33" childPadding="-19" >
+				<Bmp skinName="'fightImg21'" />
+				<Progress name="'hpBar'" w="252" h="20" value="100"
+				skin:Paint-color="0x111122" bar-skin:Gradient-colors = "[0xff4141,0xff6666, 0x8f0000,0x821207]" />		
+			</VBox>
+			<!--角色怒气-->
+			<VBox leftPt="30" topPt="49" childPadding="-19" >
+				<Bmp skinName="'fightImg22'" />
+				<Progress name="'mpBar'" w="223" h="14" value="100"
+				skin:Paint-color="0x111122" bar-skin:Gradient-colors = "[0xF6D47B,0xFFFF00,0xFFEB96, 0x777700,0x544607]" />
+			</VBox>
+			
+			<Bmp skinName="'fightImg9'" />
+			<!--角色头像-->
+			<!--<Bmp widthPt="100" skinName="'fightImg10'" leftPt="9.8" topPt="15"/>-->
+			<!--头像位置 leftPt="7" topPt="0"/>-->
+			<!--角色资料-->
+			<Text name="'hpPercent'" defaults="'YellowShadow'" format-size="18" text="'1000'" leftPt="60" topPt="34"/>
+			<Text name="'mpPercent'" defaults="'YellowShadow'" format-size="18" text="'10000'" leftPt="53" topPt="49"/>
+			<!--钻石-->
+			<Text topPt="18" leftPt="46" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>	
+			<!--金币-->
+			<Text topPt="18" leftPt="70" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>
+			<Text name="'bulletTxt'" topPt="70" leftPt="60" text="'子弹: 60/无限'" defaults="'TopMenu,Font'" format-size="25"/>	
+		</Widget>		
+		<Text name="'score'" widthPt="100" text="'0'" leftPt="10" topPt="-100" defaults="'Yellow'" />
+		
+		<!--方向按钮-->
+		
+		<Button name="'leftBtn'" defaults="'directionBtn'"  leftPt="9" topPt="60" alpha="0.8"/>
+		<Widget name="'dirPanel'" skin:Paint-color="0x00FF00" w="1" h="1" leftPt="18.5" topPt="73.7" />
+		<Button name="'rightBtn'" defaults="'directionBtn'" scaleX="-1" leftPt="28" topPt="60" alpha="0.8"/>
+		<!--角色跳跃-->
+		<Button name="'attackBtn'" defaults="'attackBtn,HightLight'" rightPt="6" bottomPt="6"  alpha="0.8" />
+		<Button name="'jumpBtn'" w="91" h="90" defaults="'tiaoyueBtn,HightLight'" rightPt="5" bottomPt="31" scaleX="0.9" scaleY="0.9"/>
+		<!--<Bmp name="'jumpBtn'" skinName="'fightImg11'" w="158" h="158" rightPt="8" bottomPt="11"  alpha="0.5"/>-->
+
+		<Widget name="'thumb'" widthPt="100" heightPt="100" topPt="4" leftPt="27" visible="false">
+			<!--<Progress name="'thumbBar'" w="450" h="6" value="100" topPt="3" skin:Paint-color="0x76d7ff" skin:Paint-corners="[0]" bar-skin:Paint-color = "0x76d7ff" bar-skin:Paint-corners="[0]" />-->
+			<Progress name="'thumbBar'" w="450" h="6" value="100" topPt="3" leftPt="1" skin:Paint-color="0x76d7ff" bar-skin:Paint-color = "0x76d7ff" />
+			<Widget name="'thumbHolder'" w="450" >
+				<!--<Bmp skinName="'fightThumb2'"/>
+				<Bmp skinName="'fightThumb2'"/>
+				<Bmp skinName="'fightThumb2'"/>-->
+			</Widget>
+			<Bmp name="'thumbPlayer'" skinName="'fightThumb1'"/>
+		</Widget>
+		
+		
+		
+		<!--5技能-->
+		<Button name="'skill3'" w="91" h="90" defaults="'jinengBtn2,HightLight'" rightPt="5" bottomPt="31" visible="false">
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="0.9" scaleY="0.9" mouseEnabled="false" />
+		</Button> 
+		
+		<Button name="'skill4'" w="91" h="90" defaults="'jinengBtn1,HightLight'" rightPt="13" bottomPt="29" scaleX="0.9" scaleY="0.9">
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="0.9" scaleY="0.9" />
+		</Button> 
+		<Text text="'∞'" rightPt="15" bottomPt="30" defaults="'TopMenu,Font'"/>
+		
+		<!--<Button name="'skill1'" w="91" h="90" defaults="'jinengBtn4,HightLight'" rightPt="19" bottomPt="19" visible="false">
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="0.9" scaleY="0.9" mouseEnabled="false"/>
+		</Button> -->
+		
+		<Button name="'skill2'" w="91" h="90" defaults="'jinengBtn3,HightLight'" rightPt="20" bottomPt="5" visible="false">
+			<Bmp name="'lock'" skinName="'skillImg9'" scaleX="0.9" scaleY="0.9" mouseEnabled="false" />
+		</Button>
+		
+		<!--<Button name="'skill0'" w="91" h="90" defaults="'jinengBtn5,HightLight'" rightPt="30" bottomPt="6" />-->
+		<Button name="'skill0'" w="91" h="90" defaults="'jinengBtn5,HightLight'" rightPt="19" bottomPt="19" scaleX="0.9" scaleY="0.9"/>
+		<Text text="'∞'" rightPt="21" bottomPt="20" defaults="'TopMenu,Font'"/>
+		
+		<Button name="'knifeBtn'" w="91" h="90" defaults="'knifeBtn,HightLight'" rightPt="20" bottomPt="5" scaleX="0.9" scaleY="0.9"/>
+		
+		
+		<Widget name="'BossPanel'" widthPt="100" heightPt="100"/>
+		<!--暂停按钮-->
+		<Button name="'stopGame'" defaults="'stopGame,HightLight'" rightPt="2" topPt="2"/>
+		<Bmp name="'goTips'" skinName="'fightImg10'" rightPt="2" topPt="25" visible="false" />
+		<Box name="'tips'" widthPt="100" heightPt="100" childPadding="60" visible="false">
+			<Bmp name="'passTips1'" skinName="'fightTip1'" />
+			<Bmp name="'passTips2'" skinName="'fightTip2'" />
+		</Box>
+		
+		
+		
+		<!--方向盘-->				
+		<!--<Widget widthPt="100" heightPt="100" leftPt="-0.5" topPt="-4">
+			<Bmp name="'dirBtn'" skinName="'fightImg16'"  leftPt="4.5" topPt="74.5" alpha="0.8" mouseEnabled="false"/>
+			<Bmp skinName="'fightImg17'"  widthPt="100" leftPt="13.5" topPt="69" mouseEnabled="false"/>
+		</Widget>-->
+		
+		<!--任务-->		
+		
+		<Box skinName="'fightImg20'" heightPt="100" leftPt="60" topPt="3" align="'left,middle'">
+			<Text name="'mission'" text="' 目标：消灭所有敌人'" defaults="'TopMenu,Font'"/>
+		</Box>			
+		
+		
+		<!--时间-->
+		<Box widthPt="100" heightPt="100" align="'center'">
+			<Text name="'timeLimit'" format-size="50" text="'00:00'" defaults="'TopMenu,Font'"  topPt="10"/>
+		</Box>
+		<!--左侧技能栏-->	
+		<VBox widthPt="100" heightPt="100" leftPt="0" topPt="30" childPadding="20" align="'top,left'">
+			<Widget skinName="'fightImg19'" widthPt="100">
+				<Button name="'skill1'" skinName="'fightImg19'" defaults="'jinengBtn6,HightLight'" widthPt="100" >	
+					<Bmp name="'lock'" skinName="'skillImg9'" scaleX="0.9" scaleY="0.9" mouseEnabled="false" />
+				</Button>
+				<Text topPt="57" leftPt="60" text="'∞'" defaults="'TopMenu,Font'"/>
+			</Widget>
+		</VBox>
+		
+		<!--换枪栏-->
+		<Widget widthPt="100" heightPt="100">
+			<HBox name="'weaponPanel'" bottomPt="1" widthPt="100" heightPt="100" childPadding="30" align="'bottom,center'">
+				<Widget skinName="'forgeImg12'">
+					<Button name="'weapon0'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+					<Text name="'usingTip0'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10"/>
+				</Widget>
+				
+				<Widget skinName="'forgeImg12'">
+					<Button name="'weapon1'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+					<Text name="'usingTip1'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10" />
+				</Widget>
+				
+				<Widget skinName="'forgeImg12'">
+					<Button name="'weapon2'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+					<Text name="'usingTip2'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10" />
+				</Widget>			
+				
+			</HBox>
+		</Widget>
+		
+	</Widget>
+	
+</Floating>
