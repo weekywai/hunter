@@ -48,7 +48,7 @@ class RewardComponent extends Component
 		{
 			//case MsgNet.UpdataReward:
 				//upDateReward(userData);
-				//GameProcess.root.notify(MsgUI.RewardPanel, userData);
+				//GameProcess.SendUIMsg(MsgUI.RewardPanel, userData);
 			case MsgMission.Add:
 				cmd_AddReward(userData);
 			case MsgStartup.BattleResult:

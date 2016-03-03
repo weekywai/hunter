@@ -240,20 +240,16 @@ class SimEntity extends Entity implements IObservable
 			node = node.next;
 		}
 	}
-	override function onMsg(msgType:Int, sender:Entity) 
-	{
-		//获取消息内容
-		//userData = incomingMessage.o
-		return super.onMsg(msgType, sender);
-	}
+	
 	/**
 	 * 发送消息给自己
 	 */
-	public function sendMsg(type:Int, userData:Dynamic = null):Void
+	public function sendMMsg(type:Int, userData:Dynamic = null):Void
 	{
 		if (userData != null)
 			outgoingMessage.o = userData;
 		sendDirectMessage(this, type, true);
+		//onMsg(type, this);
 	}
 	/**
 	 * 发送消息给component事件

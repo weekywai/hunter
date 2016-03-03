@@ -54,7 +54,7 @@ class ThroughCmd extends BaseCmd
 		_wordlMap = _widget.getChild("worldMap");
 		super.onInitComponent();
 		initHandler();
-		GameProcess.root.notify(MsgUIUpdate.UpdataReturnBtn, false );
+		notify(MsgUIUpdate.UpdataReturnBtn, false );
 	}
 	/**初始化关卡*/
 	private function initHandler():Void
@@ -167,17 +167,7 @@ class ThroughCmd extends BaseCmd
 	/*点击关卡*/
 	public function handler():Void
 	{
-		//var popup = UIManager.Alert({
-			//msg:'副本未开启',
-			//content:'onBattle'
-		//});
-		//popup.show();
 		sendMsg(MsgUI.Tips, { msg:"副本未开启", type:TipsType.onBattle} );
-		//var onBattle = UIBuilder.buildFn('ui/popup/onBattle.xml') ( { } );
-		//onBattle.x = _widget.w * 0.5-930*0.5;
-		//onBattle.y = _widget.h * 0.5-444*0.5;
-		//onBattle.name = "battleTip";
-		//_widget.addChild(onBattle);
 		
 		var tipCmd:BattleCmd = new BattleCmd();
 		tipCmd.onInitComponent();

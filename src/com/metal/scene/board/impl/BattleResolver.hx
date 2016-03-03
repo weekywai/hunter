@@ -181,7 +181,7 @@ class BattleResolver extends Component
 		}else {
 			if (targetActor.faction == BoardFaction.Boss || targetActor.faction == BoardFaction.Boss1) {
 				var hpPercent = hp / targetStat.hpMax * 100;
-				GameProcess.root.notify(MsgUIUpdate.BossInfoUpdate, { percent:hpPercent, hp:hp } );
+				GameProcess.NotifyUI(MsgUIUpdate.BossInfoUpdate, { percent:hpPercent, hp:hp } );
 			}
 			if (userData.buffId > 0) {
 				//trace("buff");

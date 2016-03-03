@@ -104,14 +104,14 @@ class MainCmd extends BaseCmd
 	private function openThrough():Void
 	{
 		mainStack.show("through");
-		GameProcess.root.notify(MsgUI.Through);
+		sendMsg(MsgUI.Through);
 		
 	}
 	/**单开副本模式界面*/
 	private function openCopy():Void
 	{
 		mainStack.show("endless");
-		GameProcess.root.notify(MsgUI.EndlessCopy);
+		sendMsg(MsgUI.EndlessCopy);
 	}
 	override function onShow():Void 
 	{
@@ -341,6 +341,7 @@ class MainCmd extends BaseCmd
 		}
 		var curWeapon:StrengthenInfo = EquipProp.Strengthen(weapon, weapon.strLv);
 		var maxWeapon:StrengthenInfo = EquipProp.Strengthen(weapon, weapon.MaxStrengthenLevel);
+		//trace(weapon);
 		var curAtk = EquipProp.compute(weapon.Att, curWeapon.Attack);
 		var maxAtk = EquipProp.compute(weapon.Att, maxWeapon.Attack);
 		

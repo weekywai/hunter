@@ -15,7 +15,7 @@ class ForgeManager
 	{
 		_protpForge = new IntMap();
 	}
-	public function getProtpForge(key:Int):StrengthenInfo
+	public function getProtoForge(key:Int):StrengthenInfo
 	{
 		return _protpForge.get(key);
 	}

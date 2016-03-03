@@ -99,7 +99,7 @@ class BattleComponent extends Component
 				//trace("runOnce");
 				if (!GameProcess.instance.isPausing() && !_pauseTimerCount) {	
 					//trace("timer running");		
-					GameProcess.UIRoot.notify(MsgUIUpdate.UpdateCountDown, _countDown);
+					GameProcess.NotifyUI(MsgUIUpdate.UpdateCountDown, _countDown);
 					_countDown--;
 					_usedtime++;
 					//if (_usedtime % buildSpace==0 && _missionType==RoomMissionType.Survive)
@@ -180,8 +180,8 @@ class BattleComponent extends Component
 			ResourceManager.instance.unLoadAll();
 			_clear = false;
 		}
-		GameProcess.UIRoot.sendMsg(MsgUI.BossPanel);
-		GameProcess.UIRoot.notify(MsgUIUpdate.StartBattle);
+		GameProcess.SendUIMsg(MsgUI.BossPanel);
+		GameProcess.NotifyUI(MsgUIUpdate.StartBattle);
 		notifyDirect("GameBoard",MsgStartup.Start);
 		
 		_missionType = MapInfoManager.instance.getRoomInfo(Std.parseInt(currentRoomId())).MissionType;		
@@ -267,7 +267,7 @@ class BattleComponent extends Component
 		Animator.start(this, "", EffectType.OPEN, null, true, startGame);
 		GameProcess.instance.startGame();
 		notifyDirect("GameBoard",MsgStartup.Reset);
-		GameProcess.UIRoot.notify(MsgUIUpdate.StartBattle);
+		GameProcess.NotifyUI(MsgUIUpdate.StartBattle);
 		notifyDirect("GameBoard",MsgStartup.Start);
 		setCountDown();
 		findGradeCondition(_duplicateInfo);
@@ -277,7 +277,7 @@ class BattleComponent extends Component
 		//	notifyRoot(MsgView.NewBie, 6);
 		//trace("cmd_GameInit: " + _duplicateInfo.DuplicateType);
 		if (_duplicateInfo.DuplicateType != 9) {
-			GameProcess.UIRoot.sendMsg(MsgUI2.InitThumb, _roomArray.length);
+			GameProcess.SendUIMsg(MsgUI2.InitThumb, _roomArray.length);
 		}
 		Actuate.tween(this, 0.5, { } ).onComplete(GameProcess.root.notify, [MsgView.NewBie, 6]);
 	}
@@ -300,8 +300,8 @@ class BattleComponent extends Component
 		_endGame = true;
 		GameProcess.instance.endGame();
 		disposeTimer();
-		//GameProcess.UIRoot.sendMsg(MsgUI.BattleResult, userData);//胜利界面
-		//GameProcess.UIRoot.sendMsg(MsgUI.BattleFailure, userData);//失败
+		//GameProcess.SendUIMsg(MsgUI.BattleResult, userData);//胜利界面
+		//GameProcess.SendUIMsg(MsgUI.BattleFailure, userData);//失败
 	}
 	
 	private function cmd_BattleClear(userData:Dynamic)
@@ -309,12 +309,12 @@ class BattleComponent extends Component
 		var count = _curMap;
 		count++;
 		if (count < _roomArray.length) {
-			GameProcess.UIRoot.sendMsg(MsgUI2.FinishBattleTip, 1);
+			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, 1);
 		} else if (count >= _roomArray.length - 1) {
-			GameProcess.UIRoot.sendMsg(MsgUI2.FinishBattleTip, 0);
+			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, 0);
 			if (_duplicateInfo.DuplicateType != 9) {
 				if (_talks.exists(1))
-					GameProcess.UIRoot.sendMsg(MsgUI2.Dilaogue, _talks.get(1));
+					GameProcess.SendUIMsg(MsgUI2.Dilaogue, _talks.get(1));
 			}
 		}
 		//notify(MsgCamera.Lock, true);
@@ -324,7 +324,7 @@ class BattleComponent extends Component
 	{
 		_curMap++;
 		if (_curMap < _roomArray.length) {
-			GameProcess.UIRoot.sendMsg(MsgUI2.FinishBattleTip, -1);
+			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, -1);
 			Animator.start(this, "", EffectType.SCREEN_CLOSE_EAT, null, true, changeMap);
 			//changeMap();
 		}
@@ -333,8 +333,8 @@ class BattleComponent extends Component
 			_duplicateInfo.setRate(rate());
 			var result:Int = 0;
 			notify(MsgStartup.Finishbattle, result);
-			GameProcess.UIRoot.sendMsg(MsgUI2.Control, false);
-			GameProcess.UIRoot.sendMsg(MsgUI.BattleResult, _duplicateInfo);//胜利界面
+			GameProcess.SendUIMsg(MsgUI2.Control, false);
+			GameProcess.SendUIMsg(MsgUI.BattleResult, _duplicateInfo);//胜利界面
 			
 			notify(MsgStartup.BattleResult, _duplicateInfo);			
 		}
@@ -362,7 +362,7 @@ class BattleComponent extends Component
 		
 		GameProcess.instance.startGame();
 		notifyDirect("GameBoard", MsgStartup.Reset);
-		GameProcess.UIRoot.notify(MsgUIUpdate.StartBattle);
+		GameProcess.NotifyUI(MsgUIUpdate.StartBattle);
 		notifyDirect("GameBoard",MsgStartup.Start);
 	}
 	
@@ -371,11 +371,11 @@ class BattleComponent extends Component
 		if (_duplicateInfo.DuplicateType != 9 ) {
 			if(_duplicateInfo.BossName=="" && _curMap == 0){
 				if (_talks.exists(0)){
-					GameProcess.UIRoot.sendMsg(MsgUI2.Dilaogue, _talks.get(0));
+					GameProcess.SendUIMsg(MsgUI2.Dilaogue, _talks.get(0));
 				}
 			}else if (_duplicateInfo.BossName != "" && _curMap == 2) {
 				if (_talks.exists(0))
-					GameProcess.UIRoot.sendMsg(MsgUI2.Dilaogue, _talks.get(0));
+					GameProcess.SendUIMsg(MsgUI2.Dilaogue, _talks.get(0));
 			}
 		}
 	}
@@ -383,7 +383,7 @@ class BattleComponent extends Component
 	private function cmd_Score(userData:Dynamic):Void
 	{
 		_socre += userData;
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateScore, _socre);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateScore, _socre);
 	}
 	private function cmd_KillBoss(userData:Dynamic):Void
 	{

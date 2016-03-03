@@ -33,7 +33,7 @@ class STCallBack
 			case NetProtocol.ST_TEXT:
 			case NetProtocol.ST_HINT_TEXT:  //服务器主动下发的公告栏消息
 				
-				GameProcess.root.notify(MsgUI.HintPanel, packet);
+				GameProcess.SendUIMsg(MsgUI.HintPanel, packet);
 			case NetProtocol.ST_ENTER_SCENE: //进入游戏获取角色信息
 				GameProcess.root.notify(MsgNet.AssignAccount, packet);
 			case NetProtocol.ST_PARTNER_VAL: //角色或伙伴属性有更新

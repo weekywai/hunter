@@ -88,9 +88,9 @@ class Network
 		if (status == 1) {
 			//删除回掉引用
 			_callBacks.remove(_currentProtocol);
-			GameProcess.root.notify(MsgUI.Tips, { msg:"网络超时，请重试！", type:TipsType.tipPopup });
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"网络超时，请重试！", type:TipsType.tipPopup });
 		}else {
-			GameProcess.root.notify(MsgUI.Tips, { msg:"网络出错，请重试！", type:TipsType.tipPopup });
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"网络出错，请重试！", type:TipsType.tipPopup });
 		}
 		/*
 		if (_connection.status) {

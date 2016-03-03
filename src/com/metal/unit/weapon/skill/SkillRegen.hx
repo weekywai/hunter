@@ -21,7 +21,7 @@ class SkillRegen extends BaseSkill
 	override function notify_ShootStart(userData:Dynamic):Void 
 	{
 		if (shootTime > 0) { // 
-			GameProcess.root.notify(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
+			GameProcess.SendUIMsg(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
 			return;
 		}
 		if(!isItem)

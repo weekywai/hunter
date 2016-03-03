@@ -155,8 +155,7 @@ class GoodsProtoManager
 	/**建立以keyId为索引的ItemMap*/
 	public function buildKeyIdMap()
 	{
-		var schedual = GameProcess.root.getComponent(GameSchedual);
-		var bagItemArr =schedual.bagData.itemArr;
+		var bagItemArr =cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData.itemArr;
 		for (i in 0...bagItemArr.length) 
 		{
 			if (keyIdMap.get(bagItemArr[i].keyId)==null)
@@ -165,10 +164,10 @@ class GoodsProtoManager
 				if (bagItemArr[i].keyId > emptyKeyId) emptyKeyId = bagItemArr[i].keyId;
 			}else 
 			{
-				trace("same keyId"+bagItemArr[i].keyId);
+				//trace("same keyId"+bagItemArr[i].keyId);
 			}			
 		}
-		bagItemArr = schedual.equipBagData.itemArr;
+		bagItemArr = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.itemArr;
 		for (i in 0...bagItemArr.length) 
 		{
 			if (keyIdMap.get(bagItemArr[i].keyId)==null)

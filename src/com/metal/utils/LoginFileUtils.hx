@@ -31,7 +31,7 @@ class LoginFileUtils
 	static private var _file:String = "user";
 	static private var _filePath:String;
 	public static var FileExits(get, null):Bool;
-	public static var Id:String = "null";
+	public static var Id:String = "";
 	public static var FileData:JsonNode = null; 
 	static private function get_FileExits():Bool
 	{
@@ -136,6 +136,7 @@ class LoginFileUtils
 	/**获取新手帮助数据*/
 	public static function getNewBie():Array<Int>
 	{
+		trace("getNewBie");
 		var temp:Array<Int> = [];
 		if (FileData == null)
 			initFileData();
@@ -160,8 +161,8 @@ class LoginFileUtils
 			return;
 		if (FileData == null)
 			initFileData();
-		if (FileData == null) 
-			throw "user " + Id +" null";
+		//if (FileData == null) 
+			//throw "user " + Id +" null";
 		var root:JsonNode = JsonUtils.getNode(FileData, "data");
 		var node:JsonNode = JsonUtils.getNode(root, Id);
 		JsonUtils.setDynamic(node, "n", data);

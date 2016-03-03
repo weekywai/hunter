@@ -516,8 +516,9 @@ class GameMap extends Component
 		
 		notify(MsgBoard.AssignUnit, player);
 		//trace("bind player" + owner.parent);
+		notify(MsgBoard.AssignPlayer, player);
 		notifyParent(MsgBoard.AssignPlayer, player);
-		//GameProcess.UIRoot.notify(MsgBoard.AssignPlayer, player);
+		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
 		//trace("AssignPlayer");
 		_trigger.setActiveByType("0");
 		_trigger.setActiveByType("1");
@@ -538,8 +539,9 @@ class GameMap extends Component
 		var player:SimEntity = UnitUtils.createUnit(UnitModelType.Vehicle, vehicle, BoardFaction.Player, centerW, centerH);
 		notify(MsgBoard.AssignUnit, player);
 		//trace("bind Vehicle");
+		notify(MsgBoard.AssignPlayer, player);
 		notifyParent(MsgBoard.AssignPlayer, player);
-		//GameProcess.UIRoot.notify(MsgBoard.AssignPlayer, player);
+		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
 	}
 	
 	private function BindUint():Void
@@ -566,7 +568,7 @@ class GameMap extends Component
 			enemiesMap.set(entity.keyId,obj);
 			bornPointMap.set(obj,entity.keyId);
 			if (faction == BoardFaction.Boss1 || faction == BoardFaction.Boss) {
-				GameProcess.UIRoot.sendMsg(MsgUI.BossPanel, modelInfo.res);
+				GameProcess.SendUIMsg(MsgUI.BossPanel, modelInfo.res);
 				SfxManager.getAudio(AudioType.BossEnter).play();
 				if (faction == BoardFaction.Boss){
 					notify(MsgPlayer.AddCollide, BoardFaction.getType(faction));
@@ -670,7 +672,7 @@ class GameMap extends Component
 		bornPointMap.set(obj,entity.keyId);
 		
 		if (faction == BoardFaction.Boss1 || faction == BoardFaction.Boss) {
-			GameProcess.UIRoot.sendMsg(MsgUI.BossPanel, modelInfo.res);
+			GameProcess.SendUIMsg(MsgUI.BossPanel, modelInfo.res);
 			SfxManager.getAudio(AudioType.BossEnter).play();
 			if (faction == BoardFaction.Boss){
 				notify(MsgPlayer.AddCollide, BoardFaction.getType(faction));

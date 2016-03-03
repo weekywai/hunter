@@ -111,7 +111,7 @@ class DevCheat
 			//DC.log("GM command is null");
 			//return;
 		//}
-		GameProcess.root.notify(MsgUI2.GMLogin,args);
+		GameProcess.SendUIMsg(MsgUI2.GMLogin,args);
 	}
 	/*背包增加物品*/
 	private function cmd_Bag(args:Array<String>):Void
@@ -173,8 +173,8 @@ class DevCheat
 	private function cmd_EndBattle(args:Array<String>):Void 
 	{
 		var input:String = "";
-		GameProcess.UIRoot.sendMsg(MsgUI.BattleFailure);
-		GameProcess.UIRoot.sendMsg(MsgUI2.Control, false);
+		GameProcess.SendUIMsg(MsgUI.BattleFailure);
+		GameProcess.SendUIMsg(MsgUI2.Control, false);
 		GameProcess.root.notify(MsgStartup.Finishbattle);
 	}
 	

@@ -123,7 +123,7 @@ class TopViewCmd extends BaseCmd
 					SfxManager.getAudio(AudioType.Btn).play();
 					latestFlag = true;
 					mainStack.show('latestFashion');
-					GameProcess.root.notify(MsgUI.LatestFashion);
+					sendMsg(MsgUI.LatestFashion);
 					UpdataReturnBtn(false);
 				}
 			}
@@ -155,18 +155,8 @@ class TopViewCmd extends BaseCmd
 		var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
 		if (_playInfo.getProperty(PlayerPropType.POWER) >= _maxPower)
 		{
-			//var popup = UIManager.Alert({
-				//msg:'体力已达上限',
-				//content:'tipPopup'
-			//});
-			//popup.show();
 			sendMsg(MsgUI.Tips, { msg:"体力已达上限", type:TipsType.tipPopup} );
 		}else{
-			//var popup = UIManager.Alert({
-				//msg:'是否购买体力',
-				//content:'buyTip'
-			//});
-			//popup.show();
 			sendMsg(MsgUI.Tips, { msg:"是否花费100颗钻石购买100体力", type:TipsType.buyTip} );
 			var tipCmd:TipCmd = new TipCmd();
 			tipCmd.onInitComponent();
@@ -198,14 +188,14 @@ class TopViewCmd extends BaseCmd
 	{
 		
 		mainStack.show('gold');
-		GameProcess.root.notify(MsgUI.BuyGold);
+		sendMsg(MsgUI.BuyGold);
 		UpdataReturnBtn(false);
 	}
 	/**打开购买钻石界面*/
 	private function BuyDiamondsBtn_click(e):Void
 	{
 		mainStack.show('diamonds');
-		GameProcess.root.notify(MsgUI.BuyDiamonds);
+		sendMsg(MsgUI.BuyDiamonds);
 		UpdataReturnBtn(false);
 		
 	}
@@ -213,7 +203,7 @@ class TopViewCmd extends BaseCmd
 	public function huntBtn_click(e):Void
 	{
 		mainStack.show('treasureHunt');
-		GameProcess.root.notify(MsgUI.TreasureHunt);
+		sendMsg(MsgUI.TreasureHunt);
 		UpdataReturnBtn(false);
 		notifyRoot(MsgView.NewBie, NoviceOpenType.NoviceText5);
 		_widget.getChildAs("hintBtn", Button).visible = false;
@@ -222,7 +212,7 @@ class TopViewCmd extends BaseCmd
 	private function payBtn_click(e):Void
 	{
 		//mainStack.show('pay'); 
-		//GameProcess.root.notify(MsgUI.Pay);
+		//sendMsg(MsgUI.Pay);
 		
 		//UpdataReturnBtn(false);
 	}

@@ -68,7 +68,7 @@ class ResurrectionCmd extends BaseCmd
 		//PlayerUtils.getPlayer().notify(MsgActor.Respawn);
 		
 		//复活增加关卡时间
-		//notifyRoot(MsgUIUpdate.UpdateCountDown, 30);
+		//notify(MsgUIUpdate.UpdateCountDown, 30);
 		_widget.getParent("popup").free();
 		dispose();
 	}

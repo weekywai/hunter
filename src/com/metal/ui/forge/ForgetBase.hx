@@ -39,7 +39,7 @@ class ForgetBase
 		if (_owner != null){
 			if (userData != null)
 				_owner.outgoingMessage.o = userData;
-			_owner.sendMsg(type, userData);
+			_owner.sendMMsg(type, userData);
 		}
 	}
 	private function notifyParent(type:Int,userData:Dynamic = null)
@@ -53,7 +53,8 @@ class ForgetBase
 	}
 	private function notify(type:Int,userData:Dynamic = null)
 	{
-		_owner.notify(type, userData);
+		if (_owner != null)
+			_owner.notify(type, userData);
 	}
 	public function dispose():Void 
 	{

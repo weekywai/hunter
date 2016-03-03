@@ -160,10 +160,6 @@ class TreasureHuntCmd extends BaseCmd
 			
 			notifyRoot(MsgPlayer.UpdateGem, -_chestInfo.NeedDiamond);
 			sendMsg(MsgUI.Tips, { msg:"", type:TipsType.gainGoods} );
-			/*var gianGoods = UIManager.Alert( {
-				content:"gainGoods"
-			});
-			gianGoods.show();*/
 			var gainGoods:GainGoodsCmd = new GainGoodsCmd();
 			gainGoods.onInitComponent();
 			gainGoods.setData(itemIdList);

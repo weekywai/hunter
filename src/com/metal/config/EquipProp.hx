@@ -33,7 +33,7 @@ class EquipProp
 	}
 	public static inline function Strengthen(info:EquipItemBaseInfo, lv:Int):StrengthenInfo
 	{
-		return ForgeManager.instance.getProtpForge(info.equipType * 1000 + lv);
+		return ForgeManager.instance.getProtoForge(info.equipType * 1000 + lv);
 	}
 	
 	public static inline function compute(atk:Int, strengRate:Float):Int

@@ -145,7 +145,6 @@ class BattleCmd extends BaseCmd
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
 		_widget.getParent("popup").free();
-		//UIManager.Loading.show();
 		//sendMsg(MsgUI2.Loading, true);
 		callbackFun.dispatch(true);
 		dispose();

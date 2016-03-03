@@ -28,10 +28,7 @@ class WeaponInfo extends EquipItemBaseInfo
 	public var Att:Int;
 	
 	/**强化等级**/
-	public var strLv:Int=1;
-	
-	/**进阶后的物品ID*/
-	public var LevelUpItemID:Int;
+	public var strLv:Int=0;
 	
 	public var SellDiamond:Int;
 	/**进阶值 +1 +2 +3*/
@@ -73,6 +70,7 @@ class WeaponInfo extends EquipItemBaseInfo
 		ClipCost = XmlUtils.GetInt(data, "ClipCost");
 		MaxBackupBullet = XmlUtils.GetInt(data, "MaxBackupBullet");
 		CritPor = XmlUtils.GetInt(data, "CritPor");
+		Property = XmlUtils.GetInt(data, "Property");
 	}
 	
 	public function initDefaultValues():Void {

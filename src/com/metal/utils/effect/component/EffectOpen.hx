@@ -70,7 +70,7 @@ class EffectOpen extends BaseEffect
 		//调整位置
 		upSprite.y = Lib.current.stage.stageHeight/2-upSprite.height;
 		downSprite.y = Lib.current.stage.stageHeight / 2;
-		GameProcess.UIRoot.notify(MsgInput.SetInputEnable, false);
+		GameProcess.NotifyUI(MsgInput.SetInputEnable, false);
 		//
 		Actuate.tween(upSprite, closeTime*2.3 , {y:-upSprite.height } ).delay(closeTime * 1.5).onComplete(onShowComplete);
 		Actuate.tween(downSprite, closeTime*2.3, { y:Lib.current.stage.stageHeight + triangleH }).delay(closeTime * 1.5);
@@ -87,7 +87,7 @@ class EffectOpen extends BaseEffect
 		downSprite.parent.removeChild(downSprite);
 		downSprite.removeChildren();
 		downSprite = null;
-		GameProcess.UIRoot.notify(MsgInput.SetInputEnable, true);
+		GameProcess.NotifyUI(MsgInput.SetInputEnable, true);
 		finish();
 	}
 }

@@ -81,11 +81,6 @@ class EndlessCopyCmd extends BaseCmd
 	private function handler():Void
 	{
 		sendMsg(MsgUI.Tips, { msg:GuideText.Duplicate(taskType), type:TipsType.onBattle} );
-		//var onBattle = UIBuilder.buildFn('ui/popup/onBattle.xml') ( { } );
-		//onBattle.x = _widget.w * 0.5-930*0.5;
-		//onBattle.y = _widget.h * 0.5-444*0.5;
-		//onBattle.name = "battleTip";
-		//_widget.addChild(onBattle);
 		
 		var tipCmd:BattleCmd = new BattleCmd();
 		tipCmd.onInitComponent();
@@ -110,12 +105,6 @@ class EndlessCopyCmd extends BaseCmd
 				dispose();
 			}else
 			{
-				//var popup = UIManager.Alert({
-					//msg:'是否购买体力',
-					//content:'buyTip'
-				//});
-				//popup.show();
-				
 				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip} );
 				var tipCmd:TipCmd = new TipCmd();
 				tipCmd.onInitComponent();

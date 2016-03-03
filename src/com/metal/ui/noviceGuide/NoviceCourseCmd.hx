@@ -48,7 +48,7 @@ class NoviceCourseCmd extends BaseCmd
 	}
 	private function cmd_GameNoviceCourse(userData:Dynamic):Void 
 	{
-		notifyRoot(MsgUI.NewBie, {msg:Std.string(userData), type:"noviceCourse" } );
+		sendMsg(MsgUI.NewBie, {msg:Std.string(userData), type:"noviceCourse" } );
 		_widget = UIBuilder.get("bieId");
 		num = userData;
 		initNoviceCourse();
@@ -124,8 +124,8 @@ class NoviceCourseCmd extends BaseCmd
 				
 				//打开新手引导关卡
 				GameProcess.root.notify(MsgStartup.GameInit, DuplicateManager.instance.getProtoDuplicateByID(0));
-				GameProcess.UIRoot.sendMsg(MsgUI2.Control, true);
-				GameProcess.UIRoot.notify(MsgUIUpdate.NewBieUI);
+				sendMsg(MsgUI2.Control, true);
+				notify(MsgUIUpdate.NewBieUI);
 				dispose();
 			}
 		});
@@ -157,7 +157,7 @@ class NoviceCourseCmd extends BaseCmd
 		_widget.getChildAs("payBmp", Button).rightPt = -28;
 		_widget.getChildAs("payBmp", Button).onRelease = function(e)
 		{
-			notifyRoot(MsgUIUpdate.NewBie, NoviceOpenType.NoviceText5);
+			notify(MsgUIUpdate.NewBie, NoviceOpenType.NoviceText5);
 			_widget.free();
 		}
 	}
@@ -378,7 +378,7 @@ class NoviceCourseCmd extends BaseCmd
 		_widget.getChildAs("shouziBtn", Button).leftPt = -30;
 		_widget.getChildAs("shouziBtn", Button).onRelease = function(e){_widget.free();}
 		if (num == 19) {
-			_widget.getChildAs("shouziBtn", Button).onPress = function(e) { notifyRoot(MsgUIUpdate.NewBie, NoviceOpenType.NoviceText19); };
+			_widget.getChildAs("shouziBtn", Button).onPress = function(e) { notify(MsgUIUpdate.NewBie, NoviceOpenType.NoviceText19); };
 		}else if (num == 20) {
 		}else if (num == 31) {
 		}else {
@@ -483,7 +483,7 @@ class NoviceCourseCmd extends BaseCmd
 		hintBtn.rightPt = -14;
 		hintBtn.onRelease = function(e)
 		{
-			notifyRoot(MsgUIUpdate.NewBie, NoviceOpenType.NoviceText28);
+			notify(MsgUIUpdate.NewBie, NoviceOpenType.NoviceText28);
 			_widget.free();
 			dispose();
 		}

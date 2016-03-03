@@ -47,7 +47,7 @@ class TaskComponent extends Component
 		{
 			case MsgNet.UpdateTask :
 				cmd_UpdateTask(userData);
-				GameProcess.UIRoot.sendMsg(MsgUI.AwardPanel, userData);
+				GameProcess.SendUIMsg(MsgUI.AwardPanel, userData);
 			case MsgNet.QuestList:
 				cmd_QuestList(userData);
 			case MsgStartup.BattleResult:

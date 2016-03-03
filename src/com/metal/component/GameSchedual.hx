@@ -136,7 +136,7 @@ class GameSchedual extends Component
 	{
 		var hpMax = playerInfo.getProperty(PlayerPropType.MAX_HP);
 		playerInfo.setProperty(PlayerPropType.HP, hpMax);
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo); 
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo); 
 		trace("cmd_GameInit");
 	}
 	
@@ -150,7 +150,7 @@ class GameSchedual extends Component
 	{
 		
 		//发送进入游戏获取到角色信息消息
-		//GameProcess.root.notify(MsgUIUpdate.UpdateUI);
+		//GameProcess.NotifyUI(MsgUIUpdate.UpdateUI);
 		playerInfo = FileUtils.getPlayerInfo();
 		trace("init playerInfo:" +playerInfo + " RoleId:" + playerInfo.RoleId);
 		setNewBie();
@@ -205,8 +205,8 @@ class GameSchedual extends Component
 			FileUtils.setFileData(null, FilesType.Player);
 		}
 		//更新界面
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);
-		//GameProcess.root.notify(MsgUIUpdate.UpdateModel, userData);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
+		//GameProcess.NotifyUI(MsgUIUpdate.UpdateModel, userData);
 	}
 	
 	private function cmd_UpdateBag(userData:Dynamic)
@@ -224,26 +224,26 @@ class GameSchedual extends Component
 		trace("cmd_updataReward");
 		var gold = playerInfo.getProperty(PlayerPropType.GOLD);
 		if ((gold + userData) < 0) {
-			GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"金币不足请购买金币", type:TipsType.tipPopup} );
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"金币不足请购买金币", type:TipsType.tipPopup} );
 			return;
 		}
 		//发送更新奖励消息
 		var money = playerInfo.getProperty(PlayerPropType.GOLD) + userData;
 		playerInfo.setProperty(PlayerPropType.GOLD, money);
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);		
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);		
 	}
 	private function cmd_updataGem(userData:Dynamic)
 	{
 		var gem = playerInfo.getProperty(PlayerPropType.GEM);
 		if((gem + userData)<0){
-			GameProcess.UIRoot.notify(MsgUI.Tips, { msg:"钻石不足请充值", type:TipsType.tipPopup} );
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"钻石不足请充值", type:TipsType.tipPopup} );
 			return;
 		}
 		//发送更新钻石消息
 		var gem = playerInfo.getProperty(PlayerPropType.GEM) + userData;
 		playerInfo.setProperty(PlayerPropType.GEM, gem);
 		FileUtils.setFileData(null, FilesType.Player);
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 		trace("cmd_updataGem");
 	}
 	/**userdata.weapon=WeaponInfo,userdata.txt=Text*/
@@ -269,7 +269,7 @@ class GameSchedual extends Component
 			FileUtils.setFileData(null, FilesType.EquipBag);
 			//通知UI更新
 			if (userData.text != null) userData.text.text = "子弹数 " + userData.weapon.currentBullet + "/" + userData.weapon.currentBackupBullet;
-			GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"购买成功", type:TipsType.tipPopup} );
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"购买成功", type:TipsType.tipPopup} );
 		}		
 		notify(MsgPlayer.UpdateMoney, -weapon.ClipCost);		
 	}
@@ -289,14 +289,14 @@ class GameSchedual extends Component
 			FileUtils.setFileData(null, FilesType.EquipBag);
 			//通知UI更新
 			if(userData.text!=null) userData.text.text = "子弹数 " + userData.weapon.currentBullet + "/" + userData.weapon.currentBackupBullet;
-			if (userData.noTip == null) GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"购买成功", type:TipsType.tipPopup} );
+			if (userData.noTip == null) GameProcess.SendUIMsg(MsgUI.Tips, { msg:"购买成功", type:TipsType.tipPopup} );
 		}
 		notify(MsgPlayer.UpdateMoney, -cost);
 	}
 	private function cmd_updateResource(userData:Dynamic)
 	{
 		//发送更新资源消息
-		GameProcess.root.notify(MsgUIUpdate.UpdateResources);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateResources);
 	}
 	
 	private function cmd_AssignPlayer(userData:Dynamic)
@@ -509,7 +509,7 @@ class GameSchedual extends Component
 		//playerInfo.setProperty(PlayerPropType.HP, HpNum);
 		//playerInfo.setProperty(PlayerPropType.MAX_HP, HpNum);
 		
-		GameProcess.root.notify(MsgUIUpdate.UpdateModel, null);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateModel, null);
 		//notify(MsgMission.Init);
 		//trace(playerInfo.getProperty(PlayerPropType.SOUNDS));
 		var sNum:Int = Std.int(playerInfo.getProperty(PlayerPropType.SOUNDS));
@@ -525,7 +525,7 @@ class GameSchedual extends Component
 		/**是否已打开*/
 		if(LoginFileUtils.Id!="null")
 			if (!Lambda.has(newbieList, userData)) {
-				notify(MsgUI2.GameNoviceCourse, userData);
+				GameProcess.SendUIMsg(MsgUI2.GameNoviceCourse, userData);
 				newbieList.push(userData);
 				LoginFileUtils.saveNewBie(newbieList);
 			}

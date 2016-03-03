@@ -280,7 +280,7 @@ class MTActor extends BaseActor
 	{
 		//trace(name);
 		if (name == Std.string(ActionType.dead_1)) {
-			//trace("Destorying to soul");
+			trace("Destorying to soul");
 			notify(MsgActor.Soul);
 			return;
 		}
@@ -329,19 +329,19 @@ class MTActor extends BaseActor
 	override function Notify_Soul(userData:Dynamic):Void 
 	{
 		super.Notify_Soul(userData);
+		
 		respawnTotal++;
 		if (respawnTotal >= 10) {
 			var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
 			if (battle.currentStage().DuplicateType == 9)
 			{
-				GameProcess.UIRoot.sendMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
+				GameProcess.SendUIMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
 			}else
 			{
-				GameProcess.UIRoot.sendMsg(MsgUI.BattleFailure);
+				GameProcess.SendUIMsg(MsgUI.BattleFailure);
 			}
-			return;
 		} else {
-			GameProcess.UIRoot.sendMsg(MsgUI.RevivePanel, respawnTotal);
+			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
 		}
 		//notify(MsgActor.ExitBoard);
 	}

@@ -25,7 +25,7 @@ class SkillClear extends BaseSkill
 	{
 		super.notify_ShootStart(userData);
 		if (shootTime > 0) { // 
-			GameProcess.root.notify(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
+			GameProcess.SendUIMsg(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
 			return;
 		}
 		//trace("clear shoot "+maxBulletCount);

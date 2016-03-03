@@ -15,9 +15,10 @@ class FilesType
 	public static var Bag:Int = 4;//背包仓库
 	public static var EquipBag:Int = 5;//装备背包
 	public static var News:Int = 6;//信息
-	public static var StageStar:Int=7;//通关信息
+	public static var StageStar:Int = 7;//通关信息
+	public static var Newbie:Int = 8;//新手引导
 	
-	public static var fileArr:Array <Int> = [Player,Active,Task,Bag,EquipBag,News,StageStar];
+	public static var fileArr:Array <Int> = [Player,Active,Task,Bag,EquipBag,News,StageStar,Newbie];
 	public function new() 
 	{
 		

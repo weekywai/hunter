@@ -114,6 +114,8 @@ class MTAvatar extends AbstractAvatar
 	
 	private var _isInit:Bool = false;
 	override public function update():Void {
+		if (isDisposed)
+			return;
 		_skeleton.update();
 		/*
 		if (_skeleton.useMask) {

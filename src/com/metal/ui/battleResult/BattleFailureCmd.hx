@@ -45,9 +45,9 @@ class BattleFailureCmd extends BaseCmd
 		var duplicateInfo = battle.currentStage();
 		if (duplicateInfo.DuplicateType == 9)
 		{
-			notifyRoot(MsgUIUpdate.OpenCopy);
+			notify(MsgUIUpdate.OpenCopy);
 		}else if(duplicateInfo.DuplicateType == 1){
-			notifyRoot(MsgUIUpdate.OpenThrough);
+			notify(MsgUIUpdate.OpenThrough);
 		}
 	}
 	override function onClose():Void 

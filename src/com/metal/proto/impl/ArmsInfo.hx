@@ -26,10 +26,8 @@ class ArmsInfo extends EquipItemBaseInfo
 	/**外观资源名称*/
 	//public var SwfId:String;
 
-	/**进阶后的物品ID*/
-	public var LevelUpItemID:Int;
 	/**强化等级**/
-	public var strLv:Int = 1;
+	public var strLv:Int = 0;
 	
 	//生命
 	public var Hp:Int;

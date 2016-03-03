@@ -164,7 +164,7 @@ class Camera extends Component
 	/**自动修正镜头**/
 	private function showAutoRun():Void
 	{
-		GameProcess.UIRoot.notify(MsgInput.SetInputEnable, false);
+		GameProcess.NotifyUI(MsgInput.SetInputEnable, false);
 		_autoKey = true;//, y:_actor.y - HXP.halfHeight
 		if(!checkBounds())
 			Actuate.tween(HXP.camera, 0.5, { x:_actor.x - HXP.halfWidth }).ease(Quart.easeOut).onComplete(changeLock);
@@ -173,7 +173,7 @@ class Camera extends Component
 	
 	private function changeLock():Void
 	{
-		GameProcess.UIRoot.notify(MsgInput.SetInputEnable, true);
+		GameProcess.NotifyUI(MsgInput.SetInputEnable, true);
 		_autoKey = false;
 		this._lockKey = false;
 	}
@@ -205,6 +205,7 @@ class Camera extends Component
 	
 	private function cmd_AssignPlayer(userData:Dynamic):Void
 	{
+		trace(userData);
 		var player:SimEntity = userData;
 		_actor = cast player.getComponent(MTActor);
 		HXP.camera.y = _actor.y - HXP.halfHeight;

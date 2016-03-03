@@ -55,7 +55,7 @@ class RechargeCmd extends BaseCmd
 		}
 		var tempInfo=cast(cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(PlayerUtils.getInfo().getProperty(PlayerPropType.WEAPON)));
 		notifyRoot(MsgNet.BuyFullClip, { weapon:tempInfo, noTip:true} );
-		sendMsg(MsgUIUpdate.UpdateBullet, tempInfo);
+		notify(MsgUIUpdate.UpdateBullet, tempInfo);
 		//notifyRoot(MsgPlayer.UpdateMoney, -_price);
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();

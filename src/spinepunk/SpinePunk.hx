@@ -205,6 +205,7 @@ class SpinePunk extends Graphic {
     }
     
     public override function update():Void {
+		
         state.update(HXP.elapsed*speed);
         state.apply(skeleton);
         skeleton.updateWorldTransform();

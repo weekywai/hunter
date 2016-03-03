@@ -99,7 +99,8 @@ class MonsterInfo
 	
 	/**怪物分数类型*/
 	public var ScoreType:Int;
-	
+	/**属性*/
+	public var Property:Int;
 	
 	public function new() 
 	{
@@ -154,6 +155,7 @@ class MonsterInfo
 		boomType = XmlUtils.GetInt(data, "IsExplosion");
 		isBoom = boomType != 0;
 		ScoreType = XmlUtils.GetInt(data, "ScoreType");
+		Property = XmlUtils.GetInt(data, "Property");
 	}
 	
 	private function ParseBornAt(value:String):Point

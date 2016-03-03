@@ -143,11 +143,6 @@ class EvolutionCmd extends ForgetBase
 					
 					if (Std.int(goodsInfo.strLv) != Std.parseInt(tempInfo.strLv))
 					{
-						//var tip1 = UIManager.Alert( {
-							//msg:"进阶装备与材料装备等级不同",
-							//content:"tipPopup"
-						//});
-						//tip1.show();
 						AlertTips.openTip("进阶装备与材料装备等级不同", "tipPopup");
 					}else{
 						selectImg.visible = !selectImg.visible;
@@ -202,19 +197,9 @@ class EvolutionCmd extends ForgetBase
 		SfxManager.getAudio(AudioType.Btn).play();
 		if (selectMeterail.length <= 0 )
 		{
-			//var tip1 = UIManager.Alert( {
-				//msg:"选择相同装备作材料",
-				//content:"tipPopup"
-			//});
-			//tip1.show();
 			AlertTips.openTip("选择相同装备作材料", "tipPopup");
 		}else if (goodsInfo == null || goodsInfo.Upgrade>=goodsInfo.InitialQuality )
 		{
-			//var tip1 = UIManager.Alert( {
-				//msg:"已达等级上限",
-				//content:"tipPopup"
-			//});
-			//tip1.show();
 			AlertTips.openTip("已达等级上限", "tipPopup");
 		}else{
 			_widget.getChildAs("effPanel", Widget).removeChildren();

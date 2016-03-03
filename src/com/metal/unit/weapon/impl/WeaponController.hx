@@ -139,8 +139,8 @@ class WeaponController extends Component
 			var mp = PlayerUtils.getInfo().getProperty(PlayerPropType.MP) - skill.Consume;
 			if (mp < 0) {
 				trace("changeSkill");	
-				GameProcess.root.notify(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
-				GameProcess.root.notify(MsgUI2.SkillCD, {time:0, id:userData});
+				GameProcess.SendUIMsg(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
+				GameProcess.SendUIMsg(MsgUI2.SkillCD, {time:0, id:userData});
 				return;
 			}
 		}
@@ -177,7 +177,7 @@ class WeaponController extends Component
 		//trace(userData+">>"+isItem);
 		if(Main.config.get("console")=="true"){
 			cast(weapon, BaseSkill).isItem = true;
-			GameProcess.root.notify(MsgUI2.SkillCD, {time:0, id:userData});
+			GameProcess.SendUIMsg(MsgUI2.SkillCD, {time:0, id:userData});
 		}else {
 			cast(weapon, BaseSkill).isItem = isItem;
 		}

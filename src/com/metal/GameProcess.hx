@@ -35,13 +35,14 @@ import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.display.Stage;
 import openfl.Lib;
+import openfl.profiler.Telemetry;
 import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 //import tweenx909.advanced.UpdateModeX;
 //import tweenx909.TweenX;
-//import hxtelemetry.HxTelemetry;
+import hxtelemetry.HxTelemetry;
 /**
  * ...
  * @author weeky
@@ -57,15 +58,25 @@ class GameProcess implements IObserver
 	
 	public static var root(default, null):SimEntity;
 	public static var UIRoot(default, null):SimEntity;
+	/** send message to UImanager */
+	public static function SendUIMsg(type:Int, userData:Dynamic = null)
+	{
+		UIRoot.sendMMsg(type, userData);
+	}
+	/** notify UImanager compent */
+	public static function NotifyUI(type:Int, userData:Dynamic = null)
+	{
+		UIRoot.notify(type, userData);
+	}
 	
 	public static var render(default, null):Engine;
 	
 	public static var console(default, null):DevCheat;
+	public var HXT:HxTelemetry;
 	
 	private var onDrawId:Int = 0;
 	private var _debugTxt:TextField;
 	private var _fps:FPS;
-	//private var _hxt:HxTelemetry;
 	private var _loop:MainLoop;
 	private var _render:Bool = false;
 	public function new() {}
@@ -101,7 +112,10 @@ class GameProcess implements IObserver
 		SimpleActuator.getTime = function() { return Timebase.stamp(); }
 		#end
 		//#end
-		//_hxt = new HxTelemetry();
+		var cfg = new hxtelemetry.HxTelemetry.Config();
+		cfg.host = "192.168.1.100";
+		cfg.allocations = false;
+		HXT = new HxTelemetry(cfg);
 	}
 	
 	/** after login */
@@ -114,7 +128,7 @@ class GameProcess implements IObserver
 		//TODO 发送启动
 		trace("initGame");
 		new LoadSource();
-		UIRoot.sendDirectMessage(UIRoot, MsgUI.MainPanel, true);
+		UIRoot.sendMMsg(MsgUI.MainPanel, true);
 	}
 	
 	private function initEngine():Void
@@ -149,11 +163,10 @@ class GameProcess implements IObserver
 	private function update()
 	{
 		render.updateEngine();
-		//TweenX.manualUpdate(Timebase.tickRate);
 		#if actuate_manual_update
 		SimpleActuator.stage_onEnterFrame (null);
 		#end
-		//_hxt.advance_frame();
+		HXT.advance_frame();
 	}
 	
 	public function startGame():Void

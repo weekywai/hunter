@@ -89,7 +89,7 @@ class PlayerStat extends Component implements IStat
 		//开火状态条件
 		if (weapon.currentBullet <= 0 && weapon.currentBackupBullet<=0) {
 			//通知购买子弹
-			GameProcess.root.notify(MsgUI.Recharge, Math.floor((weapon.ClipCost/weapon.OneClip)*(weapon.OneClip+weapon.MaxBackupBullet)));
+			GameProcess.SendUIMsg(MsgUI.Recharge, Math.floor((weapon.ClipCost/weapon.OneClip)*(weapon.OneClip+weapon.MaxBackupBullet)));
 		}
 		if (weapon.currentBullet<=0 || _actor.stateID!=ActorState.Attack && _actor.stateID!=ActorState.Stand && _actor.stateID!=ActorState.Move && _actor.stateID!=ActorState.Jump && _actor.stateID!=ActorState.DoubleJump) 
 		{
@@ -156,7 +156,7 @@ class PlayerStat extends Component implements IStat
 		//trace("cmd_consumeBullet"+weapon.currentBullet);
 		weapon.currentBullet -= userData;
 		//通知界面更新
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateBullet, weapon);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateBullet, weapon);
 		//注意备用子弹是否无限
 		if (weapon.currentBullet<userData) 
 		{
@@ -181,7 +181,7 @@ class PlayerStat extends Component implements IStat
 			weapon.currentBackupBullet = 0;
 		}
 		//通知界面更新
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateBullet, weapon);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateBullet, weapon);
 	}
 	
 	override function onDispose():Void 
@@ -274,7 +274,7 @@ class PlayerStat extends Component implements IStat
 			hp = modifyHP;
 		}
 		_playerInfo.setProperty(PlayerPropType.HP, hp);
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 	}
 	private function cmd_DoubleScore(userData:Dynamic):Void
 	{
@@ -339,7 +339,7 @@ class PlayerStat extends Component implements IStat
 		//trace("hp: "+hp);
 		_playerInfo.setProperty(PlayerPropType.HP, hp);
 		//不用存储
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 		if (hp <= 0) {
 			DC.log("Player IsDestroyed hp: " + hp);
 			//trace("notify(MsgActor.Destroying) ");
@@ -380,7 +380,7 @@ class PlayerStat extends Component implements IStat
 		_holdFire = false;
 		melee = false;
 		
-		GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);
+		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 	}
 	private function cmd_ChangeWeaponLevel(userData)
 	{
@@ -408,7 +408,7 @@ class PlayerStat extends Component implements IStat
 			mp = mpMax;
 		}else{
 			_playerInfo.setProperty(PlayerPropType.MP, mp);
-			GameProcess.UIRoot.notify(MsgUIUpdate.UpdateInfo);
+			GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 		}
 	}
 	

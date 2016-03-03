@@ -78,12 +78,12 @@ class LatestFahionCmd extends BaseCmd
 		var modelInfo = ModelManager.instance.getProto(info.res);
 		modelInfo.skin = 2;
 		notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.ROLEID, data:1002 } );//更新记录
-		GameProcess.root.notify(MsgUIUpdate.UpdateModel);
+		notify(MsgUIUpdate.UpdateModel);
 		if (mainStack.numChildren > 0) 
 		{
 			mainStack.removeChildren();
 		}
-		GameProcess.root.notify(MsgUIUpdate.UpdataReturnBtn, true);
+		notify(MsgUIUpdate.UpdataReturnBtn, true);
 		sendMsg(MsgUI.Tips, { msg:"恭喜你获得此装束！\n生命 +3000    \n攻击 +1000", type:TipsType.tipPopup} );
 	}
 	override function onClose():Void

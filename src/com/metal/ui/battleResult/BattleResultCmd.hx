@@ -174,17 +174,17 @@ class BattleResultCmd extends BaseCmd
 		{
 			if (num == 1)
 			{
-				notifyRoot(MsgUIUpdate.OpenCopy);
+				notify(MsgUIUpdate.OpenCopy);
 			}else
 			{
-				notifyRoot(MsgView.NewBie, 17);
+				notify(MsgView.NewBie, 17);
 			}
 		}else if(_duplicateInfo.DuplicateType == 1) {
 			notifyRoot(MsgView.NewBie, 3);
 		}else {
 			if (nn == 1)
 			{
-				notifyRoot(MsgUIUpdate.OpenThrough);
+				notify(MsgUIUpdate.OpenThrough);
 			}else
 			{
 				notifyRoot(MsgView.NewBie, 14);

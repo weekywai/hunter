@@ -49,6 +49,12 @@ class ItemType
 	/**开启副本的钥匙**/
 	public static inline var IK2_PROPS:Int = 15;
 	
+	/**进阶材料1 ID**/
+	public static inline var AdvanceMaterial_1:Int = 10104;
+	/**进阶材料2 ID**/
+	public static inline var AdvanceMaterial_2:Int = 10105;
+	/**进阶材料3 ID**/
+	public static inline var AdvanceMaterial_3:Int = 10106;
 	
 	/**用于接口判断**/
 	public static inline var NORMAL_TYPE:Int = 1;

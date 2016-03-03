@@ -22,8 +22,7 @@ class FashionInfo extends EquipItemBaseInfo
 	public var SkillsID:Int;
 	/**外观资源名称*/
 	//public var SwfId:String;
-	/**进阶后的物品ID*/
-	public var LevelUpItemID:Int;
+
 	
 	public function new() 
 	{

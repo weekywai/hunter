@@ -212,15 +212,15 @@ class RewardCmd extends BaseCmd
 						if (liveInfo.TaskType == 1)//普通副本
 						{
 							mainStack.show("through");
-							notifyRoot(MsgUI.Through);
+							sendMsg(MsgUI.Through);
 						}else if (liveInfo.TaskType == 2||liveInfo.TaskType == 3||liveInfo.TaskType == 4||liveInfo.TaskType == 5)//类型副本
 						{
 							mainStack.show("endless");
-							notifyRoot(MsgUI.EndlessCopy);
+							sendMsg(MsgUI.EndlessCopy);
 						}else if (liveInfo.TaskType == 6||liveInfo.TaskType == 7||liveInfo.TaskType == 8)//锻造
 						{
 							mainStack.show("forge");
-							notifyRoot(MsgUI.Forge);
+							sendMsg(MsgUI.Forge);
 						}
 					}
 				}

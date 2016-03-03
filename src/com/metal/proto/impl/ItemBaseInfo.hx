@@ -68,6 +68,12 @@ class ItemBaseInfo
 	/**暴击率*/
 	public var CritPor:Int;
 	
+	/**属性*/
+	public var Property:Int;
+	
+	/**进阶后的物品ID*/
+	public var LevelUpItemID:Int;
+	
 	public function new() 
 	{
 		firstGet = true;
@@ -88,7 +94,9 @@ class ItemBaseInfo
 		Characteristic = XmlUtils.GetString(data, "Characteristic");
 		SwfId = XmlUtils.GetString(data, "SwfId");
 		
+		LevelUpItemID = XmlUtils.GetInt(data, "LevelUpItemID");
 		CritPor = XmlUtils.GetInt(data, "CritPor");
+		Property = XmlUtils.GetInt(data, "Property");
 		//OneClip = XmlUtils.GetInt(data, "OneClip");
 		//StartClip = XmlUtils.GetInt(data, "StartClip");
 		//ClipCost = XmlUtils.GetInt(data, "ClipCost");

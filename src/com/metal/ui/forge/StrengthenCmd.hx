@@ -88,13 +88,13 @@ class StrengthenCmd extends ForgetBase
 		var equipType:Int = 0;
 		equipType= _goodsInfo.equipType;
 		subId = equipType * 1000 + _goodsInfo.strLv;
-		strengthenInfo = ForgeManager.instance.getProtpForge(subId);
-		nextStrengthenInfo = ForgeManager.instance.getProtpForge(subId + 1);
+		strengthenInfo = ForgeManager.instance.getProtoForge(subId);
+		nextStrengthenInfo = ForgeManager.instance.getProtoForge(subId + 1);
 		var expValue:Int = (nextStrengthenInfo.MaxExp - Std.int(_goodsInfo.strExp) );
 		if (expValue < 0) expValue = 0;
 		_widget.getChildAs("needExp", Text).text = "升级还需经验："+Std.string(expValue);
 		var totalNum:Int = _goodsInfo.MaxStrengthenLevel;
-		var needAllExp:Int = Std.int(ForgeManager.instance.getProtpForge(Std.int(equipType * 1000 + totalNum)).MaxExp - _goodsInfo.strExp);
+		var needAllExp:Int = Std.int(ForgeManager.instance.getProtoForge(Std.int(equipType * 1000 + totalNum)).MaxExp - _goodsInfo.strExp);
 		if (needAllExp <= 0) needAllExp = 0;
 		_widget.getChildAs("needAllExp", Text).text = "满级还需经验：" + Std.string(needAllExp);
 		_widget.getChildAs("expValue", Progress).value = _goodsInfo.strExp / nextStrengthenInfo.MaxExp * 100;
@@ -196,15 +196,15 @@ class StrengthenCmd extends ForgetBase
 		SfxManager.getAudio(AudioType.Btn).play();
 		if (_goodsInfo == null)
 		{
-			GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"请选择装备！", type:TipsType.tipPopup} );
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"请选择装备！", type:TipsType.tipPopup} );
 			return;
 		}else if (consumptionArr.length<=0)
 		{
-			GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"请选择强化材料", type:TipsType.tipPopup} );
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"请选择强化材料", type:TipsType.tipPopup} );
 			return;
 		}else if (_goodsInfo.strLv == _goodsInfo.MaxStrengthenLevel)
 		{
-			GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"强化等级上限！", type:TipsType.tipPopup} );
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"强化等级上限！", type:TipsType.tipPopup} );
 			return;
 		}else
 		{
@@ -221,7 +221,7 @@ class StrengthenCmd extends ForgetBase
 				var _playerInfo:PlayerInfo = PlayerUtils.getInfo();
 				if (_playerInfo.getProperty(PlayerPropType.GOLD) < allExp)
 				{
-					GameProcess.UIRoot.sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup} );
+					GameProcess.SendUIMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup} );
 					return;
 				}
 				//先移除
@@ -254,7 +254,7 @@ class StrengthenCmd extends ForgetBase
 				notifyRoot(MsgMission.Update, { type:"forge", data: { id:3, info:_goodsInfo }} );
 				notifyRoot(MsgMission.Forge, 6);
 				notify(MsgUIUpdate.ForgeUpdate, { type:ForgeUpdate.Success, data:_goodsInfo } );
-				GameProcess.root.notify(MsgUIUpdate.UpdateModel);
+				notify(MsgUIUpdate.UpdateModel);
 			}
 		}
 	}

@@ -48,15 +48,16 @@ enum TipsType
 	gainGoods;
 	loading;
 }
+
 /**
  * ...
  * @author weeky
  */
 class UIManager extends SimEntity
 {
-	public static var Alert : Dynamic->Floating;
-	public static var Loading: Floating;
 	public static var NewBie: Dynamic->Floating;
+	public var _popup:  Dynamic->Floating;
+	public var _loading:  Floating;
 	private var _stage:Stage;
 	/**根*/
 	private var root:Dynamic;
@@ -99,9 +100,8 @@ class UIManager extends SimEntity
 			_root = UIBuilder.buildFn('ui/root.xml')();
 			_root.show();
 		}
-		Alert = UIBuilder.buildFn('ui/alert.xml');
-		Loading = UIBuilder.buildFn('ui/loading.xml')({msg:""});
-		//UIBuilder.buildFn('ui/loading.xml')();
+		_popup = UIBuilder.buildFn('ui/alert.xml');
+		_loading = UIBuilder.buildFn('ui/loading.xml')({msg:"加载中"});
 		NewBie = UIBuilder.buildFn('ui/noviceGuide/noviceCourse.xml');
 		
         UIBuilder.buildFn('ui/index.xml')().show();
@@ -110,13 +110,16 @@ class UIManager extends SimEntity
 	}
 	override function onMsg(type:Int, sender:Entity) 
 	{
-		var userData = incomingMessage.o;
+		var userData:Dynamic = null;
+		if(incomingMessage!=null)
+			userData = incomingMessage.o;
 		switch(type) {
 			case MsgView.SetParent:
 				cmd_SetParent(userData);
 			case MsgUI2.Control:
 				cmd_Control(userData);
 			case MsgUI.MainPanel:
+				trace(userData);
 				cmd_MainPanel(userData);
 			case MsgUI.Warehouse:
 				cmd_WarehousePanel(userData);
@@ -227,7 +230,6 @@ class UIManager extends SimEntity
 		var show:Bool = data;
 		if (show)
 		{
-			Alert = UIBuilder.buildFn("ui/alert.xml");
 			//getObservable().clear();
 			var comps = compMap.toArray();
 			var dialog = getComponent(DialogueCmd);
@@ -251,7 +253,6 @@ class UIManager extends SimEntity
 	}
 	private function cmd_playInfo(data:Dynamic=null):Void
 	{
-		
 		//cast(GameProcess.root.getComponent(PlayShowCmd), PlayShowCmd).onNotify();
 		//GameProcess.root.notify(MsgNet.QuestList, packet);
 		//GameProcess.root.notify(MsgCreate.Player);
@@ -276,10 +277,7 @@ class UIManager extends SimEntity
 	/**胜利结算界面*/
 	private function cmd_BattleResult(data:Dynamic):Void
 	{
-		var alert=Alert( {
-			content:"overcome"
-		});
-		alert.show();
+		cmd_Tips( { type:TipsType.overcome, msg:""} );
 		addComponent(new BattleResultCmd(data));
 	}
 	/**失败结算界面*/
@@ -291,6 +289,7 @@ class UIManager extends SimEntity
 	/*买活*/
 	private function cmd_RevivePanel(data:Dynamic):Void
 	{
+		trace("cmd_RevivePanel");
 		var count = Std.int(data * 10);
 		cmd_Tips( { type:TipsType.resurrection, msg:"是否花费" + count + "钻石购买复活？" } );
 		var repawn = new ResurrectionCmd(count);
@@ -330,9 +329,12 @@ class UIManager extends SimEntity
 	private function cmd_Loading(data:Dynamic):Void 
 	{
 		if (data) {
-			cmd_Tips( { type:TipsType.loading, msg:"加载中" } );
+			//cmd_Tips( { type:TipsType.loading, msg:"加载中" } );
+			_loading.show();
+			
 		}else {
-			cmd_Tips( { type:TipsType.none, msg:"" } );
+			_loading.hide();
+			//cmd_Tips( { type:TipsType.none} );
 		}
 	}
 	private function cmd_BossPanel(data:Dynamic):Void 
@@ -350,9 +352,14 @@ class UIManager extends SimEntity
 	}
 	
 	private function cmd_Tips(data:Dynamic):Void {
-		var alert = UIBuilder.getAs("popup", Floating);
-		if (alert != null) alert.free();
-		alert = Alert( {
+		var alert:Floating = UIBuilder.getAs("popup", Floating);
+		if (alert != null) 
+			alert.free(true);
+		
+		//trace(alert + "" +data.type + UIBuilder.get(Std.string(data.type)));
+		if (data.type == TipsType.none)
+			return;
+		alert = _popup( {
 			msg:data.msg,
 			content:Std.string(data.type)
 		});
@@ -366,5 +373,10 @@ class UIManager extends SimEntity
 			content:data.type
 		});
 		newbie.show();
+	}
+	
+	private function onPopup()
+	{
+		
 	}
 }

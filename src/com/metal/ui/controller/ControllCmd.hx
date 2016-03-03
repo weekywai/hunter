@@ -10,6 +10,7 @@ import com.metal.config.PlayerPropType;
 import com.metal.config.ResPath;
 import com.metal.config.RoomMissionType;
 import com.metal.config.SfxManager;
+import com.metal.config.StageType;
 import com.metal.enums.MapVo;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgActor;
@@ -48,7 +49,6 @@ import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Progress;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
-//import tweenx909.TweenX;
 using com.metal.enums.Direction;
 /**
  * ...
@@ -196,8 +196,12 @@ class ControllCmd extends BaseCmd
 		_battle = GameProcess.root.getComponent(BattleComponent);
 		_holdFire = false;
 		_attackBtn = _widget.getChildAs("attackBtn", Button);
+		_attackBtn.onPress = onAttackPress;
+		_attackBtn.onRelease = onAttackRelease;
 		_jumpBtn = _widget.getChildAs("jumpBtn", Button);
+		_jumpBtn.onPress = onJumpPress;
 		_knifeBtn = _widget.getChildAs("knifeBtn", Button);
+		_knifeBtn.onPress = onKnifePress;
 		
 		_timeLimit = _widget.getChildAs("timeLimit", Text);
 		_timeLimit.label.visible = false;
@@ -237,7 +241,6 @@ class ControllCmd extends BaseCmd
 		}
 		
 		_playerInfo = PlayerUtils.getInfo();
-		
 		var icon = UIBuilder.create(Bmp, {
 			widthPt:100,
 			src:ResPath.getIconPath(Std.string(_playerInfo.res), ResPath.ModelIcon),
@@ -253,7 +256,11 @@ class ControllCmd extends BaseCmd
 		_mission = _widget.getChildAs("mission", Text);
 		cmd_AssignPlayer(PlayerUtils.getPlayer());
 	}
-	
+	private function cmd_UpdateBullet(userData:Dynamic)
+	{
+		if(userData!=null)
+		_bulletTxt.text = "子弹数 "+userData.currentBullet+"/"+userData.currentBackupBullet;
+	}
 	//mp闪烁效果
 	var addnum:Float = 0;
 	private function shine(e:Event)
@@ -319,7 +326,6 @@ class ControllCmd extends BaseCmd
 			case MsgUIUpdate.BossInfoUpdate:
 				cmd_BossInfoUpdate(userData);
 			//case MsgBoard.AssignPlayer:
-				//trace("AssignPlayer");
 				//cmd_AssignPlayer(userData);
 			case MsgUIUpdate.NewBieUI:
 				cmd_NewBieUI(userData);
@@ -331,7 +337,7 @@ class ControllCmd extends BaseCmd
 				cmd_UpdateMissionTxt(userData);				
 			case MsgUI2.InitThumb:
 				cmd_InitThumb(userData);
-			case MsgUIUpdate.StartBattle:
+			case MsgStartup.Start:
 				cmd_Start(userData);
 			case MsgUI2.FinishBattleTip:
 				cmd_FinishBattleTip(userData);
@@ -367,15 +373,14 @@ class ControllCmd extends BaseCmd
 					SfxManager.playBMG(BGMType.Victory);
 					PlayerUtils.getPlayer().notify(MsgActor.Victory);
 					trace("MsgActor.Victory");
-					notifyRoot(MsgStartup.BattleClear);
+					GameProcess.root.notify(MsgStartup.BattleClear);
 					trace("MsgStartup.BattleClear");
 				}else {
 					//通知角色死亡
 					PlayerUtils.getPlayer().notify(MsgActor.Destroying);
 					//战斗结束
 					sendMsg(MsgUI.BattleFailure);
-					notifyRoot(MsgStartup.Finishbattle);
-					sendMsg(MsgUI2.Control, false);
+					GameProcess.root.notify(MsgStartup.Finishbattle);
 				}								
 			}
 		}
@@ -409,7 +414,7 @@ class ControllCmd extends BaseCmd
 		super.onTick(timeDelta);
 		if (!isInit) return;
 		if (isDisposed) return;
-		if (_battle!=null && _battle.curMap != 1)
+		//if (_battle!=null && _battle.curMap != 1)
 			//updateThumb();
 		setDirection(currentPoint);
 		
@@ -438,7 +443,7 @@ class ControllCmd extends BaseCmd
 	private function onAttackRelease(e):Void
 	{
 		_holdFire = false;
-		_player.notify(MsgInput.HoldFire, false);
+		_player.notify(MsgInput.HoldFire, _holdFire);
 	}
 	private function onJumpPress(e):Void 
 	{
@@ -833,7 +838,7 @@ class ControllCmd extends BaseCmd
 	private function cmd_InitThumb(userData:Dynamic):Void
 	{
 		//trace("cmd_InitThumb");
-		if (_battle.currentStage().DuplicateType == 9)
+		if (_battle.currentStage().DuplicateType == StageType.Endless)
 			return;
 		//隐藏关卡进度条
 		_thumb.visible = false;
@@ -878,7 +883,7 @@ class ControllCmd extends BaseCmd
 			btn.disabled = false;
 		}		
 		GameProcess.root.notify(MsgStartup.PauseCountDown, false);
-		notify(MsgUIUpdate.UpdateMissionTxt,MapInfoManager.instance.getRoomInfo(Std.parseInt(EntityUtil.findBoardComponent(GameMap).mapData.mapId)).MissionType);
+		notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(EntityUtil.findBoardComponent(GameMap).mapData.mapId)).MissionType);
 		trace("notify(MsgUIUpdate.UpdateMissionTxt");
 		//_skill0Btn.text = _skill1Btn.text = _skill2Btn.text = _skill3Btn.text = _skill4Btn.text = "";
 		//_skill0Btn.disabled = _skill1Btn.disabled = _skill2Btn.disabled = _skill3Btn.disabled = _skill4Btn.disabled = false;
@@ -912,11 +917,6 @@ class ControllCmd extends BaseCmd
 	private function cmd_SetInputEnable(userData:Dynamic)
 	{
 		_inputEnable = userData;
-	}
-	private function cmd_UpdateBullet(userData:Dynamic)
-	{
-		if(userData!=null)
-		_bulletTxt.text = "子弹数 "+userData.currentBullet+"/"+userData.currentBackupBullet;
 	}
 	//private function updateThumb():Void
 	//{

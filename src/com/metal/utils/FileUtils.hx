@@ -10,6 +10,7 @@ import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.impl.LiveNessInfo;
 import com.metal.proto.impl.MapStarInfo;
+import com.metal.proto.impl.NewbieInfo;
 import com.metal.proto.impl.NewsInfo;
 import com.metal.proto.impl.QuestInfo;
 import com.metal.proto.manager.LiveNessManager;
@@ -108,8 +109,7 @@ class FileUtils
 		if (!FileExits) 
 			return;
 			//trace(LoginFileUtils.Id);
-		var fileContent = File.getContent(_path + LoginFileUtils.Id);
-		//trace(fileContent);
+		var fileContent = File.getContent(_path +LoginFileUtils.Id);
 		if (fileContent==null || fileContent=="")
 			return;
 		_data = Unserializer.run(fileContent);
@@ -136,6 +136,8 @@ class FileUtils
 				setNewsInfo(fileType);
 			case FilesType.StageStar:
 				setMapStarData(fileType);
+			case FilesType.Newbie:
+				setNewbieData(fileType);
 		}
 	}
 	/**所有数据*/
@@ -234,6 +236,7 @@ class FileUtils
 	/**任务*/
 	private static function setTask(type:Int):Void
 	{
+		trace("setTask");
 		var taskInfo = cast(GameProcess.root.getComponent(TaskComponent), TaskComponent).taskMap;
 		var taskMap:IntMap<TaskVo> = new IntMap();
 		for (key in taskInfo.keys())
@@ -246,6 +249,7 @@ class FileUtils
 	/**获取任务*/
 	public static function getTask():IntMap<QuestInfo>
 	{
+		trace("getTask");
 		var taskInfo = TaskManager.instance.Task;
 		parseData();
 		if (_data == null)
@@ -311,6 +315,24 @@ class FileUtils
 		if (currArr != null ) MapStarInfo.instance.dataMap = currArr;
 		//trace("MapStarInfo.instance.dataMap: "+MapStarInfo.instance.dataMap);
 		return MapStarInfo.instance.dataMap;
+	}
+	
+	/**新手指引记录*/
+	private static function setNewbieData(type:Int):Void
+	{		
+		//trace("setNewbieData");
+		saveMap(type, NewbieInfo.instance.dataArr);
+	}
+	/**新手指引记录*/
+	public static function getNewbieData():Array<Int>
+	{		
+		parseData();
+		if (_data == null)
+			return null;
+		var currArr:Array<Int> = FilesType.fileMap.get(FilesType.Newbie);		
+		if (currArr != null ) NewbieInfo.instance.dataArr = currArr;
+		//trace("getNewbieData"+NewbieInfo.instance.dataArr);
+		return NewbieInfo.instance.dataArr;
 	}
 	
 	/**装备背包*/

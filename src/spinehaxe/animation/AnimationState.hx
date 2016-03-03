@@ -134,6 +134,7 @@ class AnimationState {
 			}
 
 			// Check if completed the animation or a loop iteration.
+			//trace(lastTime +" "+ endTime +" "+ time);
 			if((loop) ? (lastTime % endTime > time % endTime):(lastTime < endTime && time >= endTime))  {
 				var count:Int = cast(time / endTime);
 				if (current.onComplete != null) 

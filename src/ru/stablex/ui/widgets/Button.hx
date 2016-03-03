@@ -227,17 +227,20 @@ class Button extends Text{
         this.mouseChildren = false;
 
         //process interactions with mouse pointer
-        this.addEventListener(MouseEvent.MOUSE_OVER, Button._onHover);
-		this.addEventListener(MouseEvent.MOUSE_OUT, Button._onHout);
-		this.addEventListener(MouseEvent.MOUSE_DOWN, Button._onPress);
-		this.addEventListener(MouseEvent.MOUSE_OUT, Button._onRelease);
-		this.addEventListener(MouseEvent.MOUSE_UP, Button._onRelease);
+        
         #if mobile
             this.addEventListener(TouchEvent.TOUCH_ROLL_OUT, Button._onHout);
             this.addEventListener(TouchEvent.TOUCH_OUT, Button._onRelease);
 			this.addEventListener(TouchEvent.TOUCH_BEGIN, Button._onTouchBegin);
 			this.addEventListener(TouchEvent.TOUCH_END, Button._onRelease);
+		#else
+		this.addEventListener(MouseEvent.MOUSE_OVER, Button._onHover);
+		this.addEventListener(MouseEvent.MOUSE_OUT, Button._onHout);
+		this.addEventListener(MouseEvent.MOUSE_DOWN, Button._onPress);
+		this.addEventListener(MouseEvent.MOUSE_OUT, Button._onRelease);
+		this.addEventListener(MouseEvent.MOUSE_UP, Button._onRelease);
 		#end
+		
 
         this.pressed  = false;
         this.hovered  = false;

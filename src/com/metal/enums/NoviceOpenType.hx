@@ -6,16 +6,28 @@ package com.metal.enums;
  */
 class NoviceOpenType
 {
+	//-------------------------------------------------------
 	/**欢迎词*/
 	inline public static var NoviceText1:Int = 1;
+	/**寻宝界面介绍*/
+	inline public static var NoviceText5:Int = 5;
+	/**战斗控制介绍*/
+	inline public static var NoviceText6:Int = 6;
+	/**培养界面介绍*/
+	inline public static var NoviceText34:Int = 34;	
+	
+	//------------------------旧版---------------------------
+	
+	///**欢迎词*/
+	//inline public static var NoviceText1:Int = 1;
 	inline public static var NoviceText2:Int = 2;
 	/**装备、护甲*/
 	inline public static var NoviceText3:Int = 3;
 	inline public static var NoviceText4:Int = 4;
-	/**寻宝*/
-	inline public static var NoviceText5:Int = 5;
-	/**战斗控制介绍*/
-	inline public static var NoviceText6:Int = 6;
+	///**寻宝*/
+	//inline public static var NoviceText5:Int = 5;
+	///**战斗控制介绍*/
+	//inline public static var NoviceText6:Int = 6;
 	inline public static var NoviceText7:Int = 7;
 	/**战斗技能介绍*/
 	inline public static var NoviceText8:Int = 8;
@@ -62,4 +74,6 @@ class NoviceOpenType
 	inline public static var NoviceText32:Int = 32;
 	/**胜利界面*/
 	inline public static var NoviceText33:Int = 33;
+	
+	
 }

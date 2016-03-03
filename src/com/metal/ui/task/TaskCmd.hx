@@ -107,7 +107,7 @@ class TaskCmd extends BaseCmd
 							if (questInfo.get(i).RunType == 2)
 							{
 								mainStack.show("through");
-								GameProcess.root.notify(MsgUI.Through);
+								sendMsg(MsgUI.Through);
 							}
 						}
 						break;
@@ -152,19 +152,19 @@ class TaskCmd extends BaseCmd
 						if (info.RunType == 2)
 						{
 							mainStack.show("endless");
-							GameProcess.root.notify(MsgUI.EndlessCopy);
+							sendMsg(MsgUI.EndlessCopy);
 						}else if (info.RunType == 3 || info.RunType == 6 || info.RunType == 12 || info.RunType == 13)
 						{
 							mainStack.show("forge");
-							GameProcess.root.notify(MsgUI.Forge);
+							sendMsg(MsgUI.Forge);
 						}else if (info.RunType == 10 )//寻宝
 						{
 							mainStack.show("treasureHunt");
-							GameProcess.root.notify(MsgUI.TreasureHunt);
+							sendMsg(MsgUI.TreasureHunt);
 						}else if (info.RunType == 11)//关卡
 						{
 							mainStack.show("through");
-							GameProcess.root.notify(MsgUI.Through);
+							sendMsg(MsgUI.Through);
 						}
 					}
 				}

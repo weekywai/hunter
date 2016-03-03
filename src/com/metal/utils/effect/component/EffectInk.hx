@@ -73,7 +73,7 @@ class EffectInk extends BaseEffect
 		//调整位置
 		upSprite.y = -upSprite.height;
 		downSprite.y =  Lib.current.stage.stageHeight + triangleH;
-		GameProcess.UIRoot.notify(MsgInput.SetInputEnable, false);
+		GameProcess.NotifyUI(MsgInput.SetInputEnable, false);
 		//
 		Actuate.tween(upSprite, closeTime , {y:Lib.current.stage.stageHeight/2-upSprite.height } ).onComplete(onShowComplete);
 		Actuate.tween(downSprite, closeTime, { y:Lib.current.stage.stageHeight / 2  });
@@ -106,7 +106,7 @@ class EffectInk extends BaseEffect
 		downSprite.parent.removeChild(downSprite);
 		downSprite.removeChildren();
 		downSprite = null;
-		GameProcess.UIRoot.notify(MsgInput.SetInputEnable, true);
+		GameProcess.NotifyUI(MsgInput.SetInputEnable, true);
 	}
 	
 	

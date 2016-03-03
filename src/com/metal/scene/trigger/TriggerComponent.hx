@@ -122,7 +122,7 @@ class TriggerComponent extends Component
 						//TODO 怪物或角色
 						//PlayerUtils.getPlayer().notify(MsgInput.SetInputEnable, true);
 						var resID = MonsterManager.instance.getInfo(obj.monsters[0]).res;
-						GameProcess.UIRoot.notify(MsgUI.BossPanel, ModelManager.instance.getProto(resID).res);
+						GameProcess.SendUIMsg(MsgUI.BossPanel, ModelManager.instance.getProto(resID).res);
 					}
 				}else {
 					var id = Std.parseInt(_info.custom.resolve("id"));
@@ -196,7 +196,7 @@ class TriggerComponent extends Component
 					_info.voInfo.shift();
 					if (_info.voInfo.length > 0) {
 						notify(MsgBoard.MonsterShow, _info.voInfo[0]);
-						//GameProcess.UIRoot.notify(MsgUIUpdate.UpdateThumb, _info.voInfo.length);
+						//GameProcess.NotifyUI(MsgUIUpdate.UpdateThumb, _info.voInfo.length);
 					}else {
 						
 						var isRunMap = cast(owner.getComponent(GameMap), GameMap).mapData.runKey;
