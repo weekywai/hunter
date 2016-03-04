@@ -1,5 +1,6 @@
 package de.polygonal.core.sys;
 
+import com.metal.message.MsgUtils;
 import de.polygonal.core.es.Entity;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
@@ -34,19 +35,19 @@ class SimEntity extends Entity implements IObservable
 	
 	public function attach(o:IObserver, mask:Int = 0)
 	{
-		assert(mInitialized, "call Timebase.init() first");
+		assert(_initialized, "call Timebase.init() first");
 		observable.attach(o, mask);
 	}
 	
 	public function detach(o:IObserver, mask:Int = 0)
 	{
-		assert(mInitialized, "call Timebase.init() first");
+		assert(_initialized, "call Timebase.init() first");
 		observable.detach(o, mask);
 	}
 	
-	public function new(id:String = null, autoInit:Bool = true)
+	public function new(id:String = null, autoInit:Bool = true, isGlobal:Bool = false)
 	{
-		super(id);
+		super(id, isGlobal);
 		compMap = new Sll();
 		propMap = new StringMap();
 		_initialized = false;
@@ -246,10 +247,7 @@ class SimEntity extends Entity implements IObservable
 	 */
 	public function sendMMsg(type:Int, userData:Dynamic = null):Void
 	{
-		if (userData != null)
-			outgoingMessage.o = userData;
-		sendDirectMessage(this, type, true);
-		//onMsg(type, this);
+		MsgUtils.sendDirectMsg(this, type, userData);
 	}
 	/**
 	 * 发送消息给component事件

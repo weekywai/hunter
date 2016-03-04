@@ -6,7 +6,7 @@ import com.metal.proto.manager.EffectManager;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.scene.effect.api.IEffect;
-import com.metal.scene.view.ViewDisplay;
+import com.metal.scene.board.view.ViewDisplay;
 import de.polygonal.core.sys.SimEntity;
 
 /**

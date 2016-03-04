@@ -9,7 +9,7 @@ import com.metal.message.MsgActor;
 import com.metal.message.MsgStat;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.board.impl.GameBoardItem;
-import com.metal.scene.map.GameMap;
+import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.IActor;
 import com.metal.unit.avatar.MTAvatar;

@@ -1,4 +1,4 @@
-package com.metal.scene.board.utils;
+package com.metal.scene.board.support;
 
 import openfl.geom.Point;
 import com.haxepunk.HXP;

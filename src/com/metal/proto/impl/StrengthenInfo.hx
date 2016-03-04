@@ -1,6 +1,6 @@
 package com.metal.proto.impl;
 import com.metal.proto.impl.WeaponInfo;
-import com.metal.utils.XmlUtils;
+import com.utils.XmlUtils;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
 

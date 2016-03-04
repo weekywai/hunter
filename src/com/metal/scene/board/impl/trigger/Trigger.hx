@@ -1,4 +1,4 @@
-package com.metal.scene.trigger;
+package com.metal.scene.board.impl.trigger;
 
 import com.metal.enums.MonsVo;
 import com.metal.message.MsgItr;

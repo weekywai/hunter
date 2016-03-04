@@ -1,7 +1,7 @@
 package com.metal.proto.impl;
 import com.metal.enums.RunVo;
-import com.metal.utils.StringUtils;
-import com.metal.utils.XmlUtils;
+import com.utils.StringUtils;
+import com.utils.XmlUtils;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
 

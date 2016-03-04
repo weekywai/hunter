@@ -1,4 +1,4 @@
-package com.metal.scene.view;
+package com.metal.scene.board.view;
 
 import com.haxepunk.Entity;
 import com.haxepunk.Graphic;

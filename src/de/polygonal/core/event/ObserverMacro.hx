@@ -90,6 +90,10 @@ class ObserverMacro
 	
 	static var _groupCounter = 0;
 	
+	static var callbackRegistered = false;
+	static var cache:String = null;
+	inline static var CACHE_PATH = "tmp_event_cache";
+	
 	macro public static function create(e:Expr):Array<Field>
 	{
 		var numBits = Context.defined("neko") ? 30 : 32;
@@ -119,6 +123,7 @@ class ObserverMacro
 								case CIdent(d):
 									fields.push(_makeTypeField(d, tid, gid, pos));
 									names.push(d);
+									cache+=d + "," + tid + "," + gid+"; ";
 									tid++;
 								
 								default: Context.error("unsupported declaration", pos);
@@ -135,6 +140,16 @@ class ObserverMacro
 		fields.push(_makeGroupMaskField(gid, pos));
 		fields.push(_makeEventMaskField(names.length, pos));
 		fields.push(_makeHasFunc(gid, names.length, pos));
+		
+		if (!callbackRegistered)
+		{
+			callbackRegistered = true;
+			Context.onGenerate(onGenerate);
+			Context.registerModuleDependency("de.polygonal.core.event.IObserver", CACHE_PATH);
+		}
+		if (cache == null)
+			if (sys.FileSystem.exists(CACHE_PATH))
+				cache = sys.io.File.getContent(CACHE_PATH);
 		
 		return fields;
 	}
@@ -293,6 +308,14 @@ class ObserverMacro
 		
 		return {name: "EVENT_MASK", doc: null, meta: [], access: [AStatic, APublic, AInline],
 			kind: FVar(TPath({pack : [], name : "Int", params : [], sub : null}), {expr: mask, pos: pos}), pos: pos}
+	}
+	
+	static function onGenerate(types:Array<haxe.macro.Type>):Void
+	{
+		//if (!changed) return;
+		var fout = sys.io.File.write(CACHE_PATH, false);
+		fout.writeString(cache);
+		fout.close();
 	}
 	#end
 }

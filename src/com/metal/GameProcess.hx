@@ -18,10 +18,10 @@ import com.metal.scene.board.impl.GameBoard;
 import com.metal.scene.bullet.impl.BulletComponent;
 import com.metal.scene.effect.impl.EffectComponent;
 import com.metal.scene.GameFactory;
-import com.metal.scene.GameScene;
-import com.metal.scene.map.GameMap;
-import com.metal.scene.view.Camera;
-import com.metal.scene.view.ViewBoard;
+import com.metal.scene.board.support.GameScene;
+import com.metal.scene.board.impl.GameMap;
+import com.metal.scene.board.view.Camera;
+import com.metal.scene.board.view.ViewBoard;
 import de.polygonal.core.es.Entity;
 import de.polygonal.core.es.EntitySystem;
 import de.polygonal.core.es.MainLoop;
@@ -90,7 +90,7 @@ class GameProcess implements IObserver
 		rootStage.addChild(gameStage);
 		
 		initEngine();
-		root = new SimEntity("Game");
+		root = new SimEntity("Game", true, true);
 		UIRoot = new UIManager();
 		root.addComponent(new GameSchedual());
 		root.add(UIRoot);
@@ -115,7 +115,7 @@ class GameProcess implements IObserver
 		var cfg = new hxtelemetry.HxTelemetry.Config();
 		cfg.host = "192.168.1.100";
 		cfg.allocations = false;
-		HXT = new HxTelemetry(cfg);
+		//HXT = new HxTelemetry(cfg);
 	}
 	
 	/** after login */
@@ -166,7 +166,7 @@ class GameProcess implements IObserver
 		#if actuate_manual_update
 		SimpleActuator.stage_onEnterFrame (null);
 		#end
-		HXT.advance_frame();
+		//HXT.advance_frame();
 	}
 	
 	public function startGame():Void
@@ -193,7 +193,6 @@ class GameProcess implements IObserver
 		trace("endGame");
 		Sfx.stopAllSound();
 		HXP.scene.end();
-		HXP.scene.updateLists();
 		ResourceManager.instance.unLoadAll();
 		var gamebord:Entity = root.findChild("GameBoard");
 		root.remove(gamebord);

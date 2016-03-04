@@ -1,11 +1,11 @@
-package com.metal.scene.view;
+package com.metal.scene.board.view;
 import com.haxepunk.HXP;
 import com.haxepunk.tmx.TmxMap;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgCamera;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgStartup;
-import com.metal.scene.board.utils.Bounds;
+import com.metal.scene.board.support.Bounds;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.BaseActor;
 import com.metal.unit.actor.impl.MTActor;

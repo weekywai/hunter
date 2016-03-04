@@ -70,7 +70,7 @@ class UIManager extends SimEntity
 	private var _showBossData:Dynamic;
 	public function new() 
 	{
-		super("UIManager");
+		super("UIManager", true, true);
 	}
 	
 	private function initUI():Void 
@@ -110,6 +110,8 @@ class UIManager extends SimEntity
 	}
 	override function onMsg(type:Int, sender:Entity) 
 	{
+		if(type == MsgUI.RevivePanel)
+		trace(MsgUI.RevivePanel);
 		var userData:Dynamic = null;
 		if(incomingMessage!=null)
 			userData = incomingMessage.o;
@@ -119,7 +121,6 @@ class UIManager extends SimEntity
 			case MsgUI2.Control:
 				cmd_Control(userData);
 			case MsgUI.MainPanel:
-				trace(userData);
 				cmd_MainPanel(userData);
 			case MsgUI.Warehouse:
 				cmd_WarehousePanel(userData);
@@ -173,7 +174,7 @@ class UIManager extends SimEntity
 	}
 	private function cmd_SetParent(data:Dynamic):Void
 	{
-		trace(data);
+		//trace(data);
 		root = data;
 		initUI();
 		
@@ -289,7 +290,6 @@ class UIManager extends SimEntity
 	/*买活*/
 	private function cmd_RevivePanel(data:Dynamic):Void
 	{
-		trace("cmd_RevivePanel");
 		var count = Std.int(data * 10);
 		cmd_Tips( { type:TipsType.resurrection, msg:"是否花费" + count + "钻石购买复活？" } );
 		var repawn = new ResurrectionCmd(count);

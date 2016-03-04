@@ -15,7 +15,7 @@ import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.scene.effect.support.EffectText;
-import com.metal.scene.map.GameMap;
+import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.BaseActor;
 import com.metal.unit.actor.impl.MTActor;

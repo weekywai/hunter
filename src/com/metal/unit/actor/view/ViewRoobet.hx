@@ -2,7 +2,7 @@ package com.metal.unit.actor.view;
 
 import com.metal.config.SfxManager;
 import com.metal.message.MsgBullet;
-import com.metal.scene.map.GameMap;
+import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import spinehaxe.Bone;
 import spinehaxe.Event;

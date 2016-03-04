@@ -10,6 +10,7 @@ import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
+import com.metal.message.MsgUtils;
 import com.metal.player.core.PlayerStat;
 import com.metal.proto.impl.BattlePrepareInfo;
 import com.metal.proto.impl.GoldGoodInfo;
@@ -280,7 +281,7 @@ class MTActor extends BaseActor
 	{
 		//trace(name);
 		if (name == Std.string(ActionType.dead_1)) {
-			trace("Destorying to soul");
+			//trace("Destorying to soul");
 			notify(MsgActor.Soul);
 			return;
 		}
@@ -341,7 +342,11 @@ class MTActor extends BaseActor
 				GameProcess.SendUIMsg(MsgUI.BattleFailure);
 			}
 		} else {
-			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
+			//trace(GameProcess.UIRoot + " ");
+			//GameProcess.root.outgoingMessage.o = respawnTotal;
+			//GameProcess.root.sendMessageToChildren(MsgUI.RevivePanel, true);
+			//GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
+			MsgUtils.sendUIMsg(MsgUI.RevivePanel, respawnTotal);
 		}
 		//notify(MsgActor.ExitBoard);
 	}

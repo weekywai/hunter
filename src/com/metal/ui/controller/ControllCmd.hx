@@ -27,7 +27,7 @@ import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.manager.MapInfoManager;
-import com.metal.scene.map.GameMap;
+import com.metal.scene.board.impl.GameMap;
 import com.metal.ui.popup.TipCmd;
 import com.metal.ui.warehouse.WarehouseCmd;
 import com.metal.unit.actor.api.ActorState;

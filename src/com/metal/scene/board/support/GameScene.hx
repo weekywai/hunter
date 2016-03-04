@@ -1,4 +1,4 @@
-package com.metal.scene;
+package com.metal.scene.board.support;
 
 import com.haxepunk.Entity;
 import com.haxepunk.Scene;
@@ -37,6 +37,7 @@ class GameScene extends Scene implements IObserver
 		clearRecycledAll();
 		removeAll();
 		_end = true;
+		updateLists();
 		trace("Scene end");
 	}
 	

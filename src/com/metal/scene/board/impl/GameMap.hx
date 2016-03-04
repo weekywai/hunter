@@ -1,4 +1,4 @@
-package com.metal.scene.map;
+package com.metal.scene.board.impl;
 
 import com.haxepunk.HXP;
 import com.haxepunk.tmx.TmxPropertySet;
@@ -26,8 +26,8 @@ import com.metal.proto.manager.MapInfoManager;
 import com.metal.proto.manager.ModelManager;
 import com.metal.proto.manager.MonsterManager;
 import com.metal.scene.board.api.BoardFaction;
-import com.metal.scene.trigger.Trigger;
-import com.metal.scene.view.Camera;
+import com.metal.scene.board.impl.trigger.Trigger;
+import com.metal.scene.board.view.Camera;
 import com.metal.unit.AppearUtils;
 import com.metal.unit.avatar.MTAvatar;
 import com.metal.unit.UnitInfo;

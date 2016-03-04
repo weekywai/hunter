@@ -1,4 +1,4 @@
-package com.metal.scene.trigger;
+package com.metal.scene.board.impl.trigger;
 
 import com.metal.component.BattleComponent;
 import com.metal.config.SfxManager;
@@ -19,7 +19,7 @@ import com.metal.proto.manager.ModelManager;
 import com.metal.proto.manager.MonsterManager;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.board.impl.BattleResolver;
-import com.metal.scene.map.GameMap;
+import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.IActor;
 import com.metal.unit.actor.impl.MTActor;
 import de.polygonal.core.event.IObservable;

@@ -1,4 +1,4 @@
-package com.metal.scene.trigger;
+package com.metal.scene.board.impl.trigger;
 
 /**
  * ...

@@ -143,4 +143,9 @@ class EntityUtil
 		if (e == null ) throw new Error("GameBoard entity is null");
 		return untyped cast(e, SimEntity).getComponent(c);
 	}
+	
+	public static function sendDirectMsg()
+	{
+		
+	}
 }

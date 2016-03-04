@@ -3,7 +3,7 @@ import com.metal.enums.Direction;
 import com.metal.message.MsgBullet;
 import com.metal.proto.manager.BulletManager;
 import com.metal.proto.manager.SkillManager;
-import com.metal.scene.map.GameMap;
+import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.ai.MonsterAI;

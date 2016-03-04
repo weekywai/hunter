@@ -1,5 +1,5 @@
 package com.metal.proto.impl;
-import com.metal.utils.XmlUtils;
+import com.utils.XmlUtils;
 import haxe.xml.Fast;
 
 /**

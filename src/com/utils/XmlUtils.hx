@@ -1,4 +1,4 @@
-﻿package com.metal.utils;
+﻿package com.utils;
 import haxe.xml.Fast;
 
 /**

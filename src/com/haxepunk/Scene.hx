@@ -1,12 +1,10 @@
 package com.haxepunk;
 
+import com.haxepunk.Entity;
+import com.haxepunk.Tweener;
 import com.haxepunk.graphics.atlas.AtlasData;
 import openfl.display.Sprite;
 import openfl.geom.Point;
-import com.haxepunk.Entity;
-import com.haxepunk.Tweener;
-import openfl.geom.Rectangle;
-import haxe.ds.IntMap;
 
 /**
  * Updated by `Engine`, main game container that holds all currently active Entities.

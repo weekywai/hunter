@@ -14,7 +14,7 @@ import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.api.IBullet;
 import com.metal.scene.effect.api.EffectRequest;
-import com.metal.scene.view.ViewDisplay;
+import com.metal.scene.board.view.ViewDisplay;
 import com.metal.unit.avatar.MTAvatar;
 import de.polygonal.core.sys.SimEntity;
 import motion.Actuate;
