@@ -151,12 +151,6 @@ class WarehouseCmd extends BaseCmd
 		initUI();
 	}
 	
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void
-	{
-		if (_unparent)
-			return;
-	}
-	
 	private function initUI():Void
 	{
 		mainStack = UIBuilder.getAs("allView", MainStack);

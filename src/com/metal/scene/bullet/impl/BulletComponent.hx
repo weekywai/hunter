@@ -49,7 +49,7 @@ class BulletComponent extends Component
 		bullets.clear();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgBullet.Create:
@@ -59,7 +59,7 @@ class BulletComponent extends Component
 			case MsgBullet.Clear, MsgStartup.TransitionMap:
 				cmd_clearBullet(userData);
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	
 	private function cmd_create(userData:Dynamic):Void
@@ -71,7 +71,8 @@ class BulletComponent extends Component
 		//trace(bullet);
 		//trace(_bullets.size());
 		_bullets.add(bullet);
-		bullet.init(owner, req.info);
+		bullet.init(owner);
+		bullet.setInfo(req.info);
 		bullet.start(req);
 		_recycles.remove(bullet);
 	}

@@ -6,7 +6,7 @@ import com.metal.proto.manager.EffectManager;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.scene.effect.api.IEffect;
-import com.metal.scene.board.view.ViewDisplay;
+import com.metal.unit.render.ViewDisplay;
 import de.polygonal.core.sys.SimEntity;
 
 /**
@@ -15,13 +15,9 @@ import de.polygonal.core.sys.SimEntity;
  */
 class EffectEntity extends ViewDisplay implements IEffect
 {
-	private var _owner:SimEntity;
-	
 	public var info(default, null):EffectInfo;
 	/** 旋转角度 */
 	private var _angle:Float = 0;
-	
-	public var effectRequest(default, default):EffectRequest;
 	
 	private var _offset:Bool;
 	
@@ -32,36 +28,29 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override private function onDispose():Void 
 	{
-		_owner = null;
 		info = null;
-		effectRequest = null;
 		super.onDispose();
 	}
 	
 	override public function removed():Void 
 	{
-		_owner = null;
+		owner = null;
 		info = null;
-		effectRequest = null;
 		super.removed();
 	}
 	
-	public function init(body:SimEntity, req:EffectRequest):Void
+	override public function init(body:SimEntity):Void
 	{
-		if (req == null) throw "req is null";
-		effectRequest = req;
 		_offset = false;
-		info = EffectManager.instance.getProto(req.Key);
-		_owner = body;
-		onInit();
+		super.init(body);
 	}
 	/**继承*/
-	private function onInit():Void
-	{
-		
+	private function onInit():Void {
+		//override 
 	}
 	public function start(req:EffectRequest):Void 
 	{
+		info = EffectManager.instance.getProto(req.Key);
 		x = req.x;
 		y = req.y;
 		_angle = req.angle;
@@ -70,14 +59,10 @@ class EffectEntity extends ViewDisplay implements IEffect
 		HXP.scene.add(this);
 	}
 	
-	override public function update():Void 
-	{
-		super.update();
-	}
-	/** 结束，循环再用 */
+	/** end recycle */
 	private function recycle():Void {
 		scene.recycle(this);
-		_owner.notify(MsgEffect.Recycle, this);
+		owner.notify(MsgEffect.Recycle, this);
 	}
 	/**
 	 * 验证物体是否可攻击

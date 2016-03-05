@@ -312,7 +312,7 @@ class ControllCmd extends BaseCmd
 	}
 	
 	/**接收UIManager消息，需要继承转发给 widget 更新数据*/
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void {
+	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void {
 		
 		switch(type){
 			case MsgUIUpdate.UpdateInfo:

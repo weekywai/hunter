@@ -167,7 +167,7 @@ class BulletSkillShiny extends BulletEntity
 	private function checkOnCameraEntity()
 	{
 		//HXP.scene.
-		var board:GameBoard = _owner.getComponent(GameBoard);
+		var board:GameBoard = owner.getComponent(GameBoard);
 		var arr:Array<SimEntity> = board.onCameraEntity();
 		//怪物受击效果
 		for (sm in arr) {
@@ -175,14 +175,14 @@ class BulletSkillShiny extends BulletEntity
 				sm.notify(MsgEffect.EffectStart, 43);//特效ID 43
 				_hitInfo.target = sm;
 				//trace("info::"+_hitInfo.buffId+"<><>"+_hitInfo.fix);
-				_owner.notify(MsgItr.BulletHit,_hitInfo);
+				owner.notify(MsgItr.BulletHit,_hitInfo);
 			}
 		}
 		//子弹消除处理
 		var effT:TextrueSpritemap;
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Z018.xml"));
 		
-		var bullets = _owner.getComponent(BulletComponent).bullets;
+		var bullets = owner.getComponent(BulletComponent).bullets;
 		for (bullet in bullets.iterator()) {
 			//if (!bullet.rcKey) {
 				if (!Std.is(bullet, BulletSkillShiny) && bullet.canRemove) {

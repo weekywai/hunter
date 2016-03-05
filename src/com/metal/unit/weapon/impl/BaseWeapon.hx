@@ -111,9 +111,8 @@ class BaseWeapon extends Component implements IWeapon
 		super.onDispose();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
 		switch(type) {
 			case MsgActor.Destroying:
 				notify_Destroying(userData);

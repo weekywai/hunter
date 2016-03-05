@@ -44,7 +44,7 @@ class GameBoard extends Component
 		super.onDispose();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgStartup.Start:
@@ -56,7 +56,7 @@ class GameBoard extends Component
 			case MsgBoard.StartAI:
 				cmd_StartAI();
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	private function cmd_Start(userData:Dynamic):Void {
 		

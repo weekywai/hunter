@@ -225,9 +225,9 @@ class MTActor extends BaseActor
 		//}
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 		switch(type) {
 			case MsgPlayer.AddCollide:
 				cmd_AddCollide(userData);
@@ -342,11 +342,7 @@ class MTActor extends BaseActor
 				GameProcess.SendUIMsg(MsgUI.BattleFailure);
 			}
 		} else {
-			//trace(GameProcess.UIRoot + " ");
-			//GameProcess.root.outgoingMessage.o = respawnTotal;
-			//GameProcess.root.sendMessageToChildren(MsgUI.RevivePanel, true);
-			//GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
-			MsgUtils.sendUIMsg(MsgUI.RevivePanel, respawnTotal);
+			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
 		}
 		//notify(MsgActor.ExitBoard);
 	}

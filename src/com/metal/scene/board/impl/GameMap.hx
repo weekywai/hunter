@@ -114,7 +114,7 @@ class GameMap extends Component
 		_schedual = GameProcess.root.getComponent(GameSchedual);
 		_trigger = new Trigger(cast owner);
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgStartup.Reset:
@@ -130,7 +130,7 @@ class GameMap extends Component
 			case MsgBoard.BindHideEntity:
 				cmd_BindHideEntity(userData);
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	
 	private function cmd_reset():Void
@@ -174,7 +174,7 @@ class GameMap extends Component
 		
 		mapData = new MapVo(path, keyB, tempMapInfo.RoomType);
 		mapData.mapId = mapId;
-		#if !spriteRenderer
+		#if !spriteTileMap
 		//解析地图
 		for (num in 0...MapVo.nLen) {
 			//mapData.getEntityByLayer(num).loadGraphic(MapLayerType.LayerName[num]);
@@ -456,7 +456,7 @@ class GameMap extends Component
 			var bornPos:Point = (appearArr!=null)?appearArr[0][j]:appearInfo.BornAt[j];
 			j++;
 			if (createPos == null || bornPos == null)
-				throw new Error("createPos:" + appearInfo.EnAt + " bornPos:" + appearInfo.BornAt + ">>>"+j);
+				throw ("createPos:" + appearInfo.EnAt + " bornPos:" + appearInfo.BornAt + ">>>"+j);
 			entity = createEntity(monsterInfo.ModelType, createPos, vo.id);
 			entity.notify(MsgActor.BornPos, bornPos);
 			notify(MsgBoard.AssignUnit, entity);

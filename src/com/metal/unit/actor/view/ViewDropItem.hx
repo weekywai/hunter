@@ -36,10 +36,6 @@ class ViewDropItem extends BaseViewActor
 		_info = owner.getProperty(ItemBaseInfo);
 		_bounds = new Rectangle(HXP.camera.x, HXP.camera.y, HXP.width*0.8 + HXP.camera.x, HXP.height * 0.7 + HXP.camera.y);
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
-	{
-		super.onNotify(type, source, userData);
-	}
 	
 	override public function onDispose():Void 
 	{

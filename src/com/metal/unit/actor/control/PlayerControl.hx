@@ -66,7 +66,7 @@ class PlayerControl extends Component
 		super.onTick(timeDelta);
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgInput.UIJoystickInput:
@@ -86,7 +86,6 @@ class PlayerControl extends Component
 			case MsgActor.Reborn:
 				cmd_Respawn(userData);
 		}
-		super.onNotify(type, source, userData);
 	}
 	
 	private function onKey():Void

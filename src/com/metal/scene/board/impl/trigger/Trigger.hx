@@ -44,7 +44,7 @@ class Trigger
 	{
 		if (UnlockTrigger != null && !UnlockTrigger.isDisposed) {
 			trace("add: "+enemies.length);	
-			UnlockTrigger.onNotify(MsgItr.AddLockEnemey, owner, enemies);
+			UnlockTrigger.onUpdate(MsgItr.AddLockEnemey, owner, enemies);
 		}else {
 			trace("new: "+enemies.length);
 			var obj = { name:TriggerEventType.ClearUnLock, arrInfo:enemies, showKey:false };	

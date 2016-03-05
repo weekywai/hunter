@@ -65,7 +65,7 @@ class BaseViewActor extends Component
 	{
 		super.onInitComponent();
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		//if(type==MsgActor.Respawn)
 		//trace("respawn");
@@ -109,7 +109,6 @@ class BaseViewActor extends Component
 			case MsgActor.Soul:
 				Notify_Soul(userData);
 		}
-		super.onNotify(type, source, userData);
 	}
 	
 	override public function onDispose():Void 

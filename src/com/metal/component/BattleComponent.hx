@@ -144,9 +144,9 @@ class BattleComponent extends Component
 		_finishRoom = new StringMap();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 		switch(type) {
 			case MsgStartup.GameInit:
 				cmd_GameInit(userData);

@@ -21,7 +21,4 @@ class EffectSkeleton extends EffectEntity
 		_effect = null;
 		super.onDispose();
 	}
-	override function onInit():Void 
-	{
-	}
 }

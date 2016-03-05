@@ -49,9 +49,8 @@ class TreasureHuntCmd extends BaseCmd
 		super.onInitComponent();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
 		switch(type) {
 			case MsgUIUpdate.NewBie:
 				cmd_NewBie(userData);

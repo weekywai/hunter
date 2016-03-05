@@ -15,28 +15,27 @@
 	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
 	
 	<template path="tmp/GameActivity.java" rename="src/org/haxe/lime/GameActivity.java" if="android" />
-	
+	<!--<haxeflag name="-dce" value="std" if="android" />-->
 	<!--<haxeflag name="--macro" value="com.metal.example.Init.init()"/>-->
 	<!-- sprite 渲染地图-->
-	<haxedef name="spriteRenderer" />
+	<haxedef name="spriteTileMap" />
 	<haxedef name="actuate_manual_update" />
 	
 	<set name="openfl-legacy" />
-	<config:hxtelemetry host="192.168.1.100" allocations="true" />
+	<!--<set name="telemetry" />-->
+	<!--<config:hxtelemetry host="192.168.1.100" allocations="true" />-->
 	<!-- classpath, haxe libs -->
 	<source path="src" />
 	<haxelib name="openfl" />
 	<haxelib name="actuate" />
-	<!--<haxelib name="tweenx" />-->
-	<haxelib name="hscript" />
-	<!--<haxelib name="stablexui" />-->
-	<haxelib name="format" />
+	<!--<haxelib name="hscript" />-->
+	<!--<haxelib name="format" />-->
 	<haxelib name="dconsole" />
-	<haxelib name="crashdumper" unless="neko,flash"/>
-	<haxelib name="HxTelemetry" />
-	<haxedef name="HXCPP_STACK_LINE" unless="neko,flash"/>
-	<haxedef name="HXCPP_STACK_TRACE" unless="neko,flash"/>
-	<haxedef name="HXCPP_TELEMETRY" />
+	<haxelib name="crashdumper" unless="flash"/>
+	<haxelib name="HxTelemetry" if="telemetry"/>
+	<haxedef name="HXCPP_STACK_LINE" unless="flash"/>
+	<haxedef name="HXCPP_STACK_TRACE" unless="flash"/>
+	<haxedef name="HXCPP_TELEMETRY" if="telemetry" />
 	
 	
 	<!--icon-->

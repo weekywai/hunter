@@ -217,7 +217,7 @@ class BulletMissile1 extends BulletEntity
 			var avatar:MTAvatar = cast(collideEntity, MTAvatar);
 			_hitInfo.target = avatar.owner;
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
-			_owner.notify(MsgItr.BulletHit, _hitInfo);
+			owner.notify(MsgItr.BulletHit, _hitInfo);
 		}
 		commitEffect();
 		//scene.remove(this);
@@ -228,7 +228,7 @@ class BulletMissile1 extends BulletEntity
 		_effectReq.Key = info.effId;
 		_effectReq.x = x;
 		_effectReq.y = y + 125;
-		_owner.notify(MsgEffect.Create, _effectReq);
+		owner.notify(MsgEffect.Create, _effectReq);
 	}
 	
 	override function recycle():Void 

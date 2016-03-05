@@ -42,7 +42,7 @@ class RewardComponent extends Component
 		cmd_initReward(null);
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type)
 		{
@@ -62,7 +62,7 @@ class RewardComponent extends Component
 			case MsgMission.UpdateReward:
 				cmd_updateReward(userData);
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	
 	override function onDispose():Void

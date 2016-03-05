@@ -57,9 +57,8 @@ class BattleResolver extends Component
 		super.onDispose();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
 		switch(type) {
 			case MsgItr.BulletHit:
 				cmd_BulletHit(userData);

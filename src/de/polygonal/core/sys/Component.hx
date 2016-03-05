@@ -8,8 +8,6 @@ import de.polygonal.core.sys.SimEntity;
 /**
  * Components are bits of data and logic that can be added to entities.
  */
-//@:build(de.polygonal.core.sys.ComponentType.build())
-//@:autoBuild(de.polygonal.core.sys.ComponentType.build())
 class Component extends Disposer implements IObserver
 {
 	var _owner:SimEntity;
@@ -67,12 +65,9 @@ class Component extends Disposer implements IObserver
         }
 		_owner = null;
 	}
-	public function onUpdate(type:Int, source:IObservable, userData:Dynamic)
-	{
-		onNotify(type, source, userData);
-	}
+	
 	/**接收消息*/
-	public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void { }
+	public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void { }
 	/**逻辑更新*/
 	public function onTick(timeDelta:Float) { }	
 	/**渲染更新*/
@@ -103,9 +98,7 @@ class Component extends Disposer implements IObserver
 	/**发送给本体entity*/
 	private function sendMsg(type:Int, userData:Dynamic=null):Void 
 	{
-		if (userData != null)
-			_owner.outgoingMessage.o = userData;
-		_owner.sendDirectMessage(_owner, type, true);
+		_owner.sendMMsg(type, userData);
 	}
 	/**发送给上级entity*/
 	private function sendMsgParent(type:Int, userData:Dynamic=null):Void 

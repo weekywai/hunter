@@ -147,7 +147,7 @@ class ViewPlayer extends BaseViewActor
 		//aimPointView = null;
 		super.onDispose();
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgPlayer.ChangeWeapon:
@@ -157,7 +157,7 @@ class ViewPlayer extends BaseViewActor
 			case MsgInput.Aim:
 				cmd_Aim(userData);			
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	
 	override function Notify_EffectStart(userData:Dynamic):Void

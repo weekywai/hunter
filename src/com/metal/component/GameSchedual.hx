@@ -87,7 +87,7 @@ class GameSchedual extends Component
 		super.onInitComponent();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgNet.AssignAccount:
@@ -129,7 +129,7 @@ class GameSchedual extends Component
 			case MsgNet.BuyFullClip:
 				cmd_BuyFullClip(userData);
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	
 	private function cmd_GameInit():Void

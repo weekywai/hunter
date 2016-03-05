@@ -124,7 +124,7 @@ class EntityMessageQue
 	{
 		assert(sender != null);
 		assert(recipient != null);
-		assert(type >= 0 && type <= 0xFFFF);
+		//assert(type >= 0 && type <= 0xFFFF);
 		assert(mSize < mCapacity, 'message queue exhausted (size=$mSize capacity=$mCapacity)');
 		
 		var i = (mFront + mSize) % mCapacity;

@@ -37,7 +37,7 @@ class EffectComponent extends Component
 		super.onDispose();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgEffect.Create:
@@ -45,7 +45,7 @@ class EffectComponent extends Component
 			case MsgEffect.Recycle:
 				cmd_recycle(userData);
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	
 	private function cmd_create(userData:Dynamic):Void
@@ -57,13 +57,13 @@ class EffectComponent extends Component
 		{
 			var info:EffectInfo = EffectManager.instance.getProto(req.Key);
 			effect = EffectFactory.instance.createEffect(info.type);
-			effect.init(owner, req);
+			effect.init(owner);
 			effect.start(req);
 		}
 		else
 		{
 			effect = EffectFactory.instance.createEffect(req.boomType);
-			effect.init(owner, req);
+			effect.init(owner);
 			effect.start(req);
 		}
 		_recycles.remove(effect);

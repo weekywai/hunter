@@ -147,7 +147,7 @@ class BulletGrenade extends BulletEntity
 					hit.buffTarget = _hitInfo.buffTarget;
 					hit.buffTime = _hitInfo.buffTime;
 					hit.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
-					_owner.notify(MsgItr.BulletHit, hit);
+					owner.notify(MsgItr.BulletHit, hit);
 				}
 			}
 			commitEffect();

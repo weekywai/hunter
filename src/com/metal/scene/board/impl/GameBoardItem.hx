@@ -60,7 +60,7 @@ class GameBoardItem extends Component implements IBoardItem
 		super.onInitComponent();
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgActor.ExitBoard:
@@ -68,7 +68,6 @@ class GameBoardItem extends Component implements IBoardItem
 			case MsgActor.InitFaction:
 				Notify_InitFaction(userData);
 		}
-		super.onNotify(type, source, userData);
 	}
 	
 	private function Notify_InitFaction(userData:Dynamic):Void {

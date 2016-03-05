@@ -3,6 +3,7 @@ package com.metal.scene.effect.support;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.haxepunk.graphics.TextrueSpritemap;
 import com.haxepunk.HXP;
+import com.metal.proto.manager.EffectManager;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.scene.effect.impl.EffectEntity;
 import motion.Actuate;
@@ -30,12 +31,17 @@ class EffectBoom1 extends EffectEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	
+	override public function start(req:EffectRequest):Void 
 	{
+		info = EffectManager.instance.getProto(req.Key);
+		x = req.x - req.width * 0.3;
+		y = req.y - req.height;
+		
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z016.xml");
 		var eff1:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z014.xml");
 		
-		var scale = effectRequest.attacker.getScale();
+		var scale = req.attacker.getScale();
 		boomEffectArray = new Array();
 		var num = Math.floor((Math.random() * 2 + 2));
 		for (i in 0...8)
@@ -48,8 +54,8 @@ class EffectBoom1 extends EffectEntity
 			addGraphic(boomEffect2);
 			boomEffect2.scale = (Math.random() * 1 + scale);
 			boomEffect2.flipped = (Math.random() <= 0.5) ? true : false;
-			boomEffect2.x = Math.random() * effectRequest.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
-			boomEffect2.y = Math.random() * effectRequest.height * 0.7;// - boomEffect2.scaledHeight / 2;
+			boomEffect2.x = Math.random() * req.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
+			boomEffect2.y = Math.random() * req.height * 0.7;// - boomEffect2.scaledHeight / 2;
 			boomEffectArray.push(boomEffect2);
 		}
 		for (i in 0...boomEffectArray.length)
@@ -68,21 +74,16 @@ class EffectBoom1 extends EffectEntity
 		_effect.visible = false;
 		_effect.scale = 1.4;
 		addGraphic(_effect);
-		_effect.x =  -effectRequest.width * 0.3;
+		_effect.x =  -req.width * 0.3;
 		_effect.y = 20;
 		Actuate.tween(this, 2, {}).onComplete(function () {
 				_effect.visible = true;
 				_effect.play("boom");
 			});
 			//}, Math.floor(boomEffectArray.length*170*0.85));
-	}
-	
-	override public function start(req:EffectRequest):Void 
-	{
 		//_effect.angle = req.angle-90;
 		//super.start(req);
-		x = req.x - req.width * 0.3;
-		y = req.y - req.height;
+		
 		//trace("x y " + x + ":" + y);
 		HXP.scene.add(this);
 	}

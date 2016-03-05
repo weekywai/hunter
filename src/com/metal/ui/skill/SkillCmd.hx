@@ -42,11 +42,6 @@ class SkillCmd extends BaseCmd
 		onEnabel();
 	}
 	
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void
-	{
-		if (_unparent)
-			return;
-	}
 	private function initUI():Void
 	{
 		setData(null);

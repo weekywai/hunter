@@ -35,12 +35,6 @@ class GameSetCmd extends BaseCmd
 		setData();
 	}
 	
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void
-	{
-		if (_unparent)
-			return;
-	}
-	
 	private function setData():Void
 	{
 		var soundSwitch:Switch = _widget.getChildAs("Sound",Switch);

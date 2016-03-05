@@ -33,8 +33,10 @@ class EffectText extends EffectEntity
 		_numTxt = null;
 	}
 	
-	override function onInit():Void 
+	
+	override public function start(req:EffectRequest):Void 
 	{
+		super.start(req);
 		/*
 		_numTxt = new BitmapText("0");
 		_numTxt.size = 30;
@@ -51,11 +53,8 @@ class EffectText extends EffectEntity
 		_numTxt.textField.filters =_normalTpye;
 		//_numTxt.textField.borderColor = 0xffffff;
 		_h = 20;
-	}
-	
-	override public function start(req:EffectRequest):Void 
-	{
-		super.start(req);
+		
+		
 		//_numTxt.text = "-" + req.text;
 		_numTxt.text = req.text;
 		x -= req.width * 0.5;

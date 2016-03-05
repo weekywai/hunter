@@ -110,11 +110,7 @@ class UIManager extends SimEntity
 	}
 	override function onMsg(type:Int, sender:Entity) 
 	{
-		if(type == MsgUI.RevivePanel)
-		trace(MsgUI.RevivePanel);
-		var userData:Dynamic = null;
-		if(incomingMessage!=null)
-			userData = incomingMessage.o;
+		var userData = (incomingMessage.hasObject())? incomingMessage.o:null;
 		switch(type) {
 			case MsgView.SetParent:
 				cmd_SetParent(userData);

@@ -144,7 +144,12 @@ class Entity extends Tweener
 	 * Override this, called when the Entity is removed from a Scene.
 	 */
 	public function removed():Void { collideEntity = null; }
-
+	
+	public function disposed()
+	{
+		if (graphic != null)
+			graphic.destroy();
+	}
 	/**
 	 * Updates the Entity.
 	 */

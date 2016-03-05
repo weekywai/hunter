@@ -55,7 +55,7 @@ class RewardCmd extends BaseCmd
 		super.onRemoveComponent();
 	}
 	
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void
+	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void
 	{
 		if (_unparent)
 			return;

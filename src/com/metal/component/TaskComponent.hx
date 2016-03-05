@@ -41,7 +41,7 @@ class TaskComponent extends Component
 		cmd_initTask(null);
 		//trace("MissionComponent2");
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) 
 		{
@@ -58,7 +58,7 @@ class TaskComponent extends Component
 				cmd_Update(userData);
 				
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	override function onDispose():Void 
 	{

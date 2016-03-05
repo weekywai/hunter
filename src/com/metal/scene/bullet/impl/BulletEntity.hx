@@ -1,7 +1,5 @@
 package com.metal.scene.bullet.impl;
 
-import com.haxepunk.graphics.Image;
-import com.haxepunk.graphics.TextrueSpritemap;
 import com.haxepunk.HXP;
 import com.metal.config.UnitModelType;
 import com.metal.message.MsgBullet;
@@ -14,19 +12,16 @@ import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.api.IBullet;
 import com.metal.scene.effect.api.EffectRequest;
-import com.metal.scene.board.view.ViewDisplay;
 import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewPhysics;
 import de.polygonal.core.sys.SimEntity;
-import motion.Actuate;
 
 /**
  * ...
  * @author weeky
  */
-class BulletEntity extends ViewDisplay implements IBullet
+class BulletEntity extends ViewPhysics implements IBullet
 {
-	private var _owner:SimEntity;
-	
 	public var info(default, null):BulletInfo;
 	
 	/** 目标X */
@@ -70,7 +65,6 @@ class BulletEntity extends ViewDisplay implements IBullet
 	override private function onDispose():Void 
 	{
 		//_owner.getComponent(BulletComponent).bullets.remove(this);
-		_owner = null;
 		info = null;
 		_effectReq = null;
 		_hitInfo = null;
@@ -81,30 +75,34 @@ class BulletEntity extends ViewDisplay implements IBullet
 	override public function removed():Void 
 	{
 		super.removed();
-		if(_owner!=null)
-			_owner.getComponent(BulletComponent).bullets.remove(this);
-		_owner = null;
+		if(owner!=null)
+			owner.getComponent(BulletComponent).bullets.remove(this);
+		owner = null;
 		info = null;
 		_effectReq = null;
 		_hitInfo = null;
 	}
 	
-	public function init(body:SimEntity, info:BulletInfo):Void
+	override public function init(body:SimEntity):Void
 	{
-		if (info == null) throw "info is null";
+		super.init(body);
+		
 		_offset = false;
 		//isRecycle = false;
-		this.info = info;
-		_owner = body;
 		_effectReq = new EffectRequest();
 		_hitInfo = new BulletHitInfo();
-		onInit();
+		
 		//_lifeSpan = _bulletInfo.BulletDistance / _bulletInfo.BulletSpeed;
 	}
-	/**继承*/
-	private function onInit():Void
+	public function setInfo(info:BulletInfo):Void
 	{
-		
+		if (info == null) throw "info is null";
+		this.info = info;
+		onInit();
+	}
+	/**继承*/
+	private function onInit():Void {
+		//override 
 	}
 	public function start(req:BulletRequest):Void 
 	{
@@ -146,7 +144,7 @@ class BulletEntity extends ViewDisplay implements IBullet
 		if (scene != null)
 			scene.recycle(this);
 		//_owner.getComponent(BulletComponent).bullets.remove(this);
-		_owner.notify(MsgBullet.Recycle, this);
+		owner.notify(MsgBullet.Recycle, this);
 	}
 	
 	/** 启动效果 */
@@ -154,7 +152,7 @@ class BulletEntity extends ViewDisplay implements IBullet
 		_effectReq.Key = info.effId;
 		_effectReq.x = x;
 		_effectReq.y = y;
-		_owner.notify(MsgEffect.Create, _effectReq);
+		owner.notify(MsgEffect.Create, _effectReq);
 	}
 	
 	private function computeInCamera():Bool
@@ -194,7 +192,7 @@ class BulletEntity extends ViewDisplay implements IBullet
 			var avatar:MTAvatar = cast(collideEntity, MTAvatar);
 			_hitInfo.target = avatar.owner;
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
-			_owner.notify(MsgItr.BulletHit, _hitInfo);
+			owner.notify(MsgItr.BulletHit, _hitInfo);
 		}
 		commitEffect();
 		//穿透判断

@@ -2,6 +2,7 @@ package com.metal.scene.effect.support;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.haxepunk.graphics.TextrueSpritemap;
 import com.metal.scene.effect.api.EffectRequest;
+import com.metal.unit.avatar.MTAvatar;
 import motion.Actuate;
 
 /**
@@ -10,7 +11,7 @@ import motion.Actuate;
  */
 class EffectBoom2 extends EffectBoom1
 {
-	private var _req:EffectRequest;
+	private var _attacker:MTAvatar;
 
 	public function new(x:Float, y:Float) 
 	{
@@ -18,14 +19,21 @@ class EffectBoom2 extends EffectBoom1
 	}
 	override function onDispose():Void 
 	{
-		_req = null;
+		_attacker = null;
 		super.onDispose();
 	}
-	override function onInit():Void 
+	
+	override function onComplete(name):Void 
 	{
-		//super.onInit();
+		super.onComplete(name);
+		if (Std.parseInt(name) == boomEffectArray.length-1)
+			recycle();
+	}
+	
+	override public function start(req:EffectRequest):Void 
+	{
+		_attacker = req.attacker;
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z016.xml");
-		
 		
 		boomEffectArray = new Array();
 		var num = Math.floor((Math.random() * 2 + 2));
@@ -39,8 +47,8 @@ class EffectBoom2 extends EffectBoom1
 			addGraphic(boomEffect2);
 			boomEffect2.scale = (Math.random() * 0.5 + 0.8);
 			boomEffect2.flipped = (Math.random() <= 0.5) ? true : false;
-			boomEffect2.x = Math.random() * effectRequest.width * 0.6 ;//- boomEffect2.scaledWidth / 2;
-			boomEffect2.y = Math.random() * effectRequest.height * 0.6;// - boomEffect2.scaledHeight / 2;
+			boomEffect2.x = Math.random() * req.width * 0.6 ;//- boomEffect2.scaledWidth / 2;
+			boomEffect2.y = Math.random() * req.height * 0.6;// - boomEffect2.scaledHeight / 2;
 			boomEffectArray.push(boomEffect2);
 		}
 		for (i in 0...boomEffectArray.length)
@@ -51,26 +59,14 @@ class EffectBoom2 extends EffectBoom1
 				boomEffect.play("" + i);
 			});
 		}
-	}
-	
-	override function onComplete(name):Void 
-	{
-		super.onComplete(name);
-		if (Std.parseInt(name) == boomEffectArray.length-1)
-			recycle();
-	}
-	
-	override public function start(req:EffectRequest):Void 
-	{
 		super.start(req);
-		_req = req;
 	}
 	
 	override public function update():Void 
 	{
 		super.update();
-		x = _req.attacker.x;
-		y = _req.attacker.y;
+		x = _attacker.x;
+		y = _attacker.y;
 	}
 	
 }

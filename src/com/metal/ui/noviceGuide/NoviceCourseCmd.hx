@@ -37,9 +37,9 @@ class NoviceCourseCmd extends BaseCmd
 	{
 		super.onInitComponent();
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 		switch(type) {
 			case MsgUI2.GameNoviceCourse:
 				cmd_GameNoviceCourse(userData);

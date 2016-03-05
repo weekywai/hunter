@@ -28,7 +28,7 @@ class Camera extends Component
 	private var _lockBounds:Bounds;
 	private var _lockKey:Bool;
 	private var _autoKey:Bool = false;
-	#if spriteRenderer
+	#if spriteTileMap
 	private var _viewMap:TiledMap;
 	#end
 	private var _roll:Bool;
@@ -51,14 +51,13 @@ class Camera extends Component
 		_limitBoundary = null;
 		_lockBounds = null;
 		_actor = null;
-		#if spriteRenderer
+		#if spriteTileMap
 		_viewMap = null;
 		#end
 		super.onDispose();
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
 		switch(type){
 			case MsgStartup.Reset:
 				cmd_Reset();
@@ -131,7 +130,7 @@ class Camera extends Component
 		/**镜头可移动范围*/
 		if (_limitBoundary != null)
 			_limitBoundary.camera();
-		#if spriteRenderer
+		#if spriteTileMap
 			if (_viewMap!=null && !_roll){
 				_viewMap.x = -HXP.camera.x * HXP.screen.fullScaleX;
 				_viewMap.y = -HXP.camera.y * HXP.screen.fullScaleY;		
@@ -213,7 +212,7 @@ class Camera extends Component
 	
 	private function cmd_AddViewMap(userData:Dynamic):Void
 	{
-		#if spriteRenderer
+		#if spriteTileMap
 		_viewMap = userData;
 		#end
 	}

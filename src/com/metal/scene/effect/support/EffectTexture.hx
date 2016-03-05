@@ -33,6 +33,13 @@ class EffectTexture extends EffectEntity
 	
 	override function onInit():Void 
 	{
+		
+	}
+	
+	override public function start(req:EffectRequest):Void 
+	{
+		super.start(req);
+		//init
 		_effAtlas= TextureAtlasFix.loadTexture(ResPath.getEffectRes(info.res, info.type));
 		_effect = new TextrueSpritemap(_effAtlas);
 		_effect.add("blast", _effAtlas.getReginCount(), info.speed);
@@ -50,12 +57,8 @@ class EffectTexture extends EffectEntity
 		}
 		graphic = _effect;
 		_effect.play("blast");
-	}
-	
-	override public function start(req:EffectRequest):Void 
-	{
 		
-		super.start(req);
+		
 		if (_offset) {
 			//var p1 = new Point();
 			//var p2 = new Point(-_effAtlas.ox, -_effAtlas.oy);

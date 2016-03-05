@@ -4,6 +4,9 @@ import com.haxepunk.Entity;
 import com.haxepunk.Scene;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
+#if telemetry
+import hxtelemetry.HxTelemetry.Timing;
+#end
 
 /**
  * ...
@@ -33,12 +36,31 @@ class GameScene extends Scene implements IObserver
 	
 	override public function end() 
 	{
+		#if telemetry
+		GameProcess.HXT.start_timing(Timing.USER);
+		#end
+		destoryGraphic(_recycled.iterator());
+		destoryGraphic(_remove.iterator());
 		clearTweens();
 		clearRecycledAll();
 		removeAll();
 		_end = true;
 		updateLists();
+		#if telemetry
+		GameProcess.HXT.end_timing(Timing.USER);
+		#end
 		trace("Scene end");
+	}
+	
+	public function destoryGraphic(itr:Iterator<Entity>)
+	{
+		if (itr == null) return;
+		var	e:Entity = itr.next();
+		while (e != null)
+		{
+			e.disposed();
+			e = itr.next();
+		}
 	}
 	
 	private function dispose():Void 

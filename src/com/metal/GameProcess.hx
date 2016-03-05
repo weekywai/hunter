@@ -13,17 +13,16 @@ import com.metal.manager.UIManager;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgView;
 import com.metal.proto.manager.RandomNameManager;
+import com.metal.scene.GameFactory;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.board.impl.GameBoard;
-import com.metal.scene.bullet.impl.BulletComponent;
-import com.metal.scene.effect.impl.EffectComponent;
-import com.metal.scene.GameFactory;
-import com.metal.scene.board.support.GameScene;
 import com.metal.scene.board.impl.GameMap;
+import com.metal.scene.board.support.GameScene;
 import com.metal.scene.board.view.Camera;
 import com.metal.scene.board.view.ViewBoard;
+import com.metal.scene.bullet.impl.BulletComponent;
+import com.metal.scene.effect.impl.EffectComponent;
 import de.polygonal.core.es.Entity;
-import de.polygonal.core.es.EntitySystem;
 import de.polygonal.core.es.MainLoop;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
@@ -31,18 +30,17 @@ import de.polygonal.core.sys.SimEntity;
 import de.polygonal.core.time.Timebase;
 import motion.actuators.SimpleActuator;
 import openfl.Assets;
+import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.display.Stage;
-import openfl.Lib;
-import openfl.profiler.Telemetry;
 import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
-//import tweenx909.advanced.UpdateModeX;
-//import tweenx909.TweenX;
+#if telemetry
 import hxtelemetry.HxTelemetry;
+#end
 /**
  * ...
  * @author weeky
@@ -72,7 +70,9 @@ class GameProcess implements IObserver
 	public static var render(default, null):Engine;
 	
 	public static var console(default, null):DevCheat;
-	public var HXT:HxTelemetry;
+	#if telemetry
+	public static var HXT:HxTelemetry;
+	#end
 	
 	private var onDrawId:Int = 0;
 	private var _debugTxt:TextField;
@@ -89,6 +89,13 @@ class GameProcess implements IObserver
 		gameStage = new Sprite();
 		rootStage.addChild(gameStage);
 		
+		#if telemetry
+		var cfg = new hxtelemetry.HxTelemetry.Config();
+		cfg.host = "192.168.1.100";
+		cfg.allocations = false;
+		HXT = new HxTelemetry(cfg);
+		#end
+		
 		initEngine();
 		root = new SimEntity("Game", true, true);
 		UIRoot = new UIManager();
@@ -97,6 +104,8 @@ class GameProcess implements IObserver
 		_loop = new MainLoop();
 		_loop.add(root);
 		root.outgoingMessage.o = rootStage;
+		trace(StringTools.hex(MsgView.SetParent)+"-"+ (MsgView.SetParent>>8));
+		//trace(StringTools.hex(MsgView.UpdateGrid)+"-"+ MsgView.UpdateGrid>>8);
 		root.sendMessageToChildren(MsgView.SetParent, true);
 		
 		//#if !mobile
@@ -108,14 +117,10 @@ class GameProcess implements IObserver
 		_fps = new FPS(10, 65, 0xffffff);
 		stage.addChild(_fps);
 		Timebase.attach(this);
+		
 		#if actuate_manual_time
 		SimpleActuator.getTime = function() { return Timebase.stamp(); }
 		#end
-		//#end
-		var cfg = new hxtelemetry.HxTelemetry.Config();
-		cfg.host = "192.168.1.100";
-		cfg.allocations = false;
-		//HXT = new HxTelemetry(cfg);
 	}
 	
 	/** after login */
@@ -166,7 +171,10 @@ class GameProcess implements IObserver
 		#if actuate_manual_update
 		SimpleActuator.stage_onEnterFrame (null);
 		#end
-		//HXT.advance_frame();
+		
+		#if telemetry
+		HXT.advance_frame();
+		#end
 	}
 	
 	public function startGame():Void

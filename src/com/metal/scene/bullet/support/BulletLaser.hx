@@ -140,7 +140,7 @@ class BulletLaser extends BulletEntity
 				_setId.push(avatar.owner.id.index);
 				_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
 				_hitInfo.target = avatar.owner;
-				_owner.notify(MsgItr.BulletHit, _hitInfo);
+				owner.notify(MsgItr.BulletHit, _hitInfo);
 			}
 			commitEffect();
 		}

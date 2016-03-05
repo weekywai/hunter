@@ -30,13 +30,10 @@ class ViewNPC extends BaseViewActor
 		_actor = owner.getComponent(UnitActor);
 		_info = owner.getProperty(MonsterInfo);
 	}
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
-	{
-		super.onNotify(type, source, userData);
-	}
 	
 	override public function onDispose():Void 
 	{
+		_info = null;
 		super.onDispose();
 	}
 	

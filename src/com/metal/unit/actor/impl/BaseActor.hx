@@ -134,7 +134,7 @@ class BaseActor extends GameBoardItem implements IActor
 		onWall = false;
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgCore.PROCESS:
@@ -184,7 +184,7 @@ class BaseActor extends GameBoardItem implements IActor
 			case MsgStat.ChangeSpeed:
 				notify_ChangeSpeed(userData);
 		}
-		super.onNotify(type, source, userData);
+		super.onUpdate(type, source, userData);
 	}
 	override function onDispose():Void 
 	{

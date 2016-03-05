@@ -12,6 +12,6 @@ interface IEffect extends IDisposer
 	var info(default, null):EffectInfo;
 	var x(get, set):Float;
 	var y(get, set):Float;
-	function init(body:SimEntity, req:EffectRequest):Void;
+	function init(body:SimEntity):Void;
 	function start(req:EffectRequest):Void;
 }

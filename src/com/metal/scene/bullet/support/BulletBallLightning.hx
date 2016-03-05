@@ -182,6 +182,6 @@ class BulletBallLightning extends BulletEntity
 		_effectReq.Key = info.effId;
 		_effectReq.x = x;
 		_effectReq.y = y + 50;
-		_owner.notify(MsgEffect.Create, _effectReq);
+		owner.notify(MsgEffect.Create, _effectReq);
 	}
 }

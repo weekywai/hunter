@@ -1,6 +1,6 @@
 package com.metal.scene.board.view;
-import com.haxepunk.graphics.Backdrop;
 import com.haxepunk.HXP;
+import com.haxepunk.graphics.Backdrop;
 import com.metal.component.BattleComponent;
 import com.metal.config.MapLayerType;
 import com.metal.config.SfxManager;
@@ -14,12 +14,10 @@ import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.impl.GameBoard;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
-import de.polygonal.core.time.Delay;
-import haxe.Timer;
-#if spriteRenderer
+import motion.Actuate;
+#if spriteTileMap
 import openfl.tiled.TiledMap;
 #end
-import motion.Actuate;
 /**
  * ...
  * @author weeky
@@ -29,7 +27,7 @@ class ViewBoard extends Component
 	private var _board:GameBoard;
 	private var _curMap:MapVo;
 	private var _bgSound:Dynamic;
-	#if spriteRenderer
+	#if spriteTileMap
 	private var _viewMap:TiledMap;
 	#end
 	public function new() 
@@ -50,12 +48,12 @@ class ViewBoard extends Component
 		_board = null;
 		_curMap = null;
 		HXP.scene.removeAll();
-		#if spriteRenderer
+		#if spriteTileMap
 		_viewMap.dispose();
 		#end
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgStartup.AssignMap:
@@ -67,7 +65,6 @@ class ViewBoard extends Component
 			case MsgView.ChangeMapSpeed:
 				cmd_ChangeMapSpeed(userData);
 		}
-		super.onNotify(type, source, userData);
 	}
 	
 	private function cmd_SetBattle(userData:Dynamic):Void {
@@ -76,7 +73,7 @@ class ViewBoard extends Component
 	
 	private function cmd_Reset(userData:Dynamic):Void
 	{
-		#if spriteRenderer
+		#if spriteTileMap
 		if (_viewMap != null)
 			_viewMap.dispose();
 		_viewMap = null;
@@ -90,7 +87,7 @@ class ViewBoard extends Component
 		HXP.scene.add(_curMap.floorTmx);
 		HXP.scene.add(_curMap.collideLayer);
 		//HXP.scene.add(new Explosion("yan"));
-		#if spriteRenderer
+		#if spriteTileMap
 			_viewMap = new TiledMap("", _curMap.map, _curMap.runKey);
 			GameProcess.gameStage.addChildAt(_viewMap, 0);
 		#else 
@@ -118,7 +115,7 @@ class ViewBoard extends Component
 		SfxManager.playBMG(_bgSound,2);
 		//var bg:Backdrop = new Backdrop("map/Res/sky.png");
 		//HXP.scene.addGraphic(bg);
-		#if spriteRenderer
+		#if spriteTileMap
 		notify(MsgBoard.AddViewMap, _viewMap);
 		#end
 		Actuate.tween(this,2,{}).onComplete(notify, [MsgBoard.StartAI]);
@@ -146,7 +143,7 @@ class ViewBoard extends Component
 	public function runLayer(mapId:String):Void
 	{
 		var tempMapInfo:MapRoomInfo = MapInfoManager.instance.getRoomInfo(Std.parseInt(mapId));
-		#if !spriteRenderer
+		#if !spriteTileMap
 			for (index in 0...MapVo.nLen) {
 				var speed:Dynamic = tempMapInfo.runData.get(index).runSpeed;
 				if (speed != null && speed != 0) {

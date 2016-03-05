@@ -51,7 +51,7 @@ class MainCmd extends BaseCmd
 	{
 		super();
 	}
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void
+	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void
 	{
 		switch(type){
 			case MsgUIUpdate.UpdateModel:

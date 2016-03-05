@@ -22,7 +22,8 @@ interface IBullet extends IDisposer
 	 * @param	$body
 	 * @param	$info
 	 */
-	function init(body:SimEntity, info:BulletInfo):Void;
+	function init(body:SimEntity):Void;
+	function setInfo(info:BulletInfo):Void;
 	function start(req:BulletRequest):Void;
 	function recycle():Void;
 }

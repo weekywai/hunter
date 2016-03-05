@@ -27,7 +27,7 @@ class BaseAiControl extends Component
 		//_actor = owner.getComponent(MTActor);
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgActor.EnterBoard:
@@ -41,7 +41,6 @@ class BaseAiControl extends Component
 			case MsgInput.SetInputEnable:
 				cmd_SetInputEnable(userData);
 		}
-		super.onNotify(type, source, userData);
 	}
 	
 	private function cmd_BornPos(userData:Dynamic):Void {}

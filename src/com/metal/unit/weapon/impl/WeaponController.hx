@@ -63,9 +63,8 @@ class WeaponController extends Component
 		_curWeaponId = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(PlayerUtils.getInfo().getProperty(PlayerPropType.WEAPON)).itemId;
 	}
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
 		switch(type) {
 			case MsgCore.PROCESS:
 				cmd_PostBoot();
@@ -98,7 +97,7 @@ class WeaponController extends Component
 	{
 		var weapon:BaseWeapon = _weaponUsing.get(userData.type);
 		if (!weapon.isShooting)
-			weapon.onNotify(MsgPlayer.ShootStart, owner, null);
+			weapon.onUpdate(MsgPlayer.ShootStart, owner, null);
 	}
 	private function cmd_ChangeWeapon(userData:Dynamic):Void
 	{
@@ -181,7 +180,7 @@ class WeaponController extends Component
 		}else {
 			cast(weapon, BaseSkill).isItem = isItem;
 		}
-		weapon.onNotify(MsgPlayer.ShootStart, owner, null);
+		weapon.onUpdate(MsgPlayer.ShootStart, owner, null);
 	}
 	
 	private function createWeapon(type:WeaponType, info:SkillInfo, isBuff:Bool = false):BaseWeapon

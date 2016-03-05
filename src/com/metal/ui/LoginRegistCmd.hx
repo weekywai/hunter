@@ -125,7 +125,7 @@ class LoginRegistCmd extends BaseCmd
 		//UIBuilder.get("loginStart").free(true);	
 	}
 	
-	override public function onNotify(type:Int, sender:IObservable, userData:Dynamic):Void
+	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void
 	{
 		switch(type){
 			case MsgUI2.GMLogin:

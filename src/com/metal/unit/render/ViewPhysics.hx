@@ -1,28 +1,23 @@
-package com.metal.scene.board.view;
-
+package com.metal.unit.render;
 import com.haxepunk.Entity;
-import com.haxepunk.Graphic;
 import com.haxepunk.HXP;
-import com.haxepunk.Mask;
-import de.polygonal.core.sys.IDisposer;
+import com.metal.config.UnitModelType;
 import openfl.geom.Point;
-
 /**
- * ...
+ * physic view entity
  * @author weeky
  */
-class ViewDisplay extends Entity implements IDisposer
+class ViewPhysics extends ViewDisplay
 {
-	private var _collideTypes:Array<String>;
-	
-	public var velocity:Point;
-	public var acceleration:Point;
-	public var drag:Point;
-	public var maxVelocity:Point;
-	
 	public var onGround:Bool;
 	public var onWall:Bool;
-	public var isDisposed(default, null) : Bool = false;
+	/**速度*/
+	public var velocity:Point;
+	public var maxVelocity:Point;
+	/**加速*/
+	public var acceleration:Point;
+	/**摩擦*/
+	public var drag:Point;
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -31,24 +26,15 @@ class ViewDisplay extends Entity implements IDisposer
 		acceleration = new Point();
 		drag = new Point();
 		maxVelocity = new Point(10000, 10000);
-		_collideTypes = ["solid"];
 	}
 	
-	public function dispose() : Void {
-		if (isDisposed)
-			return;
-		onDispose();
-		isDisposed = true;
-	}
-	private function onDispose():Void
+	override private function onDispose():Void
 	{
-		_collideTypes = null;
 		velocity = null;
 		acceleration = null;
 		drag = null;
 		maxVelocity = null;
-		if (scene != null)
-			scene.remove(this);
+		super.onDispose();
 	}
 	override public function update():Void 
 	{
@@ -83,7 +69,7 @@ class ViewDisplay extends Entity implements IDisposer
 		if (xd != 0)
 		do
 		{
-			if (collide("solid", x + HXP.sign(xd), y) != null)
+			if (collide(UnitModelType.Solid, x + HXP.sign(xd), y) != null)
 			//if ((e = collideTypes(_collideTypes, x + HXP.sign(xd), y)) != null)
 			{
 				onWall = true;
@@ -109,7 +95,7 @@ class ViewDisplay extends Entity implements IDisposer
 		if (yd != 0)
 		do
 		{
-			if (collide("solid", x, y + HXP.sign(yd)) != null)
+			if (collide(UnitModelType.Solid, x, y + HXP.sign(yd)) != null)
 			//if ((e = collideTypes(_collideTypes, x, y + HXP.sign(yd))) != null)
 			{
 				velocity.y = 0;

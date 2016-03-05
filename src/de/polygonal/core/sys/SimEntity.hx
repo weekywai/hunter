@@ -35,13 +35,11 @@ class SimEntity extends Entity implements IObservable
 	
 	public function attach(o:IObserver, mask:Int = 0)
 	{
-		assert(_initialized, "call Timebase.init() first");
 		observable.attach(o, mask);
 	}
 	
 	public function detach(o:IObserver, mask:Int = 0)
 	{
-		assert(_initialized, "call Timebase.init() first");
 		observable.detach(o, mask);
 	}
 	
@@ -75,7 +73,7 @@ class SimEntity extends Entity implements IObservable
 		attach(c);
 		if (_initialized){
 			c.initComponent(this);
-			c.onNotify(MsgCore.PROCESS, this, null);
+			c.onUpdate(MsgCore.PROCESS, this, null);
 		}
 		return cast c;
 	}
@@ -250,14 +248,14 @@ class SimEntity extends Entity implements IObservable
 		MsgUtils.sendDirectMsg(this, type, userData);
 	}
 	/**
-	 * 发送消息给component事件
+	 * 通知component事件
 	 */
 	public function notify(type:Int, userData:Dynamic = null):Void
 	{
 		observable.notify(type, userData);
 	}
 	/**
-	 * 发送消息给parent的component
+	 * 通知parent的component
 	 */
 	public function notifyParent(type:Int, userData:Dynamic = null):Void
 	{

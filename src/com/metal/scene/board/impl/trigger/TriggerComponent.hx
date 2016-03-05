@@ -226,9 +226,8 @@ class TriggerComponent extends Component
 	}
 	
 	
-	override public function onNotify(type:Int, source:IObservable, userData:Dynamic):Void 
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
-		super.onNotify(type, source, userData);
 		switch(type) {
 			case MsgItr.Destory:
 				cmd_Destory(userData);

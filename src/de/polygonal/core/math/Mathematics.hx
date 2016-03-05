@@ -164,7 +164,8 @@ class Mathematics
 	**/
 	inline public static function abs(x:Int):Int
 	{
-		return x < 0 ? -x : x;
+		//return x < 0 ? -x : x;
+		return (x ^ (x >> 31)) - (x >> 31);
 	}
 	
 	/**
