@@ -5,7 +5,8 @@ import com.haxepunk.Graphic;
 import com.haxepunk.HXP;
 import com.haxepunk.Mask;
 import com.metal.config.UnitModelType;
-import de.polygonal.core.sys.IDisposer;
+import de.polygonal.core.event.IObservable;
+import de.polygonal.core.event.IObserver;
 import de.polygonal.core.sys.SimEntity;
 import openfl.geom.Point;
 
@@ -13,7 +14,7 @@ import openfl.geom.Point;
  * ...
  * @author weeky
  */
-class ViewDisplay extends Entity implements IDisposer
+class ViewDisplay extends Entity implements IObserver 
 {
 	private var _collideTypes:Array<String> = [UnitModelType.Solid];
 	
@@ -48,4 +49,6 @@ class ViewDisplay extends Entity implements IDisposer
 		this.owner = owner;
 		type = owner.name;
 	}
+	
+	public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void{}
 }

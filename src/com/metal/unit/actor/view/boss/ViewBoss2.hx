@@ -92,7 +92,7 @@ class ViewBoss2 extends ViewEnemy
 			//_bulletReq.targetX = bulletX - 10;
 			//_bulletReq.targetY = bulletY;
 			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[0]).BulletID);
-			owner.notifyParent(MsgBullet.Create, _bulletReq);
+			notifyParent(MsgBullet.Create, _bulletReq);
 		}
 		else if (event.data.name == "attack_2")
 		{
@@ -106,7 +106,7 @@ class ViewBoss2 extends ViewEnemy
 			_bulletReq.targetY =  _player.y-20;
 			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[1]).BulletID);
 			//trace(SkillManager.instance.getInfo(_info.Skill[1]).BulletID);
-			owner.notifyParent(MsgBullet.Create, _bulletReq);
+			notifyParent(MsgBullet.Create, _bulletReq);
 		}
 		else if (event.data.name == "attack_3")
 		{
@@ -120,7 +120,7 @@ class ViewBoss2 extends ViewEnemy
 			//_bulletReq.targetX = bulletX - 10;
 			//_bulletReq.targetY = bulletY;
 			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[2]).BulletID);
-			owner.notifyParent(MsgBullet.Create, _bulletReq);
+			notifyParent(MsgBullet.Create, _bulletReq);
 		}
 	}
 	

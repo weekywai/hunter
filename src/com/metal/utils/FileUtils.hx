@@ -1,7 +1,7 @@
 package com.metal.utils;
 import com.metal.component.GameSchedual;
-import com.metal.component.RewardComponent;
-import com.metal.component.TaskComponent;
+import com.metal.component.RewardSystem;
+import com.metal.component.TaskSystem;
 import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
 import com.metal.enums.BagInfo;
@@ -170,7 +170,7 @@ class FileUtils
 	/**活跃度*/
 	private static function setActive(type:Int):Void
 	{
-		var activeInfo:IntMap<LiveNessInfo> = cast GameProcess.root.getComponent(RewardComponent).getLiveNesss();
+		var activeInfo:IntMap<LiveNessInfo> = cast GameProcess.root.getComponent(RewardSystem).getLiveNesss();
 		var activeMap:IntMap<ActiveVo> = new IntMap();
 		for (key in activeInfo.keys())
 		{
@@ -237,7 +237,7 @@ class FileUtils
 	private static function setTask(type:Int):Void
 	{
 		trace("setTask");
-		var taskInfo = cast(GameProcess.root.getComponent(TaskComponent), TaskComponent).taskMap;
+		var taskInfo = cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).taskMap;
 		var taskMap:IntMap<TaskVo> = new IntMap();
 		for (key in taskInfo.keys())
 		{	

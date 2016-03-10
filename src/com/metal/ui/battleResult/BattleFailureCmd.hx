@@ -1,6 +1,6 @@
 package com.metal.ui.battleResult;
 
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.config.SfxManager;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
@@ -41,7 +41,7 @@ class BattleFailureCmd extends BaseCmd
 		main.show();
 		_widget.getParent("popup").free();
 		sendMsg(MsgUI.MainPanel);
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		var duplicateInfo = battle.currentStage();
 		if (duplicateInfo.DuplicateType == 9)
 		{

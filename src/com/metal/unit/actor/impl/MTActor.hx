@@ -1,7 +1,7 @@
 package com.metal.unit.actor.impl;
 import com.haxepunk.Entity;
 import com.haxepunk.HXP;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
@@ -333,7 +333,7 @@ class MTActor extends BaseActor
 		
 		respawnTotal++;
 		if (respawnTotal >= 10) {
-			var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+			var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 			if (battle.currentStage().DuplicateType == 9)
 			{
 				GameProcess.SendUIMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面

@@ -2,7 +2,7 @@ package com.metal.ui.controller;
 import com.haxepunk.HXP;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Touch;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.GuideText;
 import com.metal.config.ItemType;
@@ -83,7 +83,7 @@ class ControllCmd extends BaseCmd
 	
 	private var _mapW:Float;
 	private var _runKey:Bool;
-	private var _battle:BattleComponent;
+	private var _battle:BattleSystem;
 	private var _slice:Float;
 	private var _count:Int;
 	//boss 信息
@@ -193,7 +193,7 @@ class ControllCmd extends BaseCmd
 		_mapW = 0;
 		_controlTime = 0;
 		_onShowgo = false;
-		_battle = GameProcess.root.getComponent(BattleComponent);
+		_battle = GameProcess.root.getComponent(BattleSystem);
 		_holdFire = false;
 		_attackBtn = _widget.getChildAs("attackBtn", Button);
 		_attackBtn.onPress = onAttackPress;
@@ -876,7 +876,7 @@ class ControllCmd extends BaseCmd
 	private function cmd_Start(userData:Dynamic):Void
 	{
 		trace("cmd_Start");
-		_battle = GameProcess.root.getComponent(BattleComponent);
+		_battle = GameProcess.root.getComponent(BattleSystem);
 		for (btn in _skillBtns) 
 		{
 			btn.text = "";

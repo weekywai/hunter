@@ -1,8 +1,8 @@
 package com.metal.ui.copy;
 
 import com.metal.component.GameSchedual;
-import com.metal.component.RewardComponent;
-import com.metal.component.TaskComponent;
+import com.metal.component.RewardSystem;
+import com.metal.component.TaskSystem;
 import com.metal.config.FilesType;
 import com.metal.config.GuideText;
 import com.metal.config.PlayerPropType;
@@ -95,8 +95,8 @@ class EndlessCopyCmd extends BaseCmd
 			var _playInfo = PlayerUtils.getInfo();
 			var _duplicateInfo:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
 			if (_playInfo.getProperty(PlayerPropType.POWER) >= _duplicateInfo.NeedPower) {
-				cast(GameProcess.root.getComponent(TaskComponent), TaskComponent).searchTask(taskType);
-				cast(GameProcess.root.getComponent(RewardComponent), RewardComponent).updateEndlessTask(taskType);
+				cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).searchTask(taskType);
+				cast(GameProcess.root.getComponent(RewardSystem), RewardSystem).updateEndlessTask(taskType);
 				//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo(_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower, PlayerPropType.POWER);
 				notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower});
 				
@@ -119,8 +119,8 @@ class EndlessCopyCmd extends BaseCmd
 			var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
 			
 			var _duplicateInfo:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
-			cast(GameProcess.root.getComponent(TaskComponent), TaskComponent).searchTask(taskType);
-			cast(GameProcess.root.getComponent(RewardComponent), RewardComponent).updateEndlessTask(taskType);
+			cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).searchTask(taskType);
+			cast(GameProcess.root.getComponent(RewardSystem), RewardSystem).updateEndlessTask(taskType);
 			//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo(_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower, PlayerPropType.POWER);
 			notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower});
 			FileUtils.setFileData(_playInfo, FilesType.Player);

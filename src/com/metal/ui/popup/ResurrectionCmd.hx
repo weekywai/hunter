@@ -1,6 +1,6 @@
 package com.metal.ui.popup;
 
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;
 import com.metal.message.MsgActor;
@@ -77,7 +77,7 @@ class ResurrectionCmd extends BaseCmd
 	{
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		//trace("" + battle.currentStage().DuplicateType);
 		_widget.getParent("popup").free();
 		if (battle.currentStage().DuplicateType == 9)

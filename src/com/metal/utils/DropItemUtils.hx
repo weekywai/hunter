@@ -1,5 +1,5 @@
 package com.metal.utils;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.proto.impl.DuplicateInfo;
 import haxe.ds.StringMap;
 
@@ -48,7 +48,7 @@ class DropItemUtils
 	 * */
 	public static function bossDrop(duplicateInfo:DuplicateInfo):Array<Array<Int>>
 	{
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		var total:Int =  battle.TotalKillBoss();
 		if (total == 0) return [];
 		var arrNum:Int = Math.floor(Math.random() * 2);

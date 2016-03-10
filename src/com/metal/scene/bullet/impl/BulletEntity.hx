@@ -15,6 +15,7 @@ import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.avatar.MTAvatar;
 import com.metal.unit.render.ViewPhysics;
 import de.polygonal.core.sys.SimEntity;
+import signals.Signal1;
 
 /**
  * ...
@@ -42,7 +43,7 @@ class BulletEntity extends ViewPhysics implements IBullet
 	private var _rate:Float = 2;
 	
 	public var canRemove:Bool = true;
-	//private var isRecycle:Bool = false;
+	public var removeCall:Signal1<IBullet>;
 	
 	private var _offset:Bool = false;
 	
@@ -55,6 +56,7 @@ class BulletEntity extends ViewPhysics implements IBullet
 	public function new(x:Float=0, y:Float=0) 
 	{
 		super(x, y);
+		removeCall = new Signal1<IBullet>();
 		//_effectReq = new EffectRequest();
 		//_hitInfo = new BulletHitInfo();
 		_angle = 0;
@@ -64,7 +66,11 @@ class BulletEntity extends ViewPhysics implements IBullet
 	
 	override private function onDispose():Void 
 	{
-		//_owner.getComponent(BulletComponent).bullets.remove(this);
+		trace("bullect dispose");
+		if (scene != null)
+			scene.clearRecycled(Type.getClass(this));
+		removeCall.removeAll();
+		removeCall = null;
 		info = null;
 		_effectReq = null;
 		_hitInfo = null;
@@ -75,8 +81,8 @@ class BulletEntity extends ViewPhysics implements IBullet
 	override public function removed():Void 
 	{
 		super.removed();
-		if(owner!=null)
-			owner.getComponent(BulletComponent).bullets.remove(this);
+		if(removeCall!=null)
+			removeCall.dispatch(this);
 		owner = null;
 		info = null;
 		_effectReq = null;
@@ -88,7 +94,6 @@ class BulletEntity extends ViewPhysics implements IBullet
 		super.init(body);
 		
 		_offset = false;
-		//isRecycle = false;
 		_effectReq = new EffectRequest();
 		_hitInfo = new BulletHitInfo();
 		
@@ -132,19 +137,19 @@ class BulletEntity extends ViewPhysics implements IBullet
 	{
 		super.update();
 		/**超出射程回收*/
-		if (Math.abs(x-_startX)>_range) recycle();
+		if (!onCamera)
+			recycle();
+		//TODO actor move range change
+		//if (Math.abs(x-_startX)>_range) recycle();
 	}
 	/** 结束，循环再用 */
 	public function recycle():Void {
 		//已经回收
-		//if (isRecycle) 
 		if (_recycleNext!=null) 
 			return;
-		//isRecycle = true;
 		if (scene != null)
 			scene.recycle(this);
-		//_owner.getComponent(BulletComponent).bullets.remove(this);
-		owner.notify(MsgBullet.Recycle, this);
+		//owner.notify(MsgBullet.Recycle, this);
 	}
 	
 	/** 启动效果 */
@@ -196,14 +201,10 @@ class BulletEntity extends ViewPhysics implements IBullet
 		}
 		commitEffect();
 		//穿透判断
-		if (info.isThrough==0)//不穿透
-		{
+		switch(info.isThrough) {
+			case 0://不穿透
+			case 1://穿透
+		}
 		recycle();
-		}
-		else if (info.isThrough == 1) //----此处未使用到----
-		{
-			//穿透子弹
-			recycle();
-		}
 	}
 }

@@ -20,7 +20,7 @@ import haxe.ds.IntMap;
  * ...
  * @author zxk
  */
-class RewardComponent extends Component
+class RewardSystem extends Component
 {
 	private var _liveNessList:IntMap<LiveNessInfo>;
 	public function getLiveNesss():IntMap<LiveNessInfo> {

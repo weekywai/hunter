@@ -1,7 +1,7 @@
 package com.metal.scene.board.view;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.Backdrop;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.config.MapLayerType;
 import com.metal.config.SfxManager;
 import com.metal.enums.MapVo;
@@ -109,7 +109,7 @@ class ViewBoard extends Component
 		#end
 		
 		runLayer(_curMap.mapId);
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		var roomInfo:MapRoomInfo = MapInfoManager.instance.getRoomInfo(Std.parseInt(battle.currentRoomId()));
 		_bgSound = SfxManager.getEnumType(roomInfo.Round);
 		SfxManager.playBMG(_bgSound,2);

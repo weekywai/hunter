@@ -110,9 +110,8 @@ class BulletNormal extends BulletEntity
 			onCollide();
 		}
 		if (computeInCamera()) {
-			//trace("not in camera: "+ node.getList().size());
-			if (scene != null) 
-				recycle();
+			//trace("not in camera: "+ node.getList().size()); 
+			recycle();
 		}
 	}
 	

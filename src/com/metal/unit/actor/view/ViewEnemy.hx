@@ -3,7 +3,7 @@ import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.HXP;
 import com.haxepunk.math.Vector;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.config.UnitModelType;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgItr;
@@ -216,7 +216,7 @@ class ViewEnemy extends BaseViewActor
 			//通知处理爆炸
 			startEffect(0, _info.boomType+4);
 		}
-		var rate =  GameProcess.root.getComponent(BattleComponent).BuffRate();
+		var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
 		//trace(dropRan);
 		if (Math.random() <= 0.2*rate) {
 			var index:Int = 0;

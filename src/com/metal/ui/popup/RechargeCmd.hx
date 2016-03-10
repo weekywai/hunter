@@ -1,6 +1,6 @@
 package com.metal.ui.popup;
 
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;

@@ -1,5 +1,5 @@
 package com.metal.utils;
-import com.metal.component.RewardComponent;
+import com.metal.component.RewardSystem;
 import com.metal.config.FilesType;
 import sys.FileSystem;
 import sys.io.File;
@@ -155,7 +155,7 @@ class SavaTimeUtil
 						//trace(nowDate.getDate() + "     ::  " + currTime[2]);
 						if (nowDate.getDate()-currTime[2] >= 1)
 						{
-							var infoMap = cast(GameProcess.root.getComponent(RewardComponent), RewardComponent).getLiveNesss();
+							var infoMap = cast(GameProcess.root.getComponent(RewardSystem), RewardSystem).getLiveNesss();
 							FileUtils.setFileData(infoMap, FilesType.Active);
 							return true;
 						}else

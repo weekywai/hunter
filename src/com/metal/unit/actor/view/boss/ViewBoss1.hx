@@ -203,7 +203,7 @@ class ViewBoss1 extends ViewEnemy
 			_bulletReq.targetY = _player.y;
 		}
 		_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[index - 1]).BulletID);
-		owner.notifyParent(MsgBullet.Create, _bulletReq);
+		notifyParent(MsgBullet.Create, _bulletReq);
 	}
 	
 	override private function onStartCallback(i:Int, value:String):Void

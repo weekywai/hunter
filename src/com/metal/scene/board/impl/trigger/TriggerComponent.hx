@@ -1,31 +1,25 @@
 package com.metal.scene.board.impl.trigger;
 
-import com.metal.component.BattleComponent;
 import com.metal.config.SfxManager;
 import com.metal.enums.MonsVo;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgCamera;
-import com.metal.message.MsgInput;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
-import com.metal.component.GameSchedual;
-import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.manager.AppearManager;
 import com.metal.proto.manager.ModelManager;
 import com.metal.proto.manager.MonsterManager;
-import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.board.impl.GameMap;
+import com.metal.scene.board.impl.trigger.TriggerType;
 import com.metal.unit.actor.api.IActor;
 import com.metal.unit.actor.impl.MTActor;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
-import pgr.dconsole.DC;
-
 /**
  * ...
  * @author 3D
@@ -33,31 +27,17 @@ import pgr.dconsole.DC;
 class TriggerComponent extends Component
 {
 
-	public function new(info:Dynamic,trigger:Trigger) 
+	public function new(info:Dynamic) 
 	{
 		super();
 		_info = info;
-		_trigger = trigger;
 		type = info.name;
 	}
 	
-	public var type:String = "-1";
+	public var type:String = TriggerType.None;
 	
 	private var _info:Dynamic;//当前事件object
-	private var _trigger:Trigger;
 	private var _actor:IActor;
-	
-	
-	public function setActive():Void
-	{
-		_trigger.owner.addComponent(this);
-	}
-	
-	public function add(trigger:Trigger):Void
-	{
-		this._trigger = trigger;
-	}
-	
 	
 	override function onInitComponent():Void 
 	{
@@ -90,14 +70,14 @@ class TriggerComponent extends Component
 		if (_actor == null) return;
 		var key:Bool;
 		switch (_info.name) {
-			case TriggerEventType.NewBie:
+			case TriggerType.NewBie:
 				//trace("id"+_info.custom.resolve("id"));
 				key = _actor.x >= _info.x;
 				if (key) {
 					GameProcess.root.notify(MsgView.NewBie, Std.parseInt(_info.custom.resolve("id")));
 					dispose();
 				};
-			case TriggerEventType.VictoryPlace:
+			case TriggerType.VictoryPlace:
 				//trace("id"+_info.custom.resolve("id"));
 				key = _actor.x >= _info.x;
 				if (key) {
@@ -108,7 +88,7 @@ class TriggerComponent extends Component
 					GameProcess.root.notify(MsgStartup.BattleClear);
 					dispose();
 				};
-			case TriggerEventType.ShowMonster:
+			case TriggerType.ShowMonster:
 				key = _actor.x >= _info.x;
 				if (!key) return;
 				if (_info.custom.resolve("type") != null) {
@@ -138,21 +118,21 @@ class TriggerComponent extends Component
 				}
 				dispose();
 			
-			case TriggerEventType.ShowCameraMonster:
+			case TriggerType.ShowCameraMonster:
 				key = _actor.x >= _info.x;
 				if (!key) return;
 				notify(MsgBoard.BindHideEntity, {loop:false, random:false});
 				//cast(owner.getComponent(GameMap), GameMap).cmd_BindHideEntity(false,false);				
 				dispose();
 				
-			case TriggerEventType.ShowRandomMonster:
+			case TriggerType.ShowRandomMonster:
 				key = _actor.x >= _info.x;
 				if (!key) return;
 				notify(MsgBoard.BindHideEntity, {loop:true, random:true});
 				//cast(owner.getComponent(GameMap), GameMap).cmd_BindHideEntity(true,true);				
 				dispose();
 				
-			case TriggerEventType.Lock:
+			case TriggerType.Lock:
 				key = _actor.x >= _info.x;
 				//trace(_info.x);
 				if (key) {
@@ -160,7 +140,7 @@ class TriggerComponent extends Component
 					
 					var id:Int = Std.parseInt(_info.custom.resolve("id"));
 					var enemies:Array<Int> = AppearManager.instance.getProto(id).enemies.copy();
-					_trigger.setMonsterShowNoB(enemies);
+					notify(MsgBoard.AddTrigger, {data:enemies, roll:false});
 					var enemiesVO:Array<MonsVo> = [];
 					//转换arr
 					for (monId in enemies) {
@@ -174,14 +154,14 @@ class TriggerComponent extends Component
 					dispose();
 				}
 				
-			case TriggerEventType.UnLock:
+			case TriggerType.UnLock:
 				key = _actor.x >= _info.x;
 				if (key) {
 					owner.notify(MsgCamera.Lock, false);
 					//删掉
 					dispose();
 				}
-			case TriggerEventType.NorMalLock:
+			case TriggerType.NorMalLock:
 				key = _actor.x >= _info.x;
 				if (key) {
 					owner.notify(MsgCamera.Lock, true);
@@ -189,7 +169,7 @@ class TriggerComponent extends Component
 					dispose();
 				}
 			
-			case TriggerEventType.CallMonsters:
+			case TriggerType.CallMonsters:
 				//当前index=0位置的数据长度为0时 移除index0 把切割后的index0怪物数组发出去 
 				if (_info != null && Reflect.getProperty(_info, "showKey")) {
 					//DC.beginProfile("call monster");
@@ -200,7 +180,6 @@ class TriggerComponent extends Component
 					}else {
 						
 						var isRunMap = cast(owner.getComponent(GameMap), GameMap).mapData.runKey;
-						//_trigger.owner.removeComponent(this);
 						if(isRunMap){
 							trace("Send Victory");
 							PlayerUtils.getPlayer().notify(MsgActor.Victory);
@@ -212,13 +191,12 @@ class TriggerComponent extends Component
 					_info.showKey = false;
 					//DC.endProfile("call monster");
 				}
-			case TriggerEventType.ClearUnLock:
+			case TriggerType.ClearUnLock:
 				//当前index=0位置的数据长度为0时 移除index0 把切割后的index0怪物数组发出去 
 				if (_info != null && Reflect.getProperty(_info, "showKey")) {
 					//trace("ClearUnLock");
 					notifyParent(MsgCamera.Lock, false);
 					_info.showKey = false;
-					//_trigger.owner.removeComponent(this);
 					dispose();
 				}
 		}
@@ -241,7 +219,7 @@ class TriggerComponent extends Component
 	{
 		if (_info == null) return;
 		switch(type){
-			case TriggerEventType.CallMonsters:
+			case TriggerType.CallMonsters:
 				if (_info.voInfo[0].length == null) return;
 				for (num in 0..._info.voInfo[0].length) {
 					if (_info.voInfo[0][num].id == id) {
@@ -255,7 +233,7 @@ class TriggerComponent extends Component
 						}
 					}
 				}
-			case TriggerEventType.ClearUnLock:
+			case TriggerType.ClearUnLock:
 				trace(_info.arrInfo.length);
 				_info.arrInfo.remove(id);
 				if (_info.arrInfo.length == 0) {
@@ -265,13 +243,12 @@ class TriggerComponent extends Component
 				//if (_info.arrInfo.length == 1) {
 					//_info.showKey = true;
 				//}
-				
 		}
 	}
 	
 	private function cmd_AddLockEnemey(userData):Void
 	{
-		if (type == TriggerEventType.ClearUnLock){
+		if (type == TriggerType.ClearUnLock){
 			_info.arrInfo = _info.arrInfo.concat(userData);
 			trace("add lock: "+_info.arrInfo.length);
 		}
@@ -282,10 +259,9 @@ class TriggerComponent extends Component
 	 * **/
 	public function addMonsterInEnemies(arr:Array<Int>):Void
 	{
-		var battle = _trigger.owner.getComponent(BattleResolver);
+		var battle = owner.getComponent(BattleResolver);
 		for (id in arr) {
 			battle._gameMap.enemies.push(id);
 		}
-		
 	}
 }

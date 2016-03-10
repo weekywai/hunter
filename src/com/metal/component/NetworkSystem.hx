@@ -9,7 +9,7 @@ import de.polygonal.core.sys.Component;
  * ...
  * @author weeky
  */
-class NetServiveComp extends Component
+class NetworkSystem extends Component
 {
 	private var _netWork:Network;
 	

@@ -17,7 +17,7 @@ import haxe.ds.IntMap;
  * ...
  * @author 3D
  */
-class TaskComponent extends Component
+class TaskSystem extends Component
 {
 
 	//任务数据

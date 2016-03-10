@@ -1,5 +1,5 @@
 package com.metal.ui.dialogue;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.message.MsgUI2;
 import com.metal.ui.BaseCmd;
 import de.polygonal.core.event.IObservable;

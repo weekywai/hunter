@@ -30,6 +30,8 @@ class EffectText extends EffectEntity
 	override private function onDispose():Void 
 	{
 		super.onDispose();
+		if(_numTxt!=null)
+			HXP.scene.clearRecycled(Type.getClass(_numTxt));
 		_numTxt = null;
 	}
 	

@@ -35,7 +35,7 @@ import motion.Actuate;
  * ...
  * @author li
  */
-class BattleComponent extends Component
+class BattleSystem extends Component
 {
 
 	/**宝箱数量*/

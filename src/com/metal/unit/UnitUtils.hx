@@ -5,6 +5,7 @@ import com.metal.scene.board.api.BoardFaction;
 import de.polygonal.core.sys.SimEntity;
 import de.polygonal.core.time.Timebase;
 import openfl.Lib;
+import pgr.dconsole.DC;
 
 /**
  * ...
@@ -19,6 +20,7 @@ class UnitUtils
 	private static var _index:Int =0;
 	public static function createUnit(type:String, id:Int, faction:Int, x:Float, y:Float, ai:String = null):SimEntity {
 		//var now = Lib.getTimer();
+		DC.beginProfile("createUnit");
 		var manager:GameSchedual = GameProcess.root.getComponent(GameSchedual);
 		//trace(id+">>"+type);
 		var entity:SimEntity = manager.createSimEntity(type, id);
@@ -35,6 +37,7 @@ class UnitUtils
 		
 		//_lastUintTime = now - _lastUintTime;
 		//trace(_lastUintTime);
+		DC.endProfile("createUnit");
 		return entity;
 	}
 	

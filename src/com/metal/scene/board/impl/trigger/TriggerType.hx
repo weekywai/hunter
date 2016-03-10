@@ -4,13 +4,9 @@ package com.metal.scene.board.impl.trigger;
  * ...
  * @author 3D
  */
-class TriggerEventType
+class TriggerType
 {
-
-	public function new() 
-	{
-		
-	}
+	public static var None:String = "";
 	/**新手引导*/
 	public static var NewBie:String = "0";
 	/**怪物出场*/

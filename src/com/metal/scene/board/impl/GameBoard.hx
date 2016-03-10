@@ -16,12 +16,7 @@ import de.polygonal.core.sys.SimEntity;
  */
 class GameBoard extends Component
 {
-	private var _units:List<GameBoardItem>;
-	public var units(get, null):List<GameBoardItem>;
-	private function get_units():List<GameBoardItem>
-	{
-		return _units;
-	}
+	public var units(default, null):List<SimEntity>;
 	private var _startAI:Bool;
 	// 类型缓冲 u:UnitType  v:Faction
 	//private var _typeCache:DLL<Dynamic>; // Type, Faction
@@ -29,7 +24,7 @@ class GameBoard extends Component
 	public function new() 
 	{
 		super();
-		_units = new List();
+		units = new List();
 		_startAI = false;
 	}
 	
@@ -40,7 +35,7 @@ class GameBoard extends Component
 	
 	override function onDispose():Void {
 		cmd_Reset(null);
-		_units = null;
+		units = null;
 		super.onDispose();
 	}
 	
@@ -53,6 +48,8 @@ class GameBoard extends Component
 				cmd_Reset(userData);
 			case MsgBoard.AssignUnit:
 				cmd_AssignUnit(userData);
+			case MsgBoard.RemoveUnit:
+				cmd_RemoveUnit(userData);
 			case MsgBoard.StartAI:
 				cmd_StartAI();
 		}
@@ -62,14 +59,13 @@ class GameBoard extends Component
 		
 	}
 	private function cmd_Reset(userData:Dynamic):Void {
-		var itr = _units.iterator();
-		var item:GameBoardItem = itr.next();
+		var itr = units.iterator();
+		var item:SimEntity = itr.next();
 		while (item != null) {
-			item.owner.free();
+			item.free();
 			item = itr.next();
 		}
-		//owner.treeNode.clear();
-		_units.clear();
+		units.clear();
 		_startAI = false;
 	}
 	
@@ -79,35 +75,37 @@ class GameBoard extends Component
 	}
 	private function cmd_StartAI()
 	{
-		var itr = _units.iterator();
-		var item:GameBoardItem = itr.next();
+		var itr = units.iterator();
+		var item:SimEntity = itr.next();
 		while (item != null) {
 			item.notify(MsgInput.SetInputEnable, true);
 			item = itr.next();
 		}
 		_startAI = true;
 	}
+	private function cmd_RemoveUnit(userData:Dynamic):Void {
+		//trace ("remove" +userData);
+		var item:SimEntity = userData;
+		units.remove(item);
+		item.free();
+	}
 	
-	public function addUnitEntity(entity:SimEntity):Bool {
+	public function addUnitEntity(item:SimEntity):Bool {
 		if (isDisposed) 
 			return false;
 		
 		// 如果已经存在就返回
-		var item:GameBoardItem = cast entity.getComponent(MTActor);
-		if (item == null)
-			item = cast entity.getComponent(UnitActor);
-		//trace(entity.id+"::"+_units.contains(item));
 		if (item == null)
 			return false;
-		if (Lambda.has(_units,item)) 
+		if (Lambda.has(units,item)) 
 			return false;
-		_units.add(item);
+		units.add(item);
 		
-		owner.add(entity);
+		owner.add(item);
 		// 发送进入游戏板信号
-		entity.notify(MsgActor.EnterBoard);
+		item.notify(MsgActor.EnterBoard);
 		if (_startAI){
-			entity.notify(MsgInput.SetInputEnable, true);
+			item.notify(MsgInput.SetInputEnable, true);
 		}
 		return true;
 	}
@@ -115,13 +113,17 @@ class GameBoard extends Component
 	public function onCameraEntity():Array<SimEntity>
 	{
 		var list:Array<SimEntity> = [];
-		var itr = _units.iterator();
-		var item:BaseActor =  cast itr.next();
+		var itr = units.iterator();
+		var item:SimEntity = itr.next();
+		var actor:BaseActor;
 		while (item != null) {
-			if (item != null && item.onCamera()) {
-				list.push(item.owner);
+			actor = cast item.getComponent(MTActor);
+			if (actor == null)
+				actor = cast item.getComponent(UnitActor);
+			if (actor != null && actor.onCamera()) {
+				list.push(item);
 			}
-			item =  cast itr.next();
+			item = itr.next();
 		}
 		return list;
 	}

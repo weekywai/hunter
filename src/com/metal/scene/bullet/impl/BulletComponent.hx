@@ -14,35 +14,29 @@ import de.polygonal.core.sys.Component;
  */
 class BulletComponent extends Component
 {
-	private var _recycles:List<IBullet>;
-	private var _bullets:List<IBullet>;
-	public var bullets(get, null):List<IBullet>;
-	private function get_bullets():List<IBullet>  { return _bullets; }
+	public var bullets(default, null):List<IBullet>;
 	
 	public function new() 
 	{
 		super();
-		_recycles = new List();
-		_bullets = new List();
+		bullets = new List();
 	}
 	
 	override function onDispose():Void 
 	{
-		removeBullet(_bullets);
-		removeBullet(_recycles, true);
-		_bullets = null;
-		_recycles = null;
+		//trace("onDispose");
+		removeBullet(bullets);
+		bullets = null;
 		super.onDispose();
 	}
 	
 	private function removeBullet(bullets:List<IBullet>, recycle:Bool = false):Void 
 	{
-		//var bullet:SLLNode<IBullet> = bullets.head;
 		var itr = bullets.iterator();
 		var bullet:IBullet = itr.next();
 		while (bullet!=null) {
-			if(recycle)
-				HXP.scene.clearRecycled(cast Type.getClass(bullet));
+			//if(recycle)
+				//HXP.scene.clearRecycled(cast Type.getClass(bullet));
 			bullet.dispose();
 			bullet = itr.next();
 		}
@@ -69,29 +63,29 @@ class BulletComponent extends Component
 			//return;
 		var bullet:IBullet = BulletFactory.instance.createBullet(req.info.behavior);
 		//trace(bullet);
-		//trace(_bullets.size());
-		_bullets.add(bullet);
+		//trace(bullets.size());
+		bullets.add(bullet);
 		bullet.init(owner);
 		bullet.setInfo(req.info);
+		bullet.removeCall.addOnce(cmd_recycle);
 		bullet.start(req);
-		_recycles.remove(bullet);
 	}
 	
 	private function cmd_clearBullet(userData:Dynamic):Void
 	{
-		var itr = _bullets.iterator();
+		var itr = bullets.iterator();
 		var node:IBullet = itr.next();
 		while (node != null) 
 		{
 			node.recycle();
 			node = itr.next();
 		}
-		_bullets.clear();
+		bullets.clear();
 	}
 	private function cmd_recycle(userData:Dynamic):Void
 	{
 		var bullet:IBullet = userData;
-		_recycles.add(bullet);
-		_bullets.remove(bullet);
+		var r = bullets.remove(bullet);
+		//trace("cmd_recycle "+ r);
 	}
 }

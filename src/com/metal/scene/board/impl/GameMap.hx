@@ -2,7 +2,7 @@ package com.metal.scene.board.impl;
 
 import com.haxepunk.HXP;
 import com.haxepunk.tmx.TmxPropertySet;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.MapLayerType;
 import com.metal.config.ResPath;
@@ -26,23 +26,20 @@ import com.metal.proto.manager.MapInfoManager;
 import com.metal.proto.manager.ModelManager;
 import com.metal.proto.manager.MonsterManager;
 import com.metal.scene.board.api.BoardFaction;
-import com.metal.scene.board.impl.trigger.Trigger;
 import com.metal.scene.board.view.Camera;
 import com.metal.unit.AppearUtils;
-import com.metal.unit.avatar.MTAvatar;
 import com.metal.unit.UnitInfo;
 import com.metal.unit.UnitUtils;
+import com.metal.unit.avatar.MTAvatar;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
-import de.polygonal.core.es.Entity;
 import de.polygonal.core.sys.SimEntity;
 import haxe.ds.IntMap;
 import haxe.ds.ObjectMap;
 import haxe.xml.Fast;
-import openfl.errors.Error;
 import openfl.geom.Point;
-import spinehaxe.atlas.TextureAtlas;
 import spinehaxe.SkeletonJson;
+import spinehaxe.atlas.TextureAtlas;
 import spinepunk.SpinePunk;
 /**
  * 场景地图基类
@@ -57,7 +54,6 @@ class GameMap extends Component
 	private var _npc:Array<Dynamic>;
 	private var _npcGun:Array<Dynamic>;	
 	private var _born:Point;
-	private var _trigger:Trigger;
 	private var isPlayer:Bool;
 	
 	public var enemies(default, null):Array<Int>;
@@ -91,7 +87,6 @@ class GameMap extends Component
 		mapData.onDispose();
 		mapData = null;
 		_born = null;
-		_trigger = null;
 		_entities = null;
 		_loadEntities = null;
 		_npc = null;
@@ -112,7 +107,6 @@ class GameMap extends Component
 	{
 		super.initComponent(owner);
 		_schedual = GameProcess.root.getComponent(GameSchedual);
-		_trigger = new Trigger(cast owner);
 	}
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
@@ -152,12 +146,11 @@ class GameMap extends Component
 			mapData.reset();
 			mapData = null;
 		}
-		_trigger.reset();
 	}
 	
 	private function cmd_loadMap(userData:Dynamic):Void
 	{
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		var mapId =  battle.currentRoomId();
 		
 		trace("mapId:" + mapId);
@@ -302,7 +295,7 @@ class GameMap extends Component
 	{
 		for (object in mapData.map.getObjectGroup("event").objects) 
 		{
-			_trigger.parseEvent(object);
+			notify(MsgBoard.CreateTrigger, object);
 		}
 	}
 	
@@ -326,7 +319,7 @@ class GameMap extends Component
 		
 		if(!isPlayer)BindPlayerVehicle(mapInfo.vehicle);
 		//添加B段怪物出场检测
-		_trigger.setMonsterShow(mapInfo.Events);
+		notify(MsgBoard.AddTrigger, {data:mapInfo.Events, roll:true});
 		var ary = mapInfo.Events[0];
 		ary = ary[2].split("&");
 		parseMonster(ary);
@@ -520,14 +513,7 @@ class GameMap extends Component
 		notifyParent(MsgBoard.AssignPlayer, player);
 		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
 		//trace("AssignPlayer");
-		_trigger.setActiveByType("0");
-		_trigger.setActiveByType("1");
-		_trigger.setActiveByType("2");
-		_trigger.setActiveByType("3");
-		_trigger.setActiveByType("5");
-		_trigger.setActiveByType("6");
-		_trigger.setActiveByType("7");
-		_trigger.setActiveByType("8");
+		notify(MsgBoard.StartTrigger);
 	}
 	
 
@@ -547,8 +533,10 @@ class GameMap extends Component
 	private function BindUint():Void
 	{
 		var entity:SimEntity;
+		//trace("BindUint");
 		for (obj in _entities) 
 		{
+			//DC.beginProfile("BindUint");
 			//特殊判断 是否场景物品 并且是 骨骼类资源
 			var id = Std.parseInt(obj.custom.resolve("id"));
 			var monsterInfo = MonsterManager.instance.getInfo(id);
@@ -576,6 +564,7 @@ class GameMap extends Component
 			}else if (faction == BoardFaction.Block || faction == BoardFaction.Machine) {
 				notify(MsgPlayer.AddCollide, BoardFaction.getType(faction));
 			}
+			//DC.endProfile("BindUint");
 		}
 	}
 	/**生成循环刷新的怪物*/

@@ -2,6 +2,7 @@ package com.metal.scene.bullet.api;
 import com.metal.proto.impl.BulletInfo;
 import de.polygonal.core.sys.IDisposer;
 import de.polygonal.core.sys.SimEntity;
+import signals.Signal1;
 
 /**
  * @author weeky
@@ -17,6 +18,7 @@ interface IBullet extends IDisposer
 	/** 目标Y */
 	var _ty:Float;
 	var canRemove:Bool;
+	var removeCall:Signal1<IBullet>;
 	/**
 	 * 初始化，一次初始化后可以多次重用
 	 * @param	$body
@@ -24,6 +26,7 @@ interface IBullet extends IDisposer
 	 */
 	function init(body:SimEntity):Void;
 	function setInfo(info:BulletInfo):Void;
+	
 	function start(req:BulletRequest):Void;
 	function recycle():Void;
 }

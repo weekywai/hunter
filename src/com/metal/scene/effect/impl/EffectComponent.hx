@@ -11,7 +11,7 @@ import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
 
 /**
- * 子弹管理器
+ * effect manager
  * @author weeky
  */
 class EffectComponent extends Component
@@ -28,7 +28,6 @@ class EffectComponent extends Component
 		var itr = _recycles.iterator();
 		var effect:IEffect = itr.next();
 		while (effect!=null) {
-			HXP.scene.clearRecycled(cast Type.getClass(effect));
 			effect.dispose();
 			effect = itr.next();
 		}
@@ -52,26 +51,27 @@ class EffectComponent extends Component
 	{
 		var req:EffectRequest = userData;
 		//trace(req.boomType);
-		var effect:IEffect;
+		var effect:IEffect, aniType:Int;
 		if(req.boomType == 0)
 		{
 			var info:EffectInfo = EffectManager.instance.getProto(req.Key);
-			effect = EffectFactory.instance.createEffect(info.type);
-			effect.init(owner);
-			effect.start(req);
+			aniType = info.type;
 		}
 		else
 		{
-			effect = EffectFactory.instance.createEffect(req.boomType);
-			effect.init(owner);
-			effect.start(req);
+			aniType = req.boomType;
 		}
-		_recycles.remove(effect);
+		effect = EffectFactory.instance.createEffect(aniType);
+		effect.init(owner);
+		effect.start(req);
+		_recycles.add(effect);
+		
 	}
 	
 	private function cmd_recycle(userData:Dynamic):Void
 	{
 		var effect:IEffect = userData;
-		_recycles.add(effect);
+		var r = _recycles.remove(effect);
+		//trace("create Effect " + r);
 	}
 }

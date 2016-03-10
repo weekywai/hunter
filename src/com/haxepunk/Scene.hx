@@ -288,6 +288,7 @@ class Scene extends Tweener
 	 */
 	public function clearRecycled<E:Entity>(classType:Class<E>)
 	{
+		//trace(Type.getClassName(classType));
 		var className:String = Type.getClassName(classType),
 			e:Entity = _recycled.get(className),
 			n:Entity;

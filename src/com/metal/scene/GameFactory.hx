@@ -1,6 +1,6 @@
 package com.metal.scene;
 
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.UnitModelType;
 import com.metal.player.core.PlayerStat;
@@ -104,7 +104,7 @@ class GameFactory extends Component
 		var monster:MonsterInfo = MonsterManager.instance.getInfo(id);
 		//trace(monster.ID+" monster :"+ monster.FixedType);
 		//通过关卡计算怪物ATK HP
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		
 		var model:ModelInfo = ModelManager.instance.getProto(monster.res);
 		//检测闯关或副本 获取需要根据角色等级

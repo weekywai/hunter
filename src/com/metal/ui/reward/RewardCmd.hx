@@ -1,7 +1,7 @@
 package com.metal.ui.reward;
 
 import com.metal.component.GameSchedual;
-import com.metal.component.RewardComponent;
+import com.metal.component.RewardSystem;
 import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;
@@ -91,7 +91,7 @@ class RewardCmd extends BaseCmd
 	private function setData(data:Dynamic):Void
 	{
 		if (_unparent) return;
-		var rewardComp:RewardComponent = GameProcess.root.getComponent(RewardComponent);
+		var rewardComp:RewardSystem = GameProcess.root.getComponent(RewardSystem);
 		
 		//************连续登陆签到**************//
 		var reward1 = _widget.getChildAs("reward1", VBox);

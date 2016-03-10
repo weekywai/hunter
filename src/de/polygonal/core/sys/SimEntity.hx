@@ -202,9 +202,10 @@ class SimEntity extends Entity implements IObservable
 		while (node!=null) 
 		{
 			comp =  node.val;
-			if (comp != null) 
+			if (comp != null) {
 				comp.dispose();
-			detach(comp);
+				detach(comp);
+			}
 			node = node.next;
 		}
 		compMap.clear(true);
@@ -213,6 +214,7 @@ class SimEntity extends Entity implements IObservable
 		observable.free();
 		observable = null;
 	}
+	
 	override function onTick(dt:Float, post:Bool):Void 
 	{
 		var comp:Component;

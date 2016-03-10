@@ -1,5 +1,6 @@
 package com.metal.scene.board.impl ;
 import com.metal.message.MsgActor;
+import com.metal.message.MsgBoard;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.board.api.IBoardItem;
 import de.polygonal.core.es.EntitySystem;
@@ -82,12 +83,12 @@ class GameBoardItem extends Component implements IBoardItem
 	 * 脱离场景挂接。脱离场景不需要和Board打交道，可以直接在此执行脱离操作
 	 */
 	function detachFromBoard():Void {
-		var board = GameProcess.root.findChild("GameBoard");
-		if (board == null ) throw new Error("GameBoard is null");
-		var gameboard:GameBoard = cast(board, SimEntity).getComponent(GameBoard);
-		if (gameboard.units != null)
-			gameboard.units.remove(this);
-		owner.free();
+		if (isDisposed)
+			return;
+		//trace(isDisposed + " "+owner);
+		if(owner!=null)
+			notifyParent(MsgBoard.RemoveUnit, owner);
+		//owner.free();
 		//owner.remove();
 	}
 	

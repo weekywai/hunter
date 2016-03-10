@@ -12,5 +12,6 @@ package com.metal.message;
 	Score,
 	KillBoss,
 	AddLockEnemey
+	
 ]))
 class MsgItr{}

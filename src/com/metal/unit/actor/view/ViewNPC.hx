@@ -1,6 +1,6 @@
 package com.metal.unit.actor.view;
 import com.haxepunk.HXP;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.manager.ResourceManager;
 import com.metal.message.MsgActor;
 import com.metal.proto.impl.MonsterInfo;
@@ -64,7 +64,7 @@ class ViewNPC extends BaseViewActor
 	{
 		//super.Notify_Destorying(userData);
 		trace("npc drop !!!!!!!!!!!!");
-		var battle:BattleComponent = GameProcess.root.getComponent(BattleComponent);
+		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
 		var items = battle.currentStage().DropItem;
 		//trace("items=="+items);
 		var ran = Math.round(Math.random() * (items.length-1));

@@ -2,10 +2,11 @@ package com.metal;
 import com.haxepunk.Engine;
 import com.haxepunk.HXP;
 import com.haxepunk.Sfx;
-import com.metal.component.BattleComponent;
+import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
-import com.metal.component.RewardComponent;
-import com.metal.component.TaskComponent;
+import com.metal.component.RewardSystem;
+import com.metal.component.TaskSystem;
+import com.metal.component.TriggerSystem;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.manager.ResourceManager;
@@ -22,7 +23,6 @@ import com.metal.scene.board.view.Camera;
 import com.metal.scene.board.view.ViewBoard;
 import com.metal.scene.bullet.impl.BulletComponent;
 import com.metal.scene.effect.impl.EffectComponent;
-import de.polygonal.core.es.Entity;
 import de.polygonal.core.es.MainLoop;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
@@ -78,6 +78,7 @@ class GameProcess implements IObserver
 	private var _debugTxt:TextField;
 	private var _fps:FPS;
 	private var _loop:MainLoop;
+	private var _board:SimEntity;
 	private var _render:Bool = false;
 	public function new() {}
 	
@@ -127,9 +128,9 @@ class GameProcess implements IObserver
 	public function initGame():Void
 	{
 		root.addComponent(new GameFactory());
-		root.addComponent(new TaskComponent());
-		root.addComponent(new BattleComponent());
-		root.addComponent(new RewardComponent());
+		root.addComponent(new TaskSystem());
+		root.addComponent(new BattleSystem());
+		root.addComponent(new RewardSystem());
 		//TODO 发送启动
 		trace("initGame");
 		new LoadSource();
@@ -179,16 +180,17 @@ class GameProcess implements IObserver
 	
 	public function startGame():Void
 	{
-		var entity = new SimEntity("GameBoard");
-		entity.addComponent(new GameBoard());
-		entity.addComponent(new GameMap());
-		entity.addComponent(new ViewBoard());
-		entity.addComponent(new Camera());
-		entity.addComponent(new BulletComponent());
-		entity.addComponent(new EffectComponent());
-		entity.addComponent(new BattleResolver());
-		entity.drawable = true;
-		root.add(entity);
+		_board = new SimEntity("GameBoard");
+		_board.addComponent(new GameBoard());
+		_board.addComponent(new GameMap());
+		_board.addComponent(new ViewBoard());
+		_board.addComponent(new Camera());
+		_board.addComponent(new TriggerSystem());
+		_board.addComponent(new BulletComponent());
+		_board.addComponent(new EffectComponent());
+		_board.addComponent(new BattleResolver());
+		_board.drawable = true;
+		root.add(_board);
 		onDrawId = 1;
 		
 		#if debug
@@ -199,11 +201,13 @@ class GameProcess implements IObserver
 	public function endGame():Void 
 	{
 		trace("endGame");
+		_board.free();
 		Sfx.stopAllSound();
 		HXP.scene.end();
 		ResourceManager.instance.unLoadAll();
-		var gamebord:Entity = root.findChild("GameBoard");
-		root.remove(gamebord);
+		
+		//var gamebord:Entity = root.findChild("GameBoard");
+		//root.remove(_board);
 	}
 	
 	public function pauseGame(pause:Bool)

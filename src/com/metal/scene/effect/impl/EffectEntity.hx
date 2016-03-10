@@ -28,6 +28,8 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override private function onDispose():Void 
 	{
+		if(scene!=null)
+			scene.clearRecycled(Type.getClass(this));
 		info = null;
 		super.onDispose();
 	}
@@ -61,7 +63,8 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	/** end recycle */
 	private function recycle():Void {
-		scene.recycle(this);
+		if(scene!=null)
+			scene.recycle(this);
 		owner.notify(MsgEffect.Recycle, this);
 	}
 	/**

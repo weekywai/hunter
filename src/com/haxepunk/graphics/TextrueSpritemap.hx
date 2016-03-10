@@ -65,6 +65,7 @@ class TextrueSpritemap extends Image
 	
 	override public function destroy() 
 	{
+		if(animationEnd!=null)
 		animationEnd.removeAll();
 		animationEnd = null;
 		super.destroy();
