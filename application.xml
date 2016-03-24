@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
-	<meta title="MetalWarrior" package="com.metal.MetalWarrior" version="1.0.0" company="weeky" />
+	<meta title="MetalWarrior" package="com.metal.MetalWarrior" version="3.0.0" company="weeky" />
 	
 	<!-- output -->
 	<app main="Main" file="MetalWarrior" path="bin" />
