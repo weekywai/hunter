@@ -1,8 +1,6 @@
 package com.metal.ui.warehouse ;
 
-import com.haxepunk.tmx.TmxEntity.Map;
 import com.metal.component.GameSchedual;
-import com.metal.config.BagType;
 import com.metal.config.EquipProp;
 import com.metal.config.FilesType;
 import com.metal.config.ItemType;
@@ -24,27 +22,23 @@ import com.metal.proto.impl.AdvanceInfo;
 import com.metal.proto.impl.ArmsInfo;
 import com.metal.proto.impl.DecompositionInfo;
 import com.metal.proto.impl.ItemBaseInfo;
-import com.metal.proto.impl.StrengthenInfo;
 import com.metal.proto.impl.WeaponInfo;
 import com.metal.proto.manager.AdvanceManager;
 import com.metal.proto.manager.DecompositionManager;
 import com.metal.proto.manager.ForgeManager;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.ui.BaseCmd;
-import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
+import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.ui.popup.TipCmd;
 import com.metal.utils.BagUtils;
 import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
-import haxe.ds.IntMap;
-import haxe.ds.ObjectMap;
 import haxe.Serializer;
 import haxe.Unserializer;
-import openfl.events.MouseEvent;
+import haxe.ds.ObjectMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
-import ru.stablex.ui.widgets.Box;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.HBox;
 import ru.stablex.ui.widgets.MainStack;
@@ -149,6 +143,15 @@ class WarehouseCmd extends BaseCmd
 		isClose = false;
 		super.onInitComponent();
 		initUI();
+	}
+	
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
+	{
+		super.onUpdate(type, source, userData);
+		switch(type) {
+			case MsgUIUpdate.Warehouse:
+				updataPad(userData);
+		}
 	}
 	
 	private function initUI():Void
@@ -338,7 +341,7 @@ class WarehouseCmd extends BaseCmd
 		//}
 		_rechargeOneBtn.onPress = function(e) {
 			trace("BuyOneClip");
-			notifyRoot(MsgNet.BuyOneClip, { weapon:_currentInfo, text:_widget.getChildAs("description2", Text)});
+			notifyRoot(MsgNet.BuyOneClip, _currentInfo);
 		}
 
 		//_maxStrengthenBtn = _widget.getChildAs("maxStrengthenBtn", Button);

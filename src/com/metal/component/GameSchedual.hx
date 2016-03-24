@@ -250,26 +250,29 @@ class GameSchedual extends Component
 	private function cmd_BuyOneClip(userData:Dynamic)
 	{
 		//trace("cmd_BuyOneClip");
-		var weapon:WeaponInfo = userData.weapon;
+		var weapon:WeaponInfo = userData;
 		var gold = playerInfo.getProperty(PlayerPropType.GOLD);
 		
 		if (weapon.currentBackupBullet == weapon.MaxBackupBullet && weapon.currentBullet == weapon.OneClip) return;
 		if (gold >= weapon.ClipCost) 
-		{			
+		{	
+			var msg:String = "";
 			if (weapon.currentBullet + weapon.currentBackupBullet >=  weapon.MaxBackupBullet) 
 			{
 				weapon.currentBackupBullet = weapon.MaxBackupBullet;
+				msg = "已达子弹上限";
 			}else 
 			{
 				weapon.currentBackupBullet += weapon.currentBullet;
+				msg = "购买成功";
 			}				
 			weapon.currentBullet = weapon.OneClip;
 			
 			FileUtils.setFileData(null, FilesType.Bag);
 			FileUtils.setFileData(null, FilesType.EquipBag);
 			//通知UI更新
-			if (userData.text != null) userData.text.text = "子弹数 " + userData.weapon.currentBullet + "/" + userData.weapon.currentBackupBullet;
-			GameProcess.SendUIMsg(MsgUI.Tips, { msg:"购买成功", type:TipsType.tipPopup} );
+			GameProcess.NotifyUI(MsgUIUpdate.Warehouse, weapon);
+			GameProcess.SendUIMsg(MsgUI.Tips, { msg:msg, type:TipsType.tipPopup} );
 		}		
 		notify(MsgPlayer.UpdateMoney, -weapon.ClipCost);		
 	}
