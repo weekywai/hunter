@@ -1,12 +1,12 @@
 package com.metal.unit.actor.view;
 import com.metal.enums.Direction;
+import com.metal.message.MsgActor;
 import com.metal.message.MsgBullet;
 import com.metal.proto.manager.BulletManager;
 import com.metal.proto.manager.SkillManager;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.view.ViewEnemy;
-import com.metal.unit.ai.MonsterAI;
 import haxe.ds.IntMap;
 import spinehaxe.Bone;
 import spinehaxe.Event;
@@ -32,21 +32,21 @@ class ViewBoss extends ViewEnemy
 		_gunBoneMap = null;
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
+		super.Notify_PostBoot(userData);
 		_gunBoneMap =  new IntMap();
-		//_gunBone2 = _avatar.getBone("muzzle_2");
+		//_gunBone2 = getBone("muzzle_2");
 		for (i in 1...8)
 		{
-			if (_avatar.getBone("muzzle_1") != null)
+			if (getBone("muzzle_1") != null)
 			{
-				_gunBoneMap.set(i, _avatar.getBone("muzzle_" + i));
+				_gunBoneMap.set(i, getBone("muzzle_" + i));
 			}
 		}
-		//_gunBone3 = _avatar.getBone("muzzle_3");
+		//_gunBone3 = getBone("muzzle_3");
 		_actor.isNeedRightFlip = false;
-		//_avatar.type = "solid";
+		//type = "solid";
 	}
 	
 	override function Notify_Skill(userData:Dynamic):Void 
@@ -82,14 +82,14 @@ class ViewBoss extends ViewEnemy
 				default: action1 = ActionType.attack_1;
 			}
 			//trace(_info.Skill[_skillType]);
-			if (_info.Skill[_skillType] == -1)
+			if (_mInfo.Skill[_skillType] == -1)
 				action1 = ActionType.attack_1;
 		}
 		else
 		{
 			action1 = action;
 		}
-		_avatar.setDirAction(Std.string(action1), Direction.NONE);
+		setDirAction(Std.string(action1), Direction.NONE);
 		//super.setAction(action, loop);
 	}
 	
@@ -101,28 +101,28 @@ class ViewBoss extends ViewEnemy
 		switch(event.data.name)
 		{
 			case "attack_1":
-				bulletX = _avatar.x + _gunBoneMap.get(1).worldX;
-				bulletY = _avatar.y + _gunBoneMap.get(1).worldY;
+				bulletX = x + _gunBoneMap.get(1).worldX;
+				bulletY = y + _gunBoneMap.get(1).worldY;
 				index = 1;
 			case "attack_2":
-				bulletX = _avatar.x + _gunBoneMap.get(2).worldX;
-				bulletY = _avatar.y + _gunBoneMap.get(2).worldY;
+				bulletX = x + _gunBoneMap.get(2).worldX;
+				bulletY = y + _gunBoneMap.get(2).worldY;
 				index = 2;
 			case "attack_3":
-				bulletX = _avatar.x + _gunBoneMap.get(3).worldX;
-				bulletY = _avatar.y + _gunBoneMap.get(3).worldY;
+				bulletX = x + _gunBoneMap.get(3).worldX;
+				bulletY = y + _gunBoneMap.get(3).worldY;
 				index = 3;
 			case "attack_4":
-				bulletX = _avatar.x + _gunBoneMap.get(4).worldX;
-				bulletY = _avatar.y + _gunBoneMap.get(4).worldY;
+				bulletX = x + _gunBoneMap.get(4).worldX;
+				bulletY = y + _gunBoneMap.get(4).worldY;
 				index = 4;
 			case "attack_5":
-				bulletX = _avatar.x + _gunBoneMap.get(5).worldX;
-				bulletY = _avatar.y + _gunBoneMap.get(5).worldY;
+				bulletX = x + _gunBoneMap.get(5).worldX;
+				bulletY = y + _gunBoneMap.get(5).worldY;
 				index = 5;
 			case "attack_6":
-				bulletX = _avatar.x + _gunBoneMap.get(6).worldX;
-				bulletY = _avatar.y + _gunBoneMap.get(6).worldY;
+				bulletX = x + _gunBoneMap.get(6).worldX;
+				bulletY = y + _gunBoneMap.get(6).worldY;
 				index = 6;
 			case "attack_7":
 				
@@ -132,9 +132,8 @@ class ViewBoss extends ViewEnemy
 		_bulletReq.y = bulletY;
 		_bulletReq.targetX = _player.x;
 		_bulletReq.targetY = _player.y;
-		_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[index-1]).BulletID);
+		_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_mInfo.Skill[index-1]).BulletID);
 		notifyParent(MsgBullet.Create, _bulletReq);
-		
 	}
 	
 	override private function onStartCallback(i:Int, value:Dynamic):Void
@@ -143,7 +142,7 @@ class ViewBoss extends ViewEnemy
 		var v:String = cast(value, String);
 		if (v == "attack_1" || v == "attack_2" || v == "attack_3")
 		{
-			cast(owner.getComponent(MonsterAI), MonsterAI).setAttackStatus(true);
+			notify(MsgActor.AttackStatus, true);
 		}
 		
 	}
@@ -153,7 +152,7 @@ class ViewBoss extends ViewEnemy
 		//trace("on complete "  + value);
 		if (value == "attack_1" || value == "attack_2" || value == "attack_3")
 		{
-			cast(owner.getComponent(MonsterAI), MonsterAI).setAttackStatus(false);
+			notify(MsgActor.AttackStatus, false);
 		}
 	}
 	

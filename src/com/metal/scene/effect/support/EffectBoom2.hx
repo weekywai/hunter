@@ -1,17 +1,17 @@
 package com.metal.scene.effect.support;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.haxepunk.graphics.TextrueSpritemap;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.scene.effect.api.EffectRequest;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import motion.Actuate;
 
 /**
- * ...
- * @author ...
+ * follow entity x/y effect
+ * @author weerky
  */
 class EffectBoom2 extends EffectBoom1
 {
-	private var _attacker:MTAvatar;
+	private var _attacker:ViewDisplay;
 
 	public function new(x:Float, y:Float) 
 	{

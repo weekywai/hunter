@@ -1,26 +1,22 @@
 package com.metal.unit.actor.impl;
 import com.haxepunk.Entity;
-import com.haxepunk.HXP;
 import com.metal.component.BattleSystem;
 import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
-import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
-import com.metal.message.MsgUtils;
 import com.metal.player.core.PlayerStat;
 import com.metal.proto.impl.BattlePrepareInfo;
 import com.metal.proto.impl.GoldGoodInfo;
 import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.manager.BattlePrepareManager;
 import com.metal.proto.manager.GoodsProtoManager;
-import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
 import pgr.dconsole.DC;
@@ -238,7 +234,7 @@ class MTActor extends BaseActor
 	{
 		trace("npc collide");
 		entity.type = "";
-		var target:MTAvatar = cast(entity, MTAvatar);
+		var target:ViewDisplay = cast(entity, ViewDisplay);
 		var item:SimEntity = target.owner;
 		item.notify(MsgActor.Destroying);
 	}
@@ -246,7 +242,7 @@ class MTActor extends BaseActor
 	private function pickItem(entity:Entity):Void
 	{
 		entity.type = "";
-		var target:MTAvatar = cast(entity, MTAvatar);
+		var target:ViewDisplay = cast(entity, ViewDisplay);
 		var item:SimEntity = target.owner;
 		//item.notify(MsgActor.Destroy);
 		if (item.parent!=null) {

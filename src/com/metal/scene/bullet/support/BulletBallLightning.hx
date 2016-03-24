@@ -8,6 +8,7 @@ import com.haxepunk.HXP;
 import com.metal.config.ResPath;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgEffect;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
 import openfl.geom.Point;
@@ -49,8 +50,9 @@ class BulletBallLightning extends BulletEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		//判断资源类型
 		switch (info.buffMovieType) {
 			case EffectAniType.Image:

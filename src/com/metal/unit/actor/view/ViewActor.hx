@@ -1,14 +1,12 @@
-package com.metal.unit.avatar;
-
-import com.haxepunk.Tween.TweenType;
+package com.metal.unit.actor.view;
 import com.haxepunk.graphics.Image;
-import com.haxepunk.tweens.TweenEvent;
-import com.haxepunk.tweens.misc.ColorTween;
 import com.metal.config.ResPath;
 import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
 import com.metal.manager.ResourceManager;
-import openfl.geom.Rectangle;
+import com.metal.unit.avatar.AttachSpine;
+import flash.geom.Rectangle;
+import openfl.geom.Point;
 import spinehaxe.Bone;
 import spinehaxe.BoneData;
 import spinehaxe.SkeletonData;
@@ -17,30 +15,19 @@ import spinehaxe.animation.AnimationState;
 import spinepunk.SpinePunk;
 
 /**
- * MAvatar
+ * ...
  * @author weeky
  */
-class MTAvatar extends AbstractAvatar
+class ViewActor extends ViewBase
 {
 	private var _spine:AttachSpine;
 	
 	public var useHitBox:Bool = false;
 	public var fly:Bool = false;
 	
-	public function new(x:Float = 0, y:Float = 0) 
+	public function new() 
 	{
-		super(x, y);
-	}
-	
-	override function onDispose():Void 
-	{
-		super.onDispose();
-		owner = null;
-	}
-	override public function removed():Void 
-	{
-		super.removed();
-		owner = null;
+		super();
 	}
 	
 	override private function createAvatar(name:String, type:String):Dynamic
@@ -73,11 +60,8 @@ class MTAvatar extends AbstractAvatar
 	}
 
 	override public function setDirAction(action:String, dir:Direction, loop:Bool = true):Void {
-		//trace(action);
-		//skeleton.skeleton.resetSlots(skeleton.skeletonData);
 		//trace("setToSetupPose: " + action);
 		_model.setDirAction(action, dir, loop);
-		//skeleton.skeleton.setBonesToSetupPose();
 	}
 	
 	override public function update():Void {
@@ -126,6 +110,15 @@ class MTAvatar extends AbstractAvatar
 	public function getScale():Float
 	{
 		return _info.scale;
+	}
+	
+	public function getGunPoint(name:String):Point
+	{
+		var p = new Point();
+		var gun =getBone(name);
+		p.x = x + gun.worldX * _info.scale;
+		p.y = y + gun.worldY * _info.scale;
+		return p;
 	}
 	
 	public function getBone(name:String):Bone

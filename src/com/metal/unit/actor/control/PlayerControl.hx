@@ -83,8 +83,6 @@ class PlayerControl extends Component
 				cmd_SetInputEnable(userData);
 			case MsgActor.Respawn:
 				cmd_Respawn(userData);
-			case MsgActor.Reborn:
-				cmd_Respawn(userData);
 		}
 	}
 	

@@ -31,10 +31,6 @@ class EffectTexture extends EffectEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
-	{
-		
-	}
 	
 	override public function start(req:EffectRequest):Void 
 	{

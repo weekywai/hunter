@@ -1,62 +1,51 @@
 package com.metal.unit.actor.view;
-import com.haxepunk.HXP;
 import com.metal.component.BattleSystem;
-import com.metal.manager.ResourceManager;
 import com.metal.message.MsgActor;
 import com.metal.proto.impl.MonsterInfo;
 import com.metal.proto.manager.ModelManager;
-import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.ai.MonsterAI;
-import com.metal.unit.avatar.MTAvatar;
-import de.polygonal.core.event.IObservable;
-import spinehaxe.Event;
 
 /**
  * NPC
  * @author li
  */
-class ViewNPC extends BaseViewActor
+class ViewNPC extends ViewActor
 {
-	private var _info:MonsterInfo;
 	public function new() 
 	{
 		super();	
 	}
-	override function onInitComponent():Void 
+	override function onInit():Void 
 	{
-		super.onInitComponent();
+		super.onInit();
 		_actor = owner.getComponent(UnitActor);
-		_info = owner.getProperty(MonsterInfo);
 	}
 	
 	override public function onDispose():Void 
 	{
-		_info = null;
 		super.onDispose();
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		//判断加载类型
 		var source:Int = owner.getProperty(MonsterInfo).res;
 		//trace(source);
-		_modelInfo = ModelManager.instance.getProto(source);
-		if (_modelInfo == null)
+		_info = ModelManager.instance.getProto(source);
+		if (_info == null)
 			throw "model info is null";
 		
-		if (_avatar == null) {
-			_avatar = HXP.scene.create(MTAvatar, false);
+		//if (_avatar == null) {
+			//_avatar = HXP.scene.create(MTAvatar, false);
 			//_avatar =  cast ResourceManager.instance.getEntity(_modelInfo.res);
-		}
+		//}
 		//记录碰撞类型
-		_avatar.init(owner);
 		
-		_avatar.preload(_modelInfo);
+		preload();
 			
-		notify(MsgActor.PostLoad, _avatar);
-		_avatar.animationState().onEnd.add(onEndCallback);
+		notify(MsgActor.PostLoad, this);
+		animationState().onEnd.add(onEndCallback);
 		trace(owner.name);
 	}
 	
@@ -81,7 +70,7 @@ class ViewNPC extends BaseViewActor
 			return;
 		_curAction = action;
 		//trace(action);
-		_avatar.setDirAction(Std.string(action), _actor.dir, loop);
+		setDirAction(Std.string(action), _actor.dir, loop);
 	}
 	
 	private function onEndCallback(count:Int, name:String):Void

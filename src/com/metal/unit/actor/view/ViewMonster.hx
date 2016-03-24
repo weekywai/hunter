@@ -5,10 +5,8 @@ import com.metal.enums.Direction;
 import com.metal.message.MsgBullet;
 import com.metal.scene.board.impl.BattleResolver;
 import haxe.Timer;
-import motion.Actuate;
 import spinehaxe.Bone;
 import spinehaxe.Event;
-//import tweenx909.TweenX;
 
 /**
  * ...
@@ -37,10 +35,10 @@ class ViewMonster extends ViewEnemy
 		super.onDispose();
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
-		_gunBone1 = _avatar.getBone("muzzle_1");
+		super.Notify_PostBoot(userData);
+		_gunBone1 = getBone("muzzle_1");
 	}
 	
 	override private function onEventCallback(value:Int, event:Event):Void
@@ -53,13 +51,13 @@ class ViewMonster extends ViewEnemy
 		if ( event.data.name == "attack") 
 		{
 			
-			var gun1:Bone =  _avatar.getBone("muzzle_1");
-			var bulletX = _avatar.x + _gunBone1.worldX;
-			var bulletY = _avatar.y + _gunBone1.worldY;
+			var gun1:Bone =  getBone("muzzle_1");
+			var bulletX = x + _gunBone1.worldX;
+			var bulletY = y + _gunBone1.worldY;
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;
 			//_bulletReq.targetX = _player.x;// bulletX - 10;
-			_bulletReq.targetX = ((_actor.dir == Direction.LEFT)?-1:1)*1000+_avatar.x ;// 只判断方向
+			_bulletReq.targetX = ((_actor.dir == Direction.LEFT)?-1:1)*1000+x ;// 只判断方向
 			_bulletReq.targetY = bulletY;
 			_bulletReq.renderType = BattleResolver.resolveAtk(_bulletReq.critPor);
 			if (bulletX > _bulletReq.targetX)

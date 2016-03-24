@@ -1,11 +1,12 @@
 package com.metal.unit.actor.view.boss;
 
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
-import com.haxepunk.graphics.TextrueSpritemap;
 import com.haxepunk.HXP;
+import com.haxepunk.graphics.TextrueSpritemap;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.Direction;
+import com.metal.message.MsgActor;
 import com.metal.message.MsgBullet;
 import com.metal.message.MsgEffect;
 import com.metal.proto.manager.BulletManager;
@@ -15,9 +16,6 @@ import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.view.ViewEnemy;
-import com.metal.unit.ai.MonsterAI;
-import de.polygonal.core.sys.SimEntity;
-import openfl.Lib;
 import spinehaxe.Bone;
 import spinehaxe.Event;
 
@@ -52,20 +50,20 @@ class ViewBoss1 extends ViewEnemy
 		_pos = false;
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
+		super.Notify_PostBoot(userData);
 		_actor.isNeedRightFlip = false;
 		createFire();
 	}
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		//super.Notify_Destorying(userData); 
-		_avatar.type = "";
-		if (_info.isBoom) {
+		type = "";
+		if (_mInfo.isBoom) {
 			//通知处理爆炸
 			var vo:EffectRequest = new EffectRequest();
-			vo.setInfo(_avatar, _info.boomType+4);
+			vo.setInfo(this, _mInfo.boomType+4);
 			notifyParent(MsgEffect.Create, vo);
 		}
 	}
@@ -76,11 +74,11 @@ class ViewBoss1 extends ViewEnemy
 		//trace("_skillType " + _skillType);
 	}
 	
-	override public function onTick(timeDelta:Float) 
+	override public function update() 
 	{
-		super.onTick(timeDelta);
-		var m1 = _avatar.getBone("muzzle_1");
-		var m2 = _avatar.getBone("muzzle_2");
+		super.update();
+		var m1 = getBone("muzzle_1");
+		var m2 = getBone("muzzle_2");
 		_lfire.x = m1.worldX - 100;
 		_lfire.y = m1.worldY + 105;
 		_rfire.x = m2.worldX + 450;
@@ -126,7 +124,7 @@ class ViewBoss1 extends ViewEnemy
 					case 0: action1 = ActionType.attack_1;
 					case 1: action1 = ActionType.attack_2;
 					case 2: action1 = ActionType.attack_3;
-							if (_avatar.x <= _player.x)
+							if (x <= _player.x)
 								_pos = true;
 							else
 								_pos = false;
@@ -137,7 +135,7 @@ class ViewBoss1 extends ViewEnemy
 			default:
 				action1 = action;
 		}
-		_avatar.setDirAction(Std.string(action1), Direction.NONE);
+		setDirAction(Std.string(action1), Direction.NONE);
 		//super.setAction(action, loop);
 	}
 	
@@ -164,9 +162,9 @@ class ViewBoss1 extends ViewEnemy
 	
 	private function fireBullet(index:Int):Void
 	{
-		var gun:Bone =  _avatar.getBone("muzzle_" + index);
-		var bulletX = _avatar.x + gun.worldX;
-		var bulletY = _avatar.y + gun.worldY;
+		var gun:Bone =  getBone("muzzle_" + index);
+		var bulletX = x + gun.worldX;
+		var bulletY = y + gun.worldY;
 		//需要检测方向 修正值
 		_bulletReq.x = bulletX;
 		_bulletReq.y = bulletY-100;
@@ -193,16 +191,16 @@ class ViewBoss1 extends ViewEnemy
 		{
 			if (index == 5)
 			{
-				_bulletReq.x = _avatar.x + gun.worldX - _lfire.width * 0.55;
+				_bulletReq.x = x + gun.worldX - _lfire.width * 0.55;
 			}
 			if (index == 6)
 			{
-				_bulletReq.x = _avatar.x + gun.worldX - _rfire.width * 2.25;
+				_bulletReq.x = x + gun.worldX - _rfire.width * 2.25;
 			}
 			_bulletReq.targetX = _player.x;
 			_bulletReq.targetY = _player.y;
 		}
-		_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[index - 1]).BulletID);
+		_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_mInfo.Skill[index - 1]).BulletID);
 		notifyParent(MsgBullet.Create, _bulletReq);
 	}
 	
@@ -210,11 +208,11 @@ class ViewBoss1 extends ViewEnemy
 	{
 		if (value.indexOf("attack")!=-1)
 		{
-			cast(owner.getComponent(MonsterAI), MonsterAI).setAttackStatus(true);
+			notify(MsgActor.AttackStatus, true);
 		}
 		if (value == "dead_1") {
-			_avatar.removeGraphic(_lfire);
-			_avatar.removeGraphic(_rfire);
+			removeGraphic(_lfire);
+			removeGraphic(_rfire);
 			SfxManager.getAudio(AudioType.DeadBoss).play(0.5);
 		}
 	}
@@ -224,7 +222,7 @@ class ViewBoss1 extends ViewEnemy
 		//trace("on complete "  + value);
 		if (value.indexOf("attack")!=-1)
 		{
-			cast(owner.getComponent(MonsterAI), MonsterAI).setAttackStatus(false);
+			notify(MsgActor.AttackStatus, false);
 		}
 	}
 	
@@ -235,7 +233,7 @@ class ViewBoss1 extends ViewEnemy
 		_lfire.add("_lfire", eff.getReginCount(), 25);
 		//_fireStart.animationEnd.add(onStartComplete);
 		_lfire.centerOrigin();
-		_avatar.addGraphic(_lfire);
+		addGraphic(_lfire);
 		_lfire.play("_lfire");
 		_lfire.scale = 1.4;
 		_lfire.angle = -6;
@@ -244,7 +242,7 @@ class ViewBoss1 extends ViewEnemy
 		_rfire.add("_rfire", eff.getReginCount(), 25);
 		//_fireStart.animationEnd.add(onStartComplete);
 		_rfire.centerOrigin();
-		_avatar.addGraphic(_rfire);
+		addGraphic(_rfire);
 		_rfire.play("_rfire");
 		_rfire.scale = 1.4;
 		_rfire.angle = 6;

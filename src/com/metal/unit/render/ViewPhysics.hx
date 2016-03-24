@@ -26,6 +26,7 @@ class ViewPhysics extends ViewDisplay
 		acceleration = new Point();
 		drag = new Point();
 		maxVelocity = new Point(10000, 10000);
+		onWall = false;
 	}
 	
 	override private function onDispose():Void

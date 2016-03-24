@@ -1,4 +1,5 @@
 package com.metal.manager;
+import com.haxepunk.utils.Input;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
@@ -21,6 +22,7 @@ import com.metal.ui.news.NewsCmd;
 import com.metal.ui.noviceGuide.NoviceCourseCmd;
 import com.metal.ui.popup.ResurrectionCmd;
 import com.metal.ui.popup.StopGame;
+import com.metal.ui.popup.TipCmd;
 import com.metal.ui.reward.RewardCmd;
 import com.metal.ui.skill.SkillCmd;
 import com.metal.ui.task.TaskCmd;
@@ -31,8 +33,10 @@ import com.metal.utils.effect.Animator;
 import com.metal.utils.effect.component.EffectType;
 import de.polygonal.core.es.Entity;
 import de.polygonal.core.sys.SimEntity;
+import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.display.Stage;
+import openfl.system.System;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Floating;
 
@@ -107,6 +111,9 @@ class UIManager extends SimEntity
         UIBuilder.buildFn('ui/index.xml')().show();
 		addComponent(new LoginRegistCmd());
 		addComponent(new DialogueCmd());
+		#if android
+		Input.onAndroidBack = onAndroidBack;
+		#end
 	}
 	override function onMsg(type:Int, sender:Entity) 
 	{
@@ -371,8 +378,21 @@ class UIManager extends SimEntity
 		newbie.show();
 	}
 	
-	private function onPopup()
-	{
-		
+	private function onAndroidBack(){
+		cmd_Tips( { type:TipsType.tipPopup, msg:"是否退出游戏" } );
+		var tipCmd:TipCmd = new TipCmd();
+		addComponent(tipCmd);
+		tipCmd.callbackFun.addOnce(exitApp);
 	}
+	private function exitApp(e:Bool)
+	{
+		if (e)
+			System.exit(0);
+	}
+	
+	override function onTick(dt:Float, post:Bool):Void 
+	{
+		super.onTick(dt, post);
+	}
+	
 }

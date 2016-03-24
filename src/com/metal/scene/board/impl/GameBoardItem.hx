@@ -93,7 +93,7 @@ class GameBoardItem extends Component implements IBoardItem
 	}
 	
 	function initItemType(type:Int):Void {
-		if (!isInBoard()) throw "is in gameboard list";
+		if (!isInBoard()) throw "not in gameboard list";
 		_itemType = type;
 	}
 }

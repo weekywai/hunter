@@ -45,8 +45,6 @@ class TriggerComponent extends Component
 		_actor = cast PlayerUtils.getPlayer().getComponent(MTActor);
 	}
 	
-	
-	
 	override function onDispose():Void 
 	{
 		super.onDispose();
@@ -97,7 +95,6 @@ class TriggerComponent extends Component
 						var id = _info.custom.resolve("id");
 						var enemies = AppearManager.instance.getProto(Std.parseInt(id)).enemies.copy();
 						var obj = { "monsters":enemies, "groupId": id};
-						//addMonsterInEnemies(obj.monsters);
 						notify(MsgBoard.BossShow, obj);
 						//TODO 怪物或角色
 						//PlayerUtils.getPlayer().notify(MsgInput.SetInputEnable, true);
@@ -121,15 +118,13 @@ class TriggerComponent extends Component
 			case TriggerType.ShowCameraMonster:
 				key = _actor.x >= _info.x;
 				if (!key) return;
-				notify(MsgBoard.BindHideEntity, {loop:false, random:false});
-				//cast(owner.getComponent(GameMap), GameMap).cmd_BindHideEntity(false,false);				
+				notify(MsgBoard.BindHideEntity, {loop:false, random:false});			
 				dispose();
 				
 			case TriggerType.ShowRandomMonster:
 				key = _actor.x >= _info.x;
 				if (!key) return;
-				notify(MsgBoard.BindHideEntity, {loop:true, random:true});
-				//cast(owner.getComponent(GameMap), GameMap).cmd_BindHideEntity(true,true);				
+				notify(MsgBoard.BindHideEntity, {loop:true, random:true});			
 				dispose();
 				
 			case TriggerType.Lock:
@@ -251,17 +246,6 @@ class TriggerComponent extends Component
 		if (type == TriggerType.ClearUnLock){
 			_info.arrInfo = _info.arrInfo.concat(userData);
 			trace("add lock: "+_info.arrInfo.length);
-		}
-	}
-	
-	/**把添加的怪物组id塞到怪物列表中
-	 * 用于判断是否杀光当前地图所有怪物过关
-	 * **/
-	public function addMonsterInEnemies(arr:Array<Int>):Void
-	{
-		var battle = owner.getComponent(BattleResolver);
-		for (id in arr) {
-			battle._gameMap.enemies.push(id);
 		}
 	}
 }

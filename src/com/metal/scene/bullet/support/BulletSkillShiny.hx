@@ -9,6 +9,7 @@ import com.metal.config.ResPath;
 import com.metal.config.UnitModelType;
 import com.metal.message.MsgEffect;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.GameBoard;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletComponent;
@@ -50,8 +51,9 @@ class BulletSkillShiny extends BulletEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		xmlBullet();
 	}
 	

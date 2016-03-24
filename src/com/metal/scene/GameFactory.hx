@@ -18,11 +18,6 @@ import com.metal.proto.manager.SkillManager;
 import com.metal.unit.actor.control.PlayerControl;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.actor.view.boss.ViewBoss1;
-import com.metal.unit.actor.view.boss.ViewBoss2;
-import com.metal.unit.actor.view.boss.ViewBoss3;
-import com.metal.unit.actor.view.boss.ViewBoss4;
-import com.metal.unit.actor.view.boss.ViewBoss5;
 import com.metal.unit.actor.view.ViewBoss;
 import com.metal.unit.actor.view.ViewDropItem;
 import com.metal.unit.actor.view.ViewElite;
@@ -34,6 +29,11 @@ import com.metal.unit.actor.view.ViewPlayer;
 import com.metal.unit.actor.view.ViewRoobet;
 import com.metal.unit.actor.view.ViewTank;
 import com.metal.unit.actor.view.ViewVehicle;
+import com.metal.unit.actor.view.boss.ViewBoss1;
+import com.metal.unit.actor.view.boss.ViewBoss2;
+import com.metal.unit.actor.view.boss.ViewBoss3;
+import com.metal.unit.actor.view.boss.ViewBoss4;
+import com.metal.unit.actor.view.boss.ViewBoss5;
 import com.metal.unit.ai.MonsterAI;
 import com.metal.unit.ai.PlayerAI;
 import com.metal.unit.stat.UnitStat;
@@ -82,16 +82,19 @@ class GameFactory extends Component
 	{
 		var entity:SimEntity = cerateEntity(type);
 		var player:PlayerInfo = _playerManager.playerInfo;
-		if(type == UnitModelType.Vehicle){
-			player.vehicle = id;
-			entity.addComponent(new ViewVehicle());
-		}else {
-			entity.addComponent(new ViewPlayer());
-		}
 		entity.addComponent(new MTActor());
 		entity.addComponent(new PlayerControl());
 		entity.addComponent(new PlayerAI(0));
 		entity.addComponent(new PlayerStat());
+		//entity.addComponent(new WeaponController());
+		var view:Dynamic = null;
+		if(type == UnitModelType.Vehicle){
+			player.vehicle = id;
+			createView(entity, 10);
+		}else {
+			createView(entity, 9);
+		}
+		//last add recieve update first
 		entity.addComponent(new WeaponController());
 		return entity;
 	}
@@ -121,14 +124,18 @@ class GameFactory extends Component
 			entity.addProperty(skill);
 			entity.addComponent(new MonsterAI(id));
 		}
-		var modelType:Int = monster.ModelType;
 		//trace("modelType " + modelType);
-		createView(entity, modelType);
+		createView(entity, monster.ModelType);
 		entity.addComponent(new UnitActor());
 		entity.addComponent(new UnitStat());
 		return entity;
 	}
-	
+	/**
+	 * drop item
+	 * @param	type
+	 * @param	id
+	 * @return
+	 */
 	private function createItemUnit(type:String, id:Int):SimEntity 
 	{
 		var entity:SimEntity = cerateEntity(type);
@@ -136,7 +143,7 @@ class GameFactory extends Component
 		if(item==null)
 			trace(id+""+GoodsProtoManager.instance.getItemById(id));
 		entity.addProperty(cast(item, ItemBaseInfo));
-		entity.addComponent(new ViewDropItem());
+		createView(entity, 0);
 		entity.addComponent(new UnitActor());
 		return entity;
 	}
@@ -145,7 +152,7 @@ class GameFactory extends Component
 	{
 		var entity:SimEntity = cerateEntity(type);
 		entity.addProperty(MonsterManager.instance.getInfo(id));
-		entity.addComponent(new ViewNPC());
+		createView(entity, 8);
 		entity.addComponent(new UnitActor());
 		return entity;
 	}
@@ -158,20 +165,32 @@ class GameFactory extends Component
 	
 	private function createView(entity:SimEntity, modelType:Int):Void
 	{
+		var view:Dynamic = null;
+		
 		switch(modelType) {
-			case 1: entity.addComponent(new ViewMonster());
-			case 2: entity.addComponent(new ViewRoobet());
-			case 3: entity.addComponent(new ViewTank());//坦克  精英
-			case 4: entity.addComponent(new ViewMachine());
-			case 5: entity.addComponent(new ViewItem());
-			case 6: entity.addComponent(new ViewBoss());//四脚蜘蛛  精英
-			case 7: entity.addComponent(new ViewElite());//机械  精英
-			case 11: entity.addComponent(new ViewBoss1());//武装飞机boss
-			case 12: entity.addComponent(new ViewBoss2());//双脚boss
-			case 13: entity.addComponent(new ViewBoss3());//站桩boss
-			case 14: entity.addComponent(new ViewBoss4());//直升飞机boss
-			case 15: entity.addComponent(new ViewBoss5());//有轮boss
+			case 0: view = new ViewDropItem();//掉落物品
+			
+			case 1: view = new ViewMonster();
+			case 2: view = new ViewRoobet();
+			case 3: view = new ViewTank();//坦克  精英
+			case 4: view = new ViewMachine();
+			case 5: view = new ViewItem();
+			case 6: view = new ViewBoss();//四脚蜘蛛  精英
+			case 7: view = new ViewElite();//机械  精英
+			
+			case 8: view = new ViewNPC();//NPC 宝箱
+			case 9: view = new ViewPlayer(); //普通主角
+			case 10: view = new ViewVehicle();//骑乘主角
+			
+			
+			case 11: view = new ViewBoss1();//武装飞机boss
+			case 12: view = new ViewBoss2();//双脚boss
+			case 13: view = new ViewBoss3();//站桩boss
+			case 14: view = new ViewBoss4();//直升飞机boss
+			case 15: view = new ViewBoss5();//有轮boss
 			//case 9: entity.addComponent(new ViewBoss2());
 		}
+		entity.attach(view);
+		view.init(entity);
 	}
 }

@@ -384,16 +384,15 @@ class GameMap extends Component
 			}
 			
 			//trace(ResourceManager.PreLoad+">>"+data.id);
-			if(ResourceManager.PreLoad){
-				var avater:MTAvatar = HXP.scene.create(MTAvatar, true);
-				avater.type = data.type;
-				avater.preload(modelInfo);
-				avater.active = false;
-				avater.visible = false;
-				ResourceManager.instance.addEntity(modelInfo.res, avater);
-			}else {
+			//if(ResourceManager.PreLoad){
+				//var avater:MTAvatar = HXP.scene.create(MTAvatar, true);
+				//avater.type = data.type;
+				//avater.preload(modelInfo);
+				//avater.active = false;
+				//avater.visible = false;
+			//}else {
 				SpinePunk.readSkeletonData("model", ResPath.getModelRoot(modelType, modelInfo.res));
-			}
+			//}
 		}
 	}
 	

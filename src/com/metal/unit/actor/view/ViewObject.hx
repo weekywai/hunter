@@ -1,18 +1,20 @@
-package com.metal.unit.avatar;
+package com.metal.unit.actor.view;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
+import com.metal.unit.avatar.AttachTexture;
 
 /**
  * ...
- * @author 3D
+ * @author weeky
  */
-class TexAvatar extends MTAvatar
+class ViewObject extends ViewBase
 {
-	public function new(x:Float=0, y:Float=0) 
+
+	public function new() 
 	{
-		super(x, y);
+		super();
+		
 	}
-	
 	override public function update():Void {
 		//setHitboxTo(_model);
 		if(_model!=null)
@@ -26,16 +28,17 @@ class TexAvatar extends MTAvatar
 		model = new AttachTexture(eff);
 		model.initAttach(onComplete);
 		addGraphic(model);
-		//_model.play("box");
 		
 		setHitbox(Std.int(model.width *0.5), model.height , Std.int(model.width / 4), Std.int(model.height / 2));
 		return model;
 	}
+	
 	private function onComplete(obj):Void
 	{
 		//recycle();
 		//scene.remove(this);
 	}
+	
 	override private function initTexture():Void
 	{
 		_model = createAvatar(_info.res, "unit");
@@ -43,13 +46,7 @@ class TexAvatar extends MTAvatar
 	
 	override private function set_flip(value:Bool):Bool
 	{
-		_model.flip = value;
-		return value;
-	}
-	
-	override public function setCallback(fun:Dynamic) 
-	{
-		//super.setCallback(fun);
+		return _model.flip = value;
 	}
 	
 	public function setFrameIndex(index:Int):Void

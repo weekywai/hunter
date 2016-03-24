@@ -1,12 +1,11 @@
 package com.metal.unit.actor.view;
 import com.metal.enums.Direction;
+import com.metal.message.MsgActor;
 import com.metal.message.MsgBullet;
 import com.metal.proto.manager.BulletManager;
 import com.metal.proto.manager.SkillManager;
-import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.ActorState.ActionType;
-import com.metal.unit.ai.MonsterAI;
 import spinehaxe.Bone;
 import spinehaxe.Event;
 
@@ -32,13 +31,12 @@ class ViewTank extends ViewEnemy
 		_gunBone3 = null;
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
-		
-		_gunBone1 = _avatar.getBone("muzzle_1");
-		_gunBone2 = _avatar.getBone("muzzle_2");
-		_gunBone3 = _avatar.getBone("muzzle_3");
+		super.Notify_PostBoot(userData);
+		_gunBone1 = getBone("muzzle_1");
+		_gunBone2 = getBone("muzzle_2");
+		_gunBone3 = getBone("muzzle_3");
 		
 	}
 	
@@ -76,56 +74,56 @@ class ViewTank extends ViewEnemy
 				default: action1 = ActionType.attack_1;
 			}
 			//trace(_info.Skill[_skillType]);
-			if (_info.Skill[_skillType] == -1)
+			if (_mInfo.Skill[_skillType] == -1)
 				action1 = ActionType.attack_1;
 		}
 		else
 		{
 			action1 = action;
 		}
-		_avatar.setDirAction(Std.string(action1), Direction.NONE);
+		setDirAction(Std.string(action1), Direction.NONE);
 	}
 	
 	override function onEventCallback(value:Int, event:Event):Void
 	{
 		if ( event.data.name == "attack_1") 
 		{
-			//trace(_avatar.getScale());
-			var bulletX = _avatar.x + _gunBone1.worldX *(_avatar.getScale()-0.1);
-			var bulletY = _avatar.y + _gunBone1.worldY * (_avatar.getScale() - 0.1);
+			//trace(getScale());
+			var bulletX = x + _gunBone1.worldX *(getScale()-0.1);
+			var bulletY = y + _gunBone1.worldY * (getScale() - 0.1);
 			//需要检测方向
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;
 			_bulletReq.targetX = _player.x;
 			_bulletReq.targetY = _player.y;
 			_bulletReq.bulletAngle = _gunBone1.worldRotation;
-			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[0]).BulletID);
+			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_mInfo.Skill[0]).BulletID);
 			//notifyParent(MsgBullet.Create, _bulletReq);
 			notifyParent(MsgBullet.Create, _bulletReq);
 		}else if (event.data.name == "attack_2")
 		{
-			var bulletX = _avatar.x + _gunBone2.worldX;
-			var bulletY = _avatar.y + _gunBone2.worldY;
+			var bulletX = x + _gunBone2.worldX;
+			var bulletY = y + _gunBone2.worldY;
 			//需要检测方向
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;
 			_bulletReq.targetX = _player.x;
 			_bulletReq.targetY = _player.y;
 			_bulletReq.bulletAngle = _gunBone2.worldRotation;
-			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[1]).BulletID);
+			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_mInfo.Skill[1]).BulletID);
 			//notifyParent(MsgBullet.Create, _bulletReq);
 			notifyParent(MsgBullet.Create, _bulletReq);
 		}else if (event.data.name == "attack_3")
 		{
-			var bulletX = _avatar.x + _gunBone3.worldX;
-			var bulletY = _avatar.y + _gunBone3.worldY;
+			var bulletX = x + _gunBone3.worldX;
+			var bulletY = y + _gunBone3.worldY;
 			//需要检测方向
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;
 			_bulletReq.targetX = _player.x;
 			_bulletReq.targetY = _player.y;
 			_bulletReq.bulletAngle = _gunBone3.worldRotation;
-			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_info.Skill[2]).BulletID);
+			_bulletReq.info = BulletManager.instance.getInfo(SkillManager.instance.getInfo(_mInfo.Skill[2]).BulletID);
 			//notifyParent(MsgBullet.Create, _bulletReq);
 			notifyParent(MsgBullet.Create, _bulletReq);
 		}
@@ -136,7 +134,7 @@ class ViewTank extends ViewEnemy
 		var v:String = cast(value, String);
 		if (v == "attack_1" || v == "attack_2" || v == "attack_3")
 		{
-			cast(owner.getComponent(MonsterAI), MonsterAI).setAttackStatus(true);
+			notify(MsgActor.AttackStatus, true);
 		}
 		
 	}
@@ -146,7 +144,7 @@ class ViewTank extends ViewEnemy
 		//trace("on complete "  + value);
 		if (value == "attack_1" || value == "attack_2" || value == "attack_3")
 		{
-			cast(owner.getComponent(MonsterAI), MonsterAI).setAttackStatus(false);
+			notify(MsgActor.AttackStatus, false);
 		}
 	}
 }

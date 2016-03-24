@@ -1,22 +1,22 @@
 package com.metal.scene.bullet.support;
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.TextrueSpritemap;
-import com.haxepunk.HXP;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.Direction;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
-import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.BaseActor;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import openfl.geom.Point;
 /**
  * 主角手雷
@@ -51,8 +51,9 @@ class BulletGrenade extends BulletEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		_collides = [];
 		//_bulletGraphic = new Image(ResPath.getBulletRes(info.img));
 		var atlas:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
@@ -138,7 +139,7 @@ class BulletGrenade extends BulletEntity
 			{
 				if(e.type != "solid")
 				{
-					var avatar:MTAvatar = cast(e, MTAvatar);
+					var avatar:ViewDisplay = cast(e, ViewDisplay);
 					var hit = new BulletHitInfo();
 					hit.target = avatar.owner;
 					hit.atk = _hitInfo.atk;

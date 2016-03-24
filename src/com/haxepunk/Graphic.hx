@@ -123,7 +123,10 @@ class Graphic
 	 * If we can blit the graphic or not (flash/html5)
 	 */
 	public var blit(default, null):Bool;
-
+	/*
+	 * ObjectPool unique id
+	 */
+	public var poolId:Int =-1;
 	/**
 	 * Constructor.
 	 */

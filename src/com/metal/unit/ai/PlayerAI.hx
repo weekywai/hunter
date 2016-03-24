@@ -79,8 +79,6 @@ class PlayerAI extends BaseAiControl
 				cmd_PostLoad(userData);
 			case MsgActor.Respawn:
 				cmd_Revive(userData);
-			case MsgActor.Reborn:
-				cmd_Revive(userData);
 			case MsgActor.Victory:
 				cmd_Victory(userData);
 			//case MsgInput.HoldFire:

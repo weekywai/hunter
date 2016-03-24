@@ -1,4 +1,5 @@
 package com.metal.ui.main;
+import com.haxepunk.utils.Input;
 import com.metal.component.GameSchedual;
 import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
@@ -96,19 +97,10 @@ class TopViewCmd extends BaseCmd
 	private function initUI():Void
 	{
 		SfxManager.playBMG(BGMType.b001);
-		//_widget.getChildAs("backBtn", Button);
 		
 		//返回
-		_widget.getChildAs("leftBtn", Button).onPress = function(e)
-			{ 
-				SfxManager.getAudio(AudioType.Btn).play();
-				if (mainStack.numChildren > 0)
-				mainStack.clear();
-				latestFlag = false;
-				UpdataReturnBtn(true);
-				//notifyRoot(MsgView.NewBie, 17);
-				notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText27);
-			}
+		_widget.getChildAs("leftBtn", Button).onPress = onBackBtn;
+			
 		//时装	
 		_widget.getChildAs("rightBtn", Button).onPress = function(e)
 			{
@@ -141,6 +133,15 @@ class TopViewCmd extends BaseCmd
 			if (!Lambda.has(newbieList, NoviceOpenType.NoviceText5))
 				_widget.getChildAs("hintBtn", Button).visible = true;
 		}
+	}
+	private function onBackBtn(e)
+	{ 
+		SfxManager.getAudio(AudioType.Btn).play();
+		if (mainStack.numChildren > 0)
+			mainStack.clear();
+		latestFlag = false;
+		UpdataReturnBtn(true);
+		notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText27);
 	}
 	/**是否显示时装按钮*/
 	private function UpdataReturnBtn(data:Dynamic):Void

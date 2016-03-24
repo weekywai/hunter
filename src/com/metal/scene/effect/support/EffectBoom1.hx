@@ -41,7 +41,7 @@ class EffectBoom1 extends EffectEntity
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z016.xml");
 		var eff1:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z014.xml");
 		
-		var scale = req.attacker.getScale();
+		//var scale = req.attacker.getScale();
 		boomEffectArray = new Array();
 		var num = Math.floor((Math.random() * 2 + 2));
 		for (i in 0...8)
@@ -52,7 +52,8 @@ class EffectBoom1 extends EffectEntity
 			boomEffect2.visible = false;
 			boomEffect2.centerOrigin();
 			addGraphic(boomEffect2);
-			boomEffect2.scale = (Math.random() * 1 + scale);
+			boomEffect2.scale = (Math.random() * 1 + 1);
+			//boomEffect2.scale = (Math.random() * 1 + scale);
 			boomEffect2.flipped = (Math.random() <= 0.5) ? true : false;
 			boomEffect2.x = Math.random() * req.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
 			boomEffect2.y = Math.random() * req.height * 0.7;// - boomEffect2.scaledHeight / 2;

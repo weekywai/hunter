@@ -46,22 +46,22 @@ class ViewMachine extends ViewEnemy
 	{
 		//trace("Notify_Destorying");
 		super.Notify_Destorying(userData);
-		if (_info.isBoom) {
+		if (_mInfo.isBoom) {
 			//通知处理爆炸
 			var vo:EffectRequest = new EffectRequest();
-			vo.setInfo(_avatar, _info.boomType+4);
+			vo.setInfo(this, _mInfo.boomType+4);
 			notifyParent(MsgEffect.Create, vo);
 		}
-		//_avatar.type = "npc";
+		//type = "npc";
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
-		_frontArmBone = _avatar.getBone("gun_1");
-		_gunBone = _avatar.getBone("muzzle_1");
+		super.Notify_PostBoot(userData);
+		_frontArmBone = getBone("gun_1");
+		_gunBone = getBone("muzzle_1");
 		originRarmRo = _frontArmBone.rotation;
-		//originRarmRo = _avatar.getBoneData("gun_1").rotation;
+		//originRarmRo = getBoneData("gun_1").rotation;
 		//var skill:SkillInfo = owner.getProperty(SkillInfo);
 		//_bulletReq.info = BulletManager.instance.getInfo(skill.BulletID);
 	}
@@ -74,9 +74,9 @@ class ViewMachine extends ViewEnemy
 		//return;
 		if ( event.data.name == "attack") 
 		{
-			//var gun:Bone =  _avatar.getBone("muzzle_1");
-			var bulletX = _avatar.x + _gunBone.worldX;
-			var bulletY = _avatar.y + _gunBone.worldY;
+			//var gun:Bone =  getBone("muzzle_1");
+			var bulletX = x + _gunBone.worldX;
+			var bulletY = y + _gunBone.worldY;
 			//需要检测方向
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;
@@ -96,16 +96,16 @@ class ViewMachine extends ViewEnemy
 		_timers.shift();
 	}
 	
-	override public function onDraw() 
+	override public function update() 
 	{
-		super.onDraw();
+		super.update();
 		/*if(_attcking)
 		{
 			//D点
 			_targetPos.x = _player.x;
 			_targetPos.y = _player.y;
 			
-			if (_avatar.distanceToPoint(_targetPos.x, _targetPos.y) > 100){
+			if (distanceToPoint(_targetPos.x, _targetPos.y) > 100){
 				//setHeadRotation(_targetPos, _actor.dir);
 				setGunRoatation(_targetPos, _actor.dir);
 			}else {
@@ -130,8 +130,8 @@ class ViewMachine extends ViewEnemy
 		//if (_headBone.worldX !=null && _headBone.worldY!=null)
 		//#end
 		//{
-			//headPos.x = _headBone.worldX + _avatar.x;
-			//headPos.y = _headBone.worldY + _avatar.y;	
+			//headPos.x = _headBone.worldX + x;
+			//headPos.y = _headBone.worldY + y;	
 			//
 			//var len:Point = new Point();
 			//len.x = headPos.x - pos.x;
@@ -146,7 +146,7 @@ class ViewMachine extends ViewEnemy
 				//ro = 180 - angle * (180 / Math.PI);
 			//else if(dir == Direction.LEFT)
 				//ro = angle * (180 / Math.PI);
-			//_avatar.getBoneData("head").rotation = ro;
+			//getBoneData("head").rotation = ro;
 		//}
 	//}
 	
@@ -154,13 +154,13 @@ class ViewMachine extends ViewEnemy
 	{
 		//C点
 		var gunPos:Point = new Point();
-		gunPos.x = _gunBone.worldX + _avatar.x;
-		gunPos.y = _gunBone.worldY + _avatar.y;	
+		gunPos.x = _gunBone.worldX + x;
+		gunPos.y = _gunBone.worldY + y;	
 		
 		//A点
 		var armPos:Point = new Point();
-		armPos.x = _frontArmBone.worldX + _avatar.x;
-		armPos.y = _frontArmBone.worldY + _avatar.y;
+		armPos.x = _frontArmBone.worldX + x;
+		armPos.y = _frontArmBone.worldY + y;
 			
 		//AD距离
 		var rAD:Float = Math.sqrt((mousePos.x - armPos.x) * (mousePos.x - armPos.x) + (mousePos.y - armPos.y) * (mousePos.y - armPos.y));
@@ -191,14 +191,14 @@ class ViewMachine extends ViewEnemy
 		if(mousePos.y < armPos.y - r)
 		{
 			angle = b - c;
-			_avatar.getBoneData("gun_1").rotation = originRarmRo + angle;
-			//_avatar.getBoneData("gun_1").rotation = originLarmRo + angle;	
+			getBoneData("gun_1").rotation = originRarmRo + angle;
+			//getBoneData("gun_1").rotation = originLarmRo + angle;	
 		}
 		else
 		{
 			angle = c - b;
-			_avatar.getBoneData("gun_1").rotation = originRarmRo - angle;
-			//_avatar.getBoneData("gun_1").rotation = originLarmRo - angle;
+			getBoneData("gun_1").rotation = originRarmRo - angle;
+			//getBoneData("gun_1").rotation = originLarmRo - angle;
 		}
 	}
 	override private function onStartCallback(i:Int, value:String):Void

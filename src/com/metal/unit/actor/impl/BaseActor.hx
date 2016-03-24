@@ -1,7 +1,6 @@
 package com.metal.unit.actor.impl;
 import com.haxepunk.Entity;
 import com.haxepunk.HXP;
-import com.haxepunk.math.Vector;
 import com.metal.config.UnitModelType;
 import com.metal.fsm.FState;
 import com.metal.fsm.FStateMachine;
@@ -12,13 +11,12 @@ import com.metal.scene.board.impl.GameBoardItem;
 import com.metal.scene.board.impl.GameMap;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.IActor;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.actor.view.ViewBase;
 import com.metal.unit.stat.IStat;
 import de.polygonal.core.es.EntityUtil;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.MsgCore;
 import openfl.geom.Point;
-import pgr.dconsole.DC;
 using com.metal.enums.Direction;
 /**
  * 基础角色
@@ -49,7 +47,7 @@ class BaseActor extends GameBoardItem implements IActor
 	private var _doublejump:Bool;
 	
 	private var _collides:Array<String> = [UnitModelType.Solid, UnitModelType.Block];
-	private var _model:Entity;
+	private var _model:ViewBase;
 	
 	private var _fsm:FStateMachine;
 	private var _state:FState;
@@ -83,13 +81,13 @@ class BaseActor extends GameBoardItem implements IActor
 		{
 			if (!isNeedLeftFlip)
 				return _dir;
-			cast(_model, MTAvatar).flip = true;
+			_model.flip = true;
 		}
 		else if (value == Direction.RIGHT)
 		{
 			if (!isNeedRightFlip)
 				return _dir;
-			cast(_model, MTAvatar).flip = false;
+			_model.flip = false;
 		}
 		return _dir; 
 	}
@@ -172,10 +170,6 @@ class BaseActor extends GameBoardItem implements IActor
 			case MsgActor.Soul:
 				Notify_Soul(userData);
 			case MsgActor.Respawn:
-				//trace("Respawn");
-				Notify_Respawn(userData);
-			case MsgActor.Reborn:
-				trace("reborn");
 				Notify_Respawn(userData);
 			case MsgActor.Victory:
 				Notify_Victory(userData);
@@ -208,10 +202,7 @@ class BaseActor extends GameBoardItem implements IActor
 	private function cmd_PostLoad(userData:Dynamic):Void
 	{
 		_model = userData;
-		var avatar = cast(_model, MTAvatar);
-		if(avatar!=null)
-			avatar.setCallback(onComplete);
-		
+		_model.setCallback(onComplete);
 	}
 	
 	public var isGrounded (default, default):Bool;
@@ -447,7 +438,7 @@ class BaseActor extends GameBoardItem implements IActor
 		}
 		//trace(name);
 		if (name == Std.string(ActionType.dead_1)) {
-			//trace("destory");
+			trace("destory");
 			notify(MsgActor.Destroy);
 		}
 	}

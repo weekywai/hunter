@@ -18,8 +18,6 @@ class GameBoard extends Component
 {
 	public var units(default, null):List<SimEntity>;
 	private var _startAI:Bool;
-	// 类型缓冲 u:UnitType  v:Faction
-	//private var _typeCache:DLL<Dynamic>; // Type, Faction
 	
 	public function new() 
 	{
@@ -90,7 +88,7 @@ class GameBoard extends Component
 		item.free();
 	}
 	
-	public function addUnitEntity(item:SimEntity):Bool {
+	private function addUnitEntity(item:SimEntity):Bool {
 		if (isDisposed) 
 			return false;
 		

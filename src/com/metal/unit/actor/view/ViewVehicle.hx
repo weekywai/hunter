@@ -1,6 +1,6 @@
 package com.metal.unit.actor.view;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.haxepunk.graphics.TextrueSpritemap;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.EffectEnum.EffectAniType;
@@ -12,20 +12,20 @@ import com.metal.unit.weapon.impl.BaseWeapon;
 import com.metal.unit.weapon.impl.WeaponController;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
 import openfl.geom.Point;
-import spinehaxe.animation.Animation;
 import spinehaxe.Bone;
+import spinehaxe.animation.Animation;
 
 using com.metal.enums.Direction;
 /**
  * ...
  * @author weeky
  */
-class ViewVehicle extends BaseViewActor
+class ViewVehicle extends ViewActor
 {
 	private var _gunBone:Bone;
+	private var _weapon:BaseWeapon;
 	private var originRotation:Float;
 	private var r:Float = 0;
-	private var _weapon:BaseWeapon;
 	private var _attackAnimation:Animation;
 	
 	public function new() 
@@ -33,33 +33,33 @@ class ViewVehicle extends BaseViewActor
 		super();
 	}
 	
-	override function onInitComponent():Void 
+	override function onInit():Void 
 	{
-		super.onInitComponent();
+		super.onInit();
 		_actor = owner.getComponent(MTActor);
 		_stat = owner.getComponent(PlayerStat);
 	}
 	override public function onDispose():Void 
 	{
-		_gunBone = null;
 		_weapon = null;
+		_gunBone = null;
 		super.onDispose();
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
-		_gunBone = _avatar.getBone("paoguan");
+		super.Notify_PostBoot(userData);
+		_gunBone = getBone("paoguan");
 		originRotation = _gunBone.data.rotation;
-		_avatar.animationState().onStart.add(onStartCallback);
-		_avatar.animationState().onComplete.add(onCompleteCallback);
+		animationState().onStart.add(onStartCallback);
+		animationState().onComplete.add(onCompleteCallback);
 		_actor.isNeedLeftFlip = false;
 		var weaponContorl:WeaponController = owner.getComponent(WeaponController);
 		_weapon = weaponContorl.getWeapon(WeaponType.Shoot);
 		//Notify_EffectStart("z006");
 		//attack animation
-		_attackAnimation = _avatar.getAnimation(Std.string(ActionType.attack_1));
-		//_avatar.setAttachMent("gun_1", "gun_1");
+		_attackAnimation = getAnimation(Std.string(ActionType.attack_1));
+		//setAttachMent("gun_1", "gun_1");
 	}
 	override function Notify_EffectStart(userData:Dynamic):Void
 	{
@@ -89,13 +89,13 @@ class ViewVehicle extends BaseViewActor
 		}
 		SfxManager.getAudio(AudioType.Buff).play();
 		effect.play("runLight");
-		_avatar.addGraphic(effect);
+		addGraphic(effect);
 		_effList.set(userData, effect);
 	}
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		super.Notify_Destorying(userData);
-		_avatar.animationState().clearTrack(1);
+		animationState().clearTrack(1);
 	}
 	override function Notify_Soul(userData:Dynamic):Void 
 	{
@@ -138,9 +138,9 @@ class ViewVehicle extends BaseViewActor
 		Notify_EffectEnd("Z006");
 	}
 	
-	override public function onDraw() 
+	override public function update() 
 	{
-		super.onDraw();
+		super.update();
 		if( _actor.stateID == ActorState.Victory)
 			return;
 		if(_actor.stateID == ActorState.Destroying)
@@ -175,14 +175,14 @@ class ViewVehicle extends BaseViewActor
 		if (_attackAnimation == null)
 			return;
 		//setAnimation(1)原有上动作添加多一个
-		_avatar.animationState().setAnimation(1, _attackAnimation, false);
+		animationState().setAnimation(1, _attackAnimation, false);
 		_attcking = true;
 		trace("viewVehicle fire");
 	}
 	
 	override function Notify_Respawn(userData:Dynamic):Void 
 	{
-		_avatar.type = owner.name;
+		type = owner.name;
 	}
 	
 	private function onStartCallback(i:Int, value:String):Void
@@ -207,8 +207,8 @@ class ViewVehicle extends BaseViewActor
 		if (_gunBone.worldX !=null && _gunBone.worldY!=null)
 		#end
 		{
-			armPos.x = _gunBone.worldX * _modelInfo.scale + _avatar.x;
-			armPos.y = _gunBone.worldY * _modelInfo.scale + _avatar.y;	
+			armPos.x = _gunBone.worldX * _info.scale + x;
+			armPos.y = _gunBone.worldY * _info.scale + y;	
 		}
 		var angle:Float;
 		if (mousePos.y == armPos.y)

@@ -82,6 +82,7 @@ class WeaponController extends Component
 	}
 	private function cmd_PostBoot():Void
 	{
+		//trace("cmd_PostBoot");
 		var skillInfo = getSkill();
 		var playerInfo = PlayerUtils.getInfo();
 		createWeapon(WeaponType.Shoot, skillInfo);

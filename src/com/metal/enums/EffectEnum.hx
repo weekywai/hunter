@@ -13,9 +13,9 @@ class EffectAniType {
 	inline public static var Skeleton = 3;
 	/**纯图片动画**/
 	inline public static var ImageMoive = 4;
-	/**爆炸类型1**/
+	/**原地爆炸类型1**/
 	inline public static var Boom1 = 5;
-	
+	/**跟随爆炸类型**/
 	inline public static var Boom2 = 6;
 	/**文字特效*/
 	inline public static var Text = 7;

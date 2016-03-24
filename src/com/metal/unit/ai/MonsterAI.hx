@@ -2,6 +2,7 @@ package com.metal.unit.ai;
 import com.haxepunk.HXP;
 import com.metal.component.GameSchedual;
 import com.metal.enums.Direction;
+import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.proto.impl.MonsterInfo;
 import com.metal.proto.impl.SkillInfo;
@@ -16,6 +17,7 @@ import com.metal.unit.bevtree.data.MonsterInputData;
 import com.metal.unit.bevtree.data.MonsterOutputData;
 import com.metal.unit.stat.IStat;
 import com.metal.unit.stat.UnitStat;
+import de.polygonal.core.event.IObservable;
 import openfl.geom.Point;
 
 /**
@@ -51,7 +53,14 @@ class MonsterAI extends BaseAiControl
 		_actor = owner.getComponent(UnitActor);
 		
 	}
-	
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
+	{
+		super.onUpdate(type, source, userData);
+		switch(type) {
+			case MsgActor.AttackStatus:
+				cmd_AttackStatus(userData);
+		}
+	}
 	override function cmd_enterBoard():Void 
 	{
 		var gs:GameSchedual = GameProcess.root.getComponent(GameSchedual);
@@ -215,7 +224,7 @@ class MonsterAI extends BaseAiControl
 		_selfStat = null;
 	}
 	
-	public function setAttackStatus(value:Bool):Void
+	function cmd_AttackStatus(value:Dynamic):Void
 	{
 		//trace("setAttackStatus: "+value);
 		_monsterInputData.isOnAttackStatus = value;

@@ -1,7 +1,5 @@
 package com.metal.scene.effect.api;
-import com.metal.proto.impl.EffectInfo;
-import com.metal.unit.avatar.MTAvatar;
-import de.polygonal.core.sys.SimEntity;
+import com.metal.unit.render.ViewDisplay;
 
 /**
  * 特效请求，注意:此类是重用类，接受者绝不驻留此类，需将此类的参数复制出来。
@@ -13,7 +11,7 @@ class EffectRequest
 	/**攻击类型ID*/
 	public var attackType:String;
 	
-	public var attacker:MTAvatar;
+	public var attacker:ViewDisplay;
 	
 	/**起始位置*/
 	public var x:Float = 0;
@@ -49,11 +47,12 @@ class EffectRequest
 		
 	}
 	
-	public function setInfo(av:MTAvatar,type:Int,renderType:Int=0):Void
+	public function setInfo(av:ViewDisplay,type:Int,renderType:Int=0, isFollow:Bool =false):Void
 	{
 		x = av.x;
 		y = av.y;
-		attacker = av;
+		if(isFollow)
+			attacker = av;
 		width = av.width;
 		height = av.height;
 		boomType = type;

@@ -374,8 +374,6 @@ class PlayerStat extends Component implements IStat
 		_playerInfo.setProperty(PlayerPropType.HP, hpMax);
 		_playerInfo.setProperty(PlayerPropType.MP, mpMax);
 		//只有这里收到复活然后通知其他
-		trace("cmd_Revive");
-		//notify(MsgActor.Reborn);
 		notify(MsgPlayer.ItemSkill, 1411);
 		_holdFire = false;
 		melee = false;

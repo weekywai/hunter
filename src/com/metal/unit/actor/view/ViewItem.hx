@@ -10,6 +10,7 @@ import com.metal.proto.manager.ModelManager;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.impl.UnitActor;
+import com.metal.unit.avatar.AttachTexture;
 import com.metal.unit.avatar.MTAvatar;
 import com.metal.unit.avatar.TexAvatar;
 import de.polygonal.core.event.IObservable;
@@ -18,19 +19,17 @@ import de.polygonal.core.event.IObservable;
  * 角色视图控制
  * @author weeky
  */
-class ViewItem extends BaseViewActor
+class ViewItem extends ViewObject
 {
-	private var _info:MonsterInfo;
 	private var _key:Bool;//判断是否骨骼 or xml
 	public function new() 
 	{
 		super();	
 	}
-	override function onInitComponent():Void 
+	override function onInit():Void 
 	{
-		super.onInitComponent();
+		super.onInit();
 		_actor = owner.getComponent(UnitActor);
-		_info = owner.getProperty(MonsterInfo);
 	}
 	
 	override public function onDispose():Void 
@@ -38,31 +37,31 @@ class ViewItem extends BaseViewActor
 		super.onDispose();
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		//判断加载类型
 		var source:Int = owner.getProperty(MonsterInfo).res;
 		//trace(source);
-		_modelInfo = ModelManager.instance.getProto(source);
-		if (_modelInfo == null)
+		_info = ModelManager.instance.getProto(source);
+		if (_info == null)
 			throw "model info is null";
 		
-		if (_avatar == null) {
+		if (_model == null) {
 			//骨骼 or xml
 			//trace("modelinfo " + _modelInfo);
-			_key = _modelInfo.type == 2;
+			_key = _info.type == 2;
 			//trace("creat type:"+key);
-			if(_key){
-				_avatar = new TexAvatar();
-			}else {
-				_avatar = HXP.scene.create(MTAvatar, false);
-			}
+			//if (_key) {
+				//_model = createAvatar();
+			//}else {
+				//_model = HXP.scene.create(MTAvatar, false);
+			//}
 		}
 		//记录碰撞类型
-		_avatar.init(owner);
+		//_model.init(owner);
 		if(!_key)
-			_avatar.preload(_modelInfo);
-		notify(MsgActor.PostLoad, _avatar);
+			preload();
+		notify(MsgActor.PostLoad, this);
 	}
 	
 	override function setAction(action:ActionType, loop:Bool = true):Void 
@@ -88,25 +87,24 @@ class ViewItem extends BaseViewActor
 	{
 		super.Notify_Destorying(userData);
 		if (!_key) {
-			_avatar.type = "solid";
+			type = "solid";
 			//播放爆炸特效
 			var vo:EffectRequest = new EffectRequest();
-			vo.setInfo(this._avatar, EffectAniType.Boom1);
+			vo.setInfo(this, EffectAniType.Boom1);
 			GameProcess.root.notify(MsgEffect.Create, vo);
 			
 			//停留到死亡后的骨骼 无需循环flase
 			setAction(ActionType.dead_1, false);
-			//_avatar.useHitBox = true;
-			_avatar.originY = Std.int(_avatar.originY * 0.7);
-			_avatar.originX = Std.int(_avatar.originX * 0.7);
-			_avatar.width = Std.int(_avatar.width * 1.3);
-			//_avatar.setHitbox(325, 90, 140, 90);
+			//useHitBox = true;
+			originY = Std.int(originY * 0.7);
+			originX = Std.int(originX * 0.7);
+			width = Std.int(width * 1.3);
+			//setHitbox(325, 90, 140, 90);
 			return;
 		}
 		
 		//trace(" sd destorying");
-		var avatar:TexAvatar = cast(_avatar, TexAvatar);
-		avatar.setFrameIndex(1);
-		avatar.type = "solid";
+		_model.as(AttachTexture).frame = 1;
+		type = "solid";
 	}
 }

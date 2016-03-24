@@ -58,7 +58,7 @@ class GameScene extends Scene implements IObserver
 		var	e:Entity = itr.next();
 		while (e != null)
 		{
-			e.disposed();
+			e.dispose();
 			e = itr.next();
 		}
 	}

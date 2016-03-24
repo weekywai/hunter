@@ -1,20 +1,18 @@
 package com.metal.scene.bullet.support;
 
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.TextrueSpritemap;
-import com.haxepunk.HXP;
-import com.haxepunk.masks.Polygon;
-import com.haxepunk.math.Vector;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
-import com.metal.unit.avatar.MTAvatar;
-import openfl.geom.Point;
+import com.metal.unit.render.ViewDisplay;
 
 /**
  * 喷火
@@ -43,8 +41,9 @@ class BulletFire extends BulletEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		//判断资源类型
 		_count = 0;
 		_angle = 0;
@@ -173,7 +172,7 @@ class BulletFire extends BulletEntity
 		if(collideEntity.type != "solid")
 		{
 			//trace("collideEntity " + collideEntity);
-			var avatar:MTAvatar = cast(collideEntity, MTAvatar);
+			var avatar:ViewDisplay = cast(collideEntity, ViewDisplay);
 			_hitInfo.target = avatar.owner;
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
 			owner.notify(MsgItr.BulletHit, _hitInfo);

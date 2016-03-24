@@ -36,7 +36,6 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override public function removed():Void 
 	{
-		owner = null;
 		info = null;
 		super.removed();
 	}
@@ -46,10 +45,7 @@ class EffectEntity extends ViewDisplay implements IEffect
 		_offset = false;
 		super.init(body);
 	}
-	/**继承*/
-	private function onInit():Void {
-		//override 
-	}
+	
 	public function start(req:EffectRequest):Void 
 	{
 		info = EffectManager.instance.getProto(req.Key);
