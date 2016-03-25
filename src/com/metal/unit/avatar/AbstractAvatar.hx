@@ -28,10 +28,6 @@ class AbstractAvatar extends ViewDisplay
 	private var _recolor:Int;
 	private var _colorT:ColorTween;
 	
-	public var res(get, null):String;
-	private function get_res():String {
-		return _info.res;
-	}
 	
 	public function new(x:Float=0, y:Float=0, graphic:Graphic=null, mask:Mask=null) 
 	{

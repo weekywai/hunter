@@ -31,15 +31,18 @@ class EffectTexture extends EffectEntity
 		super.onDispose();
 	}
 	
-	
-	override public function start(req:EffectRequest):Void 
+	override function onStart(req:EffectRequest):Void 
 	{
-		super.start(req);
-		//init
-		_effAtlas= TextureAtlasFix.loadTexture(ResPath.getEffectRes(info.res, info.type));
-		_effect = new TextrueSpritemap(_effAtlas);
-		_effect.add("blast", _effAtlas.getReginCount(), info.speed);
-		_effect.animationEnd.add(onComplete);
+		_effAtlas = TextureAtlasFix.loadTexture(ResPath.getEffectRes(info.res, info.type));
+		if(_effect==null){
+			_effect = new TextrueSpritemap(_effAtlas);
+			_effect.add("blast", _effAtlas.getReginCount(), info.speed);
+			_effect.animationEnd.add(onComplete);
+		} else {
+			_effect.resetTexture(_effAtlas, onComplete);
+			_effect.add("blast", _effAtlas.getReginCount(), info.speed);
+		}
+		
 		
 		if (_effAtlas.ox != 0 || _effAtlas.oy != 0) {
 			_effect.originX = _effAtlas.ox;
@@ -52,31 +55,19 @@ class EffectTexture extends EffectEntity
 			_effect.centerOrigin();
 		}
 		graphic = _effect;
-		_effect.play("blast");
+		
+		_effect.play("blast",true);
 		
 		
 		if (_offset) {
-			//var p1 = new Point();
-			//var p2 = new Point(-_effAtlas.ox, -_effAtlas.oy);
-			//HXP.rotateAround(p1, p2, _angle+_effAtlas.r);
-			
 			if (_effAtlas.r != 0)
 			{
 				_effect.angle = _angle+_effAtlas.r;
 			}
-			//_effect.x = _effect.y = 0;
-			//_effect.angle = _angle+_effAtlas.r;
-			//trace("_effect.angle=========" + _effect.angle);
-			//_effect.x = _effAtlas.ox;
-			//_effect.y = _effAtlas.oy;
-			//var d = Point.distance(p1, p2);
-			//_effect.x = p2.x+d;
-			//_effect.y = p2.y+d;
 		}
 		else {
 			_effect.angle = _angle;// -90;
 		}
-		//trace("====asdf");
 	}
 	
 	private function onComplete(name):Void

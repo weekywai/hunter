@@ -67,10 +67,15 @@ class EffectBoom1 extends EffectEntity
 				boomEffect.play("" + i);
 			});
 		}
+		if(_effect==null){
+			_effect = new TextrueSpritemap(eff1);
+			_effect.add("boom", eff1.getReginCount(), 17, false);
+			_effect.animationEnd.add(onBoomComplete);
+		} else {
+			_effect.resetTexture(eff1, onComplete);
+			_effect.add("boom", eff1.getReginCount(), 17, false);
+		}
 		
-		_effect = new TextrueSpritemap(eff1);
-		_effect.add("boom", eff1.getReginCount(), 17, false);
-		_effect.animationEnd.add(onBoomComplete);
 		_effect.centerOrigin();
 		_effect.visible = false;
 		_effect.scale = 1.4;
@@ -78,14 +83,16 @@ class EffectBoom1 extends EffectEntity
 		_effect.x =  -req.width * 0.3;
 		_effect.y = 20;
 		Actuate.tween(this, 2, {}).onComplete(function () {
-				_effect.visible = true;
-				_effect.play("boom");
-			});
+			_effect.visible = true;
+			_effect.play("boom");
+		});
 			//}, Math.floor(boomEffectArray.length*170*0.85));
 		//_effect.angle = req.angle-90;
 		//super.start(req);
 		
 		//trace("x y " + x + ":" + y);
+		if (graphic != null )
+			graphic.resume();
 		HXP.scene.add(this);
 	}
 	
@@ -102,7 +109,6 @@ class EffectBoom1 extends EffectEntity
 	
 	private function onComplete(name):Void
 	{
-		
 		//name.visible = false;
 		var num:Int = Std.parseInt(name);
 		var b:TextrueSpritemap = boomEffectArray[num];
@@ -115,5 +121,4 @@ class EffectBoom1 extends EffectEntity
 		_effect.visible = false;
 		recycle();
 	}
-	
 }

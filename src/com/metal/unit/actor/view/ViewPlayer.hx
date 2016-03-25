@@ -194,7 +194,7 @@ class ViewPlayer extends ViewActor
 		_playerInfo = PlayerUtils.getInfo();
 		lastDir = _actor.dir;
 		setDefaultAimPoint();
-		
+		trace(Notify_PostBoot);
 		super.Notify_PostBoot(userData);
 		
 		//trace("boot" );
@@ -600,7 +600,7 @@ class ViewPlayer extends ViewActor
 		_frontArmBone.data.rotation = originFrontRo + angle;
 		//_spine.skeleton.findBone(name);
 		//var gun:Bone =  getBone("muzzle_1");
-		//bulletReq.x = _avatar.x + gun.worldX * _avatar.getScale();
-		//bulletReq.y = _avatar.y + gun.worldY * _avatar.getScale();
+		//bulletReq.x = x + gun.worldX * getScale();
+		//bulletReq.y = y + gun.worldY * getScale();
 	}
 }

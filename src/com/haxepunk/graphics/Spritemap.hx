@@ -80,7 +80,7 @@ class Spritemap extends Image
 		updateBuffer();
 		active = true;
 	}
-
+	
 	/**
 	 * Updates the spritemap's buffer.
 	 */
