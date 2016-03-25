@@ -1,8 +1,6 @@
 package com.metal.unit.actor.view;
 
-import com.haxepunk.HXP;
 import com.metal.enums.EffectEnum.EffectAniType;
-import com.metal.manager.ResourceManager;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgEffect;
 import com.metal.proto.impl.MonsterInfo;
@@ -11,9 +9,6 @@ import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.impl.UnitActor;
 import com.metal.unit.avatar.AttachTexture;
-import com.metal.unit.avatar.MTAvatar;
-import com.metal.unit.avatar.TexAvatar;
-import de.polygonal.core.event.IObservable;
 
 /**
  * 角色视图控制

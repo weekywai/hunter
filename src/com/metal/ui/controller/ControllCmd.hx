@@ -175,6 +175,7 @@ class ControllCmd extends BaseCmd
 		
 		_lastWeaponIndex = index;
 	}
+	
 	override function onInitComponent():Void 
 	{
 		_maxTouchW = Lib.current.stage.stageWidth * 0.2;

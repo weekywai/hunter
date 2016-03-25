@@ -84,7 +84,7 @@ class ViewActor extends ViewBase
 		super.update();
 	}
 	
-	override private function initTexture():Void
+	override private function preload():Void
 	{
 		switch(type){
 			case UnitModelType.Player:

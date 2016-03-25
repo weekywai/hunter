@@ -21,13 +21,12 @@ import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.MTActor;
-import com.metal.unit.actor.view.BaseViewActor.EffConfig;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.actor.view.ViewBase.EffConfig;
+import com.metal.unit.render.ViewDisplay;
 import com.metal.unit.weapon.impl.BaseWeapon;
 import com.metal.unit.weapon.impl.WeaponController;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
 import de.polygonal.core.event.IObservable;
-import de.polygonal.core.sys.SimEntity;
 import openfl.geom.Point;
 import spinehaxe.Bone;
 import spinehaxe.Event;
@@ -57,8 +56,10 @@ class ViewPlayer extends ViewActor
 	private var _meleeAnimation:Animation;
 	private var _throwBombAnimation:Animation;
 	
+	#if debug
 	/**瞄准点视图*/
 	private var aimPointView:Entity;
+	#end
 	//瞄准间补
 	private var aimPoint:Point;
 	private var aimHeight:Float = 0;
@@ -77,26 +78,23 @@ class ViewPlayer extends ViewActor
 	override public function onInit():Void 
 	{
 		super.onInit();
-		_actor = cast owner.getComponent(MTActor);
-		_actor.throwBomb = false;
-		_stat = owner.getComponent(PlayerStat);
-		_playerInfo = PlayerUtils.getInfo();
 		_targetPos = new Point();
 		targetAimPoint = new Point();		
-		setDefaultAimPoint();
 		aimPoint = new Point();
-		lastDir = _actor.dir;
 		onAim = false;
-		//trace(_info.Job);
+#if debug
 		aimPointView = new Entity(targetAimPoint.x, targetAimPoint.y, Image.createCircle(4, 0xffffff, 1));
 		HXP.scene.add(aimPointView);		
+#end
 	}
 	function setAimPointWithoutTween()
 	{
 		aimPoint.x = targetAimPoint.x;
 		aimPoint.y = targetAimPoint.y;
+#if debug
 		aimPointView.x = aimPoint.x;
 		aimPointView.y = aimPoint.y;
+#end
 	}
 	
 	function setDefaultAimPoint(withoutTween:Bool=false)
@@ -115,8 +113,10 @@ class ViewPlayer extends ViewActor
 		{
 			aimPoint.x = targetAimPoint.x;
 			aimPoint.y = targetAimPoint.y;
+#if debug
 			aimPointView.x = aimPoint.x;
 			aimPointView.y = aimPoint.y;
+#end
 		}
 		
 		//trace("_actor.y: "+_actor.y);
@@ -138,19 +138,21 @@ class ViewPlayer extends ViewActor
 		aimPoint = null;
 		lastDir = null;		
 		onAim = false;
+	#if debug
 		HXP.scene.remove(aimPointView);
 		aimPointView = null;
+	#end
 		super.onDispose();
 	}
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
 			case MsgPlayer.ChangeWeapon:
-				cmd_ChangeWeapon(userData);
+				Notify_ChangeWeapon(userData);
 			case MsgActor.ThrowBomb:
-				cmd_ThrowBomb(userData);
+				Notify_ThrowBomb(userData);
 			case MsgInput.Aim:
-				cmd_Aim(userData);			
+				Notify_Aim(userData);			
 		}
 		super.onUpdate(type, source, userData);
 	}
@@ -184,28 +186,42 @@ class ViewPlayer extends ViewActor
 		_effList.set(userData, effect);
 	}
 	
-	private function getConfig(userData:String):EffConfig
+	override function Notify_PostBoot(userData:Dynamic)
 	{
-		var config = new EffConfig();
-		config.name = userData;
-		switch(userData) {
-			case "Z001"://护盾
-				config.oy = -70;
-			case "Z002","Z006":
-				config.ox = -30;
-				config.oy = -100;
-				config.loop = false;
-			default:
-				config.ox = -30;
-				config.oy = -100;
-		}
-		return config;
-	}
-	
-	private function onEffectEnd(obj)
-	{
-		Notify_EffectEnd("Z002");
-		Notify_EffectEnd("Z006");
+		_actor = cast owner.getComponent(MTActor);
+		_actor.throwBomb = false;
+		_stat = owner.getComponent(PlayerStat);
+		_playerInfo = PlayerUtils.getInfo();
+		lastDir = _actor.dir;
+		setDefaultAimPoint();
+		
+		super.Notify_PostBoot(userData);
+		
+		//trace("boot" );
+		_backArmBone = getBone("L_upperarm");
+		_frontArmBone = getBone("R_upperarm");
+		_headBone = getBone("head");
+		
+		originBackRo = _backArmBone.rotation;
+		originFrontRo = _frontArmBone.rotation;
+		originHeadRo = _headBone.rotation;
+		
+		animationState().onEvent.add(onEventCallback);
+		animationState().onStart.add(onStartCallback);
+		animationState().onEnd.add(onEndCallback);
+		animationState().onComplete.add(onCompleteCallback);
+		var weaponContorl:WeaponController = owner.getComponent(WeaponController);
+		_weapon = weaponContorl.getWeapon(WeaponType.Shoot);
+		//trace(_weapon);
+		//attack animation
+		setGun();
+		
+		_melee = new Entity();
+		setGunHitbox("texiao");
+		HXP.scene.add(_melee);
+		_meleeAnimation = getAnimation("cut_1").clone();
+		_throwBombAnimation= getAnimation("throwBomb_1").clone();
+		_meleeCollides = [UnitModelType.Unit];
 	}
 	
 	override function Notify_EnterBoard(userData:Dynamic):Void 
@@ -240,37 +256,8 @@ class ViewPlayer extends ViewActor
 		var msg:String = (userData==0)?"miss":Std.string(userData.damage);
 		startEffect(0, EffectAniType.Text, msg,userData.renderType);
 	}
-	override function Notify_PostBoot(userData:Dynamic)
-	{
-		super.Notify_PostBoot(userData);
-		//trace("boot" );
-		_backArmBone = getBone("L_upperarm");
-		_frontArmBone = getBone("R_upperarm");
-		_headBone = getBone("head");
-		
-		originBackRo = _backArmBone.rotation;
-		originFrontRo = _frontArmBone.rotation;
-		originHeadRo = _headBone.rotation;
-		
-		animationState().onEvent.add(onEventCallback);
-		animationState().onStart.add(onStartCallback);
-		animationState().onEnd.add(onEndCallback);
-		animationState().onComplete.add(onCompleteCallback);
-		var weaponContorl:WeaponController = owner.getComponent(WeaponController);
-		_weapon = weaponContorl.getWeapon(WeaponType.Shoot);
-		//trace(_weapon);
-		//attack animation
-		setGun();
-		
-		_melee = new Entity();
-		setGunHitbox("texiao");
-		HXP.scene.add(_melee);
-		_meleeAnimation = getAnimation("cut_1").clone();
-		_throwBombAnimation= getAnimation("throwBomb_1").clone();
-		_meleeCollides = [UnitModelType.Unit];
-	}
 	
-	private function cmd_ChangeWeapon(userData:Dynamic):Void
+	private function Notify_ChangeWeapon(userData:Dynamic):Void
 	{
 		trace("cmd_ChangeWeapon");
 		setGun((userData.id != null)?userData.id:0);
@@ -289,13 +276,13 @@ class ViewPlayer extends ViewActor
 		//animationState().setAnimation(1, _meleeAnimation, false);
 		//SfxManager.getAudio(AudioType.Cut).play();
 	//}
-	private function cmd_ThrowBomb(userData:Dynamic):Void
+	private function Notify_ThrowBomb(userData:Dynamic):Void
 	{		
 		trace("ThrowBomb");
 		animationState().setAnimation(1, _throwBombAnimation, false);
 	}
-	var lostAimPoint:Bool;
-	private function cmd_Aim(userData:Dynamic):Void
+	
+	private function Notify_Aim(userData:Dynamic):Void
 	{
 		if (userData.target!=null) 
 		{
@@ -314,6 +301,30 @@ class ViewPlayer extends ViewActor
 			//}
 			setDefaultAimPoint();
 		}		
+	}
+	
+	private function getConfig(userData:String):EffConfig
+	{
+		var config = new EffConfig();
+		config.name = userData;
+		switch(userData) {
+			case "Z001"://护盾
+				config.oy = -70;
+			case "Z002","Z006":
+				config.ox = -30;
+				config.oy = -100;
+				config.loop = false;
+			default:
+				config.ox = -30;
+				config.oy = -100;
+		}
+		return config;
+	}
+	
+	private function onEffectEnd(obj)
+	{
+		Notify_EffectEnd("Z002");
+		Notify_EffectEnd("Z006");
 	}
 	private function setGun(id:Int=0):Void
 	{
@@ -369,10 +380,10 @@ class ViewPlayer extends ViewActor
 				aimPoint.y = complement(aimPoint.y, targetAimPoint.y, aimAdjustY);
 				setHeadRotation(aimPoint, _actor.dir);
 				setGunRotation(aimPoint, _actor.dir);
+	#if debug
 				aimPointView.x = aimPoint.x;
 				aimPointView.y = aimPoint.y;
-				//trace("aimPoint.x: "+aimPoint.x);
-				//trace("aimPoint.y: "+aimPoint.y);
+	#end
 			}				
 		}else {
 			//trace("no aimPoint");
@@ -460,7 +471,7 @@ class ViewPlayer extends ViewActor
 					hitInfo.fix = _weapon.bulletReq.fix;
 					hitInfo.melee = true;
 					//trace(Type.typeof(e));
-					hitInfo.target = cast(e, MTAvatar).owner;
+					hitInfo.target = cast(e, ViewDisplay).owner;
 					hitInfo.renderType=BattleResolver.resolveAtk(_weapon.bulletReq.critPor);
 					owner.notifyParent(MsgItr.BulletHit, hitInfo);
 					_melee.collidable = false;

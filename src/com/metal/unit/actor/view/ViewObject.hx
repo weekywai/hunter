@@ -39,7 +39,7 @@ class ViewObject extends ViewBase
 		//scene.remove(this);
 	}
 	
-	override private function initTexture():Void
+	override private function preload():Void
 	{
 		_model = createAvatar(_info.res, "unit");
 	}

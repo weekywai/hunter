@@ -8,8 +8,13 @@ import com.haxepunk.tweens.misc.ColorTween;
 import com.metal.config.MapLayerType;
 import com.metal.enums.Direction;
 import com.metal.manager.ResourceManager;
+import com.metal.message.MsgActor;
+import com.metal.message.MsgEffect;
+import com.metal.message.MsgStat;
 import com.metal.proto.impl.ModelInfo;
 import com.metal.unit.render.ViewDisplay;
+import de.polygonal.core.event.IObservable;
+import de.polygonal.core.sys.MsgCore;
 import de.polygonal.core.sys.SimEntity;
 
 /**
@@ -40,14 +45,7 @@ class AbstractAvatar extends ViewDisplay
 		super.removed();
 	}
 	
-	/**
-	 * 
-	 */
-	public function preload():Void
-	{
-		initTexture();
-	} 
-	private function initTexture() { }
+	private function preload():Void { }
 	private function createAvatar(name:String, type:String):Dynamic { return null; }
 	public function setDirAction(action:String, dir:Direction, loop:Bool = true):Void { }
 	public var flip(get, set):Bool;
@@ -81,4 +79,68 @@ class AbstractAvatar extends ViewDisplay
 		_colorT.cancel();
 		addTween(_colorT);
 	}
+	
+	//{Notify
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
+	{
+		switch(type) {
+			case MsgCore.PROCESS:
+				Notify_PostBoot(userData);
+			case MsgCore.FREE:
+				Notify_FREE(userData);
+			case MsgActor.EnterBoard:
+				Notify_EnterBoard(userData);
+			case MsgActor.BornPos:
+				Notify_BornPos(userData);
+			case MsgActor.Stand:
+				Notify_Stand(userData);
+			case MsgActor.Move:
+				Notify_Move(userData);
+			case MsgActor.Jump:
+				Notify_Jump(userData);
+			case MsgActor.Attack:
+				Notify_Attack(userData);
+			case MsgActor.Skill:
+				Notify_Skill(userData);
+			case MsgActor.Injured:
+				Notify_Injured(userData);
+			case MsgActor.Destroy:
+				Notify_Destory(userData);
+			case MsgActor.Destroying:
+				Notify_Destorying(userData);
+			case MsgActor.Respawn:
+				Notify_Respawn(userData);
+			case MsgEffect.EffectStart:
+				Notify_EffectStart(userData);
+			case MsgEffect.EffectEnd:
+				Notify_EffectEnd(userData);
+			case MsgStat.ChangeSpeed:
+				Notify_ChangeSpeed(userData);
+			case MsgActor.Soul:
+				Notify_Soul(userData);
+		}
+	}
+	/* entity notify internal component */
+	function Notify_PostBoot(userData:Dynamic) { }
+	
+	private function Notify_FREE(userData:Dynamic):Void { 
+		_isFree = true; 
+	}
+	private function Notify_Stand(userData:Dynamic):Void {}
+	private function Notify_Move(userData:Dynamic):Void {}
+	private function Notify_Skill(userData:Dynamic):Void {}
+	private function Notify_Jump(userData:Dynamic):Void {}
+	private function Notify_Creep(userData:Dynamic):Void {}
+	private function Notify_Soul(userData:Dynamic):Void { }
+	private function Notify_ChangeSpeed(userData:Dynamic):Void {}
+	private function Notify_EffectStart(userData:Dynamic):Void { }
+	private function Notify_Attack(userData:Dynamic):Void {}
+	private function Notify_Respawn(userData:Dynamic):Void { }
+	private function Notify_EffectEnd(userData:Dynamic):Void { }
+	private function Notify_Injured(userData:Dynamic):Void { startChangeColor(); }
+	private function Notify_Destorying(userData:Dynamic):Void { }
+	private function Notify_Destory(userData:Dynamic):Void { }
+	private function Notify_EnterBoard(userData:Dynamic):Void { }
+	private function Notify_BornPos(userData:Dynamic):Void { }
+//}
 }

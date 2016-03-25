@@ -7,7 +7,7 @@ import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.player.core.PlayerStat;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.MTActor;
-import com.metal.unit.actor.view.BaseViewActor.EffConfig;
+import com.metal.unit.actor.view.ViewBase.EffConfig;
 import com.metal.unit.weapon.impl.BaseWeapon;
 import com.metal.unit.weapon.impl.WeaponController;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;

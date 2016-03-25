@@ -34,6 +34,7 @@ class BitmapText extends Graphic
 	public var height:Float = 0;
 	public var textWidth:Int = 0;
 	public var textHeight:Int = 0;
+	
 	public var autoWidth:Bool = false;
 	public var autoHeight:Bool = false;
 	public var size:Int = 0;
@@ -42,6 +43,7 @@ class BitmapText extends Graphic
 	public var scale:Float = 1;
 	public var scaleX:Float = 1;
 	public var scaleY:Float = 1;
+	public var fontScale:Float = 1;
 
 	public var lines:Array<String>;
 	public var lineSpacing:Int = 0;
@@ -72,7 +74,8 @@ class BitmapText extends Graphic
 		if (options == null) options = {};
 
 		// defaults
-		if (!Reflect.hasField(options, "font"))      options.font      = HXP.defaultFont + ".png";
+		if (!Reflect.hasField(options, "font"))      options.font      = "font/artFont_0.fnt";
+		//if (!Reflect.hasField(options, "font"))      options.font      = HXP.defaultFont + ".png";
 		if (!Reflect.hasField(options, "size"))      options.size      = null;
 		if (!Reflect.hasField(options, "color"))     options.color     = 0xFFFFFF;
 		if (!Reflect.hasField(options, "wordWrap"))  options.wordWrap  = false;
@@ -93,6 +96,7 @@ class BitmapText extends Graphic
 		this.height = height;
 		wrap = options.wordWrap;
 		size = options.size != null ? options.size : _font.fontSize;
+		fontScale = size / _font.fontSize;
 
 		autoWidth = (width == 0);
 		autoHeight = (height == 0);
@@ -183,7 +187,7 @@ class BitmapText extends Graphic
 		// subdivide lines
 		var newLines:Array<String> = [];
 		var spaceWidth = _font.glyphData.get(' ').xAdvance;
-		var fontScale = size / _font.fontSize;
+		fontScale = size / _font.fontSize;
 		var sx:Float = scale * scaleX * fontScale, 
 			sy:Float = scale * scaleY * fontScale;
 		for (line in lines)
@@ -269,7 +273,7 @@ class BitmapText extends Graphic
 
 		if (text == null) return;
 
-		var fontScale = size / _font.fontSize;
+		fontScale = size / _font.fontSize;
 
 		var fsx = HXP.screen.fullScaleX,
 			fsy = HXP.screen.fullScaleY;
@@ -321,7 +325,7 @@ class BitmapText extends Graphic
 	{
 		// loop through the text one character at a time, calling the supplied
 		// rendering function for each character
-		var fontScale = size/_font.fontSize;
+		fontScale = size/_font.fontSize;
 
 		var lineHeight:Int = Std.int(_font.lineHeight + lineSpacing);
 
@@ -383,7 +387,7 @@ class BitmapText extends Graphic
 	override public function render(target:BitmapData, point:Point, camera:Point)
 	{
 		// determine drawing location
-		var fontScale = size / _font.fontSize;
+		fontScale = size / _font.fontSize;
 
 		var sx = scale * scaleX * fontScale,
 			sy = scale * scaleY * fontScale;
@@ -405,7 +409,7 @@ class BitmapText extends Graphic
 	override public function renderAtlas(layer:Int, point:Point, camera:Point)
 	{
 		// determine drawing location
-		var fontScale = size / _font.fontSize;
+		fontScale = size / _font.fontSize;
 
 		var fsx = HXP.screen.fullScaleX,
 			fsy = HXP.screen.fullScaleY;
