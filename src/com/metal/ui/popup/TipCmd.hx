@@ -15,27 +15,22 @@ class TipCmd extends BaseCmd
 {
 	public var callbackFun:Signal1<Dynamic>;
 	private var _data:Dynamic;
-	public var txt(default, set):String;
+	//public var txt(default, set):String;
 	public function new() 
 	{
 		super();
-		
-	}
-	override function onInitComponent():Void 
-	{
+		onInitComponent();
 		SfxManager.getAudio(AudioType.t001).play();
 		_widget = UIBuilder.get("flagTip");
 		callbackFun = new Signal1();
 		super.onInitComponent();
-		
-		
 		onEnabel();
 	}
 	/**设置标题*/
-	private function set_txt(text:String):String
+	/*private function set_txt(text:String):String
 	{
 		return _widget.getChildAs("tipTxt", Text).text = text;
-	}
+	}*/
 	private function onEnabel():Void
 	{
 		_widget.getChildAs("noBtn", Button).onPress = noBtn_click;
@@ -56,12 +51,10 @@ class TipCmd extends BaseCmd
 		_widget.getParent('popup').free(); callbackFun.dispatch(true);
 		dispose();
 	}
-	override function onClose():Void 
-	{
-		super.onClose();
-	}
+	
 	override function onDispose():Void 
 	{
+		callbackFun.removeAll();
 		callbackFun = null;
 		_widget = null;
 		super.onDispose();

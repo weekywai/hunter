@@ -65,8 +65,10 @@ class EffectBoom2 extends EffectBoom1
 	override public function update():Void 
 	{
 		super.update();
-		x = _attacker.x;
-		y = _attacker.y;
+		if(_attacker!=null){
+			x = _attacker.x;
+			y = _attacker.y;
+		}
 	}
 	
 }

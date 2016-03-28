@@ -1,6 +1,5 @@
 package com.metal.ui.task;
 
-import com.metal.component.GameSchedual;
 import com.metal.component.TaskSystem;
 import com.metal.config.FilesType;
 import com.metal.config.SfxManager;
@@ -9,18 +8,13 @@ import com.metal.message.MsgMission;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.proto.impl.QuestInfo;
-import com.metal.proto.manager.Task_Manager;
-import com.metal.proto.manager.TaskManager;
 import com.metal.ui.BaseCmd;
 import com.metal.utils.FileUtils;
 import haxe.ds.IntMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.MainStack;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.VBox;
-import de.polygonal.core.event.IObservable;
-import openfl.events.MouseEvent;
 
 /**
  * ...
@@ -36,8 +30,6 @@ class TaskCmd extends BaseCmd
 	/**测试按钮累计*/
 	private var count1:Int = 0;
 	private var count2:Int = 0;
-	
-	private var mainStack:MainStack;
 
 	public function new(data:Dynamic) 
 	{
@@ -49,7 +41,6 @@ class TaskCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.t001).play();
 		_widget = UIBuilder.get("activity");
 		super.onInitComponent();
-		mainStack = UIBuilder.getAs("allView", MainStack);
 		initUI();
 		
 		onEnable();
@@ -106,7 +97,6 @@ class TaskCmd extends BaseCmd
 						{
 							if (questInfo.get(i).RunType == 2)
 							{
-								mainStack.show("through");
 								sendMsg(MsgUI.Through);
 							}
 						}
@@ -151,19 +141,15 @@ class TaskCmd extends BaseCmd
 					{
 						if (info.RunType == 2)
 						{
-							mainStack.show("endless");
 							sendMsg(MsgUI.EndlessCopy);
 						}else if (info.RunType == 3 || info.RunType == 6 || info.RunType == 12 || info.RunType == 13)
 						{
-							mainStack.show("forge");
 							sendMsg(MsgUI.Forge);
 						}else if (info.RunType == 10 )//寻宝
 						{
-							mainStack.show("treasureHunt");
 							sendMsg(MsgUI.TreasureHunt);
 						}else if (info.RunType == 11)//关卡
 						{
-							mainStack.show("through");
 							sendMsg(MsgUI.Through);
 						}
 					}
@@ -190,7 +176,6 @@ class TaskCmd extends BaseCmd
 		//_widget.getChildAs("task2", VBox).removeChildren();
 		//_widget = null;
 		//taskInfo = null;
-		//mainStack = null;
 		super.onClose();
 	}
 	

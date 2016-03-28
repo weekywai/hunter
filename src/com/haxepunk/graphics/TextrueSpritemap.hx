@@ -75,7 +75,7 @@ class TextrueSpritemap extends Image
 		super.destroy();
 	}
 	
-	public function resetTexture(source:TextureAtlasFix, callbackFun:Dynamic):Void 
+	public function resetTexture(source:TextureAtlasFix, ?callbackFun:Dynamic):Void 
 	{
 		complete = true;
 		rate = 1;
@@ -88,7 +88,8 @@ class TextrueSpritemap extends Image
 		
 		if(animationEnd!=null){
 			animationEnd.removeAll();
-			animationEnd.add(callbackFun);
+			if (callbackFun != null)
+				animationEnd.add(callbackFun);
 		}
 
 		_imageWidth = Std.int(_region.width);

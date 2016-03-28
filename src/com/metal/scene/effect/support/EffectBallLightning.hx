@@ -71,8 +71,6 @@ class EffectBallLightning extends EffectEntity
 		//super.start(req);
 		
 		//trace("x y " + x + ":" + y);
-		if (graphic != null)
-			graphic.resume();
 		HXP.scene.add(this);
 	}
 	override public function removed():Void 

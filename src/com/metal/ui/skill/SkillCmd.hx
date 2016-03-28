@@ -6,8 +6,6 @@ import com.metal.config.SfxManager;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
-import com.metal.ui.popup.TipCmd;
-import de.polygonal.core.event.IObservable;
 import openfl.events.MouseEvent;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
@@ -103,10 +101,10 @@ class SkillCmd extends BaseCmd
 			case 5:
 				price = GuideText.SkillPrice4;
 		}
-		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip} );
-		var tipCmd:TipCmd = new TipCmd();
-		tipCmd.onInitComponent();
-		tipCmd.callbackFun.addOnce(callBackFun);
+		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:callBackFun} );
+		//var tipCmd:TipCmd = new TipCmd();
+		//tipCmd.onInitComponent();
+		//tipCmd.callbackFun.addOnce(callBackFun);
 	}
 	private function callBackFun(flag:Bool):Void
 	{

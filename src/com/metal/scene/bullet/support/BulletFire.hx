@@ -60,10 +60,13 @@ class BulletFire extends BulletEntity
 	{
 		
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q110.xml"));
-		_fireStart = new TextrueSpritemap(eff);
+		if(_fireStart==null){
+			_fireStart = new TextrueSpritemap(eff);
+			_fireStart.animationEnd.add(onStartComplete);
+		}else{
+			_fireStart.resetTexture(eff, onStartComplete);
+		}
 		_fireStart.add("fireStart", eff.getReginCount(), 25, false);
-		
-		_fireStart.animationEnd.add(onStartComplete);
 		_fireStart.centerOrigin();
 		_fireStart.play("fireStart", true);
 		//_fireStart.scaleX = 1.3;
@@ -75,9 +78,13 @@ class BulletFire extends BulletEntity
 		
 		
 		var eff1:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q111.xml"));
-		_fire = new TextrueSpritemap(eff1);
+		if(_fire==null){
+			_fire = new TextrueSpritemap(eff1);
+			_fire.animationEnd.add(onComplete);
+		}else{
+			_fire.resetTexture(eff1, onComplete);
+		}
 		_fire.add("fire", eff1.getReginCount(), 25,true);
-		_fire.animationEnd.add(onComplete);
 		
 		_fire.visible = false;
 		//_fire.scaleX = 1.3;
@@ -88,9 +95,13 @@ class BulletFire extends BulletEntity
 		_fire.scaleX = 1.7;
 		
 		var eff2:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q112.xml"));
-		_fireEnd = new TextrueSpritemap(eff2);
+		if(_fireEnd==null){
+			_fireEnd = new TextrueSpritemap(eff2);
+			_fireEnd.animationEnd.add(onEndComplete);
+		}else{
+			_fireEnd.resetTexture(eff2, onEndComplete);
+		}
 		_fireEnd.add("fireEnd", eff2.getReginCount(), 25, false);
-		_fireEnd.animationEnd.add(onEndComplete);
 		_fireEnd.centerOrigin();
 		
 		_fireEnd.visible = false;

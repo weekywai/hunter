@@ -228,6 +228,7 @@ class UIBuilder {
         //registering frequently used classes
 		UIBuilder.registerClass('Main');
         UIBuilder.registerClass('ru.stablex.ui.widgets.Text');
+        UIBuilder.registerClass('ru.stablex.ui.widgets.BmpText');
         UIBuilder.registerClass('ru.stablex.ui.widgets.InputText');
         UIBuilder.registerClass('ru.stablex.ui.widgets.Widget');
         UIBuilder.registerClass('ru.stablex.ui.widgets.Bmp');

@@ -65,7 +65,7 @@ class BulletEntity extends ViewPhysics implements IBullet
 	
 	override private function onDispose():Void 
 	{
-		trace("bullect dispose");
+		//trace("bullect dispose");
 		if (scene != null)
 			scene.clearRecycled(Type.getClass(this));
 		removeCall.removeAll();

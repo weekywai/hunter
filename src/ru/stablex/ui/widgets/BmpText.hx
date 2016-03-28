@@ -1,5 +1,8 @@
 package ru.stablex.ui.widgets;
 
+import bitmapFont.BitmapFont;
+import bitmapFont.BitmapTextField;
+import flash.display.BitmapData;
 import openfl.text.Font;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -10,9 +13,9 @@ import pgr.dconsole.DC;
 /**
 * Text field
 */
-class Text extends Box{
+class BmpText extends Box{
     //<type>flash.display.TextField</type> used to render text
-    public var label  : TextField;
+    public var label  : BitmapTextField;
     //Text format wich will be aplied to label on refresh
     public var format : TextFormat;
     //Text format for higlight mode
@@ -23,7 +26,8 @@ class Text extends Box{
     //Getter-setter for text.
     public var text (get_text, set_text) : String;
 	public var autoWordWrap(get_autoWordWrap, set_autoWordWrap):Bool;
-
+	
+	public var size(get, set):Float;
 
     /**
     * Constructor
@@ -31,14 +35,15 @@ class Text extends Box{
     */
     public function new() : Void {
         super();
+		var fontXML:Xml = Xml.parse(Assets.getText("font/artFont_0.fnt"));
+		var fontImage:BitmapData = Assets.getBitmapData("font/artFont_0.png");
+		var angelCodeFont:BitmapFont = BitmapFont.fromAngelCode(fontImage, fontXML);
+        this.label = new BitmapTextField(angelCodeFont);
+        this.label.autoSize   = true;
+        this.label.multiLine  = true;
+		addChild(label);
 
-        this.label = cast(this.addChild(new TextField()), TextField);
-        this.label.autoSize   = TextFieldAutoSize.LEFT;
-        this.label.multiline  = true;
-        // this.label.embedFonts = true;
-
-        this.format = this.label.defaultTextFormat;
-		this.format.font = ru.stablex.ui.themes.gui.Main.FONT;
+        //this.format = this.label.defaultTextFormat;
         this.align    = 'top,left';
     }//function new()
 
@@ -51,7 +56,7 @@ class Text extends Box{
     @:noCompletion private function get_highlightFormat () : TextFormat {
         if( this._hightlightFormat == null ){
             //clone current format
-            this._hightlightFormat = new TextFormat(
+            /*this._hightlightFormat = new TextFormat(
                 this.format.font,
                 this.format.size,
                 this.format.color,
@@ -72,7 +77,7 @@ class Text extends Box{
                     this.format.indent,
                     this.format.leading
                 #end
-            );
+            );*/
         }
         return this._hightlightFormat;
     }//function get_highlightFormat()
@@ -92,7 +97,7 @@ class Text extends Box{
     *
     */
     override public function refresh() : Void {
-        if( this.highlighted ){
+        /*if( this.highlighted ){
             this.label.defaultTextFormat = this.highlightFormat;
             if( this.label.text.length > 0 ){
                 this.label.setTextFormat(this.highlightFormat #if cpp , 0 , this.text.length #end );
@@ -102,7 +107,7 @@ class Text extends Box{
             if( this.label.text.length > 0 ){
                 this.label.setTextFormat(this.format #if cpp , 0 , this.text.length #end);
             }
-        }
+        }*/
 
         if( !this.autoWidth && this.label.wordWrap ){
             this.label.width = this._width;
@@ -121,9 +126,9 @@ class Text extends Box{
 		#else
 		var textformat:TextFormat = new TextFormat(ru.stablex.ui.themes.gui.Main.FONT,size, color,bold);
 		#end
-		this.label.defaultTextFormat = textformat;
+		/*this.label.defaultTextFormat = textformat;
 		this.label.embedFonts = true;
-		this.format = textformat;
+		this.format = textformat;*/
 	}
 	
 	/**
@@ -258,5 +263,12 @@ class Text extends Box{
         return _autoWordWrap;
     }
 
+	private function get_size() : Float {
+        return label.size;
+    }
+	 private function set_size(value:Float) : Float {
+		label.size = value;
+		return label.size;
+    }
 
 }//class Text

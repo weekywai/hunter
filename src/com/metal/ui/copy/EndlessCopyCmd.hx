@@ -14,7 +14,6 @@ import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.manager.DuplicateManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.popup.BattleCmd;
-import com.metal.ui.popup.TipCmd;
 import com.metal.utils.FileUtils;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
@@ -105,10 +104,10 @@ class EndlessCopyCmd extends BaseCmd
 				dispose();
 			}else
 			{
-				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip} );
-				var tipCmd:TipCmd = new TipCmd();
-				tipCmd.onInitComponent();
-				tipCmd.callbackFun.addOnce(callBackFun_buy);
+				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip, callback:callBackFun_buy} );
+				//var tipCmd:TipCmd = new TipCmd();
+				//tipCmd.onInitComponent();
+				//tipCmd.callbackFun.addOnce(callBackFun_buy);
 			}
 		}
 	}

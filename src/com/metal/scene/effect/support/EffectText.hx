@@ -57,10 +57,12 @@ class EffectText extends EffectEntity
 		_bmpTxt.charSpacing = 1;
 		_crit = req.renderType;
 		if (_crit == EffectRequest.Crit) {
+			_bmpTxt.color = 0xFFFFFF;
+			//Actuate.transform (_bmpTxt, 0.4).color (0);
 			Actuate.tween(_bmpTxt, 0.4, { size:50 } ).ease (Elastic.easeOut).onUpdate(function() {
 				//trace(_bmpTxt.scaleX+"-"+_bmpTxt.scale);
-				_bmpTxt.x = -_bmpTxt.textWidth*_bmpTxt.fontScale * 0.3;
-				_bmpTxt.y = -_bmpTxt.textHeight*_bmpTxt.fontScale * 0.3;
+				_bmpTxt.x = -_bmpTxt.textWidth*_bmpTxt.fontScale*0.2;
+				_bmpTxt.y = -_bmpTxt.textHeight*_bmpTxt.fontScale*0.4;
 			});
 			
 			Actuate.tween(_bmpTxt,0.5,{alpha:0},false).delay(0.4).onComplete(function() {
@@ -68,7 +70,7 @@ class EffectText extends EffectEntity
 			});
 		}else {
 			_bmpTxt.color = 0xFF0000;
-			Actuate.tween(_bmpTxt,0.8,{}).onComplete(function() {
+			Actuate.tween(_bmpTxt,0.8, {}).onComplete(function() {
 				_remove = true;
 			});
 		}

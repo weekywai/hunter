@@ -1,10 +1,10 @@
 package com.metal.scene.bullet.support;
 
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.TextrueSpritemap;
-import com.haxepunk.HXP;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.config.UnitModelType;
@@ -23,7 +23,7 @@ class BulletMissile extends BulletEntity
 
 	private var _bullet:Image;
 	private var _bullet2:TextrueSpritemap;
-	private var _req:BulletRequest;
+	private var _bullectAngle:Float;
 	private var _speed:Int;
 	/**运动轨迹辅助参数**/
 	private var xSpeed:Float;
@@ -48,10 +48,12 @@ class BulletMissile extends BulletEntity
 
 	override private function onDispose():Void 
 	{
-		//_bullet.destroy();
+		if(_bullet!=null)
+			_bullet.destroy();
 		_bullet = null;
+		if(_bullet2!=null)
+			_bullet2.destroy();
 		_bullet2 = null;
-		_req = null;
 		_offset = false;
 		super.onDispose();
 	}
@@ -73,6 +75,8 @@ class BulletMissile extends BulletEntity
 	
 	private function imageBullet():Void
 	{
+		if (_bullet != null)
+			_bullet.destroy();
 		_bullet = new Image(ResPath.getBulletRes(info.img));
 		_bullet.centerOrigin();
 		var box = Image.createCircle(Std.int(_bullet.height * 0.25));
@@ -85,7 +89,11 @@ class BulletMissile extends BulletEntity
 	private function xmlBullet():Void
 	{
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bullet2 = new TextrueSpritemap(eff);
+		if (_bullet2 == null){
+			_bullet2 = new TextrueSpritemap(eff);
+		}else {
+			_bullet2.resetTexture(eff);
+		}
 		_bullet2.add("blast", eff.getReginCount(), 25);
 		//_bullet2.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0) {
@@ -107,13 +115,12 @@ class BulletMissile extends BulletEntity
 		//trace("eff.ox: "+eff.ox);
 		//trace("eff.oy: "+eff.oy);
 		setHitboxTo(box);
-		_bullet2.play("blast");
+		_bullet2.play("blast", true);
 	}
 	
 	override public function start(req:BulletRequest):Void 
 	{
 		super.start(req);
-		_req = req;
 		x = req.x ;// - HXP.camera.x;// - _bullet2.width;
 		y = req.y ;// + HXP.camera.y;// - _bullet2.height;
 		_parabola = HXP.width - req.info.param;// req.info.param;//从屏幕底部算起
@@ -182,17 +189,17 @@ class BulletMissile extends BulletEntity
 			//_parabola-(groundY-y - HXP.camera.y));//704刚好是落地的Y
 		//xSpeed = ((pos.x - this.x) / t1) * _rate;
 		//ySpeed = ((((pos.y - this.y) - ((g * t1) * (t1 / 2))) / t1))* _rate;
-		while (_req.bulletAngle < 0)_req.bulletAngle+= 360; 
-		while (_req.bulletAngle >= 360)_req.bulletAngle-= 360;
-		if (_req.bulletAngle < 90 || _req.bulletAngle > 270){
+		while (_bullectAngle < 0)_bullectAngle+= 360; 
+		while (_bullectAngle >= 360)_bullectAngle-= 360;
+		if (_bullectAngle < 90 || _bullectAngle > 270){
 			//初始右			
 		}else 
 		{
 			//初始左
-			_req.bulletAngle=180- _req.bulletAngle;
+			_bullectAngle = 180 - _bullectAngle;
 		}
-		xSpeed = _rate * Math.cos(_req.bulletAngle / 180*Math.PI) * t1 * (dir?1: -1);
-		ySpeed = _rate * Math.sin(_req.bulletAngle / 180*Math.PI) * t1;
+		xSpeed = _rate * Math.cos(_bullectAngle / 180*Math.PI) * t1 * (dir?1: -1);
+		ySpeed = _rate * Math.sin(_bullectAngle / 180*Math.PI) * t1;
 		
 		//trace("Math.tan(ySpeed / xSpeed): "+(Math.atan(ySpeed /  Math.abs(xSpeed))/ Math.PI * 180));
 		//trace("_req.bulletAngle: "+_req.bulletAngle);

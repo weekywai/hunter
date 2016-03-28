@@ -36,13 +36,12 @@ class EffectTexture extends EffectEntity
 		_effAtlas = TextureAtlasFix.loadTexture(ResPath.getEffectRes(info.res, info.type));
 		if(_effect==null){
 			_effect = new TextrueSpritemap(_effAtlas);
-			_effect.add("blast", _effAtlas.getReginCount(), info.speed);
 			_effect.animationEnd.add(onComplete);
 		} else {
 			_effect.resetTexture(_effAtlas, onComplete);
-			_effect.add("blast", _effAtlas.getReginCount(), info.speed);
+			
 		}
-		
+		_effect.add("blast", _effAtlas.getReginCount(), info.speed);
 		
 		if (_effAtlas.ox != 0 || _effAtlas.oy != 0) {
 			_effect.originX = _effAtlas.ox;

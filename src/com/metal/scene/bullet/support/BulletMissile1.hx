@@ -44,8 +44,14 @@ class BulletMissile1 extends BulletEntity
 		super.onDispose();
 		//scene.remove(_warn);
 		Actuate.stop(this);
+		if(_bullet!=null)
+			_bullet.destroy();
 		_bullet = null;
+		if(_bullet2!=null)
+			_bullet2.destroy();
 		_bullet2 = null;
+		if(_warning!=null)
+			_warning.destroy();
 		_warning = null;
 		_warn = null;
 		_req = null;
@@ -69,6 +75,8 @@ class BulletMissile1 extends BulletEntity
 	
 	private function imageBullet():Void
 	{
+		if (_bullet != null)
+			_bullet.destroy();
 		_bullet = new Image(ResPath.getBulletRes(info.img));
 		_bullet.centerOrigin();
 		var box = Image.createCircle(Std.int(_bullet.height * 0.25));
@@ -81,9 +89,12 @@ class BulletMissile1 extends BulletEntity
 	private function xmlBullet():Void
 	{
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bullet2 = new TextrueSpritemap(eff);
+		if (_bullet2 == null) {
+			_bullet2 = new TextrueSpritemap(eff);
+		}else{
+			_bullet2.resetTexture(eff);
+		}
 		_bullet2.add("blast", eff.getReginCount(), 25);
-		_bullet2.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0) {
 			_bullet2.originX = eff.ox ;// - _bullet2.width * 0.5;
 			_bullet2.originY = eff.oy;
@@ -102,14 +113,10 @@ class BulletMissile1 extends BulletEntity
 		}
 		
 		setHitboxTo(box);
-		_bullet2.play("blast");
+		_bullet2.play("blast", true);
 		Actuate.tween(this, 1, { } ).onComplete(createWarning);
 	}
 	
-	private function onComplete(name:String):Void
-	{
-		//recycle();
-	}
 	
 	override public function start(req:BulletRequest):Void 
 	{
@@ -174,9 +181,11 @@ class BulletMissile1 extends BulletEntity
 		{
 			_warn = new Entity();
 			var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getEffectRes(info.warning, 4));
-			_warning = new TextrueSpritemap(eff);
+			if(_warning==null)
+				_warning = new TextrueSpritemap(eff);
+			else
+				_warning.resetTexture(eff);
 			_warning.add("warning", eff.getReginCount(), 25);
-			_warning.animationEnd.add(onComplete);
 			if (eff.ox != 0 || eff.oy != 0 ) {
 				_warning.originX = eff.ox;
 				_warning.originY = eff.oy;
@@ -185,7 +194,7 @@ class BulletMissile1 extends BulletEntity
 				_warning.centerOrigin();
 			}
 			_warn.addGraphic(_warning);
-			_warning.play("warning");
+			_warning.play("warning", true);
 			//_warn.x = HXP.width * (Math.random()*0.3 + 0.1);
 			_warn.x = _tx;
 			_warn.y = HXP.height;

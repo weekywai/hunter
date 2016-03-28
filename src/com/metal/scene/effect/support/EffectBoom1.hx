@@ -69,13 +69,12 @@ class EffectBoom1 extends EffectEntity
 		}
 		if(_effect==null){
 			_effect = new TextrueSpritemap(eff1);
-			_effect.add("boom", eff1.getReginCount(), 17, false);
 			_effect.animationEnd.add(onBoomComplete);
 		} else {
 			_effect.resetTexture(eff1, onComplete);
-			_effect.add("boom", eff1.getReginCount(), 17, false);
+			
 		}
-		
+		_effect.add("boom", eff1.getReginCount(), 17, false);
 		_effect.centerOrigin();
 		_effect.visible = false;
 		_effect.scale = 1.4;
@@ -84,7 +83,7 @@ class EffectBoom1 extends EffectEntity
 		_effect.y = 20;
 		Actuate.tween(this, 2, {}).onComplete(function () {
 			_effect.visible = true;
-			_effect.play("boom");
+			_effect.play("boom", true);
 		});
 			//}, Math.floor(boomEffectArray.length*170*0.85));
 		//_effect.angle = req.angle-90;

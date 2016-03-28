@@ -1,6 +1,5 @@
 package com.metal.ui.reward;
 
-import com.metal.component.GameSchedual;
 import com.metal.component.RewardSystem;
 import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
@@ -12,7 +11,6 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.LiveNessInfo;
-import com.metal.proto.manager.LiveNessManager;
 import com.metal.ui.BaseCmd;
 import com.metal.utils.FileUtils;
 import com.metal.utils.SavaTimeUtil;
@@ -20,11 +18,9 @@ import de.polygonal.core.event.IObservable;
 import haxe.ds.IntMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.MainStack;
 import ru.stablex.ui.widgets.Progress;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.VBox;
-import ru.stablex.ui.widgets.Widget;
 
 /**
  * ...
@@ -34,7 +30,6 @@ class RewardCmd extends BaseCmd
 {
 	/**活跃度数值*/
 	private var livelyNum:Float = 0;
-	private var mainStack:MainStack;
 	private var _newbieFun:Dynamic;
 	public function new(data:Dynamic) 
 	{
@@ -46,7 +41,6 @@ class RewardCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.t001).play();
 		_widget = UIBuilder.get("reward");
 		super.onInitComponent();
-		mainStack = UIBuilder.getAs("allView", MainStack);
 		initUI();
 	}
 	override function onRemoveComponent() 
@@ -211,15 +205,12 @@ class RewardCmd extends BaseCmd
 						trace(liveInfo.TaskType);
 						if (liveInfo.TaskType == 1)//普通副本
 						{
-							mainStack.show("through");
 							sendMsg(MsgUI.Through);
 						}else if (liveInfo.TaskType == 2||liveInfo.TaskType == 3||liveInfo.TaskType == 4||liveInfo.TaskType == 5)//类型副本
 						{
-							mainStack.show("endless");
 							sendMsg(MsgUI.EndlessCopy);
 						}else if (liveInfo.TaskType == 6||liveInfo.TaskType == 7||liveInfo.TaskType == 8)//锻造
 						{
-							mainStack.show("forge");
 							sendMsg(MsgUI.Forge);
 						}
 					}

@@ -74,21 +74,32 @@ class BulletFire1 extends BulletEntity
 	{
 		trace("====");
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q114.xml"));
-		_fireStart = new TextrueSpritemap(eff);
+		if(_fireStart==null){
+			_fireStart = new TextrueSpritemap(eff);
+			
+			_fireStart.animationEnd.add(onStartComplete);
+		}else {
+			_fireStart.resetTexture(eff, onStartComplete);
+		}
 		_fireStart.add("fireStart", eff.getReginCount(), 25,false);
-		_fireStart.animationEnd.add(onStartComplete);
 		_fireStart.centerOrigin();
 		addGraphic(_fireStart);
-		_fireStart.play("fireStart");
+		_fireStart.play("fireStart", true);
 		_fireStart.scaleX = 1.3;
 		_fireStart.scaleY = 1.3;
 		_fireStart.x = 70;//-_fireStart.scaledHeight / 2;
 		_fireStart.y = 40;
 		
 		var eff1:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q115.xml"));
-		_fire = new TextrueSpritemap(eff1);
+		if(_fire==null){
+			_fire = new TextrueSpritemap(eff1);
+			_fire.animationEnd.add(onComplete);
+		}else {
+			_fire.resetTexture(eff1, onComplete);
+		}
+		
 		_fire.add("fire", eff1.getReginCount(), 25,true);
-		_fire.animationEnd.add(onComplete);
+		
 		addGraphic(_fire);
 		_fire.visible = false;
 		_fire.scaleX = 2.55;
@@ -98,9 +109,14 @@ class BulletFire1 extends BulletEntity
 		_fire.y = -110;
 		
 		var eff2:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q116.xml"));
-		_fireEnd = new TextrueSpritemap(eff2);
+		if(_fireEnd==null){
+			_fireEnd = new TextrueSpritemap(eff2);
+			_fireEnd.animationEnd.add(onEndComplete);
+		}else {
+			_fireEnd.resetTexture(eff2, onEndComplete);
+		}
+		
 		_fireEnd.add("fireEnd", eff2.getReginCount(), 25, false);
-		_fireEnd.animationEnd.add(onEndComplete);
 		_fireEnd.centerOrigin();
 		addGraphic(_fireEnd);
 		_fireEnd.visible = false;
@@ -117,7 +133,7 @@ class BulletFire1 extends BulletEntity
 	{
 		_fireStart.visible = false;
 		_fire.visible = true;
-		_fire.play("fire");
+		_fire.play("fire", true);
 	}
 	
 	private function onComplete(name):Void
@@ -129,7 +145,7 @@ class BulletFire1 extends BulletEntity
 			_fire.visible = false;
 			_fire.pause();
 			_fireEnd.visible = true;
-			_fireEnd.play("fireEnd");
+			_fireEnd.play("fireEnd", true);
 		}
 	}
 	

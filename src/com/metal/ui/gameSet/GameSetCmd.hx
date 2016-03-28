@@ -1,27 +1,19 @@
 package com.metal.ui.gameSet;
-import com.haxepunk.Sfx;
-import com.metal.config.FilesType;
-import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
-import com.metal.player.utils.PlayerInfo;
 import com.metal.ui.BaseCmd;
-import com.metal.utils.FileUtils;
-import de.polygonal.core.event.IObservable;
 import openfl.events.MouseEvent;
 import ru.stablex.ui.UIBuilder;
-import ru.stablex.ui.widgets.Switch;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.MainStack;
+import ru.stablex.ui.widgets.Switch;
 /**
  * ...
  * @author zxk
  */
 class GameSetCmd extends BaseCmd
 {
-	private var mainStack:MainStack;
 	public function new() 
 	{
 		super();
@@ -29,7 +21,6 @@ class GameSetCmd extends BaseCmd
 	override function onInitComponent():Void 
 	{
 		//SfxManager.getAudio(AudioType.t001).play();
-		mainStack = cast(UIBuilder.get("allView"),MainStack);
 		_widget = UIBuilder.get("gameSet");
 		super.onInitComponent();
 		setData();
@@ -49,8 +40,7 @@ class GameSetCmd extends BaseCmd
 	private function onHelp(e):Void 
 	{
 		//SfxManager.getAudio(AudioType.Btn).play(); 
-		//mainStack.show("helpText");
-		
+		sendMsg(MsgUI2.Help);
 	}
 	private function OnBgm(e:MouseEvent):Void 
 	{

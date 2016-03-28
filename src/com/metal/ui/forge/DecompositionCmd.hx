@@ -12,7 +12,6 @@ import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.impl.WeaponInfo;
 import com.metal.proto.manager.DecompositionManager;
 import com.metal.proto.manager.GoodsProtoManager;
-import com.metal.ui.popup.TipCmd;
 import de.polygonal.core.sys.SimEntity;
 import haxe.Serializer;
 import haxe.Unserializer;
@@ -114,10 +113,10 @@ class DecompositionCmd extends ForgetBase
 			sendMsg(MsgUI.Tips, { msg:"选择分解的装备", type:TipsType.tipPopup} );
 		}else
 		{
-			sendMsg(MsgUI.Tips, { msg:"确定分解所选择的装备？", type:TipsType.buyTip} );
-			var tipCmd:TipCmd = new TipCmd();
-			tipCmd.initComponent(null);
-			tipCmd.callbackFun.addOnce(callBackFun);
+			sendMsg(MsgUI.Tips, { msg:"确定分解所选择的装备？", type:TipsType.buyTip, callback:callBackFun} );
+			//var tipCmd:TipCmd = new TipCmd();
+			//tipCmd.initComponent(null);
+			//tipCmd.callbackFun.addOnce(callBackFun);
 		}
 	}
 	/**确定分解*/

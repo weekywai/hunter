@@ -10,10 +10,8 @@ import com.metal.message.MsgUIUpdate;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.manager.ModelManager;
 import com.metal.ui.BaseCmd;
-import com.metal.ui.popup.TipCmd;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.MainStack;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
 import spinepunk.SpriteActor;
@@ -25,7 +23,6 @@ import spinepunk.SpriteActor;
 class LatestFahionCmd extends BaseCmd
 {
 	private var leftModelContainer:Widget;
-	private var mainStack:MainStack;
 	public function new() 
 	{
 		super();
@@ -36,7 +33,6 @@ class LatestFahionCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.t001).play();
 		_widget = UIBuilder.get("latestFashion");
 		super.onInitComponent();
-		mainStack = UIBuilder.getAs("allView", MainStack);
 		initModel();
 	}
 	/**初始化模型*/
@@ -59,10 +55,10 @@ class LatestFahionCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.Btn).play();
 		var info = PlayerUtils.getInfo();
 		if (info.getProperty(PlayerPropType.ROLEID) != 1002) {
-			sendMsg(MsgUI.Tips, { msg:"是否立刻充值500元！", type:TipsType.buyTip} );
-			var tipCmd:TipCmd = new TipCmd();
-			tipCmd.onInitComponent();
-			tipCmd.callbackFun.addOnce(buyFun);
+			sendMsg(MsgUI.Tips, { msg:"是否立刻充值500元！", type:TipsType.buyTip, callback:buyFun} );
+			//var tipCmd:TipCmd = new TipCmd();
+			//tipCmd.onInitComponent();
+			//tipCmd.callbackFun.addOnce(buyFun);
 		}else {
 			sendMsg(MsgUI.Tips, { msg:"你已经获得此装束！", type:TipsType.tipPopup} );
 		}
@@ -79,10 +75,7 @@ class LatestFahionCmd extends BaseCmd
 		modelInfo.skin = 2;
 		notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.ROLEID, data:1002 } );//更新记录
 		notify(MsgUIUpdate.UpdateModel);
-		if (mainStack.numChildren > 0) 
-		{
-			mainStack.removeChildren();
-		}
+		sendMsg(MsgUIUpdate.ClearMainView);
 		notify(MsgUIUpdate.UpdataReturnBtn, true);
 		sendMsg(MsgUI.Tips, { msg:"恭喜你获得此装束！\n生命 +3000    \n攻击 +1000", type:TipsType.tipPopup} );
 	}

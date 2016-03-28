@@ -26,7 +26,7 @@ class BulletGrenade extends BulletEntity
 {
 
 	private var _bulletGraphic:TextrueSpritemap;
-	
+	private var _box:Image;
 	/**运动轨迹辅助参数**/
 	private var xSpeed:Float;
 	private var ySpeed:Float;
@@ -57,14 +57,21 @@ class BulletGrenade extends BulletEntity
 		_collides = [];
 		//_bulletGraphic = new Image(ResPath.getBulletRes(info.img));
 		var atlas:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bulletGraphic = new TextrueSpritemap(atlas);
+		if(_bulletGraphic==null){
+			_bulletGraphic = new TextrueSpritemap(atlas);
+		}else {
+			_bulletGraphic.resetTexture(atlas);
+		}
 		_bulletGraphic.add("grende", atlas.getReginCount(), 25, false);
-		_bulletGraphic.play("grende");
+		
+		_bulletGraphic.play("grende", true);
 		_bulletGraphic.scale = 1;
 		
-		var box = Image.createCircle(Std.int(_bulletGraphic.height * 0.5));
-		box.centerOO();
-		setHitboxTo(box);
+		if (_box != null)
+			_box.destroy();
+		_box = Image.createCircle(Std.int(_bulletGraphic.height * 0.5));
+		_box.centerOO();
+		setHitboxTo(_box);
 		graphic = _bulletGraphic;
 		t0 = 0;
 		_delay = 60;

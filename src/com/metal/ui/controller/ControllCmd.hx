@@ -45,6 +45,7 @@ import openfl.geom.Point;
 import openfl.Lib;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
+import ru.stablex.ui.widgets.BmpText;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Progress;
 import ru.stablex.ui.widgets.Text;
@@ -97,7 +98,7 @@ class ControllCmd extends BaseCmd
 	
 	private var stat:PlayerStat;
 	/**倒计时的显示文档*/
-	private var _timeLimit:Text;
+	private var _timeLimit:BmpText;
 	private var _originX:Float; 
 	private var _originY:Float;
 	private var _afterScaleX:Float;
@@ -204,7 +205,7 @@ class ControllCmd extends BaseCmd
 		_knifeBtn = _widget.getChildAs("knifeBtn", Button);
 		_knifeBtn.onPress = onKnifePress;
 		
-		_timeLimit = _widget.getChildAs("timeLimit", Text);
+		_timeLimit = _widget.getChildAs("timeLimit", BmpText);
 		_timeLimit.label.visible = false;
 		_originX = _timeLimit.label.x;
 		_originY = _timeLimit.label.y;
@@ -498,10 +499,9 @@ class ControllCmd extends BaseCmd
 			case "skill4":
 				price = GuideText.SkillDes4+"\n"+GuideText.SkillPrice4;
 		}
-		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip} );
-		var tipCmd:TipCmd = new TipCmd();
-		tipCmd.onInitComponent();
-		tipCmd.callbackFun.addOnce(buyFun);
+		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:buyFun} );
+		//var tipCmd:TipCmd = new TipCmd();
+		//tipCmd.callbackFun.addOnce(buyFun);
 		GameProcess.instance.pauseGame(true);
 	}
 	

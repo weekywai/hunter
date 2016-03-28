@@ -30,8 +30,11 @@ class BulletLaser extends BulletEntity
 	
 	override private function onDispose():Void 
 	{
-		//_bullet.destroy();
+		if (_bullet != null )
+			_bullet.destroy();
 		_bullet = null;
+		if(_bullet2 != null)
+			_bullet2.destroy();
 		_bullet2 = null;
 		_spark = null;
 		_setId = null;
@@ -54,6 +57,8 @@ class BulletLaser extends BulletEntity
 	
 	private function imageBullet():Void
 	{
+		if (_bullet != null)
+			_bullet.destroy();
 		_bullet = new Image(ResPath.getBulletRes(info.img));
 		_bullet.centerOrigin();
 		//var box = Image.createCircle(Std.int(_bullet.height * 1.5));
@@ -66,10 +71,14 @@ class BulletLaser extends BulletEntity
 	
 	private function xmlBullet():Void
 	{
+		
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bullet2 = new TextrueSpritemap(eff);
+		if (_bullet2 == null){
+			_bullet2 = new TextrueSpritemap(eff);
+		}else {
+			_bullet2.resetTexture(eff);
+		}
 		_bullet2.add("blast", eff.getReginCount(), 25);
-		_bullet2.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0) {
 			_bullet2.x = -eff.ox;
 			_bullet2.y = -eff.oy;
@@ -79,14 +88,8 @@ class BulletLaser extends BulletEntity
 		}
 		
 		graphic = _bullet2;
-		_bullet2.play("blast");
+		_bullet2.play("blast", true);
 	}
-	
-	private function onComplete(name):Void
-	{
-		//recycle();
-	}
-	
 	
 	override public function start(req:BulletRequest):Void 
 	{
