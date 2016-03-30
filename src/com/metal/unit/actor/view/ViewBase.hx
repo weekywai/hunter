@@ -39,6 +39,7 @@ class ViewBase extends AbstractAvatar
 	private var _targetPos:Point;
 	private var _attcking:Bool;
 	private var _meleeHit:Bool;
+	private var _checkCamera:Bool;
 	public function new() 
 	{
 		super();
@@ -47,6 +48,7 @@ class ViewBase extends AbstractAvatar
 		_curAction = none;
 		_attcking = false;
 		_meleeHit = false;
+		_checkCamera = true;
 	}
 	
 	override public function onDispose():Void 
@@ -67,15 +69,13 @@ class ViewBase extends AbstractAvatar
 	
 	override public function update():Void 
 	{
+		//if (_enterboard)
+			//trace("update");
 		super.update();
 		if (isDisposed || _isFree)
 			return;
-		if(onCamera && !ActorState.IsDestroyed(_actor.stateID) ){
-			active = onCamera;
-			visible = onCamera;
-		}else {
-			active = true;
-			visible = true;
+		if (graphic != null) {
+			graphic.active = graphic.visible = onCamera;
 		}
 			
 		//trace(_actor.x + "::" + _actor.y);
@@ -145,17 +145,23 @@ class ViewBase extends AbstractAvatar
 			//scene.recycle(this);
 			scene.remove(this);
 	}
-
+	
+	private var _enterboard:Bool = false;
 	override function Notify_EnterBoard(userData:Dynamic):Void
 	{
 		if (ResourceManager.PreLoad) {
 			visible = true;
 			active = true;
 		}else {
-			//DC.beginProfile("add viewactor");
+			//trace("EnterBoard");
+			//_enterboard = true;
 			HXP.scene.add(this);
-			//DC.endProfile("add viewactor");
 		}
+	}
+	override function Notify_BornPos(userData:Dynamic):Void 
+	{
+		trace("Notify_BornPos");
+		_checkCamera = false;
 	}
 //}
 	

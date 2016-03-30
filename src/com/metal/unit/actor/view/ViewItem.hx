@@ -21,20 +21,11 @@ class ViewItem extends ViewObject
 	{
 		super();	
 	}
-	override function onInit():Void 
-	{
-		super.onInit();
-		_actor = owner.getComponent(UnitActor);
-	}
-	
-	override public function onDispose():Void 
-	{
-		super.onDispose();
-	}
 	
 	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		//判断加载类型
+		_actor = owner.getComponent(UnitActor);
 		var source:Int = owner.getProperty(MonsterInfo).res;
 		//trace(source);
 		_info = ModelManager.instance.getProto(source);

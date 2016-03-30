@@ -141,7 +141,8 @@ class GameFactory extends Component
 		var entity:SimEntity = cerateEntity(type);
 		var item = GoodsProtoManager.instance.getItemById(id);
 		if(item==null)
-			trace(id+""+GoodsProtoManager.instance.getItemById(id));
+			trace(id+" item is null");
+			//trace(id+""+GoodsProtoManager.instance.getItemById(id));
 		entity.addProperty(cast(item, ItemBaseInfo));
 		createView(entity, 0);
 		entity.addComponent(new UnitActor());

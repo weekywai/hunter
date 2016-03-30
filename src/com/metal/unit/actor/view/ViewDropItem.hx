@@ -28,7 +28,6 @@ class ViewDropItem extends ViewObject
 	override function onInit():Void 
 	{
 		super.onInit();
-		_actor = owner.getComponent(UnitActor);
 		_bounds = new Rectangle(HXP.camera.x, HXP.camera.y, HXP.width*0.8 + HXP.camera.x, HXP.height * 0.7 + HXP.camera.y);
 	}
 	
@@ -73,6 +72,7 @@ class ViewDropItem extends ViewObject
 	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		//判断加载类型
+		_actor = owner.getComponent(UnitActor);
 		//trace(owner.getProperty(ItemBaseInfo));
 		var info = owner.getProperty(ItemBaseInfo);
 		if (info == null)

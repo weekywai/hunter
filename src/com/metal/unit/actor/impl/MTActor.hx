@@ -55,6 +55,7 @@ class MTActor extends BaseActor
 			return;
 		if (isVictory)
 			return;
+			//trace(_model);
 		var e = _model.collide(UnitModelType.DropItem, x , y);
 		if (e != null) 
 			pickItem(e);

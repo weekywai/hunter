@@ -20,7 +20,7 @@ class UnitUtils
 	private static var _index:Int =0;
 	public static function createUnit(type:String, id:Int, faction:Int, x:Float, y:Float, ai:String = null):SimEntity {
 		//var now = Lib.getTimer();
-		DC.beginProfile("createUnit");
+		//DC.beginProfile("createUnit");
 		var manager:GameSchedual = GameProcess.root.getComponent(GameSchedual);
 		//trace(id+">>"+type);
 		var entity:SimEntity = manager.createSimEntity(type, id);
@@ -37,7 +37,7 @@ class UnitUtils
 		
 		//_lastUintTime = now - _lastUintTime;
 		//trace(_lastUintTime);
-		DC.endProfile("createUnit");
+		//DC.endProfile("createUnit");
 		return entity;
 	}
 	

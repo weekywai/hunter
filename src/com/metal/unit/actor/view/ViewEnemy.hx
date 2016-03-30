@@ -167,8 +167,11 @@ class ViewEnemy extends ViewActor
 		//if (_actor.stateID == ActorState.Move)
 			//trace(_mInfo.res);
 		//滚屏死亡移动
+		if (isDisposed || _isFree)
+			return;
 		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded)
-			_actor.x-=15;
+			_actor.x -= 15;
+			
 		super.update();
 		
 		if (_weapon != null && !_meleeHit && _attcking) {

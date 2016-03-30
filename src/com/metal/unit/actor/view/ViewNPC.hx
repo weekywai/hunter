@@ -16,11 +16,6 @@ class ViewNPC extends ViewActor
 	{
 		super();	
 	}
-	override function onInit():Void 
-	{
-		super.onInit();
-		_actor = owner.getComponent(UnitActor);
-	}
 	
 	override public function onDispose():Void 
 	{
@@ -33,6 +28,7 @@ class ViewNPC extends ViewActor
 		var source:Int = owner.getProperty(MonsterInfo).res;
 		//trace(source);
 		_info = ModelManager.instance.getProto(source);
+		_actor = owner.getComponent(UnitActor);
 		if (_info == null)
 			throw "model info is null";
 		

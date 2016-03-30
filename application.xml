@@ -31,6 +31,7 @@
 	<!--<haxelib name="hscript" />-->
 	<!--<haxelib name="format" />-->
 	<haxelib name="dconsole" />
+	<haxelib name="bitmapFont" />
 	<haxelib name="crashdumper" unless="flash"/>
 	<haxelib name="HxTelemetry" if="telemetry"/>
 	<haxedef name="HXCPP_STACK_LINE" unless="flash"/>
@@ -58,7 +59,7 @@
 	<assets path="assets/audio" rename="sfx" include="*.mp3|*.wav" if="flash" />
 	<assets path="assets/audio" rename="sfx" include="*.wav|*.ogg" unless="flash" />
 	<assets path="assets/icon" rename="icon" include="*.png|*.jpg"/>
-	<assets path="assets/font" rename="font" include="*.ttf|*.ttf.hash|*.png|*.otf" />
+	<assets path="assets/font" rename="font" include="*.ttf|*.hash|*.png|*.otf|*.fnt|*.xml" />
 	<assets path="assets/graphics" rename="graphics" include="*.png|*.jpg|*.xml" if="debug"/>
 	<!-- optimize output 
 	<haxeflag name="-dce full" /> -->

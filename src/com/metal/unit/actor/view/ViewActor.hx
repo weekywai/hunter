@@ -65,11 +65,12 @@ class ViewActor extends ViewBase
 	}
 	
 	override public function update():Void {
-		if (isDisposed)
+		if (isDisposed || _isFree)
 			return;
-		if (_model == null)
-			return;
-		_model.update();
+		if (_model != null){
+			_model.update();
+			_model.color = _colorT.color;
+		}
 		/*
 		if (_skeleton.useMask) {
 			useHitBox = false;
@@ -79,8 +80,7 @@ class ViewActor extends ViewBase
 			setHitboxTo(_skeleton.mainHitbox);
 		}
 		*/
-		//if (_model.color != null)
-		_spine.color = _colorT.color;
+		
 		super.update();
 	}
 	

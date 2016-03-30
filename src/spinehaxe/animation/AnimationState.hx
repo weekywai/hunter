@@ -136,12 +136,15 @@ class AnimationState {
 			}
 
 			// Check if completed the animation or a loop iteration.
-			//trace(lastTime +" "+ endTime +" "+ time);
-			if((loop) ? (lastTime % endTime > time % endTime):(lastTime < endTime && time >= endTime))  {
-				var count:Int = cast(time / endTime);
-				if (current.onComplete != null) 
-					current.onComplete(count, current.animation.name);
-				onComplete.dispatch(count, current.animation.name);
+			//trace(lastTime +" " + endTime +" " + time);
+			//TODO modify lasttime if free =-1
+			if (lastTime !=-1){
+				if((loop) ? (lastTime % endTime > time % endTime):(lastTime < endTime && time >= endTime))  {
+					var count:Int = cast(time / endTime);
+					if (current.onComplete != null) 
+						current.onComplete(count, current.animation.name);
+					onComplete.dispatch(count, current.animation.name);
+				}
 			}
 
 			current.lastTime = current.time;
