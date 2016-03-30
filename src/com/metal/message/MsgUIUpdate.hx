@@ -17,8 +17,9 @@ package com.metal.message;
 	UpdateMoney,			//更新金币
 	UpdateModel,          	//更新模型
 	UpdataReturnBtn,     	//返回按钮状态更新
+	ClearMainView,     		//清除返回按钮记录
 	UpdateScore,			//更新分数
-	UpdateUI,           	//更新界面数据
+	//UpdateUI,           	//更新界面数据
 	UpdateResources,    	//更新角色资源
 	OpenThrough,        	//战斗结束打开关卡
 	OpenCopy,            	//战斗结束打开副本

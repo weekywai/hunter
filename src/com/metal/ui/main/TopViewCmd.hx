@@ -9,17 +9,16 @@ import com.metal.message.MsgMission;
 import com.metal.message.MsgNet;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
+import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.ui.BaseCmd;
-import com.metal.ui.popup.TipCmd;
 import com.metal.utils.FileUtils;
 import com.metal.utils.LoginFileUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.MainStack;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
 import sys.FileSystem;
@@ -40,7 +39,6 @@ class TopViewCmd extends BaseCmd
 	private var vitFlag:Bool = false;
 	private var currTime:Array<Int>;
 	
-	private var mainStack:MainStack;
 	private var latestFahionBtn:Button;
 	private var latestFlag:Bool = false;
 	private var _filePath:String;
@@ -63,7 +61,6 @@ class TopViewCmd extends BaseCmd
 		var _bagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
 			
 		currTime = new Array();
-		mainStack = cast(UIBuilder.get("allView"),MainStack);
 		initUI();
 		upDate_Vit();
 		readTime();
@@ -96,33 +93,18 @@ class TopViewCmd extends BaseCmd
 	private function initUI():Void
 	{
 		SfxManager.playBMG(BGMType.b001);
-		//_widget.getChildAs("backBtn", Button);
 		
 		//返回
-		_widget.getChildAs("leftBtn", Button).onPress = function(e)
-			{ 
-				SfxManager.getAudio(AudioType.Btn).play();
-				if (mainStack.numChildren > 0)
-				mainStack.clear();
-				latestFlag = false;
-				UpdataReturnBtn(true);
-				//notifyRoot(MsgView.NewBie, 17);
-				notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText27);
-			}
+		_widget.getChildAs("leftBtn", Button).onPress = onBackBtn;
+			
 		//时装	
 		_widget.getChildAs("rightBtn", Button).onPress = function(e)
 			{
-				//if (mainStack.numChildren > 0) 
-				//{
-					//latestFlag = true;
-				//}
-			//else { latestFlag = false; }
 				latestFlag = false;
 				if (!latestFlag)
 				{
 					SfxManager.getAudio(AudioType.Btn).play();
 					latestFlag = true;
-					mainStack.show('latestFashion');
 					sendMsg(MsgUI.LatestFashion);
 					UpdataReturnBtn(false);
 				}
@@ -142,6 +124,14 @@ class TopViewCmd extends BaseCmd
 				_widget.getChildAs("hintBtn", Button).visible = true;
 		}
 	}
+	private function onBackBtn(e)
+	{ 
+		SfxManager.getAudio(AudioType.Btn).play();
+		sendMsg(MsgUIUpdate.ClearMainView);
+		latestFlag = false;
+		UpdataReturnBtn(true);
+		notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText27);
+	}
 	/**是否显示时装按钮*/
 	private function UpdataReturnBtn(data:Dynamic):Void
 	{
@@ -157,10 +147,10 @@ class TopViewCmd extends BaseCmd
 		{
 			sendMsg(MsgUI.Tips, { msg:"体力已达上限", type:TipsType.tipPopup} );
 		}else{
-			sendMsg(MsgUI.Tips, { msg:"是否花费100颗钻石购买100体力", type:TipsType.buyTip} );
-			var tipCmd:TipCmd = new TipCmd();
-			tipCmd.onInitComponent();
-			tipCmd.callbackFun.addOnce(callBackFun);
+			sendMsg(MsgUI.Tips, { msg:"是否花费100颗钻石购买100体力", type:TipsType.buyTip, callback:callBackFun} );
+			//var tipCmd:TipCmd = new TipCmd();
+			//tipCmd.onInitComponent();
+			//tipCmd.callbackFun.addOnce(callBackFun);
 		}
 	}
 	/**确定购买体力*/
@@ -186,15 +176,12 @@ class TopViewCmd extends BaseCmd
 	/**打开购买金币界面*/
 	private function BuyGoldBtn_click(e):Void
 	{
-		
-		mainStack.show('gold');
 		sendMsg(MsgUI.BuyGold);
 		UpdataReturnBtn(false);
 	}
 	/**打开购买钻石界面*/
 	private function BuyDiamondsBtn_click(e):Void
 	{
-		mainStack.show('diamonds');
 		sendMsg(MsgUI.BuyDiamonds);
 		UpdataReturnBtn(false);
 		
@@ -202,7 +189,6 @@ class TopViewCmd extends BaseCmd
 	/**打开购买宝箱界面*/
 	public function huntBtn_click(e):Void
 	{
-		mainStack.show('treasureHunt');
 		sendMsg(MsgUI.TreasureHunt);
 		UpdataReturnBtn(false);
 		notifyRoot(MsgView.NewBie, NoviceOpenType.NoviceText5);
@@ -211,9 +197,7 @@ class TopViewCmd extends BaseCmd
 	/**打开充值界面*/
 	private function payBtn_click(e):Void
 	{
-		//mainStack.show('pay'); 
-		//sendMsg(MsgUI.Pay);
-		
+		sendMsg(MsgUI2.Pay);
 		//UpdataReturnBtn(false);
 	}
 	/**更新数据*/

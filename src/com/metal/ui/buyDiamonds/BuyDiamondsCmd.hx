@@ -1,15 +1,11 @@
 package com.metal.ui.buyDiamonds;
-import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgMission;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
-import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.Gold_Info;
 import com.metal.proto.manager.Diamond_Manager;
-import com.metal.ui.popup.TipCmd;
-import pgr.dconsole.DC;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Text;
@@ -58,17 +54,17 @@ class BuyDiamondsCmd extends BaseCmd
 				SfxManager.getAudio(AudioType.Btn).play();
 				var diamond = Diamond_Manager.instance.getProto(btnNum);
 				var price:String  = "是否花费人民币" + Std.string(diamond.Price) + "元\n购买" + Std.string(diamond.Gold) +"颗钻石";
-				sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip} );
-				var tipCmd:TipCmd = new TipCmd();
-				tipCmd.onInitComponent();
-				tipCmd.callbackFun.addOnce(callBackFun);
+				sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:tipCallback} );
+				//var tipCmd:TipCmd = new TipCmd();
+				//tipCmd.onInitComponent();
+				//tipCmd.callbackFun.addOnce(tipCallback);
 			}
 			_btnList[key] = buyBtn;
 			key++;
 		}
 	}
 
-	private function callBackFun(flag:Bool):Void
+	private function tipCallback(flag:Bool):Void
 	{
 		if (flag)
 		{

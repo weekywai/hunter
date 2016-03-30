@@ -18,7 +18,6 @@ import com.metal.proto.manager.TreasuerHuntManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.ui.popup.GainGoodsCmd;
-import com.metal.ui.popup.TipCmd;
 import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
@@ -80,10 +79,7 @@ class TreasureHuntCmd extends BaseCmd
 				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 				return;
 			}
-			sendMsg(MsgUI.Tips, { msg:"是否花费98钻石购买？", type:TipsType.buyTip} );
-			var tipCmd:TipCmd = new TipCmd();
-			tipCmd.onInitComponent();
-			tipCmd.callbackFun.addOnce(callBackFun);
+			sendMsg(MsgUI.Tips, { msg:"是否花费98钻石购买？", type:TipsType.buyTip, callback:callBackFun} );
 		}
 		_newbieFun1 = silverBtn.onPress;
 		
@@ -103,10 +99,7 @@ class TreasureHuntCmd extends BaseCmd
 				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 				return;
 			}
-			sendMsg(MsgUI.Tips, { msg:"是否花费888钻石购买十连抽？", type:TipsType.buyTip} );
-			var tipCmd:TipCmd = new TipCmd();
-			tipCmd.onInitComponent();
-			tipCmd.callbackFun.addOnce(callBackFun);
+			sendMsg(MsgUI.Tips, { msg:"是否花费888钻石购买十连抽？", type:TipsType.buyTip, callback:callBackFun} );
 		}
 		_widget.getChild("content").addChild(treasure1);
 		_widget.getChild("content").addChild(treasure2);

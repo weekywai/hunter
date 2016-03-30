@@ -30,7 +30,6 @@ import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
 import com.metal.ui.forge.component.DetailAnalysis;
-import com.metal.ui.popup.TipCmd;
 import com.metal.utils.BagUtils;
 import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
@@ -41,7 +40,6 @@ import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.HBox;
-import ru.stablex.ui.widgets.MainStack;
 import ru.stablex.ui.widgets.Radio;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.VBox;
@@ -66,7 +64,6 @@ class WarehouseCmd extends BaseCmd
 	
 	private var _itemTextMap:ObjectMap<ItemBaseInfo,Text>;
 	
-	private var mainStack:MainStack;
 	private var isClose:Bool;
 	
 	//物品信息部分
@@ -134,11 +131,6 @@ class WarehouseCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.Btn).play();
 		_itemTextMap = new ObjectMap();
 		_widget = UIBuilder.get("warehouse");
-		if (_widget == null){
-			var mainStack:MainStack = cast(UIBuilder.get("allView"), MainStack);
-			mainStack.show('warehouse');
-			_widget = UIBuilder.get("warehouse");
-		}
 		
 		isClose = false;
 		super.onInitComponent();
@@ -156,7 +148,6 @@ class WarehouseCmd extends BaseCmd
 	
 	private function initUI():Void
 	{
-		mainStack = UIBuilder.getAs("allView", MainStack);
 		_panel = _widget.getChildAs("scrollPanel", VBox);
 		_bagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
 		_equipBagData = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData;
@@ -500,10 +491,7 @@ class WarehouseCmd extends BaseCmd
 				}
 				//分解
 				_decomposeBtn.onPress = function (e) { 
-					sendMsg(MsgUI.Tips, { msg:"分解可获得进阶材料\n确定分解所选择的装备？", type:TipsType.buyTip } );
-					var tipCmd:TipCmd = new TipCmd();
-					tipCmd.initComponent(null);
-					tipCmd.callbackFun.addOnce(callBackFun);					
+					sendMsg(MsgUI.Tips, { msg:"分解可获得进阶材料\n确定分解所选择的装备？", type:TipsType.buyTip, callback:callBackFun} );
 				};
 			}			
 			

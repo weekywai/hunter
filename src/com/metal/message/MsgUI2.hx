@@ -20,6 +20,8 @@ package com.metal.message;
 	InitThumb,		//初始预览
 	FinishBattleTip,     //完成关卡
 	Dilaogue,     		//对话框
-	Control
+	Control,
+	Pay,
+	Help
 ]))
 class MsgUI2{}

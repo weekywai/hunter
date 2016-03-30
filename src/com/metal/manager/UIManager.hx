@@ -1,7 +1,9 @@
 package com.metal.manager;
+import com.haxepunk.utils.Input;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
+import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.proto.manager.DuplicateManager;
 import com.metal.ui.battleResult.BattleFailureCmd;
@@ -21,6 +23,7 @@ import com.metal.ui.news.NewsCmd;
 import com.metal.ui.noviceGuide.NoviceCourseCmd;
 import com.metal.ui.popup.ResurrectionCmd;
 import com.metal.ui.popup.StopGame;
+import com.metal.ui.popup.TipCmd;
 import com.metal.ui.reward.RewardCmd;
 import com.metal.ui.skill.SkillCmd;
 import com.metal.ui.task.TaskCmd;
@@ -31,10 +34,13 @@ import com.metal.utils.effect.Animator;
 import com.metal.utils.effect.component.EffectType;
 import de.polygonal.core.es.Entity;
 import de.polygonal.core.sys.SimEntity;
+import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.display.Stage;
+import openfl.system.System;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Floating;
+import ru.stablex.ui.widgets.MainStack;
 
 enum TipsType
 {
@@ -67,6 +73,7 @@ class UIManager extends SimEntity
 	public var effLayer(default, null):Sprite;
 	
 	private var cotroller:ControllCmd;
+	private var _mainView:MainStack;
 	private var _showBossData:Dynamic;
 	public function new() 
 	{
@@ -107,6 +114,10 @@ class UIManager extends SimEntity
         UIBuilder.buildFn('ui/index.xml')().show();
 		addComponent(new LoginRegistCmd());
 		addComponent(new DialogueCmd());
+		#if android
+		Input.onAndroidBack = onAndroidBack;
+		#end
+		
 	}
 	override function onMsg(type:Int, sender:Entity) 
 	{
@@ -148,6 +159,8 @@ class UIManager extends SimEntity
 				cmd_Reward(userData);
 			case MsgUI.Battle:
 				cmd_Battle(userData);
+			case MsgUI2.Pay:
+				cmd_Pay(userData);
 			case MsgUI2.Task:
 				cmd_Task(userData);
 			case MsgUI2.Loading:
@@ -162,10 +175,14 @@ class UIManager extends SimEntity
 				cmd_GameNoviceCourse(userData);
 			case MsgUI2.ScreenMessage:
 				cmd_ScreenMessage(userData);
+			case MsgUI2.Help:
+				cmd_Help(userData);
 			case MsgUI.Tips:
 				cmd_Tips(userData);
 			case MsgUI.NewBie:
 				cmd_Newbie(userData);
+			case MsgUIUpdate.ClearMainView:
+				cmd_ClearMainView(userData);
 		}
 	}
 	private function cmd_SetParent(data:Dynamic):Void
@@ -179,6 +196,7 @@ class UIManager extends SimEntity
 	}
 	private function cmd_oneNews(data:Dynamic):Void
 	{
+		_mainView.show("news");
 		addComponent(new NewsCmd());
 	}
 	private function cmd_GameNoviceCourse(data:Dynamic):Void
@@ -189,35 +207,43 @@ class UIManager extends SimEntity
 	/**闯关*/
 	private function cmd_Through(data:Dynamic):Void
 	{
+		_mainView.show("through");
 		addComponent(new ThroughCmd());
 	}
 	/**无尽副本（无尽、护甲、武器、金钱）*/
 	private function cmd_EndlessCopy(data:Dynamic):Void
 	{
+		_mainView.show("endless");
 		addComponent(new EndlessCopyCmd());
 	}
 	/**购买宝箱*/
 	private function cmd_TreasureHunt(data:Dynamic):Void
 	{
+		_mainView.show('treasureHunt');
 		addComponent(new TreasureHuntCmd());
 	}
 	/**购买钻石*/
 	private function cmd_BuyDiamonds(data:Dynamic):Void
 	{
+		_mainView.show('diamonds');
 		addComponent(new BuyDiamondsCmd());
 	}
 	/**购买金币*/
 	private function cmd_BuyGold(data:Dynamic):Void
 	{
+		
+		_mainView.show('gold');
 		addComponent(new BuyGoldCmd());
 	}
 	/*时装*/
 	private function cmd_LatestFashion(data:Dynamic):Void
 	{
+		_mainView.show('latestFashion');
 		addComponent(new LatestFahionCmd());
 	}
 	private function cmd_Forge(data:Dynamic):Void
 	{
+		_mainView.show("forge");
 		addComponent(new ForgeCmd(data));
 	}
 	
@@ -257,18 +283,20 @@ class UIManager extends SimEntity
 	/*主界面*/
 	private function cmd_MainPanel(data:Dynamic):Void
 	{
+		_mainView = UIBuilder.getAs("allView", MainStack);
 		addComponent(new TopViewCmd());
 		addComponent(new MainCmd());
 	}
 	/**仓库*/
 	private function cmd_WarehousePanel(data:Dynamic):Void
 	{
-		
+		_mainView.show("warehouse");
 		addComponent(new WarehouseCmd(data));
 	}
 	/**技能解锁*/
 	private function cmd_Skill(data:Dynamic):Void
 	{
+		_mainView.show("skill");
 		addComponent(new SkillCmd(data));
 	}
 	/**胜利结算界面*/
@@ -300,16 +328,19 @@ class UIManager extends SimEntity
 	/**奖励界面*/
 	private function cmd_Reward(data:Dynamic):Void
 	{
+		_mainView.show("reward");
 		addComponent(new RewardCmd(data));
 	}
 	/**任务界面*/
 	private function cmd_Task(data:Dynamic):Void
 	{
+		_mainView.show("activity");
 		addComponent(new TaskCmd(data));
 	}
 	/**游戏设置*/
 	private function cmd_GameSet():Void
 	{
+		_mainView.show("gameSet");
 		addComponent(new GameSetCmd());
 	}
 	
@@ -320,6 +351,11 @@ class UIManager extends SimEntity
 		GameProcess.root.notify(MsgStartup.GameInit, duplicate);
 		cmd_Control(true);
 		UIBuilder.get("main").free();
+	}
+	
+	private function cmd_Pay(data:Dynamic):Void
+	{
+		_mainView.show("pay");
 	}
 	
 	private function cmd_Loading(data:Dynamic):Void 
@@ -347,6 +383,11 @@ class UIManager extends SimEntity
 		Animator.start(this, "", EffectType.MESSAGE_FADE, data, false);
 	}
 	
+	private function cmd_Help(data:Dynamic):Void 
+	{
+		_mainView.show("helpText");
+	}
+	
 	private function cmd_Tips(data:Dynamic):Void {
 		var alert:Floating = UIBuilder.getAs("popup", Floating);
 		if (alert != null) 
@@ -360,6 +401,11 @@ class UIManager extends SimEntity
 			content:Std.string(data.type)
 		});
 		alert.show();
+		
+		if (data.callback != null){
+			var tipCmd:TipCmd = new TipCmd();
+			tipCmd.callbackFun.addOnce(data.callback);
+		}
 	}
 	private function cmd_Newbie(data:Dynamic):Void {
 		var newbie = UIBuilder.getAs("bieId", Floating);
@@ -371,8 +417,26 @@ class UIManager extends SimEntity
 		newbie.show();
 	}
 	
-	private function onPopup()
+	private function cmd_ClearMainView(userData:Dynamic):Void
 	{
-		
+		if (_mainView.numChildren > 0)
+			_mainView.clear();
 	}
+	
+	private function onAndroidBack(){
+		cmd_Tips( { type:TipsType.buyTip, msg:"是否退出游戏" } );
+		var tipCmd:TipCmd = new TipCmd();
+		tipCmd.callbackFun.addOnce(exitApp);
+	}
+	private function exitApp(e:Bool)
+	{
+		if (e)
+			System.exit(0);
+	}
+	
+	override function onTick(dt:Float, post:Bool):Void 
+	{
+		super.onTick(dt, post);
+	}
+	
 }

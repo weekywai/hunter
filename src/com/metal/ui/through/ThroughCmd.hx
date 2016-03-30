@@ -1,22 +1,17 @@
 package com.metal.ui.through;
-import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgNet;
-import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.manager.DuplicateManager;
 import com.metal.ui.popup.BattleCmd;
-import com.metal.ui.popup.TipCmd;
-import com.metal.utils.FileUtils;
 import motion.Actuate;
 import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import ru.stablex.ui.UIBuilder;
-import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Scroll;
 import ru.stablex.ui.widgets.Text;
@@ -54,7 +49,7 @@ class ThroughCmd extends BaseCmd
 		_wordlMap = _widget.getChild("worldMap");
 		super.onInitComponent();
 		initHandler();
-		notify(MsgUIUpdate.UpdataReturnBtn, false );
+		notify(MsgUIUpdate.UpdataReturnBtn, false);
 	}
 	/**初始化关卡*/
 	private function initHandler():Void
@@ -191,10 +186,7 @@ class ThroughCmd extends BaseCmd
 				dispose();
 			}else
 			{
-				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip} );
-				var tipCmd:TipCmd = new TipCmd();
-				tipCmd.onInitComponent();
-				tipCmd.callbackFun.addOnce(callBackFun_buy);
+				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip, callback:callBackFun_buy} );
 			}
 		}
 	}

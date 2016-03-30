@@ -109,7 +109,7 @@
 		
 		<!--时间-->
 		<Box widthPt="100" heightPt="100" align="'center'">
-			<Text name="'timeLimit'" format-size="50" text="'00:00'" defaults="'TopMenu,Font'"  topPt="10"/>
+			<BmpText name="'timeLimit'" size="1" text="'0:00'" defaults="'TopMenu,Font'"  topPt="10"/>
 		</Box>
 		<!--左侧技能栏-->	
 		<VBox widthPt="100" heightPt="100" leftPt="0" topPt="30" childPadding="20" align="'top,left'">

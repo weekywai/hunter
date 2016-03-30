@@ -54,18 +54,7 @@ class ResurrectionCmd extends BaseCmd
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
 		
-		var e = PlayerUtils.getPlayer();
-		var arr =e.observable.getObserverList();
-		//e.getObservable().clear(true);
-		for (o in arr) 
-		{
-			//PlayerUtils.getPlayer().getObservable().detach(o);
-			//e.attach(o);
-			o.onUpdate(MsgActor.Respawn, e, null);
-		}
-		trace(arr);
-		//e.notify(MsgActor.Respawn);
-		//PlayerUtils.getPlayer().notify(MsgActor.Respawn);
+		PlayerUtils.getPlayer().notify(MsgActor.Respawn);
 		
 		//复活增加关卡时间
 		//notify(MsgUIUpdate.UpdateCountDown, 30);

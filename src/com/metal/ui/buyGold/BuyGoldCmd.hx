@@ -1,19 +1,17 @@
 package com.metal.ui.buyGold;
 import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;
-import com.metal.manager.UIManager;
+import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.Gold_Info;
 import com.metal.proto.manager.Gold_Manager;
 import com.metal.ui.BaseCmd;
-import com.metal.ui.popup.TipCmd;
-import haxe.ds.IntMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.VBox;
 import ru.stablex.ui.widgets.Text;
+import ru.stablex.ui.widgets.VBox;
 
 /**
  * ...
@@ -78,10 +76,7 @@ class BuyGoldCmd extends BaseCmd
 		
 		price = "是否花费" + Std.string(Gold_Manager.instance.getProto(btnNum).Price) + "颗钻石购买金币";
 		
-		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip} );
-		var tipCmd:TipCmd = new TipCmd();
-		tipCmd.onInitComponent();
-		tipCmd.callbackFun.addOnce(callBackFun);
+		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:callBackFun} );
 	}
 	
 	private function callBackFun(flag:Bool):Void

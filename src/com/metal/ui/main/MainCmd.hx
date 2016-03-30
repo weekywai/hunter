@@ -2,32 +2,25 @@ package com.metal.ui.main;
 import com.metal.component.GameSchedual;
 import com.metal.config.BagType;
 import com.metal.config.EquipProp;
-import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
-import com.metal.enums.NoviceOpenType;
-import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
-import com.metal.message.MsgView;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ArmsInfo;
 import com.metal.proto.impl.StrengthenInfo;
 import com.metal.proto.impl.WeaponInfo;
-import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.proto.manager.ModelManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.noviceGuide.NoviceCourseCmd;
-import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Box;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.MainStack;
 import ru.stablex.ui.widgets.Radio;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Tip;
@@ -43,7 +36,6 @@ class MainCmd extends BaseCmd
 {
 	
 	private var _model:SpriteActor;
-	private var mainStack:MainStack;
 	private var _mainTLView:Widget;
 	private var novCmd:NoviceCourseCmd ;
 	public static var main_cmd:MainCmd = new MainCmd();
@@ -72,7 +64,6 @@ class MainCmd extends BaseCmd
 		
 		initFileData();
 		
-		mainStack = UIBuilder.getAs("allView", MainStack);
 		//showModel();
 		onClick();
 		
@@ -96,21 +87,18 @@ class MainCmd extends BaseCmd
 		//_model = null;
 		//_widget.free();
 		//_widget = null;
-		//mainStack = null;
 		super.onDispose();
 	}
 	
 	/*打开关卡界面*/
 	private function openThrough():Void
 	{
-		mainStack.show("through");
 		sendMsg(MsgUI.Through);
 		
 	}
 	/**单开副本模式界面*/
 	private function openCopy():Void
 	{
-		mainStack.show("endless");
 		sendMsg(MsgUI.EndlessCopy);
 	}
 	override function onShow():Void 
@@ -122,12 +110,10 @@ class MainCmd extends BaseCmd
 	 * */
 	private function onClick():Void
 	{
-		mainStack = UIBuilder.getAs("allView", MainStack);
 		//活动
 		_widget.getChildAs("shopBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("activity");
 				sendMsg(MsgUI2.Task);
 				notify(MsgUIUpdate.UpdataReturnBtn, false);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText29);
@@ -136,7 +122,6 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("rewardBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("reward");
 				sendMsg(MsgUI.Reward);
 				notify(MsgUIUpdate.UpdataReturnBtn,false);
 			}
@@ -144,15 +129,13 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("newsBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("news");
 				notify(MsgUIUpdate.UpdataReturnBtn, false);
 				sendMsg(MsgUI2.oneNews);
 			}
 		//游戏设置
 		_widget.getChildAs("gameSetBtn", Button).onPress = function(e)
 			{
-				SfxManager.getAudio(AudioType.Btn).play(); 
-				mainStack.show("gameSet");
+				SfxManager.getAudio(AudioType.Btn).play();
 				sendMsg(MsgUI2.GameSet);
 				notify(MsgUIUpdate.UpdataReturnBtn,false);
 			}
@@ -160,7 +143,6 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("battleBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("through");
 				sendMsg(MsgUI.Through);
 				notify(MsgUIUpdate.UpdataReturnBtn, false);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText13);
@@ -169,7 +151,6 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("endlessBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("endless");
 				sendMsg(MsgUI.EndlessCopy);
 				notify(MsgUIUpdate.UpdataReturnBtn, false);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText15);
@@ -178,7 +159,6 @@ class MainCmd extends BaseCmd
 		//_widget.getChildAs("strengthenBtn", Button).onPress = function(e)
 			//{
 				//SfxManager.getAudio(AudioType.Btn).play();
-				//mainStack.show("forge");
 				//sendMsg(MsgUI.Forge);
 				//notify(MsgUIUpdate.UpdataReturnBtn, false);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText19);
@@ -187,7 +167,6 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("warehouseBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("warehouse");
 				sendMsg(MsgUI.Warehouse, BagType.OPENTYPE_STORE);
 				notify(MsgUIUpdate.UpdataReturnBtn, false);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText24);
@@ -196,7 +175,6 @@ class MainCmd extends BaseCmd
 		//_widget.getChildAs("skillBtn", Button).onPress = function(e)
 			//{
 				//SfxManager.getAudio(AudioType.Btn).play();
-				//mainStack.show("skill");
 				//sendMsg(MsgUI.Skill);
 				//notify(MsgUIUpdate.UpdataReturnBtn, false);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText25);
@@ -206,7 +184,6 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("leftEquipBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("warehouse");
 				sendMsg(MsgUI.Warehouse, BagType.OPENTYPE_WEAPON);
 				notify(MsgUIUpdate.UpdataReturnBtn, true);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText24);
@@ -215,7 +192,6 @@ class MainCmd extends BaseCmd
 		_widget.getChildAs("rightEquipBtn", Button).onPress = function(e)
 			{
 				SfxManager.getAudio(AudioType.Btn).play();
-				mainStack.show("warehouse");
 				sendMsg(MsgUI.Warehouse, BagType.OPENTYPE_ARMS);
 				notify(MsgUIUpdate.UpdataReturnBtn, true);
 				//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText24);
