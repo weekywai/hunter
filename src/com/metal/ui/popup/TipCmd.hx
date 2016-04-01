@@ -21,6 +21,7 @@ class TipCmd extends BaseCmd
 		super();
 		onInitComponent();
 		SfxManager.getAudio(AudioType.t001).play();
+		//_widget = UIBuilder.get("tipPopup");
 		_widget = UIBuilder.get("flagTip");
 		callbackFun = new Signal1();
 		onEnabel();

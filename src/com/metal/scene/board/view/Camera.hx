@@ -204,7 +204,7 @@ class Camera extends Component
 	
 	private function cmd_AssignPlayer(userData:Dynamic):Void
 	{
-		trace(userData);
+		//trace(userData);
 		var player:SimEntity = userData;
 		_actor = cast player.getComponent(MTActor);
 		HXP.camera.y = _actor.y - HXP.halfHeight;

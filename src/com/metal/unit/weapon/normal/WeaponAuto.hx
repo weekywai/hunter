@@ -28,7 +28,7 @@ class WeaponAuto extends BaseWeapon
 	{
 		super.initInfo(info);
 		_weaponSubId = GoodsProtoManager.instance.getSubID(weaponID);
-		trace("initInfo");
+		//trace("initInfo");
 	}
 	override public function onTick(timeDelta:Float) 
 	{
