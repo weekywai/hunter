@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Widget id="'gameSet'" name="'gameSetView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+<Widget id="'gameSet'" name="'gameSet'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
 	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
 		<Text text="'设 置'" defaults="'Tip'" topPt="6" />
 	</VBox>

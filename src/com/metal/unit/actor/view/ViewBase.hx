@@ -39,7 +39,6 @@ class ViewBase extends AbstractAvatar
 	private var _targetPos:Point;
 	private var _attcking:Bool;
 	private var _meleeHit:Bool;
-	private var _checkCamera:Bool;
 	public function new() 
 	{
 		super();
@@ -48,7 +47,6 @@ class ViewBase extends AbstractAvatar
 		_curAction = none;
 		_attcking = false;
 		_meleeHit = false;
-		_checkCamera = true;
 	}
 	
 	override public function onDispose():Void 
@@ -157,11 +155,6 @@ class ViewBase extends AbstractAvatar
 			//_enterboard = true;
 			HXP.scene.add(this);
 		}
-	}
-	override function Notify_BornPos(userData:Dynamic):Void 
-	{
-		trace("Notify_BornPos");
-		_checkCamera = false;
 	}
 //}
 	

@@ -213,6 +213,8 @@ class BaseActor extends GameBoardItem implements IActor
 			return;
 		if (isDisposed) return;
 		if (_model == null) return;
+		
+		_model.active = _model.onCamera;
 		if (stateID == ActorState.Destroyed)
 			return;
 		// 更新状态逻辑

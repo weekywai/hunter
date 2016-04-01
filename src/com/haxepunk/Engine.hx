@@ -288,7 +288,7 @@ class Engine extends Sprite
 	/**更新引擎*/
 	public function updateEngine():Void
 	{
-		if(parent!=null)
+		if(parent!=null && !paused)
 			onEnterFrame(null);
 	}
 	/** @private Framerate independent game loop. */

@@ -52,7 +52,7 @@ class TopViewCmd extends BaseCmd
 	
 	override function onInitComponent():Void 
 	{
-		trace("onInitComponent");
+		//trace("onInitComponent");
 		_widget = UIBuilder.get("topview");
 		//playerInfo = FileUtils.getPlayerInfos();
 		notify(MsgUIUpdate.UpdateInfo);
@@ -85,7 +85,7 @@ class TopViewCmd extends BaseCmd
 				latestFlag = true;
 				upDate_Vit(userData);
 			case MsgUIUpdate.UpdataReturnBtn:
-				UpdataReturnBtn(userData);
+				UpdataFashionBtn(userData);
 				
 		}
 	}
@@ -106,7 +106,7 @@ class TopViewCmd extends BaseCmd
 					SfxManager.getAudio(AudioType.Btn).play();
 					latestFlag = true;
 					sendMsg(MsgUI.LatestFashion);
-					UpdataReturnBtn(false);
+					UpdataFashionBtn(false);
 				}
 			}
 		
@@ -126,14 +126,15 @@ class TopViewCmd extends BaseCmd
 	}
 	private function onBackBtn(e)
 	{ 
+		//trace("onBackBtn");
 		SfxManager.getAudio(AudioType.Btn).play();
 		sendMsg(MsgUIUpdate.ClearMainView);
 		latestFlag = false;
-		UpdataReturnBtn(true);
+		UpdataFashionBtn(true);
 		notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText27);
 	}
 	/**是否显示时装按钮*/
-	private function UpdataReturnBtn(data:Dynamic):Void
+	private function UpdataFashionBtn(data:Dynamic):Void
 	{
 		_widget.getChildAs("returnBtnBg", Widget).visible = data;
 	}
@@ -176,21 +177,23 @@ class TopViewCmd extends BaseCmd
 	/**打开购买金币界面*/
 	private function BuyGoldBtn_click(e):Void
 	{
-		sendMsg(MsgUI.BuyGold);
-		UpdataReturnBtn(false);
+		//trace("BuyGoldBtn_click" + MsgUI.BuyGold);
+		sendMsg(MsgUI.BuyGolds);
+		UpdataFashionBtn(false);
 	}
 	/**打开购买钻石界面*/
 	private function BuyDiamondsBtn_click(e):Void
 	{
+		//trace("BuyDiamondsBtn_click" + MsgUI.BuyDiamonds);
 		sendMsg(MsgUI.BuyDiamonds);
-		UpdataReturnBtn(false);
+		UpdataFashionBtn(false);
 		
 	}
 	/**打开购买宝箱界面*/
 	public function huntBtn_click(e):Void
 	{
 		sendMsg(MsgUI.TreasureHunt);
-		UpdataReturnBtn(false);
+		UpdataFashionBtn(false);
 		notifyRoot(MsgView.NewBie, NoviceOpenType.NoviceText5);
 		_widget.getChildAs("hintBtn", Button).visible = false;
 	}

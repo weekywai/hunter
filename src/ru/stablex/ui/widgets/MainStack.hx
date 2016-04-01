@@ -1,42 +1,60 @@
 package ru.stablex.ui.widgets;
-import haxe.macro.Context;
-import haxe.macro.Expr;
-
-#if macro
-import sys.FileSystem;
-import sys.io.File;
-#else
-import ru.stablex.ui.skins.Skin;
-import Type;
-import ru.stablex.ui.widgets.Widget;
-#end
+import flash.display.DisplayObject;
+import ru.stablex.ui.events.WidgetEvent;
 /**
  * ...
  * @author hyg
  */
-class MainStack extends Widget
+class MainStack extends ViewStack
 {
 	private var openType:String;
+	private var _hideIndex:Int = -1;
 	public function new()  
 	{
 		super();
 	}
 
-	public function show(name:String):Void
+	override public function show(name:String, cb:Void->Void = null, ignoreHistory:Bool = true):Void 
 	{
+		if (openType == name)
+			return;
 		openType = name;
-		if (this.numChildren > 0) this.removeChildren();
-		var current = UIBuilder.get(name);
-		if (current != null)
+		var toHide : DisplayObject = (currentIdx==-1)?null:this.getChildAt(this.currentIdx);
+        var toShow : DisplayObject = UIBuilder.get(name);
+		if (toShow != null)
 		{
-			this.addChild(current);
-		}else
-		{
-			openView(name);
+			toShow.visible = false;
+			addChild(toShow);
+		} else {
+			toShow = openView(name);
 		}
-		
+        if( toShow != null ){
+            if( !ignoreHistory ){
+                this._history.push( this.getChildIndex(toShow) );
+            }else {
+				if(toHide!=null){
+					_hideIndex = this.getChildIndex(toHide);
+					cb = clearCB;
+				}
+			}
+
+            if( toHide != toShow && this.trans != null ){
+                this.trans.change(this, toHide, toShow, cb);
+            }else{
+                toHide.visible = false;
+                toShow.visible = true;
+                if( cb != null ) cb();
+            }
+            this.dispatchEvent(new WidgetEvent(WidgetEvent.CHANGE));
+        }
 	}
-	private function openView(name:String):Void
+	
+	private function clearCB()
+	{
+		removeChildAt(_hideIndex);
+		_hideIndex =-1;
+	}
+	private function openView(name:String):DisplayObject
 	{
 		var loadXml:Dynamic = null;
 		switch(name)
@@ -45,8 +63,10 @@ class MainStack extends Widget
 				loadXml = UIBuilder.buildFn('ui/task/activity.xml');
 			case "news":	//消息
 				loadXml = UIBuilder.buildFn('ui/news/news.xml');
-			case "gold":	//购买金币
+			case "golds":	//购买金币
 				loadXml = UIBuilder.buildFn('ui/buyGoldOrDiamonds/gold.xml');
+			case "diamonds":	//钻石
+				loadXml = UIBuilder.buildFn('ui/buyGoldOrDiamonds/diamonds.xml');
 			case "reward":	//奖励
 				loadXml = UIBuilder.buildFn('ui/reward/reward.xml');
 			case "gameSet":	//游戏设置
@@ -57,7 +77,7 @@ class MainStack extends Widget
 				loadXml = UIBuilder.buildFn('ui/copy/through.xml');
 			case "treasureHunt":	//寻宝
 				loadXml = UIBuilder.buildFn('ui/treasureHunt/treasureHunt.xml');
-			case "pay":	//充值
+			case "pay":	//充值8
 				loadXml = UIBuilder.buildFn('ui/pay/pay.xml');
 			case "warehouse":	//仓库
 				loadXml = UIBuilder.buildFn('ui/storehouse/warehouse.xml');
@@ -67,24 +87,44 @@ class MainStack extends Widget
 				loadXml = UIBuilder.buildFn('ui/forge/forge.xml');
 			case "endless"://无尽
 				loadXml = UIBuilder.buildFn('ui/endless/endless.xml');
-			case "diamonds":	//钻石
-				loadXml = UIBuilder.buildFn('ui/buyGoldOrDiamonds/diamonds.xml');
 			case "latestFashion":	//时装
 				loadXml = UIBuilder.buildFn('ui/latestFashion/latestFashion.xml');
 			case "skill":			//技能
 				loadXml = UIBuilder.buildFn('ui/skill/skill.xml');
-			case "noviceCourse":	
-				loadXml = UIBuilder.buildFn('ui/noviceGuide/noviceCourse.xml');
 			default:
 				trace("请在MainStack类中导入相应xml！");
 		}
-		if (loadXml != null) this.addChild(loadXml({}));
-		
+		if (loadXml != null) {
+			var child = addChild(loadXml( { } ));
+			child.visible = false;
+			return child;
+		}
+		return null;
 	}
 	public function clear():Void
 	{
-		this.removeChildren();
+		if (numChildren > 0) {
+			if (numChildren > 1) {
+				back(backCallback);
+			}else{
+				var toHide = getChildAt(numChildren-1);
+				trans.change(this, toHide, null, transCallback, true);
+			}
+		}
+	}
+	private function transCallback()
+	{
+		clearHistory();
+		removeChildren();
 		openType = "";
+	}
+	/**
+	 * back to ui
+	*/
+	private function backCallback()
+	{
+		removeChildAt(numChildren - 1);
+		openType = getChildAt(numChildren - 1).name;
 	}
 	/**
 	 * 

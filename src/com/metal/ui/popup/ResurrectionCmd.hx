@@ -8,10 +8,8 @@ import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
-import com.metal.message.MsgUIUpdate;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.ui.BaseCmd;
-import de.polygonal.core.sys.Component;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Text;
@@ -38,16 +36,16 @@ class ResurrectionCmd extends BaseCmd
 	}
 	private function onEnable():Void
 	{
-		_widget.getChildAs("suerBtn", Button).onRelease = suerBtn_click;
-		_widget.getChildAs("closeBtn", Button).onRelease = closeBtn_click;
+		_widget.getChildAs("yesBtn", Button).onRelease = suerBtn_click;
+		_widget.getChildAs("noBtn", Button).onRelease = closeBtn_click;
 	}
 	/*确定复活*/
 	private function suerBtn_click(e):Void
 	{
 		if (PlayerUtils.getInfo().getProperty(PlayerPropType.GEM) < _price)
 		{
-			_widget.getChildAs("Load", Text).text = "钻石不足";
-			_widget.getChild("suerBtn").visible = false;
+			_widget.getChildAs("tipTxt", Text).text = "钻石不足";
+			_widget.getChild("yesBtn").visible = false;
 			return;
 		}
 		notifyRoot(MsgPlayer.UpdateGem, -_price);

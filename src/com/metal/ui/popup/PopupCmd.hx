@@ -4,30 +4,22 @@ import com.metal.config.SfxManager;
 import com.metal.ui.BaseCmd;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.Text;
 import signals.Signal1;
 
 /**
  * ...通用确认提示框
  * @author hyg
  */
-class TipCmd extends BaseCmd
+class PopupCmd extends BaseCmd
 {
 	public var callbackFun:Signal1<Dynamic>;
-	private var _data:Dynamic;
-	//public var txt(default, set):String;
 	public function new() 
 	{
 		super();
 		onInitComponent();
 		SfxManager.getAudio(AudioType.t001).play();
-		_widget = UIBuilder.get("flagTip");
+		_widget = UIBuilder.get("alertSystem");
 		callbackFun = new Signal1();
-		onEnabel();
-	}
-	
-	private function onEnabel():Void
-	{
 		_widget.getChildAs("noBtn", Button).onPress = noBtn_click;
 		_widget.getChildAs("yesBtn", Button).onPress = yesBtn_click;
 	}
@@ -35,8 +27,7 @@ class TipCmd extends BaseCmd
 	private function noBtn_click(e):Void
 	{	
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('popup').free(); 
-		callbackFun.dispatch(false);
+		_widget.getParent('alertSystem').free(); callbackFun.dispatch(false);
 		dispose();
 		
 	}
@@ -44,8 +35,7 @@ class TipCmd extends BaseCmd
 	private function yesBtn_click(e):Void
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('popup').free(); 
-		callbackFun.dispatch(true);
+		_widget.getParent('alertSystem').free(); callbackFun.dispatch(true);
 		dispose();
 	}
 	

@@ -309,7 +309,7 @@ class SpinePunk extends Graphic {
 						//trace(weaponBox);
 					}
 				}
-				
+				/*
 				if (mask!=null)
 					continue;
 				//判断非碰撞骨骼
@@ -342,9 +342,10 @@ class SpinePunk extends Graphic {
                         _aabb.height = y1 - y0;
                     }
                 }
-				
+				*/
             }
         }
+		/*
 		if (mask!=null)
 			return;
 		_aabb = box;
@@ -354,7 +355,7 @@ class SpinePunk extends Graphic {
             mainHitbox = _aabb;
             firstFrame = false;
         }
-		
+		*/
 		
     }
     
@@ -439,8 +440,8 @@ class SpinePunk extends Graphic {
         
         wrapper.smooth = smooth;
         
-        wrapper.originX = (region.regionWidth / 2);
-        wrapper.originY = (region.regionHeight / 2);
+        wrapper.originX = (region.regionWidth * 0.5);
+        wrapper.originY = (region.regionHeight * 0.5);
         if (region.rotate) {
             wrapper.angle = -90;
         }

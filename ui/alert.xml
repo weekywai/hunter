@@ -23,8 +23,5 @@
 		<Widget name="'gainGoods'" widthPt="100" heightPt="100">
 			<meta:include src="ui/popup/gainGoods.xml"/>
 		</Widget>
-		<Widget name="'loading'" widthPt="100" heightPt="100">
-			<meta:include src="ui/popup/loading.xml"/>
-		</Widget>
     </ViewStack>
 </Floating>

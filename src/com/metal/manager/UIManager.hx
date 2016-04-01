@@ -1,11 +1,13 @@
 package com.metal.manager;
 import com.haxepunk.utils.Input;
+import com.haxepunk.utils.Key;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.proto.manager.DuplicateManager;
+import com.metal.ui.LoginRegistCmd;
 import com.metal.ui.battleResult.BattleFailureCmd;
 import com.metal.ui.battleResult.BattleResultCmd;
 import com.metal.ui.buyDiamonds.BuyDiamondsCmd;
@@ -16,11 +18,11 @@ import com.metal.ui.dialogue.DialogueCmd;
 import com.metal.ui.forge.ForgeCmd;
 import com.metal.ui.gameSet.GameSetCmd;
 import com.metal.ui.latestFashion.LatestFahionCmd;
-import com.metal.ui.LoginRegistCmd;
 import com.metal.ui.main.MainCmd;
 import com.metal.ui.main.TopViewCmd;
 import com.metal.ui.news.NewsCmd;
 import com.metal.ui.noviceGuide.NoviceCourseCmd;
+import com.metal.ui.popup.PopupCmd;
 import com.metal.ui.popup.ResurrectionCmd;
 import com.metal.ui.popup.StopGame;
 import com.metal.ui.popup.TipCmd;
@@ -34,7 +36,6 @@ import com.metal.utils.effect.Animator;
 import com.metal.utils.effect.component.EffectType;
 import de.polygonal.core.es.Entity;
 import de.polygonal.core.sys.SimEntity;
-import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.display.Stage;
 import openfl.system.System;
@@ -53,6 +54,7 @@ enum TipsType
 	resurrection;
 	gainGoods;
 	loading;
+	SystemPopup;
 }
 
 /**
@@ -63,6 +65,7 @@ class UIManager extends SimEntity
 {
 	public static var NewBie: Dynamic->Floating;
 	public var _popup:  Dynamic->Floating;
+	public var _alert:  Dynamic->Floating;
 	public var _loading:  Floating;
 	private var _stage:Stage;
 	/**根*/
@@ -108,6 +111,7 @@ class UIManager extends SimEntity
 			_root.show();
 		}
 		_popup = UIBuilder.buildFn('ui/alert.xml');
+		_alert = UIBuilder.buildFn('ui/alertSystem.xml');
 		_loading = UIBuilder.buildFn('ui/loading.xml')({msg:"加载中"});
 		NewBie = UIBuilder.buildFn('ui/noviceGuide/noviceCourse.xml');
 		
@@ -135,7 +139,7 @@ class UIManager extends SimEntity
 				cmd_Forge(userData);
 			case MsgUI.LatestFashion:
 				cmd_LatestFashion(userData);
-			case MsgUI.BuyGold:
+			case MsgUI.BuyGolds:
 				cmd_BuyGold(userData);
 			case MsgUI.BuyDiamonds:
 				cmd_BuyDiamonds(userData);
@@ -201,7 +205,7 @@ class UIManager extends SimEntity
 	}
 	private function cmd_GameNoviceCourse(data:Dynamic):Void
 	{
-		trace("cmd_GameNoviceCourse");
+		//trace("cmd_GameNoviceCourse");
 		addComponent(new NoviceCourseCmd());
 	}
 	/**闯关*/
@@ -231,8 +235,8 @@ class UIManager extends SimEntity
 	/**购买金币*/
 	private function cmd_BuyGold(data:Dynamic):Void
 	{
-		
-		_mainView.show('gold');
+		trace("cmd_BuyGold");
+		_mainView.show('golds');
 		addComponent(new BuyGoldCmd());
 	}
 	/*时装*/
@@ -385,7 +389,7 @@ class UIManager extends SimEntity
 	
 	private function cmd_Help(data:Dynamic):Void 
 	{
-		_mainView.show("helpText");
+		_mainView.show("helpText", null, false);
 	}
 	
 	private function cmd_Tips(data:Dynamic):Void {
@@ -423,11 +427,19 @@ class UIManager extends SimEntity
 			_mainView.clear();
 	}
 	
-	private function onAndroidBack(){
-		cmd_Tips( { type:TipsType.buyTip, msg:"是否退出游戏" } );
-		var tipCmd:TipCmd = new TipCmd();
+	private function onAndroidBack() {
+		var alert:Floating = UIBuilder.getAs("alertSystem", Floating);
+		if (alert != null) 
+			alert.free();
+		alert = _alert( {
+			msg:"是否退出游戏",
+			content:Std.string(TipsType.SystemPopup)
+		});
+		alert.show();
+		var tipCmd:PopupCmd = new PopupCmd();
 		tipCmd.callbackFun.addOnce(exitApp);
 	}
+	
 	private function exitApp(e:Bool)
 	{
 		if (e)
@@ -437,6 +449,11 @@ class UIManager extends SimEntity
 	override function onTick(dt:Float, post:Bool):Void 
 	{
 		super.onTick(dt, post);
+		#if debug
+		if (Input.check(Key.BACKSPACE)) {
+			trace("press");
+			onAndroidBack() ;
+		}
+		#end
 	}
-	
 }
