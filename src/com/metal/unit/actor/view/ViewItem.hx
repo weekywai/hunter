@@ -1,5 +1,6 @@
 package com.metal.unit.actor.view;
 
+import com.metal.config.UnitModelType;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgEffect;
@@ -14,7 +15,7 @@ import com.metal.unit.avatar.AttachTexture;
  * 角色视图控制
  * @author weeky
  */
-class ViewItem extends ViewObject
+class ViewItem extends ViewActor
 {
 	private var _key:Bool;//判断是否骨骼 or xml
 	public function new() 
@@ -49,6 +50,7 @@ class ViewItem extends ViewObject
 			preload();
 		notify(MsgActor.PostLoad, this);
 	}
+	
 	
 	override function setAction(action:ActionType, loop:Bool = true):Void 
 	{

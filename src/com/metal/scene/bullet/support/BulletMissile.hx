@@ -127,6 +127,7 @@ class BulletMissile extends BulletEntity
 		//判断目标 和 攻击者的相对位置
 		dirKey = req.targetX >= req.x;// _attacker.getComponent(MTActor).dir == Direction.RIGHT;
 		_speed = req.info.speed;
+		_bullectAngle = req.bulletAngle;
 		initRunInfo(dirKey);
 		t0 = 0;
 		//_bullet.centerOrigin();

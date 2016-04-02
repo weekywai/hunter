@@ -1,6 +1,8 @@
 package com.metal.unit.actor.view;
+import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
+import com.metal.config.UnitModelType;
 import com.metal.unit.avatar.AttachImage;
 import com.metal.unit.avatar.AttachTexture;
 import com.metal.unit.avatar.IAttach;
@@ -19,28 +21,33 @@ class ViewObject extends ViewBase
 	}
 	override public function update():Void {
 		//setHitboxTo(_model);
-		//if(_model!=null)
-			//_model.color = _colorT.color;
 	}
 	
 	override function createAvatar(name:String, type:String):Dynamic 
 	{
 		var fileName = name.substring(0, name.length - 4);
-		var fileType = name.substr(name.length - 4);
+		var fileType = (type != UnitModelType.Unit)?name.substr(name.length - 4):".xml";
 		var res = ResPath.getIconPath(fileName, "", fileType);
-		var model:Dynamic = null;
-		switch(fileType) {
+		var model:IAttach;
+		switch(fileType) { 
 			case ".xml":
-				var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(res);
+				var eff:TextureAtlasFix;
+				if (type == UnitModelType.Unit){   
+					eff = TextureAtlasFix.loadTexture(ResPath.getModelXML(type, name));
+				}else{
+					eff = TextureAtlasFix.loadTexture(res);
+				}
 				model = new AttachTexture(eff);
 			case ".png":
 				model = new AttachImage(res);
+			default:
+				model = null;
 		}
-		
-		addGraphic(cast model);
-		//trace(model);
-		setHitbox(model.width, model.height);
-		//setHitbox(Std.int(_model.width *0.5), _model.height , Std.int(_model.width / 4), Std.int(_model.height / 2));
+		var img:Image = cast (model,Image);
+		addGraphic(img);
+		//trace(res + " : "+a.width);
+		setHitbox(img.width, img.height);
+		//setHitbox(Std.int(img.width *0.5), img.height , Std.int(img.width / 4), Std.int(img.height / 2));
 		return model;
 	}
 	

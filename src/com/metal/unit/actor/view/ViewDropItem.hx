@@ -36,7 +36,6 @@ class ViewDropItem extends ViewObject
 		Actuate.stop(this);
 		_bounds = null;
 		super.onDispose();
-		
 	}
 	override public function update() 
 	{
