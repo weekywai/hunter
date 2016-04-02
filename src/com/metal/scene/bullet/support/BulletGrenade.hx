@@ -101,7 +101,7 @@ class BulletGrenade extends BulletEntity
 	{
 		if (isDisposed)
 			return;
-		super.update();
+		//super.update();
 		moveGrenade();
 		if (_collides.length==0) {
 			onCollide();
