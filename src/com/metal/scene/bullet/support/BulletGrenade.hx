@@ -109,12 +109,13 @@ class BulletGrenade extends BulletEntity
 	{
 		if (isDisposed)
 			return;
-		super.update();
+		//super.update();
 		moveGrenade();
 		if (_collides.length==0) {
 			onCollide();
 		}
 		_delay--;
+		//trace(_delay);
 		if (_delay <= 0) {
 			if (computeInCamera()) {
 				//trace("not in camera");
@@ -141,6 +142,7 @@ class BulletGrenade extends BulletEntity
 		if (_collides.length > 0) return;
 		collideTypesInto(_collideTypes, x, y, _collides);
 		if (_collides.length > 0) {
+			trace(_collides);
 			SfxManager.getAudio(AudioType.Canon).play();
 			for (e in _collides) 
 			{

@@ -226,11 +226,8 @@ class BattleResolver extends Component
 			case 2://生命
 			case 3://伤害
 		}
-		if (Main.config.get("console") == "true") {
-			damage = fixRate * damage / 100 + fixParam;
-		}else {
-			damage = fixRate * damage / 10000 + fixParam;
-		}
+		
+		damage = fixRate * damage / (10000 * Std.parseFloat(Main.config.get("maxAttack")))  + fixParam;
 		
 		//trace("damage:"+damage);
 		var ran = Math.random() > 0.5?1: -1;
