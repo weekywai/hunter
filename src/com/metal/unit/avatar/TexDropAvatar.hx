@@ -64,8 +64,9 @@ class TexDropAvatar extends MTAvatar
 			_model = new Image(res);
 		}
 		//trace(_model);
+		var img:Image = cast(_model, Image);
 		graphic = _model;
-		setHitbox(_model.width, _model.height);// , Std.int(_model.width / 2), Std.int(_model.height / 2));
+		setHitbox(img.width, img.height);// , Std.int(_model.width / 2), Std.int(_model.height / 2));
 		//changeColor();
 		return _model;
 	}

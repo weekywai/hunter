@@ -33,6 +33,8 @@
 package spinehaxe.animation;
 
 import openfl.errors.Error;
+import signals.Signal2;
+import signals.SignalAny;
 import spinehaxe.animation.TrackEntry;
 import spinehaxe.Event;
 import spinehaxe.Skeleton;
@@ -43,20 +45,20 @@ class AnimationState {
 	public var tracks:Array<TrackEntry>;
 	var trackEntryPool:TrackEntryPool;
 	public var events:Array<Event>;
-	public var onStart:Listeners;
-	public var onEnd:Listeners;
-	public var onComplete:Listeners;
-	public var onEvent:Listeners;
+	public var onStart:Signal2<Int, String>;
+	public var onEnd:Signal2<Int, String>;
+	public var onComplete:Signal2<Int, String>;
+	public var onEvent:Signal2<Int, Event>;
 	public var timeScale:Float;
 	public var clearWhenFinished:Bool=true;
 	public function new(data:AnimationStateData) {
 		tracks = new Array<TrackEntry>();
 		trackEntryPool = new TrackEntryPool();
 		events = new Array<Event>();
-		onStart = new Listeners();
-		onEnd = new Listeners();
-		onComplete = new Listeners();
-		onEvent = new Listeners();
+		onStart = new Signal2();
+		onEnd = new Signal2();
+		onComplete = new Signal2();
+		onEvent = new Signal2();
 		timeScale = 1;
 		if(data == null) 
 			throw new Error("data cannot be null.");
@@ -130,16 +132,19 @@ class AnimationState {
 			for(event in events) {
 				if(current.onEvent != null) 
 					current.onEvent(i, event);
-				onEvent.invoke(i, event);
+				onEvent.dispatch(i, event);
 			}
 
 			// Check if completed the animation or a loop iteration.
-			//trace(lastTime +" "+ endTime +" "+ time);
-			if((loop) ? (lastTime % endTime > time % endTime):(lastTime < endTime && time >= endTime))  {
-				var count:Int = cast(time / endTime);
-				if (current.onComplete != null) 
-					current.onComplete(count, current.animation.name);
-				onComplete.invoke(count, current.animation.name);
+			//trace(lastTime +" " + endTime +" " + time);
+			//TODO modify lasttime if free =-1
+			if (lastTime !=-1){
+				if((loop) ? (lastTime % endTime > time % endTime):(lastTime < endTime && time >= endTime))  {
+					var count:Int = cast(time / endTime);
+					if (current.onComplete != null) 
+						current.onComplete(count, current.animation.name);
+					onComplete.dispatch(count, current.animation.name);
+				}
 			}
 
 			current.lastTime = current.time;
@@ -165,7 +170,7 @@ class AnimationState {
 			return;
 		if(current.onEnd != null) 
 			current.onEnd(trackIndex, current.animation.name);
-		onEnd.invoke(trackIndex, current.animation.name);
+		onEnd.dispatch(trackIndex, current.animation.name);
 		tracks[trackIndex] = null;
 		freeAll(current);
 		if (current.previous != null) trackEntryPool.free(current.previous);
@@ -192,7 +197,7 @@ class AnimationState {
 			current.previous = null;
 			if(current.onEnd != null) 
 				current.onEnd(index, current.animation.name);
-			onEnd.invoke(index, current.animation.name);
+			onEnd.dispatch(index, current.animation.name);
 			entry.mixDuration = data.getMix(current.animation, entry.animation);
 			if(entry.mixDuration > 0)  {
 				entry.mixTime = 0;
@@ -202,7 +207,7 @@ class AnimationState {
 		tracks[index] = entry;
 		if(entry.onStart != null) 
 			entry.onStart(index, entry.animation.name);//current == null ? "" : current.animation.name);
-		onStart.invoke(index, entry.animation.name);//current == null ? "" : current.animation.name);
+		onStart.dispatch(index, entry.animation.name);//current == null ? "" : current.animation.name);
 	}
 
 	public function setAnimationByName(trackIndex:Int, animationName:String, loop:Bool):TrackEntry {
@@ -260,6 +265,22 @@ class AnimationState {
 		if(trackIndex >= tracks.length) 
 			return null;
 		return tracks[trackIndex];
+	}
+	
+	public function dispose()
+	{
+		data = null;
+		tracks = null;
+		trackEntryPool = null;
+		events = null;
+		onStart.removeAll();
+		onStart = null;
+		onEnd.removeAll();
+		onEnd = null;
+		onComplete.removeAll();
+		onComplete = null;
+		onEvent.removeAll();
+		onEvent = null;
 	}
 
 	public function toString():String {

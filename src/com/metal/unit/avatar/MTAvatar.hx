@@ -41,10 +41,10 @@ class MTAvatar extends AbstractAvatar
 	override function onDispose():Void 
 	{
 		super.onDispose();
-		_skeleton.state.onEvent.listeners = [];
-		_skeleton.state.onStart.listeners = [];
-		_skeleton.state.onComplete.listeners = [];
-		_skeleton.state.onEnd.listeners = [];
+		_skeleton.state.onEvent.removeAll();
+		_skeleton.state.onStart.removeAll();
+		_skeleton.state.onComplete.removeAll();
+		_skeleton.state.onEnd.removeAll();
 		ResourceManager.instance.addSource(_skeleton.name, _skeleton);
 		//_skeleton.destroy();
 		_skeleton = null;
