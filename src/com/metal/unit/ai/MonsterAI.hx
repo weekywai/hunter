@@ -160,46 +160,14 @@ class MonsterAI extends BaseAiControl
 			case AIStatus.Skill:
 				Input_Skill(monsterOutput.SkillType);
 			case AIStatus.Enter:
-				//trace(monsterOutput.flipX+"--"+_selfActor.faction);
-				if (_selfActor.faction == BoardFaction.Boss || _selfActor.faction == BoardFaction.Boss1) {
-					if (monsterOutput.flipX == null) {
-						Input_Enter(null);
-						return;
-					}
-					
+				if (monsterOutput.flipX == null) {
+					Input_Enter(null);
+				} else {
 					if(monsterOutput.flipX)
 						Input_Enter(Direction.LEFT);
 					else
 						Input_Enter(Direction.RIGHT);
-				}else
-				{
-					if (monsterOutput.flipX == null)
-						return;
-					if(monsterOutput.flipX)
-						Input_Move(Direction.LEFT);
-					else
-						Input_Move(Direction.RIGHT);
 				}
-				/*
-				if (_selfActor.faction == BoardFaction.Boss) {
-					if (monsterOutput.flipX == null) {
-						Input_Enter(null);
-						return;
-					}
-					
-					if(monsterOutput.flipX)
-						Input_Enter(Direction.LEFT);
-					else
-						Input_Enter(Direction.RIGHT);
-				}else {
-					if (monsterOutput.flipX == null)
-						return;
-					if(monsterOutput.flipX)
-						Input_Move(Direction.LEFT);
-					else
-						Input_Move(Direction.RIGHT);
-				}
-				*/
 				if(_monsterOutData.isEnter)
 					_player.notify(MsgInput.SetInputEnable, true);
 		}
@@ -209,7 +177,6 @@ class MonsterAI extends BaseAiControl
 	{
 		super.cmd_BornPos(userData);
 		_bornPos = cast(userData, Point);
-		//trace(_bornPos);
 	}
 	
 	override function onDispose():Void 

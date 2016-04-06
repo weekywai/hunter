@@ -103,10 +103,10 @@ class TriggerComponent extends Component
 					}
 				}else {
 					var id = Std.parseInt(_info.custom.resolve("id"));
-					trace("ShowMonster :"+id);
+					//trace("ShowMonster :"+id);
 					var enemies = AppearManager.instance.getProto(id).enemies.copy();
 					var enemiesVO:Array<MonsVo> = [];
-					//转换arr
+					//转换array
 					for (monId in enemies) {
 						var vo:MonsVo = new MonsVo(monId, id);
 						enemiesVO.push(vo);

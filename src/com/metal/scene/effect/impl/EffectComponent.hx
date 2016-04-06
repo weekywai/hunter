@@ -54,7 +54,9 @@ class EffectComponent extends Component
 		var effect:IEffect, aniType:Int;
 		if(req.boomType == 0)
 		{
+			
 			var info:EffectInfo = EffectManager.instance.getProto(req.Key);
+			//trace(req.Key +" "+ info);
 			aniType = info.type;
 		}
 		else

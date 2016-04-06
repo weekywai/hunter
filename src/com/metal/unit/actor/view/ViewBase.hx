@@ -151,7 +151,7 @@ class ViewBase extends AbstractAvatar
 			visible = true;
 			active = true;
 		}else {
-			//trace("EnterBoard");
+			//trace("EnterBoard" + x);
 			//_enterboard = true;
 			HXP.scene.add(this);
 		}
@@ -207,7 +207,7 @@ class ViewBase extends AbstractAvatar
 	{
 		var vo:EffectRequest = new EffectRequest();
 		vo.Key = key;
-		vo.setInfo(this, type,renderType);
+		vo.setInfo(this, type, renderType);
 		if (msg != null)
 			vo.text = msg;
 		notifyParent(MsgEffect.Create, vo);

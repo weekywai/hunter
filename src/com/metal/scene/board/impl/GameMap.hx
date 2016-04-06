@@ -450,6 +450,7 @@ class GameMap extends Component
 			entity = createEntity(monsterInfo.ModelType, createPos, vo.id);
 			entity.notify(MsgActor.BornPos, bornPos);
 			notify(MsgBoard.AssignUnit, entity);
+			//trace(entity);
 			if(!mapData.runKey){
 				var faction = BoardFaction.getFaction(monsterInfo.ModelType);
 				if(faction == BoardFaction.Elite || faction == BoardFaction.Machine){
@@ -478,6 +479,7 @@ class GameMap extends Component
 				unitModel = UnitModelType.Unit;
 				
 		}
+		//trace(x +" "+y);
 		return UnitUtils.createUnit(unitModel, id, faction, x, y);
 	}
 	

@@ -142,7 +142,7 @@ class BulletGrenade extends BulletEntity
 		if (_collides.length > 0) return;
 		collideTypesInto(_collideTypes, x, y, _collides);
 		if (_collides.length > 0) {
-			trace(_collides);
+			//trace(_collides);
 			SfxManager.getAudio(AudioType.Canon).play();
 			for (e in _collides) 
 			{

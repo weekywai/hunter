@@ -164,8 +164,6 @@ class ViewEnemy extends ViewActor
 	}
 	override public function update() 
 	{
-		//if (_actor.stateID == ActorState.Move)
-			//trace(_mInfo.res);
 		//滚屏死亡移动
 		if (isDisposed || _isFree)
 			return;
@@ -201,6 +199,7 @@ class ViewEnemy extends ViewActor
 	{
 		super.Notify_Injured(userData);
 		//受击特效
+		trace(type+" "+ _info.ID);
 		if (_info.hit != 0) 
 			startEffect(_info.hit);
 		//文字特效
@@ -291,7 +290,7 @@ class ViewEnemy extends ViewActor
 		{
 			_attcking = false;
 				//trace("onCompleteCallback");
-			notify(MsgActor.AttackStatus ,false);
+			notify(MsgActor.AttackStatus , false);
 			_actor.transition(ActorState.Stand);
 		}
 	}

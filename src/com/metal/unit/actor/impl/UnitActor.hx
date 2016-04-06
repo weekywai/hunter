@@ -37,11 +37,11 @@ class UnitActor extends BaseActor
 			notify(MsgActor.Destroy);
 		}
 	}
-	override function cmd_PostBoot(userData:Dynamic):Void 
+	/*override function Notify_Move(userData:Dynamic) 
 	{
-		//trace("cmd_PostBoot");
-		super.cmd_PostBoot(userData);
-	}
+		trace(x+" " +y);
+		super.Notify_Move(userData);
+	}*/
 	override function notify_ChangeSpeed(userData:Dynamic):Void 
 	{
 		//_speed = _speed * userData[0];

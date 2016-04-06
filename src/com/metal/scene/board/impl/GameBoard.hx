@@ -102,7 +102,7 @@ class GameBoard extends Component
 		owner.add(item);
 		// 发送进入游戏板信号
 		item.notify(MsgActor.EnterBoard);
-		if (_startAI){
+		if (_startAI) {
 			item.notify(MsgInput.SetInputEnable, true);
 		}
 		return true;

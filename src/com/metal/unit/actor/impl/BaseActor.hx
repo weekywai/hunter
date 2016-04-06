@@ -44,6 +44,7 @@ class BaseActor extends GameBoardItem implements IActor
 	/** 移动速度 */
 	public var velocity:Point;
 	
+	private var _keepActive:Bool;
 	private var _doublejump:Bool;
 	
 	private var _collides:Array<String> = [UnitModelType.Solid, UnitModelType.Block];
@@ -93,7 +94,7 @@ class BaseActor extends GameBoardItem implements IActor
 	}
 	public var radarRange(get, null):Int;
 	private function get_radarRange():Int{ return 0; }
-	public function getProperty(key:String):String { return null; }
+	//public function getProperty(key:String):String { return null; }
 	//}
 	
 	
@@ -130,6 +131,7 @@ class BaseActor extends GameBoardItem implements IActor
 		isNeedRightFlip = true;
 		isAttack = false;
 		onWall = false;
+		_keepActive = false;
 	}
 	
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
@@ -209,12 +211,12 @@ class BaseActor extends GameBoardItem implements IActor
 
 	override public function onTick(timeDelta:Float) 
 	{
-		if (!isInBoard())
-			return;
 		if (isDisposed) return;
+		if (!isInBoard()) return;
 		if (_model == null) return;
 		
-		_model.active = _model.onCamera;
+		_model.active = (_keepActive)?_keepActive:_model.onCamera;
+		_keepActive = false;
 		if (stateID == ActorState.Destroyed)
 			return;
 		// 更新状态逻辑
@@ -486,22 +488,27 @@ class BaseActor extends GameBoardItem implements IActor
 			acceleration.x = _moveSpeed;
 		//trace("Notify_Move" + acceleration +" dir:"+ dir);
 	}
+	
+	private function Notify_Enter(userData:Dynamic):Void 
+	{
+		_keepActive = true;
+		if (faction == BoardFaction.Boss || faction == BoardFaction.Boss1) {
+			transition(ActorState.Enter);
+		}else{
+			transition(ActorState.Move);
+		}
+		acceleration.x = 0;
+		dir = userData;
+		if (dir == LEFT && velocity.x > -_maxSpeed.x) //if (dir == LEFT)
+			acceleration.x = -_moveSpeed;
+		else if(dir == RIGHT && velocity.x < _maxSpeed.x)// else if(dir == RIGHT)
+			acceleration.x = _moveSpeed;
+		//trace("Enter" + acceleration +" dir:"+ dir);
+	}
 	private function Notify_EnterBoard(userData:Dynamic):Void 
 	{
 		isRunMap = EntityUtil.findBoardComponent(GameMap).mapData.runKey;
 	}
-	private function Notify_Enter(userData:Dynamic):Void 
-	{
-		transition(ActorState.Enter);
-		acceleration.x = 0;
-		dir = userData;
-		if (dir == LEFT)
-			acceleration.x = -_moveSpeed;
-		else if(dir == RIGHT)
-			acceleration.x = _moveSpeed;
-			trace("Enter" + acceleration +" dir:"+ dir);
-	}
-	
 	private function Notify_Skill(userData:Dynamic):Void 
 	{
 		transition(ActorState.Skill);
