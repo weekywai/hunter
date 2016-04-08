@@ -70,8 +70,8 @@ class UnitActor extends BaseActor
 	}
 	override function Notify_Destroy(userData:Dynamic):Void 
 	{
-		//notifyParent(MsgItr.Destory, bindPlayerID);
-		notifyParent(MsgItr.Destory, owner.keyId);
+		notifyParent(MsgItr.Destory, {key:owner.keyId, id:bindPlayerID});
+		//notifyParent(MsgItr.Destory, owner.keyId);
 		if(faction != BoardFaction.Block)
 			super.Notify_Destroy(userData);
 	}

@@ -33,12 +33,6 @@ class ViewVehicle extends ViewActor
 		super();
 	}
 	
-	override function onInit():Void 
-	{
-		super.onInit();
-		_actor = owner.getComponent(MTActor);
-		_stat = owner.getComponent(PlayerStat);
-	}
 	override public function onDispose():Void 
 	{
 		_weapon = null;
@@ -48,6 +42,8 @@ class ViewVehicle extends ViewActor
 	
 	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
+		_actor = owner.getComponent(MTActor);
+		_stat = owner.getComponent(PlayerStat);
 		super.Notify_PostBoot(userData);
 		_gunBone = getBone("paoguan");
 		originRotation = _gunBone.data.rotation;

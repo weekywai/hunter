@@ -450,6 +450,7 @@ class BaseActor extends GameBoardItem implements IActor
 	override function Notify_InitFaction(userData:Dynamic):Void 
 	{
 		super.Notify_InitFaction(userData);
+		//trace(userData.id);
 		_bindPlayerID = userData.id;
 		switch(faction) {
 			case BoardFaction.Player,BoardFaction.Block, BoardFaction.Enemy, BoardFaction.Npc, BoardFaction.Vehicle, BoardFaction.Boss, BoardFaction.Elite, BoardFaction.Machine:

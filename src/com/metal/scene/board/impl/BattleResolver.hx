@@ -71,8 +71,9 @@ class BattleResolver extends Component
 	{
 		//trace("Destory::"+userData + " len:"+_gameMap.enemies.length);
 		if (_gameMap.mapData != null && _gameMap.mapData.runKey) return;
-		var remove = _gameMap.enemies.remove(userData);
-		if(remove)_gameMap.bornPointMap.set(_gameMap.enemiesMap.get(userData),-1);
+		var key:Int = userData.key;
+		var remove = _gameMap.enemies.remove(key);
+		if(remove)_gameMap.bornPointMap.set(_gameMap.enemiesMap.get(key),-1);
 		//var loopEntity = _gameMap.loopEntityId.remove(userData);
 		//if (loopEntity && _gameMap.loopEntityId.length<=0) 
 		//{
@@ -85,7 +86,7 @@ class BattleResolver extends Component
 			loopGroup = _gameMap.loopEntityId[i];
 			for (j in 0...loopGroup.length) 
 			{
-				if (loopGroup[j]==userData) 
+				if (loopGroup[j]==key) 
 				{
 					groupNum[i]--;
 					if (groupNum[i]<=0) 
