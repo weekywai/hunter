@@ -510,7 +510,7 @@ class GameMap extends Component
 		//trace("bind player" + owner.parent);
 		notify(MsgBoard.AssignPlayer, player);
 		notifyParent(MsgBoard.AssignPlayer, player);
-		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
+		
 		//trace("AssignPlayer");
 		notify(MsgBoard.StartTrigger);
 	}
@@ -526,7 +526,7 @@ class GameMap extends Component
 		//trace("bind Vehicle");
 		notify(MsgBoard.AssignPlayer, player);
 		notifyParent(MsgBoard.AssignPlayer, player);
-		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
+		//GameProcess.NotifyUI(MsgBoard.AssignPlayer);
 	}
 	
 	private function BindUint():Void

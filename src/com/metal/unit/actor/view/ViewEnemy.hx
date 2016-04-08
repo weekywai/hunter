@@ -199,7 +199,7 @@ class ViewEnemy extends ViewActor
 	{
 		super.Notify_Injured(userData);
 		//受击特效
-		trace(type+" "+ _info.ID);
+		//trace(type+" "+ _info.ID);
 		if (_info.hit != 0) 
 			startEffect(_info.hit);
 		//文字特效

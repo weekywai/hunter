@@ -59,7 +59,6 @@ class BaseAiControl extends Component
 	
 	private function cmd_SetInputEnable(userData):Void 
 	{
-		
 		_stop = !userData;
 	}
 	public function initData():Void {}

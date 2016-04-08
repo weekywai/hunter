@@ -181,7 +181,7 @@ class BattleSystem extends Component
 			_clear = false;
 		}
 		GameProcess.SendUIMsg(MsgUI.BossPanel);
-		GameProcess.NotifyUI(MsgUIUpdate.StartBattle);
+		GameProcess.NotifyUI(MsgUIUpdate.StartBattle|MsgStartup.Start);
 		notifyDirect("GameBoard",MsgStartup.Start);
 		
 		_missionType = MapInfoManager.instance.getRoomInfo(Std.parseInt(currentRoomId())).MissionType;		
@@ -306,6 +306,7 @@ class BattleSystem extends Component
 	
 	private function cmd_BattleClear(userData:Dynamic)
 	{
+		trace("cmd_BattleClear");
 		var count = _curMap;
 		count++;
 		if (count < _roomArray.length) {
@@ -323,6 +324,7 @@ class BattleSystem extends Component
 	private function cmd_TransitionMap(userData:Dynamic):Void
 	{
 		_curMap++;
+		trace(_roomArray);
 		if (_curMap < _roomArray.length) {
 			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, -1);
 			Animator.start(this, "", EffectType.SCREEN_CLOSE_EAT, null, true, changeMap);

@@ -40,8 +40,9 @@ class GameBoard extends Component
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
-			case MsgStartup.Start:
-				cmd_Start(userData);
+			//case MsgStartup.Start:
+				//trace("Start");
+				//cmd_Start(userData);
 			case MsgStartup.Reset:
 				cmd_Reset(userData);
 			case MsgBoard.AssignUnit:
@@ -53,9 +54,9 @@ class GameBoard extends Component
 		}
 		super.onUpdate(type, source, userData);
 	}
-	private function cmd_Start(userData:Dynamic):Void {
-		
-	}
+	//private function cmd_Start(userData:Dynamic):Void {
+		//
+	//}
 	private function cmd_Reset(userData:Dynamic):Void {
 		var itr = units.iterator();
 		var item:SimEntity = itr.next();
@@ -73,6 +74,8 @@ class GameBoard extends Component
 	}
 	private function cmd_StartAI()
 	{
+		trace("cmd_StartAI");
+		GameProcess.NotifyUI(MsgBoard.AssignPlayer);
 		var itr = units.iterator();
 		var item:SimEntity = itr.next();
 		while (item != null) {

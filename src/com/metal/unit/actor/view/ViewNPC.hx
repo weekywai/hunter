@@ -42,7 +42,7 @@ class ViewNPC extends ViewActor
 			
 		notify(MsgActor.PostLoad, this);
 		animationState().onEnd.add(onEndCallback);
-		trace(owner.name);
+		//trace(owner.name);
 	}
 	
 	override function Notify_Destorying(userData:Dynamic):Void 

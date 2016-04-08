@@ -194,7 +194,7 @@ class ViewPlayer extends ViewActor
 		_playerInfo = PlayerUtils.getInfo();
 		lastDir = _actor.dir;
 		setDefaultAimPoint();
-		trace(Notify_PostBoot);
+		//trace(Notify_PostBoot);
 		super.Notify_PostBoot(userData);
 		
 		//trace("boot" );

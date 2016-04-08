@@ -299,7 +299,7 @@ class Engine extends Sprite
 		HXP._systemTime = _time - _systemTime;
 		_updateTime = _time;
 		//HXP.elapsed = Timebase.gameTimeDelta;
-		HXP.elapsed = Timebase.timeDelta*0.5;
+		HXP.elapsed = Timebase.gameTimeDelta*0.5;
 		
 		_last = _time;
 

@@ -140,7 +140,8 @@ class BulletMissile1 extends BulletEntity
 	{
 		if (isDisposed)
 			return;
-		super.update();
+		//super.update();
+		onCheck();
 		if(_dir == "up")
 			moveUp();
 		else if (_dir == "down")
@@ -159,7 +160,7 @@ class BulletMissile1 extends BulletEntity
 	
 	private function moveDown():Void
 	{
-		//x += -_speed;
+		//x += -_speed;`
 		//x += - _speed * (HXP.halfWidth - _warn.x) / (HXP.height + 10);
 		y += _speed;
 	}

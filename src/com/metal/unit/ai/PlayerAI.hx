@@ -67,7 +67,6 @@ class PlayerAI extends BaseAiControl
 		_playerInputData.AttackingRadius = 0.6;
 		_playerInputData.BaseAttackTime = 0;
 		_playerInputData.BaseIdleTime = 0;
-		_playerInputData.isEscape = 2;
 		_playerInputData.Victory = false;
 	}
 
@@ -86,7 +85,6 @@ class PlayerAI extends BaseAiControl
 		}
 	}
 	
-	
 	private function cmd_PostLoad(userData:Dynamic):Void
 	{
 		_model = userData;
@@ -100,10 +98,14 @@ class PlayerAI extends BaseAiControl
 	
 	private function cmd_Victory(userData:Dynamic):Void
 	{
+		_playerInputData.Victory = true; //through animation
 		_stop = true;
 		//trace("victory");
-		GameProcess.root.notify(MsgStartup.PauseCountDown,true);
-		Actuate.tween(this, 2.5, { } ).onComplete(function() { _playerInputData.Victory = true; _stop = false; } );
+		GameProcess.root.notify(MsgStartup.PauseCountDown, true);
+/*		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
+			_playerInputData.Victory = true; //through animation
+			_stop = false;
+		} );*/
 	}
 	/*
 	private function cmd_HoldFire(userData:Dynamic):Void
@@ -113,10 +115,7 @@ class PlayerAI extends BaseAiControl
 		//setAttackStatus(_holdFire);
 	}
 	*/
-	override function cmd_SetInputEnable(userData):Void 
-	{
-		super.cmd_SetInputEnable(userData);
-	}
+	
 	private function findClose(ary:Array<Entity>):Entity
 	{
 		var collideE:Entity = null;

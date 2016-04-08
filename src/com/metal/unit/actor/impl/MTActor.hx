@@ -1,9 +1,12 @@
 package com.metal.unit.actor.impl;
 import com.haxepunk.Entity;
+import com.haxepunk.HXP;
 import com.metal.component.BattleSystem;
 import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
+import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
+import com.metal.message.MsgInput;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
@@ -19,6 +22,7 @@ import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.render.ViewDisplay;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
+import motion.Actuate;
 import pgr.dconsole.DC;
 /**
  * ...
@@ -355,15 +359,18 @@ class MTActor extends BaseActor
 	}
 	override function Notify_Escape(userData:Dynamic):Void 
 	{
+		//ai update many execute 
+		trace("Victory Escape:");
 		//trace("Victory Escape:"+(HXP.camera.x + HXP.width) +">>>" + x);
-		//if (x >= HXP.camera.x+HXP.width){
+		if (x >= HXP.camera.x + HXP.width) {
+			//TODO only one execute
 			GameProcess.root.notify(MsgStartup.TransitionMap);
-		//}else {
-			//if (onWall) {
-				//transition(ActorState.Jump);
-			//}
-			//Notify_Move(Direction.RIGHT);
-		//}
+		}else {
+			if (onWall) {
+				transition(ActorState.Jump);
+			}
+			Notify_Move(Direction.RIGHT);
+		}
 	}
 	override function Notify_Victory(userData:Dynamic):Void 
 	{
@@ -371,6 +378,10 @@ class MTActor extends BaseActor
 		isVictory = true;
 		super.Notify_Victory(userData);		
 		velocity.x = 0;
+		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
+			GameProcess.root.notify(MsgStartup.TransitionMap);
+		} );
+		
 	}
 	private function cmd_AddCollide(userData:Dynamic):Void 
 	{
