@@ -51,7 +51,7 @@ class EffectRequest
 	{
 		x = av.x;
 		y = av.y;
-		if(isFollow)
+		//if(isFollow)
 			attacker = av;
 		width = av.width;
 		height = av.height;

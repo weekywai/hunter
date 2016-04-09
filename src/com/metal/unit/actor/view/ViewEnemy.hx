@@ -215,6 +215,25 @@ class ViewEnemy extends ViewActor
 			//通知处理爆炸
 			startEffect(0, _mInfo.boomType+4);
 		}
+		onDropItem();
+	}
+	override function Notify_Destory(userData:Dynamic):Void 
+	{
+		
+		if(_weapon!=null) HXP.scene.remove(_weapon);
+		super.Notify_Destory(userData);
+	}
+	
+	override function Notify_EffectStart(userData:Dynamic):Void
+	{
+		//trace("add Effect :" + userData);
+		if (userData == null)
+			return;
+		startEffect(userData);
+	}
+	
+	private function onDropItem()
+	{
 		var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
 		//trace(dropRan);
 		if (Math.random() <= 0.2*rate) {
@@ -248,21 +267,6 @@ class ViewEnemy extends ViewActor
 			//createDropItem(drop);
 		}
 	}
-	override function Notify_Destory(userData:Dynamic):Void 
-	{
-		
-		if(_weapon!=null) HXP.scene.remove(_weapon);
-		super.Notify_Destory(userData);
-	}
-	
-	override function Notify_EffectStart(userData:Dynamic):Void
-	{
-		//trace("add Effect :" + userData);
-		if (userData == null)
-			return;
-		startEffect(userData);
-	}
-	
 	private function onEventCallback(value:Int, event:Event):Void {
 		//trace("callback"); 
 		if (isDisposed)

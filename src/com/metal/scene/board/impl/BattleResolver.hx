@@ -143,10 +143,11 @@ class BattleResolver extends Component
 			targetStat = cast target.getComponent(UnitStat);
 		}
 		//
-		if(Main.config.get("console")=="true")
+		if (Main.config.get("console") == "true") {
 			if (target.name == UnitModelType.Player ||target.name == UnitModelType.Vehicle) 
 				  return;
-		//trace(attacker.id + " " +attackerSkill);
+		}
+		
 		if (targetStat == null)
 			return;
 		var buff:Buff = targetStat.findStatusByKey(BuffType.Invincible);

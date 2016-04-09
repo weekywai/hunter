@@ -42,19 +42,6 @@ class ViewMachine extends ViewEnemy
 		_gunBone = null;
 	}
 	
-	override function Notify_Destorying(userData:Dynamic):Void 
-	{
-		//trace("Notify_Destorying");
-		super.Notify_Destorying(userData);
-		if (_mInfo.isBoom) {
-			//通知处理爆炸
-			var vo:EffectRequest = new EffectRequest();
-			vo.setInfo(this, _mInfo.boomType+4);
-			notifyParent(MsgEffect.Create, vo);
-		}
-		//type = "npc";
-	}
-	
 	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		super.Notify_PostBoot(userData);

@@ -60,12 +60,14 @@ class ViewBoss1 extends ViewEnemy
 	{
 		//super.Notify_Destorying(userData); 
 		type = "";
+		_attcking = false;
 		if (_mInfo.isBoom) {
 			//通知处理爆炸
 			var vo:EffectRequest = new EffectRequest();
 			vo.setInfo(this, _mInfo.boomType+4);
 			notifyParent(MsgEffect.Create, vo);
 		}
+		
 	}
 	override function Notify_Skill(userData:Dynamic):Void 
 	{
