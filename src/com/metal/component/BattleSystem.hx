@@ -208,7 +208,7 @@ class BattleSystem extends Component
 	}
 	
 	/**通关评级*/
-	public function rate():Int
+	private function rate():Int
 	{
 		var rateStarNum:Int = 0;
 		var reachArr:Array<Bool> = new Array();

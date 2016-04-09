@@ -140,7 +140,7 @@ class BulletMissile extends BulletEntity
 	{
 		if (isDisposed)
 			return;
-		super.update();
+		//super.update();
 		
 		if (collideEntity != null) {
 			onCollide();

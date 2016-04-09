@@ -23,6 +23,7 @@ import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.avatar.MTAvatar;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
+import motion.Actuate;
 import pgr.dconsole.DC;
 /**
  * ...
@@ -374,6 +375,9 @@ class MTActor extends BaseActor
 		isVictory = true;
 		super.Notify_Victory(userData);		
 		velocity.x = 0;
+		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
+			GameProcess.root.notify(MsgStartup.TransitionMap);
+		} );
 	}
 	private function cmd_AddCollide(userData:Dynamic):Void 
 	{

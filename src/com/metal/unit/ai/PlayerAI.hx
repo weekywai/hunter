@@ -103,9 +103,10 @@ class PlayerAI extends BaseAiControl
 	private function cmd_Victory(userData:Dynamic):Void
 	{
 		_stop = true;
+		_playerInputData.Victory = true;
 		//trace("victory");
-		GameProcess.root.notify(MsgStartup.PauseCountDown,true);
-		Actuate.tween(this, 2.5, { } ).onComplete(function() { _playerInputData.Victory = true; _stop = false; } );
+		GameProcess.root.notify(MsgStartup.PauseCountDown, true);
+		//Actuate.tween(this, 2.5, { } ).onComplete(function() { _playerInputData.Victory = true; _stop = false; } );
 	}
 	/*
 	private function cmd_HoldFire(userData:Dynamic):Void

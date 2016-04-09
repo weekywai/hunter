@@ -131,7 +131,7 @@ class BulletMissile1 extends BulletEntity
 	{
 		if (isDisposed)
 			return;
-		super.update();
+		//super.update();
 		if(_dir == "up")
 			moveUp();
 		else if (_dir == "down")

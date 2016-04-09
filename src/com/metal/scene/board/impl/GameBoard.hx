@@ -75,6 +75,7 @@ class GameBoard extends Component
 	}
 	private function cmd_StartAI()
 	{
+		GameProcess.NotifyUI(MsgBoard.AssignPlayer);
 		var itr = units.iterator();
 		var item:SimEntity = itr.next();
 		while (item != null) {

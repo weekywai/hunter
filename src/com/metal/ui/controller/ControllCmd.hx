@@ -256,7 +256,7 @@ class ControllCmd extends BaseCmd
 		_thumb = _widget.getChild("thumb");
 		setWeaponPanel();
 		_mission = _widget.getChildAs("mission", Text);
-		cmd_AssignPlayer(PlayerUtils.getPlayer());
+		//cmd_AssignPlayer(PlayerUtils.getPlayer());
 	}
 	private function cmd_UpdateBullet(userData:Dynamic)
 	{
@@ -327,8 +327,8 @@ class ControllCmd extends BaseCmd
 				//cmd_bossFight(userData);
 			case MsgUIUpdate.BossInfoUpdate:
 				cmd_BossInfoUpdate(userData);
-			//case MsgBoard.AssignPlayer:
-				//cmd_AssignPlayer(userData);
+			case MsgBoard.AssignPlayer:
+				cmd_AssignPlayer();
 			case MsgUIUpdate.NewBieUI:
 				cmd_NewBieUI(userData);
 			//case MsgUIUpdate.UpdateThumb:
@@ -788,9 +788,9 @@ class ControllCmd extends BaseCmd
 		_bossPanel.getChildAs("bossHP", Progress).value = userData.percent;
 		_bossPanel.getChildAs("hpPercent", Text).text = Std.string(userData.hp < 0?0:userData.hp);
 	}
-	private function cmd_AssignPlayer(userData):Void 
+	private function cmd_AssignPlayer():Void 
 	{
-		_player = userData;
+		_player = PlayerUtils.getPlayer();
 		stat = _player.getComponent(PlayerStat);
 		_attackBtn.onPress = onAttackPress;
 		_attackBtn.onRelease = onAttackRelease;

@@ -18,7 +18,8 @@ class XmlUtils
 	public static function GetInt(xml:Fast, name:String, init:Int = 0):Int {
 		var str:String = xml.node.resolve(name).innerData;
 		if (!StringUtils.IsNullOrEmpty(str)) {
-			return Std.parseInt(str);
+			var i = Std.parseInt(str);
+			return i == null?init:i;
 		} else {
 			return init;
 		}

@@ -201,8 +201,9 @@ class ViewEnemy extends BaseViewActor
 	{
 		super.Notify_Injured(userData);
 		//受击特效
-		if (_modelInfo.hit != 0) 
+		if (_modelInfo.hit != 0) {
 			startEffect(_modelInfo.hit);
+		}
 		//文字特效
 		var msg:String = (userData.damage==0)?"miss":Std.string(userData.damage);
 		startEffect(0, EffectAniType.Text, msg,userData.renderType);
