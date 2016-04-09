@@ -41,7 +41,7 @@ class ViewMachine extends ViewEnemy
 		_frontArmBone = null;
 		_gunBone = null;
 	}
-	
+	/*super is double effect 
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		//trace("Notify_Destorying");
@@ -53,7 +53,7 @@ class ViewMachine extends ViewEnemy
 			notifyParent(MsgEffect.Create, vo);
 		}
 		//_avatar.type = "npc";
-	}
+	}*/
 	
 	override private function cmd_PostBoot(userData:Dynamic):Void
 	{
