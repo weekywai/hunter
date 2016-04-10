@@ -56,7 +56,7 @@ class EffectComponent extends Component
 		{
 			
 			var info:EffectInfo = EffectManager.instance.getProto(req.Key);
-			trace(req.Key + " " +info);
+			//trace(req.Key + " " +info);
 			aniType = info.type;
 		}
 		else

@@ -136,7 +136,7 @@ class TriggerComponent extends Component
 				key = _actor.x >= _info.x;
 				//trace(_info.x);
 				if (key) {
-					owner.notify(MsgCamera.Lock, true);
+					notify(MsgCamera.Lock, true);
 					
 					var id:Int = Std.parseInt(_info.custom.resolve("id"));
 					var enemies:Array<Int> = AppearManager.instance.getProto(id).enemies.copy();
@@ -157,14 +157,14 @@ class TriggerComponent extends Component
 			case TriggerType.UnLock:
 				key = _actor.x >= _info.x;
 				if (key) {
-					owner.notify(MsgCamera.Lock, false);
+					notify(MsgCamera.Lock, false);
 					//删掉
 					dispose();
 				}
 			case TriggerType.NorMalLock:
 				key = _actor.x >= _info.x;
 				if (key) {
-					owner.notify(MsgCamera.Lock, true);
+					notify(MsgCamera.Lock, true);
 					//删掉
 					dispose();
 				}
@@ -195,7 +195,7 @@ class TriggerComponent extends Component
 				//当前index=0位置的数据长度为0时 移除index0 把切割后的index0怪物数组发出去 
 				if (_info != null && Reflect.getProperty(_info, "showKey")) {
 					//trace("ClearUnLock");
-					notifyParent(MsgCamera.Lock, false);
+					notify(MsgCamera.Lock, false);
 					_info.showKey = false;
 					dispose();
 				}
@@ -215,9 +215,10 @@ class TriggerComponent extends Component
 	}
 	
 	/**此方法 只在B段地图控制出场怪物数据的处理*/
-	private function cmd_Destory(id:Int):Void
+	private function cmd_Destory(userData:Dynamic):Void
 	{
 		if (_info == null) return;
+		var id:Int = userData.id;
 		switch(type){
 			case TriggerType.CallMonsters:
 				if (_info.voInfo[0].length == null) return;

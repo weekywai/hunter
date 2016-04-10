@@ -38,7 +38,7 @@ class TextrueSpritemap extends Image
 	 * @param	frameHeight		Frame height.
 	 * @param	callback		Optional callback function for animation end.
 	 */
-	public function new(source:TextureAtlasFix)
+	public function new(source:TextureAtlasFix, auto:Bool = true)
 	{
 		complete = true;
 		rate = 1;
@@ -59,7 +59,7 @@ class TextrueSpritemap extends Image
 		
 
 		updateBuffer();
-		active = true;
+		active = auto;
 		//trace(_region.center+"::::"+originX);
 	}
 	

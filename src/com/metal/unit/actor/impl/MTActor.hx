@@ -324,7 +324,7 @@ class MTActor extends BaseActor
 	
 	override function Notify_Destroy(userData:Dynamic):Void 
 	{
-		notifyParent(MsgItr.Destory, bindPlayerID);
+		notifyParent(MsgItr.Destory, {key:owner.keyId, id:bindPlayerID});
 		super.Notify_Destroy(userData);
 	}
 	
