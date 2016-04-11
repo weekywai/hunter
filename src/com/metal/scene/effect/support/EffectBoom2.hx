@@ -54,7 +54,6 @@ class EffectBoom2 extends EffectBoom1
 			boomEff.flipped = (ran <= 0.5) ? true : false;
 			boomEff.x = ran * req.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
 			boomEff.y = ran * req.height * 0.5;// - boomEffect2.scaledHeight / 2;
-			addGraphic(boomEff);
 			Actuate.timer(i * 0.17).onComplete (effectTween, [boomEff, ""+i]);
 		}
 		//trace("x y " + x + ":" + y);

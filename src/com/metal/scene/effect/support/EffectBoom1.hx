@@ -58,24 +58,22 @@ class EffectBoom1 extends EffectEntity
 			});
 			boomEff.visible = false;
 			boomEff.centerOrigin();
-			addGraphic(boomEff);
 			ran = Math.random();
 			boomEff.scale = (ran * 1 + 1);
-			//boomEffect2.scale = (Math.random() * 1 + scale);
 			boomEff.flipped = (ran <= 0.5) ? true : false;
 			boomEff.x = ran * req.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
 			boomEff.y = ran * req.height * 0.7;// - boomEffect2.scaledHeight / 2;
 			//boomEffectArray.push(boomEff);
 			Actuate.timer(i * 0.25).onComplete (effectTween, [boomEff, ""+i]);
 		}
-		
-		_effect = new TextrueSpritemap(eff1);
-		_effect.add("boom", eff1.getReginCount(), 17, false);
-		_effect.animationEnd.add(onBoomComplete);
+		if(_effect==null){
+			_effect = new TextrueSpritemap(eff1);
+			_effect.add("boom", eff1.getReginCount(), 17, false);
+			_effect.animationEnd.addOnce(onBoomComplete);
+		}
 		_effect.centerOrigin();
 		_effect.visible = false;
 		_effect.scale = 1.4;
-		addGraphic(_effect);
 		_effect.x =  -req.width * 0.3;
 		_effect.y = 20;
 		Actuate.timer(2).onComplete (effectTween, [_effect, "boom"]);
@@ -89,21 +87,18 @@ class EffectBoom1 extends EffectEntity
 	private function effectTween(tex:TextrueSpritemap, name:String)
 	{
 		if (scene == null) return;
-		tex.active = true;
-		tex.visible = true;
-		tex.play(name);
+		addGraphic(tex);
+		tex.play(name, true);
 	}
-	override public function removed():Void 
+	/*override public function removed():Void 
 	{
-		/*for (i in boomEffectArray) 
-		{
-			i.destroy();
-		}*/
-		Actuate.stop(this);
+		//for (i in boomEffectArray) 
+		//{
+			//i.destroy();
+		//}
 		//boomEffectArray = [];
 		super.removed();
 	}
-	/*
 	private function onComplete(name):Void
 	{
 		var num:Int = Std.parseInt(name);
