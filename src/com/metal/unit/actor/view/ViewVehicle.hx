@@ -1,9 +1,11 @@
 package com.metal.unit.actor.view;
+import com.haxepunk.Entity;
 import com.haxepunk.graphics.TextrueSpritemap;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.EffectEnum.EffectAniType;
+import com.metal.message.MsgInput;
 import com.metal.player.core.PlayerStat;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.MTActor;
@@ -11,6 +13,7 @@ import com.metal.unit.actor.view.ViewBase.EffConfig;
 import com.metal.unit.weapon.impl.BaseWeapon;
 import com.metal.unit.weapon.impl.WeaponController;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
+import de.polygonal.core.event.IObservable;
 import openfl.geom.Point;
 import spinehaxe.Bone;
 import spinehaxe.animation.Animation;
@@ -28,6 +31,7 @@ class ViewVehicle extends ViewActor
 	private var r:Float = 0;
 	private var _attackAnimation:Animation;
 	
+	
 	public function new() 
 	{
 		super();
@@ -37,7 +41,17 @@ class ViewVehicle extends ViewActor
 	{
 		_weapon = null;
 		_gunBone = null;
+		_attackAnimation = null;
 		super.onDispose();
+	}
+	
+	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
+	{
+		switch(type) {
+			case MsgInput.Aim:
+				Notify_Aim(userData);			
+		}
+		super.onUpdate(type, source, userData);
 	}
 	
 	override private function Notify_PostBoot(userData:Dynamic):Void
@@ -52,10 +66,12 @@ class ViewVehicle extends ViewActor
 		_actor.isNeedLeftFlip = false;
 		var weaponContorl:WeaponController = owner.getComponent(WeaponController);
 		_weapon = weaponContorl.getWeapon(WeaponType.Shoot);
+		//trace(_weapon);
 		//Notify_EffectStart("z006");
 		//attack animation
 		_attackAnimation = getAnimation(Std.string(ActionType.attack_1));
 		//setAttachMent("gun_1", "gun_1");
+		setDefaultAimPoint();
 	}
 	override function Notify_EffectStart(userData:Dynamic):Void
 	{
@@ -95,16 +111,27 @@ class ViewVehicle extends ViewActor
 	}
 	override function Notify_Soul(userData:Dynamic):Void 
 	{
-		//var playerInfo = PlayerUtils.getInfo();
-		//var info:PlayerModelInfo = PlayerModelManager.instance.getInfo(playerInfo.getProperty(PlayerPropType.ROLEID));
-		//createDropItem(info.dropItem);
+		/*var playerInfo = PlayerUtils.getInfo();
+		var info:PlayerModelInfo = PlayerModelManager.instance.getInfo(playerInfo.getProperty(PlayerPropType.ROLEID));
+		createDropItem(info.dropItem);*/
 	}
+	
 	override function Notify_Injured(userData:Dynamic):Void 
 	{
 		super.Notify_Injured(userData);
 		//文字特效
 		var msg:String = (userData==0)?"miss":Std.string(userData.damage);
 		startEffect(0, EffectAniType.Text, msg,userData.renderType);
+	}
+	
+	private function Notify_Aim(userData:Dynamic):Void
+	{
+		if (userData.target!=null) 
+		{
+			targetAimPoint = userData.target;
+		}else {
+			setDefaultAimPoint();
+		}		
 	}
 	private function getConfig(userData:String):EffConfig
 	{
@@ -141,8 +168,35 @@ class ViewVehicle extends ViewActor
 			return;
 		if(_actor.stateID == ActorState.Destroying)
 			return;
+		if (_onAim && _actor.stateID != ActorState.Destroying) {		
+			if (aimPoint==null) 
+			{
+				aimPoint = new Point();
+				setDefaultAimPoint(true);
+			}else 
+			{				
+				aimPoint.x= targetAimPoint.x;
+				aimPoint.y= targetAimPoint.y;
+				//aimPoint.y = complement(aimPoint.y, targetAimPoint.y, aimAdjustY);
+				setGunRotationLine(targetAimPoint);
+	#if debug
+				aimPointView.x = aimPoint.x;
+				aimPointView.y = aimPoint.y;
+	#end
+			}				
+		} else {
+			if (!_onAim){
+				if(_actor.isGrounded) {
+					_onAim = true; 
+				}
+				setDefaultAimPoint(true);
+			}
+			
+			_gunBone.data.rotation = originRotation;
+			setAimPointWithoutTween();
+		}
 		onAttack();
-		
+		/*
 		//D点
 		var mousePos:Point = new Point();
 		//mousePos.x = Input.mouseX + HXP.camera.x;
@@ -154,6 +208,7 @@ class ViewVehicle extends ViewActor
 		}else{
 			_gunBone.data.rotation = originRotation;
 		}
+		*/
 	}
 	
 	override function setAction(action:ActionType, loop:Bool = true):Void 
@@ -173,12 +228,22 @@ class ViewVehicle extends ViewActor
 		//setAnimation(1)原有上动作添加多一个
 		animationState().setAnimation(1, _attackAnimation, false);
 		_attcking = true;
-		trace("viewVehicle fire");
+		owner.notify(MsgInput.DirAttack, {melee:false, target:aimPoint});
+		trace("viewVehicle fire :" +aimPoint);
 	}
 	
-	override function Notify_Respawn(userData:Dynamic):Void 
+	override function setDefaultAimPoint(withoutTween:Bool=false)
 	{
-		type = owner.name;
+		//trace("setDefaultAimPoint");
+		if (_actor.halfHeight!=0 && aimHeight==0) 
+		{
+			aimHeight = _actor.halfHeight * 1.2;
+		}
+		
+		targetAimPoint.x = _actor.x + 400;
+		targetAimPoint.y = _actor.y - aimHeight;
+		if (withoutTween) 
+			setAimPointWithoutTween();
 	}
 	
 	private function onStartCallback(i:Int, value:String):Void

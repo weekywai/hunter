@@ -56,72 +56,10 @@ class ViewPlayer extends ViewActor
 	private var _meleeAnimation:Animation;
 	private var _throwBombAnimation:Animation;
 	
-	#if debug
-	/**瞄准点视图*/
-	private var aimPointView:Entity;
-	#end
-	//瞄准间补
-	private var aimPoint:Point;
-	private var aimHeight:Float = 0;
-	private var targetAimPoint:Point;
-	//var aimAdjust:Float = 10;
-	private var aimAdjustY:Float = 20;
-	private var rotationAdjust:Float = 5;
-	private var onAim:Bool;
-	
 	public function new() 
 	{
 		super();
 		_meleeAtk = false;
-	}
-	
-	override public function onInit():Void 
-	{
-		super.onInit();
-		_targetPos = new Point();
-		targetAimPoint = new Point();		
-		aimPoint = new Point();
-		onAim = false;
-#if debug
-		aimPointView = new Entity(targetAimPoint.x, targetAimPoint.y, Image.createCircle(4, 0xffffff, 1));
-		HXP.scene.add(aimPointView);		
-#end
-	}
-	function setAimPointWithoutTween()
-	{
-		aimPoint.x = targetAimPoint.x;
-		aimPoint.y = targetAimPoint.y;
-#if debug
-		aimPointView.x = aimPoint.x;
-		aimPointView.y = aimPoint.y;
-#end
-	}
-	
-	function setDefaultAimPoint(withoutTween:Bool=false)
-	{
-		//trace("setDefaultAimPoint");
-		if (_actor.halfHeight!=0 && aimHeight==0) 
-		{
-			aimHeight = _actor.halfHeight *1.2;
-			//trace("aimHeight: "+aimHeight);
-			//trace("_actor.halfHeight: "+_actor.halfHeight);
-		}
-		
-		targetAimPoint.x = _actor.x + ((_actor.dir == Direction.RIGHT)?1: -1) * 400;
-		targetAimPoint.y = _actor.y - aimHeight;
-		if (withoutTween) 
-		{
-			aimPoint.x = targetAimPoint.x;
-			aimPoint.y = targetAimPoint.y;
-#if debug
-			aimPointView.x = aimPoint.x;
-			aimPointView.y = aimPoint.y;
-#end
-		}
-		
-		//trace("_actor.y: "+_actor.y);
-		//trace("aimHeight: "+aimHeight);
-		//trace("targetAimPoint.y : "+targetAimPoint.y );
 	}
 	
 	override public function onDispose():Void 
@@ -132,12 +70,11 @@ class ViewPlayer extends ViewActor
 		_frontArmBone = null;
 		_headBone = null;
 		_weapon = null;
-		_targetPos = null;
 		targetAimPoint = null;
 		_melee = null;
 		aimPoint = null;
 		lastDir = null;		
-		onAim = false;
+		_onAim = false;
 	#if debug
 		HXP.scene.remove(aimPointView);
 		aimPointView = null;
@@ -359,16 +296,16 @@ class ViewPlayer extends ViewActor
 			_headBone.data.rotation = originHeadRo;
 			return;
 		}
-		//if (!onAim) {
+		//if (!_onAim) {
 			//if (_actor.isGrounded) {
-				////trace("set onAim");
-				//onAim = true; 
+				////trace("set _onAim");
+				//_onAim = true; 
 				//setDefaultAimPoint(true);
 			//}
 		//}	
 		//trace("aiming");
-		if (onAim &&(_actor.stateID == ActorState.Move || _actor.stateID == ActorState.Attack || _actor.stateID == ActorState.Jump || _actor.stateID == ActorState.Stand)) {		
-			//trace("onaim");
+		if (_onAim &&(_actor.stateID == ActorState.Move || _actor.stateID == ActorState.Attack || _actor.stateID == ActorState.Jump || _actor.stateID == ActorState.Stand)) {		
+			//trace("_onAim");
 			if (aimPoint==null) 
 			{
 				//trace("new aimPoint");
@@ -387,9 +324,9 @@ class ViewPlayer extends ViewActor
 			}				
 		}else {
 			//trace("no aimPoint");
-			if (!onAim){
+			if (!_onAim){
 				if(_actor.isGrounded) {
-					onAim = true; 
+					_onAim = true; 
 					setDefaultAimPoint(true);
 					//trace("first set");
 				}else 
@@ -420,33 +357,6 @@ class ViewPlayer extends ViewActor
 			setDefaultAimPoint(true);
 			//trace("turn back");
 		}
-	}
-	
-	/**从from向to（递增/递减），单次增量为space*/
-	private function complement(from:Float,to:Float,space:Float,rotate:Bool=false):Float
-	{
-		if (from == to) return from; 
-		if (rotate) 
-		{
-			if (to - from > 180 ) {
-				//trace("to - from > 180 : " + from);
-				from += 360;
-				
-			}else if (from - to > 180 ) {
-				//trace("(from - to > 180 ): " + from);
-				from -= 360;
-			}
-		}
-		if (from<to) 
-		{
-			from += space;
-			if (from > to) from = to;
-		}else if (from>to) 
-		{
-			from -= space;
-			if (from < to) from = to;
-		}
-		return from;
 	}
 	
 	private function meleeCollide()

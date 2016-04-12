@@ -1,6 +1,5 @@
 package com.metal.unit.ai;
 import com.haxepunk.Entity;
-import com.haxepunk.Graphic;
 import com.haxepunk.HXP;
 import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
@@ -8,22 +7,15 @@ import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgStartup;
 import com.metal.player.core.PlayerStat;
-import com.metal.scene.board.api.BoardFaction;
 import com.metal.unit.actor.impl.MTActor;
-import com.metal.unit.actor.impl.UnitActor;
+import com.metal.unit.actor.view.ViewActor;
 import com.metal.unit.ai.type.AiFactory;
-import com.metal.unit.avatar.AbstractAvatar;
 import com.metal.unit.bevtree.BevNode;
 import com.metal.unit.bevtree.data.AIStatus;
 import com.metal.unit.bevtree.data.MonsterInputData;
 import com.metal.unit.bevtree.data.MonsterOutputData;
-import com.metal.unit.stat.IStat;
 import de.polygonal.core.event.IObservable;
-import de.polygonal.core.time.Timebase;
-import openfl.display.Sprite;
 import openfl.geom.Point;
-import haxe.Timer;
-import motion.Actuate;
 
 
 /**
@@ -32,21 +24,18 @@ import motion.Actuate;
  */
 class PlayerAI extends BaseAiControl
 {
-	private var _id:Int;
 	private var _playerRoot:BevNode;
 	private var _playerInputData:MonsterInputData;
 	private var _playerOutputData:MonsterOutputData;
 	
-	private var _model:Entity;
+	private var _model:ViewActor;
 	private var _stat:PlayerStat;
-	//private var _holdFire:Bool;
 	private static var _aimAreaAdjustX = 150;//瞄准区域以_model.x为基准，沿_model前方推移值
 	private static var _maxElevation = 1;//人物基准点与怪物基准点连线的斜率，=1时为45度
 
 	public function new(id:Int) 
 	{
 		super();
-		_id = id;
 		_playerRoot = AiFactory.instance.createAI(0);
 	}
 	
@@ -55,7 +44,6 @@ class PlayerAI extends BaseAiControl
 		super.onInitComponent();
 		_actor = owner.getComponent(MTActor);
 		_stat = owner.getComponent(PlayerStat);
-		//_holdFire = false;
 	}
 	
 	override public function initData():Void 
@@ -80,8 +68,6 @@ class PlayerAI extends BaseAiControl
 				cmd_Revive(userData);
 			case MsgActor.Victory:
 				cmd_Victory(userData);
-			//case MsgInput.HoldFire:
-				//cmd_HoldFire(userData);
 		}
 	}
 	
@@ -102,26 +88,18 @@ class PlayerAI extends BaseAiControl
 		_stop = true;
 		//trace("victory");
 		GameProcess.root.notify(MsgStartup.PauseCountDown, true);
-/*		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
-			_playerInputData.Victory = true; //through animation
-			_stop = false;
-		} );*/
 	}
-	/*
-	private function cmd_HoldFire(userData:Dynamic):Void
-	{
-		_holdFire = userData;
-		//_stop = !userData;
-		//setAttackStatus(_holdFire);
-	}
-	*/
 	
 	private function findClose(ary:Array<Entity>):Entity
 	{
 		var collideE:Entity = null;
+		var p:Point =  _model.getGunPoint("muzzle_1");
 		for (e in ary)
 		{
 			if (e != null && e.visible) {
+				if (HXP.scene.collideLine(UnitModelType.Solid, Std.int(p.x), Std.int(p.y), Math.round(e.x), Math.round(e.y - e.halfHeight), 32)!=null) {
+					continue;
+				}
 				if (collideE == null) {
 					collideE = e;
 				} else {
@@ -140,77 +118,10 @@ class PlayerAI extends BaseAiControl
 		//trace(_model);
 		if (_model == null)
 			return;
-		/*
-		//if (_stat.holdFire) {
-			_playerInputData.SelfPoint = new Point(_actor.x, _actor.y);
-			_playerInputData.AttackMelee = false;
-			var collideList = [];
-			var collideE:Entity = null;
-			var tempE:Entity = null;
-			for (modelType in _collideList) 
-			{
-				collideList = [];
-				
-				//HXP.scene.collideCircleInto(modelType, _model.x, _model.y, HXP.width*0.6, collideList);
-				if(_actor.dir==Direction.RIGHT){
-					HXP.scene.collideRectInto(modelType, _model.x, 0, HXP.width * 0.6, HXP.height, collideList);
-				}else {
-					HXP.scene.collideRectInto(modelType, _model.x -HXP.width * 0.6, 0, HXP.width * 0.6, HXP.height, collideList);
-				}
-				if (collideList.length > 0)
-					tempE = findClose(collideList);
-				else
-					tempE = null;
-				//var tempE = HXP.scene.nearestToRect(modelType, _model.x-HXP.halfWidth, _model.y-HXP.halfHeight,_model.x+HXP.halfWidth, _model.y+HXP.halfHeight);
-				//var tempE = HXP.scene.nearestToEntity(modelType, _model, true);
-				if (tempE != null && tempE.visible) {
-					if (collideE == null) {
-						collideE = tempE;
-					} else {
-						if (_model.distanceFrom(tempE) < _model.distanceFrom(collideE))
-							collideE = tempE;
-					}
-				}
-			}
-			if (collideE != null && (!collideE.visible || !collideE.active))
-				collideE = null;
-			if (collideE == null) {//最后才判断攻击场景物体
-				//collideE = HXP.scene.nearestToRect(UnitModelType.Block, _model.x-HXP.halfWidth, _model.y-HXP.halfHeight,_model.x+HXP.halfWidth, _model.y+HXP.halfHeight);
-				//collideE = HXP.scene.nearestToEntity(UnitModelType.Block, _model, true);
-				if(_actor.dir==Direction.RIGHT){
-					collideE = HXP.scene.collideRect(UnitModelType.Block, _model.x, 0, HXP.width * 0.6, HXP.height);
-				}else {
-					collideE = HXP.scene.collideRect(UnitModelType.Block, _model.x -HXP.width * 0.6, 0, HXP.width * 0.6, HXP.height);
-				}
-			}
-			if (collideE != null && collideE.visible) {	
-				//判断攻击范围
-				if (collideE.type != UnitModelType.Block && collideE.type != UnitModelType.Boss) {
-					//trace(Type.typeof(collideE));
-					var actor:UnitActor = (cast(collideE, AbstractAvatar).owner.getComponent(UnitActor));
-					//近身变刀设置
-					//if(actor.faction != BoardFaction.Elite && actor.faction != BoardFaction.Machine)	
-						//if (_model.distanceFrom(collideE) <= 100)
-							//_playerInputData.AttackMelee = true;
-				}
-				_playerInputData.TargetPoint = new Point(collideE.x, collideE.y - collideE.halfHeight);
-				//notify(MsgInput.DirAttack, {melee:_playerInputData.AttackMelee, target:_playerInputData.TargetPoint});
-			}
-			else
-			{
-				_playerInputData.TargetPoint = null;
-				//notify(MsgInput.DirAttack, {melee:_playerInputData.AttackMelee});
-			}
-		//}
-		*/
 		
 		findAimPoint();
 		
 		notify(MsgInput.Aim, {melee:_playerInputData.AttackMelee, target:_playerInputData.TargetPoint});
-		//if (_stat.holdFire)
-		//{
-			//notify(MsgInput.DirAttack, {melee:_playerInputData.AttackMelee, target:_playerInputData.TargetPoint});
-		//}
 		//ai
 		if (_playerRoot.evaluate(_playerInputData))
 		{
@@ -226,82 +137,50 @@ class PlayerAI extends BaseAiControl
 	private var collideE:Entity = null;
 	
 	var targetCollideList:Array<Entity>;
-	var tempE:Entity;
-	var removeList:Array<Entity>;
 	private function findAimPoint()
 	{
 		timeCount++;
 		//每10帧寻找一次瞄准点
 		if (timeCount>=10) 
 		{
-			//var starttime = Timebase.stamp();
-			//var overTime = Timebase.stamp();
 			timeCount = 0;
 			_playerInputData.SelfPoint.x = _actor.x;
 			_playerInputData.SelfPoint.y = _actor.y;
 			_playerInputData.AttackMelee = false;
 			targetCollideList= [];
-			//var collideE:Entity = null;
 			collideE = null;
-			tempE = null;
-			
-			if (_actor.dir == Direction.RIGHT) {			
+			if (_owner.name == UnitModelType.Vehicle) {//不需要方向屏幕查找
 				for (modelType in _collideList) {
-					HXP.scene.collideRectInto(modelType, _model.x+_aimAreaAdjustX, 0, HXP.halfWidth, HXP.height, targetCollideList);
+					HXP.scene.collideRectInto(modelType, HXP.camera.x, HXP.camera.y, HXP.width, HXP.height, targetCollideList);
 				}
-			}else {
-				for (modelType in _collideList) {
-					HXP.scene.collideRectInto(modelType, _model.x -HXP.halfWidth-_aimAreaAdjustX, 0, HXP.halfWidth, HXP.height, targetCollideList);
-				}		
-			}
-			//trace("collideList: "+collideList.length);
-			removeList = [];
-			for (collide1 in targetCollideList) 
-			{
-				//线段碰撞检测间隔为20
-				if (!(collide1 != null && collide1.visible) || HXP.scene.collideLine(UnitModelType.Solid, Math.round(_model.x), Math.round(_model.y - _model.halfHeight), Math.round(collide1.x), Math.round(collide1.y - collide1.halfHeight),20)!=null) {
-					removeList.push(collide1);
+			}else{
+				//方向屏幕查找
+				if (_actor.dir == Direction.RIGHT) {			
+					for (modelType in _collideList) {
+						HXP.scene.collideRectInto(modelType, _model.x+_aimAreaAdjustX, HXP.camera.y, HXP.halfWidth, HXP.height, targetCollideList);
+					}
+				} else {
+					for (modelType in _collideList) {
+						HXP.scene.collideRectInto(modelType, _model.x -HXP.halfWidth-_aimAreaAdjustX, HXP.camera.y, HXP.halfWidth, HXP.height, targetCollideList);
+					}		
 				}
 			}
-			for (removeObj in removeList) 
-			{
-				targetCollideList.remove(removeObj);
-			}
-			
-			if (targetCollideList.length > 0) {
-				tempE = findClose(targetCollideList);
-			}else {	
-				tempE = null;
-			}
-			
-			collideE = tempE;
-				
-			if (collideE != null && (!collideE.visible || !collideE.active))
-				collideE = null;
-			if (collideE == null) {//最后才判断攻击场景物体
-				if(_actor.dir==Direction.RIGHT){
-					collideE = HXP.scene.collideRect(UnitModelType.Block, _model.x+_aimAreaAdjustX, 0, HXP.halfWidth, HXP.height);
-				}else {
-					collideE = HXP.scene.collideRect(UnitModelType.Block, _model.x -HXP.halfWidth-_aimAreaAdjustX, 0, HXP.halfWidth, HXP.height);
-				}
-			}
-			//overTime = Timebase.stamp();
-			//trace("Unserializertime: " + (overTime-starttime));
+			collideE = findClose(targetCollideList);
 		}	
 		
 		if (collideE != null && collideE.visible) {				
 			if (collideE.y <_actor.y-_actor.halfHeight && collideE.y- collideE.height>_actor.y-_actor.halfHeight) 
 			{
 				_playerInputData.TargetPoint = null;
-				//trace("");
 			}else 
 			{
 				_playerInputData.TargetPoint = new Point(collideE.x, collideE.y - collideE.halfHeight);
 			}
-			//trace("_playerInputData.TargetPoint: "+_playerInputData.TargetPoint);
-		}else{
+		}else {
+			collideE = null;
 			_playerInputData.TargetPoint = null;
 		}
+		//}
 	}
 	private function render(playerOutput:MonsterOutputData):Void 
 	{
@@ -320,8 +199,6 @@ class PlayerAI extends BaseAiControl
 	override function onDispose():Void 
 	{
 		super.onDispose();
-		Actuate.stop(this);
-		_id = 0;
 		_stat = null;
 		_playerRoot = null;
 		_playerInputData.SelfPoint = null;
@@ -334,6 +211,4 @@ class PlayerAI extends BaseAiControl
 	{
 		_playerInputData.isOnAttackStatus = value;
 	}
-	
-	
 }

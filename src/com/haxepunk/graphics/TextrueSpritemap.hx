@@ -65,7 +65,6 @@ class TextrueSpritemap extends Image
 	
 	override public function destroy() 
 	{
-		throw "a";
 		if(animationEnd!=null)
 		animationEnd.removeAll();
 		animationEnd = null;
@@ -90,7 +89,7 @@ class TextrueSpritemap extends Image
 		if(animationEnd!=null){
 			animationEnd.removeAll();
 			if (callbackFun != null)
-				animationEnd.add(callbackFun);
+				animationEnd.addOnce(callbackFun);
 		}
 
 		_imageWidth = Std.int(_region.width);
@@ -98,7 +97,7 @@ class TextrueSpritemap extends Image
 		_rect = new Rectangle(0, 0, _imageWidth, _imageHeight);
 
 		updateBuffer();
-		active = true;
+		//active = true;
 	}
 	/** @private Creates the buffer. */
 	override private function createBuffer()

@@ -509,7 +509,6 @@ class GameMap extends Component
 		notify(MsgBoard.AssignUnit, player);
 		//trace("bind player" + owner.parent);
 		notify(MsgBoard.AssignPlayer, player);
-		notifyParent(MsgBoard.AssignPlayer, player);
 		
 		//trace("AssignPlayer");
 		notify(MsgBoard.StartTrigger);
@@ -525,7 +524,6 @@ class GameMap extends Component
 		notify(MsgBoard.AssignUnit, player);
 		//trace("bind Vehicle");
 		notify(MsgBoard.AssignPlayer, player);
-		notifyParent(MsgBoard.AssignPlayer, player);
 		//GameProcess.NotifyUI(MsgBoard.AssignPlayer);
 	}
 	
@@ -551,7 +549,11 @@ class GameMap extends Component
 				entity = UnitUtils.createUnit(UnitModelType.Unit, id, faction, obj.x, obj.y);
 			}
 			notify(MsgBoard.AssignUnit, entity);
-			enemies.push(entity.keyId);
+			//trace(faction);
+			if (faction != BoardFaction.Block){
+				enemies.push(entity.keyId);
+				//trace(enemies.length +">>"+faction);
+			}
 			enemiesMap.set(entity.keyId,obj);
 			bornPointMap.set(obj,entity.keyId);
 			if (faction == BoardFaction.Boss1 || faction == BoardFaction.Boss) {
@@ -565,6 +567,7 @@ class GameMap extends Component
 			}
 			//DC.endProfile("BindUint");
 		}
+		//trace(enemies.length);
 	}
 	/**生成循环刷新的怪物*/
 	public function BindLoopEntity(buildIndex:Int)

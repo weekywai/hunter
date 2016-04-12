@@ -13,6 +13,7 @@ import com.metal.proto.manager.BulletManager;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.impl.MTActor;
+import com.metal.unit.actor.view.ViewActor;
 import com.metal.unit.actor.view.ViewPlayer;
 import com.metal.unit.stat.IStat;
 import com.metal.unit.weapon.api.IWeapon;
@@ -44,7 +45,7 @@ class BaseWeapon extends Component implements IWeapon
 	private var _actor:MTActor;
 	private var _stat:IStat;
 	
-	private var _avatar:ViewPlayer;
+	private var _avatar:ViewActor;
 	private var _reborn:Bool = false;
 	
 	

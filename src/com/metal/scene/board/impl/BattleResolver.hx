@@ -5,6 +5,7 @@ import com.metal.config.SfxManager;
 import com.metal.config.UnitModelType;
 import com.metal.GameProcess;
 import com.metal.message.MsgActor;
+import com.metal.message.MsgBoard;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgStat;
@@ -38,6 +39,10 @@ class BattleResolver extends Component
 {
 	public var _gameMap:GameMap;
 	
+	private var _player:SimEntity;
+	public var player(get, null):SimEntity;
+	private function get_player():SimEntity { return _player; }
+	
 	private var _hitTime:Int = 3;
 	private var _injureTime:Int = 2;
 	public function new() 
@@ -64,7 +69,18 @@ class BattleResolver extends Component
 				cmd_BulletHit(userData);
 			case MsgItr.Destory:
 				cmd_Destory(userData);
+			case MsgBoard.AssignPlayer:
+				cmd_AssignPlayer(userData);
+			case MsgStartup.Finishbattle:
+				cmd_Finishbattle(userData);
 		}
+	}
+	private function cmd_Finishbattle(userData:Dynamic):Void {
+		_player = null;
+	}
+	private function cmd_AssignPlayer(userData:Dynamic):Void
+	{
+		_player = userData;
 	}
 	
 	private function cmd_Destory(userData:Dynamic):Void
@@ -117,6 +133,7 @@ class BattleResolver extends Component
 		//trace(userData);
 		calculate(userData);
 	}
+	
 	//{战斗中计算
 	private function calculate(userData:Dynamic):Void
 	{

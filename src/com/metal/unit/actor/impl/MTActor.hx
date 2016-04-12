@@ -17,6 +17,7 @@ import com.metal.proto.impl.GoldGoodInfo;
 import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.manager.BattlePrepareManager;
 import com.metal.proto.manager.GoodsProtoManager;
+import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.render.ViewDisplay;
@@ -90,6 +91,8 @@ class MTActor extends BaseActor
 	{
 		trace("Notify_ThrowBomb");
 		//trace("stateID: " + stateID);
+		if (owner.name == UnitModelType.Vehicle) 
+			return;
 		if (stateID == ActorState.Melee || stateID == ActorState.ThrowBomb) return;
 		transition(ActorState.ThrowBomb);
 	}
@@ -104,6 +107,9 @@ class MTActor extends BaseActor
 			velocity.y = -_jumpHeight; 
 			//trace("FirstJump: "+stateID);
 		}else {
+			//trace(owner.name + ">>" + UnitModelType.Vehicle);
+			if (owner.name == UnitModelType.Vehicle) 
+				return;
 			transition(ActorState.DoubleJump);
 			velocity.y = -_jumpHeight; 
 			//trace("DoubleJump: " + stateID);
@@ -360,11 +366,11 @@ class MTActor extends BaseActor
 	override function Notify_Escape(userData:Dynamic):Void 
 	{
 		//ai update many execute 
-		trace("Victory Escape:");
+		//trace("Victory Escape:");
 		//trace("Victory Escape:"+(HXP.camera.x + HXP.width) +">>>" + x);
 		if (x >= HXP.camera.x + HXP.width) {
 			//TODO only one execute
-			GameProcess.root.notify(MsgStartup.TransitionMap);
+			//GameProcess.root.notify(MsgStartup.TransitionMap);
 		}else {
 			if (onWall) {
 				transition(ActorState.Jump);

@@ -2,6 +2,7 @@ package com.metal.manager;
 import com.haxepunk.Graphic;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.atlas.AtlasData;
+import com.haxepunk.graphics.atlas.BitmapFontAtlas;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import de.polygonal.ds.pooling.DynamicObjectPool;
 import de.polygonal.ds.pooling.ObjectPool;
@@ -101,7 +102,8 @@ class ResourceManager
 		_graphicPool.free();
 		SpinePunk.clear();
 		SkeletonJson.clearJson();
-		TextureAtlasFix.clearCacahes();
+		BitmapFontAtlas.clear();
+		TextureAtlasFix.clear();
 		AtlasData.destroyAll();
 		HXP.removeAllBitmap();
 	}

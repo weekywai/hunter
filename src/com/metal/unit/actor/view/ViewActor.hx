@@ -1,4 +1,6 @@
 package com.metal.unit.actor.view;
+import com.haxepunk.Entity;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.metal.config.ResPath;
 import com.metal.config.UnitModelType;
@@ -25,9 +27,45 @@ class ViewActor extends ViewBase
 	public var useHitBox:Bool = false;
 	public var fly:Bool = false;
 	
+	#if debug
+	/**瞄准点视图*/
+	private var aimPointView:Entity;
+	#end
+	//瞄准间补
+	private var aimPoint:Point;
+	private var targetAimPoint:Point;
+	private var aimHeight:Float = 0;
+	private var aimAdjustY:Float = 20;
+	private var rotationAdjust:Float = 5;
+	private var _onAim:Bool;
+	
 	public function new() 
 	{
 		super();
+	}
+	
+	override public function onInit():Void 
+	{
+		super.onInit();
+		targetAimPoint = new Point();		
+		aimPoint = new Point();
+		_onAim = false;
+#if debug
+		aimPointView = new Entity(targetAimPoint.x, targetAimPoint.y, Image.createCircle(4, 0xffffff, 1));
+		HXP.scene.add(aimPointView);		
+#end
+	}
+	
+	override public function onDispose():Void 
+	{
+		targetAimPoint = null;
+		aimPoint = null;
+		_spine = null;
+	#if debug
+		HXP.scene.remove(aimPointView);
+		aimPointView = null;
+	#end
+		super.onDispose();
 	}
 	
 	override private function createAvatar(name:String, type:String):Dynamic
@@ -156,5 +194,55 @@ class ViewActor extends ViewBase
 	override public function setCallback(fun:Dynamic)
 	{
 		_model.initAttach(fun);
+	}
+	
+	function setAimPointWithoutTween()
+	{
+		aimPoint.x = targetAimPoint.x;
+		aimPoint.y = targetAimPoint.y;
+#if debug
+		aimPointView.x = aimPoint.x;
+		aimPointView.y = aimPoint.y;
+#end
+	}
+	
+	function setDefaultAimPoint(withoutTween:Bool=false)
+	{
+		if (_actor.halfHeight!=0 && aimHeight==0) 
+		{
+			aimHeight = _actor.halfHeight * 1.2;
+		}
+		
+		targetAimPoint.x = _actor.x + ((_actor.dir == Direction.RIGHT)?1: -1) * 400;
+		targetAimPoint.y = _actor.y - aimHeight;
+		if (withoutTween) 
+			setAimPointWithoutTween();
+	}
+	
+	/**从from向to（递增/递减），单次增量为space*/
+	private function complement(from:Float,to:Float,space:Float,rotate:Bool=false):Float
+	{
+		if (from == to) return from; 
+		if (rotate) 
+		{
+			if (to - from > 180 ) {
+				//trace("to - from > 180 : " + from);
+				from += 360;
+				
+			}else if (from - to > 180 ) {
+				//trace("(from - to > 180 ): " + from);
+				from -= 360;
+			}
+		}
+		if (from<to) 
+		{
+			from += space;
+			if (from > to) from = to;
+		}else if (from>to) 
+		{
+			from -= space;
+			if (from < to) from = to;
+		}
+		return from;
 	}
 }

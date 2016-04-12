@@ -12,7 +12,7 @@ import openfl.geom.Point;
 class TextureAtlasFix extends TextureAtlas
 {
 	public static var caches:StringMap<TextureAtlasFix> = new StringMap();
-	public static function clearCacahes() {
+	public static function clear() {
 		for (key in caches.keys()) 
 		{
 			caches.remove(key);

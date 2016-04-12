@@ -20,7 +20,6 @@ import openfl.filters.GlowFilter;
 class EffectText extends EffectEntity
 {
 	private var _bmpTxt:BitmapText;
-	private var _remove:Bool;
 	private var _color:Int;
 	private var _crit:Int;
 	//private var _normalTpye = [new GlowFilter(0xFF0000, 1, 5, 5, 5) , new DropShadowFilter(3, 45, 0, 0.8)];
@@ -41,7 +40,6 @@ class EffectText extends EffectEntity
 	
 	override function onStart(req:EffectRequest):Void 
 	{
-		_remove = false;
 		x -= req.width * 0.5;
 		y -= req.height * 1.5;
 		if(_bmpTxt==null){
@@ -64,29 +62,31 @@ class EffectText extends EffectEntity
 				_bmpTxt.x = -_bmpTxt.textWidth*_bmpTxt.fontScale*0.2;
 				_bmpTxt.y = -_bmpTxt.textHeight*_bmpTxt.fontScale*0.4;
 			});
-			
-			Actuate.tween(_bmpTxt,0.5,{alpha:0},false).delay(0.4).onComplete(function() {
-				_remove = true;
-			});
+			//Actuate.timer(0.5).onComplete (recycle);
+			Actuate.tween(_bmpTxt, 0.5, { alpha:0 }, false).delay(0.4).onComplete(recycle);
 		}else {
 			_bmpTxt.color = 0xFF0000;
-			Actuate.tween(_bmpTxt,0.8, {}).onComplete(function() {
-				_remove = true;
-			});
+			Actuate.timer(0.8).onComplete (recycle);
+			//Actuate.tween(_bmpTxt,0.8, {}).onComplete(function() {
+				//recycle();
+			//});
 		}
-		
-		graphic = _bmpTxt;
+		addGraphic(_bmpTxt);
 	}
-	
+	override function recycle():Void 
+	{
+		removeGraphic(_bmpTxt);
+		super.recycle();
+	}
 	override public function update():Void 
 	{
 		if (_bmpTxt == null)
 			return;
 		super.update();
-		if (_remove) {
+		/*if (_remove) {
 			recycle();
 			return;
-		}
+		}*/
 		
 		if (_crit != EffectRequest.Crit)
 			y --;

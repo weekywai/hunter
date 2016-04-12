@@ -40,7 +40,7 @@ class EffectBoom1 extends EffectEntity
 	
 	override public function start(req:EffectRequest):Void 
 	{
-		//trace("boom1");
+		trace("boom1");
 		info = EffectManager.instance.getProto(req.Key);
 		x = req.x - req.width * 0.3;
 		y = req.y - req.height;
@@ -53,40 +53,33 @@ class EffectBoom1 extends EffectEntity
 		var ran:Float, boomEff:TextrueSpritemap;
 		for (i in 0..._numEffect)
 		{
-			boomEff = new TextrueSpritemap(eff, false);
+			boomEff = new TextrueSpritemap(eff);
 			boomEff.add(""+i, eff.getReginCount(), 30,false);
 			boomEff.animationEnd.addOnce(function(e) {
 				_numEffect--;
 				removeGraphic(boomEff);
 				boomEff = null;
 			});
-			boomEff.visible = false;
 			boomEff.centerOrigin();
-			addGraphic(boomEff);
 			ran = Math.random();
 			boomEff.scale = (ran * 1 + 1);
-			//boomEffect2.scale = (Math.random() * 1 + scale);
 			boomEff.flipped = (ran <= 0.5) ? true : false;
 			boomEff.x = ran * req.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
 			boomEff.y = ran * req.height * 0.7;// - boomEffect2.scaledHeight / 2;
 			//boomEffectArray.push(boomEff);
-			Actuate.timer(i * 0.25).onComplete (effectTween, [boomEff, ""+i]);
+			Actuate.timer(i * 0.22).onComplete (effectTween, [boomEff, ""+i]);
 		}
+		
 		if(_effect==null){
 			_effect = new TextrueSpritemap(eff1);
-			_effect.animationEnd.add(onBoomComplete);
-		} else {
-			_effect.resetTexture(eff1, onBoomComplete);
-			
+			_effect.animationEnd.addOnce(onBoomComplete);
+			_effect.add("boom", eff1.getReginCount(), 17, false);
 		}
-		_effect.add("boom", eff1.getReginCount(), 17, false);
 		_effect.centerOrigin();
-		_effect.visible = false;
-		_effect.scale = 1.4;
-		addGraphic(_effect);
+		_effect.scale = 1.3;
 		_effect.x =  -req.width * 0.3;
-		_effect.y = 20;
-		Actuate.timer(2).onComplete (effectTween, [_effect, "boom"]);
+		_effect.y = 0;
+		Actuate.timer((_numEffect-1) * 0.22).onComplete (effectTween, [_effect, "boom"]);
 			//}, Math.floor(boomEffectArray.length*170*0.85));
 		//_effect.angle = req.angle-90;
 		//super.start(req);
@@ -99,25 +92,22 @@ class EffectBoom1 extends EffectEntity
 	private function effectTween(tex:TextrueSpritemap, name:String)
 	{
 		if (scene == null) return;
-		tex.active = true;
-		tex.visible = true;
-		tex.play(name);
+		addGraphic(tex);
+		tex.play(name, true);
 	}
 	
-	override public function removed():Void 
+	/*override public function removed():Void 
 	{
-		
-		Actuate.stop(this);
 		//boomEffectArray = [];
 		super.removed();
-	}
+	}*/
 	
-	private function onComplete(name):Void
+	/*private function onComplete(name):Void
 	{
-		//var num:Int = Std.parseInt(name);
-		//var b:TextrueSpritemap = boomEffectArray[num];
-		//b.visible = false;
-	}
+		var num:Int = Std.parseInt(name);
+		var b:TextrueSpritemap = boomEffectArray[num];
+		b.visible = false;
+	}*/
 	
 	private function onBoomComplete(name):Void
 	{

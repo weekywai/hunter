@@ -156,7 +156,7 @@ class GameProcess implements IObserver
 	{
 		rootStage.stage.setChildIndex(_debugTxt, rootStage.stage.numChildren - 1);
 		rootStage.stage.setChildIndex(_fps, rootStage.stage.numChildren - 1);
-		_debugTxt.text = "fps: " + Timebase.gameTimeDelta + " Mem:" + HXP.round(System.totalMemory / 1024 / 1024, 2) + "MB";
+		_debugTxt.text = "fps: " + Timebase.fps + " Mem:" + HXP.round(System.totalMemory / 1024 / 1024, 2) + "MB";
 		//+ "\nrealDelta:" + TimeBase.timeDelta + "\ngameDelta:" +Timebase.gameTimeDelta;
 		//+ "\nRealTime::" + Timebase.realTime + "\nGameTime:" +Timebase.gameTime;
 		#if actuate_manual_update
@@ -169,9 +169,9 @@ class GameProcess implements IObserver
 	private function update()
 	{
 		render.updateEngine();
-		#if actuate_manual_update
-		SimpleActuator.stage_onEnterFrame (null);
-		#end
+		//#if actuate_manual_update
+		//SimpleActuator.stage_onEnterFrame (null);
+		//#end
 		
 		#if telemetry
 		HXT.advance_frame();

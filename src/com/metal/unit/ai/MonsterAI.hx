@@ -1,13 +1,12 @@
 package com.metal.unit.ai;
 import com.haxepunk.HXP;
-import com.metal.component.GameSchedual;
 import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
+import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.MonsterInfo;
 import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.SkillManager;
-import com.metal.scene.board.api.BoardFaction;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.impl.UnitActor;
 import com.metal.unit.ai.type.AiFactory;
@@ -63,8 +62,7 @@ class MonsterAI extends BaseAiControl
 	}
 	override function cmd_enterBoard():Void 
 	{
-		var gs:GameSchedual = GameProcess.root.getComponent(GameSchedual);
-		_player = gs.playerEntity.getComponent(MTActor);
+		_player = PlayerUtils.getPlayer().getComponent(MTActor);
 		_selfStat = owner.getComponent(UnitStat);
 		_selfActor = owner.getComponent(UnitActor);
 		super.cmd_enterBoard();

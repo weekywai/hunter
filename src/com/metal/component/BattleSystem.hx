@@ -173,9 +173,8 @@ class BattleSystem extends Component
 	/**切换场景**/
 	private function changeMap():Void
 	{
-		notifyDirect("GameBoard",MsgStartup.Reset);
+		notifyDirect("GameBoard", MsgStartup.Reset);
 		HXP.scene.end();
-		HXP.scene.updateLists();
 		if (_clear){
 			ResourceManager.instance.unLoadAll();
 			_clear = false;
@@ -324,7 +323,7 @@ class BattleSystem extends Component
 	private function cmd_TransitionMap(userData:Dynamic):Void
 	{
 		_curMap++;
-		trace(_roomArray);
+		//trace(_roomArray);
 		if (_curMap < _roomArray.length) {
 			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, -1);
 			Animator.start(this, "", EffectType.SCREEN_CLOSE_EAT, null, true, changeMap);
