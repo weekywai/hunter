@@ -83,9 +83,7 @@ class WeaponAuto extends BaseWeapon
 	/**更新角色坐标修正子弹发射点*/
 	private function updateReq():Void 
 	{
-		//trace("updateReq");
 		var p:Point =  _avatar.getGunPoint("muzzle_1");
-		trace(p);
 		bulletReq.x = p.x;
 		bulletReq.y = p.y;
 		//bulletReq.bulletAngle = gun.worldRotation;//保留，以后子弹发射用angle控制，不用target控制

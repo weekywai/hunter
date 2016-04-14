@@ -12,6 +12,7 @@ import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.MonsterInfo;
 import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.BulletManager;
+import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
@@ -113,13 +114,57 @@ class ViewEnemy extends ViewActor
 		super.onInit();
 		_targetPos = new Point();
 	}
+	
+	override public function onDispose():Void 
+	{
+		super.onDispose();
+		temp1 = null;
+		temp2 = null;
+		_player = null;
+		_bulletReq = null;
+		_weapon = null;
+		_mInfo = null;
+		disposeHpBar();
+	}
+	override public function update() 
+	{
+		//滚屏死亡移动
+		if (isDisposed || _isFree)
+			return;
+		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded){
+			_actor.x -= 15;
+			trace("roll");
+		}
+		super.update();
+		
+		if (_weapon != null && !_meleeHit && _attcking) {
+			//trace("melee");
+			_weapon.setHitboxTo(getGunHitbox());
+			_weapon.x = x;
+			_weapon.y = y;
+			var hitEntity = _weapon.collide(UnitModelType.Player, _weapon.x, _weapon.y);
+			if (hitEntity != null){
+				_meleeHit = true;
+				var hitInfo = new BulletHitInfo();
+				hitInfo.atk = _bulletReq.atk;
+				hitInfo.fix = _bulletReq.fix;
+				hitInfo.target = cast(hitEntity, ViewDisplay).owner;
+				hitInfo.renderType=BattleResolver.resolveAtk(_bulletReq.critPor);
+				notifyParent(MsgItr.BulletHit, hitInfo);
+			}
+		}
+		updateHpBarXY();
+	}
 	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		_actor = owner.getComponent(UnitActor);
 		_stat = owner.getComponent(UnitStat);
-		initHpBar();
+		
 		super.Notify_PostBoot(userData);
 		_mInfo = owner.getProperty(MonsterInfo);
+		var faction = BoardFaction.getFaction(_mInfo.ModelType);
+		if(faction != BoardFaction.Boss1 && faction != BoardFaction.Boss)
+			initHpBar();
 		_bulletReq = new BulletRequest();
 		//trace(_mInfo.SkillId);
 		_skill = owner.getProperty(SkillInfo);
@@ -142,53 +187,12 @@ class ViewEnemy extends ViewActor
 		if (_skill.AttackType == AttackTypeList.Cut){
 			_weapon = new Entity();
 			setGunHitbox("gun_1");
-			//setGunHitbox("gun_1");
 			HXP.scene.add(_weapon);
 		}
 		
 		animationState().onEvent.add(onEventCallback);
 		animationState().onStart.add(onStartCallback);
 		animationState().onComplete.add(onCompleteCallback);
-	}
-	
-	override public function onDispose():Void 
-	{
-		super.onDispose();
-		temp1 = null;
-		temp2 = null;
-		_player = null;
-		_bulletReq = null;
-		_weapon = null;
-		_mInfo = null;
-		disposeHpBar();
-	}
-	override public function update() 
-	{
-		//滚屏死亡移动
-		if (isDisposed || _isFree)
-			return;
-		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded)
-			_actor.x -= 15;
-			
-		super.update();
-		
-		if (_weapon != null && !_meleeHit && _attcking) {
-			//trace("melee");
-			_weapon.setHitboxTo(getGunHitbox());
-			_weapon.x = x;
-			_weapon.y = y;
-			var hitEntity = _weapon.collide(UnitModelType.Player, _weapon.x, _weapon.y);
-			if (hitEntity != null){
-				_meleeHit = true;
-				var hitInfo = new BulletHitInfo();
-				hitInfo.atk = _bulletReq.atk;
-				hitInfo.fix = _bulletReq.fix;
-				hitInfo.target = cast(hitEntity, ViewDisplay).owner;
-				hitInfo.renderType=BattleResolver.resolveAtk(_bulletReq.critPor);
-				notifyParent(MsgItr.BulletHit, hitInfo);
-			}
-		}
-		updateHpBarXY();
 	}
 	
 	override function Notify_ChangeSpeed(userData:Dynamic):Void 
@@ -234,7 +238,7 @@ class ViewEnemy extends ViewActor
 	
 	private function onDropItem()
 	{
-		var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
+		/*var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
 		//trace(dropRan);
 		if (Math.random() <= 0.2*rate) {
 			var index:Int = 0;
@@ -249,7 +253,8 @@ class ViewEnemy extends ViewActor
 				//case 14,15,16,17: index = 6;
 				//case 18,19,20: index = 7;
 			}
-			//10602-2-1|10601-1-1|10603-2-1|10604-1-1|10608-5-1|10610-3-1|10607-1-1|10609-5-1
+			
+			//10602-2-1|10601-1-1|10603-2-1|10604-1-1|10608-5-1|10610-3-1|10607-1-1|10609-5-1 10201
 			//index = Std.int(Math.random() * 4)+3;//测试
 			//无手枪掉落
 			
@@ -264,8 +269,17 @@ class ViewEnemy extends ViewActor
 			}
 			var drop =	[item];
 			//掉落物品在此解锁
-			//createDropItem(drop);
-		}
+			createDropItem(drop);
+		}*/
+		var item = new DropItemInfo();
+		item.ItemId = 10201;
+		item.Num = 1;
+		item.Precent = 1;
+		var drop = [];
+		var num:Int = Std.int(Math.random() * 6)+1;
+		for(i in 0...num)
+		    drop.push(item);
+		createDropItem(drop);
 	}
 	private function onEventCallback(value:Int, event:Event):Void {
 		//trace("callback"); 

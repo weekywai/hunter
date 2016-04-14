@@ -98,9 +98,7 @@ class WeaponController extends Component
 	{
 		
 		var weapon:BaseWeapon = _weaponUsing.get(userData.type);
-		trace(weapon.isShooting);
 		if (!weapon.isShooting) {
-			//trace("MsgPlayer.ShootStart");
 			weapon.onUpdate(MsgPlayer.ShootStart, owner, null);
 		}
 	}

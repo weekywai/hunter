@@ -278,8 +278,6 @@ class Scene extends Tweener
 	 */
 	public function recycle<E:Entity>(e:E):E
 	{
-		if (e == null)
-			throw "$e";
 		_recycle[_recycle.length] = e;
 		return remove(e);
 	}
@@ -309,9 +307,18 @@ class Scene extends Tweener
 	public function clearRecycledAll()
 	{
 		var e:Entity;
-		for (e in _recycled)
+		var keys = _recycled.keys();
+		/*for (k in keys)
 		{
-			//trace(Type.getClassName(Type.getClass(e)));
+			e = _recycled.get(k);
+			if (e == null) {
+				_recycled.remove(k);
+				continue;
+			}
+			clearRecycled(Type.getClass(e));
+		}*/
+		for (e in _recycled) 
+		{
 			clearRecycled(Type.getClass(e));
 		}
 	}

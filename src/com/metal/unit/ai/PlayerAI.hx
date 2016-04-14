@@ -6,7 +6,7 @@ import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgStartup;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.view.ViewActor;
 import com.metal.unit.ai.type.AiFactory;

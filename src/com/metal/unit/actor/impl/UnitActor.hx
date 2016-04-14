@@ -42,7 +42,7 @@ class UnitActor extends BaseActor
 		trace(x+" " +y);
 		super.Notify_Move(userData);
 	}*/
-	override function notify_ChangeSpeed(userData:Dynamic):Void 
+	override function Notify_ChangeSpeed(userData:Dynamic):Void 
 	{
 		//_speed = _speed * userData[0];
 	}

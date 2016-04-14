@@ -2,7 +2,7 @@ package com.metal.player.utils;
 import com.metal.config.PlayerPropType;
 import com.metal.enums.BagInfo;
 import com.metal.enums.GunType;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.component.GameSchedual;
 import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.GoodsProtoManager;

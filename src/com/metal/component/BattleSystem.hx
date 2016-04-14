@@ -4,7 +4,6 @@ import com.metal.config.BattleGradeConditionType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.RoomMissionType;
 import com.metal.manager.ResourceManager;
-import com.metal.message.MsgActor;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgStartup;
@@ -12,22 +11,19 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.network.Network;
-import com.metal.network.ZNetPacket;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.impl.GradeConditionInfo;
 import com.metal.proto.manager.GradeConditionManager;
 import com.metal.proto.manager.MapInfoManager;
-import com.metal.unit.actor.impl.MTActor;
 import com.metal.utils.effect.Animator;
 import com.metal.utils.effect.component.EffectType;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
+import haxe.Timer;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
-import haxe.Timer;
 import motion.Actuate;
 
 
@@ -207,12 +203,12 @@ class BattleSystem extends Component
 	}
 	
 	/**通关评级*/
-	public function rate():Int
+	private function rate(data:Dynamic):Int
 	{
 		var rateStarNum:Int = 0;
 		var reachArr:Array<Bool> = new Array();
-		var hpPercent:Float = PlayerUtils.getPlayerStat().hp/PlayerUtils.getPlayerStat().hpMax;
-		var rebornTime:Int = cast(PlayerUtils.getPlayer().getComponent(MTActor), MTActor).getRebornTime();
+		var hpPercent:Float = data.hp;
+		var rebornTime:Int = data.times;
 		for (i in 0...conditionTypeArr.length) 
 		{
 			switch (conditionTypeArr[i]) 
@@ -331,7 +327,7 @@ class BattleSystem extends Component
 		}
 		else if (_curMap >= _roomArray.length-1){
 			//notify(MsgStartup.Reset);
-			_duplicateInfo.setRate(rate());
+			_duplicateInfo.setRate(rate(userData));
 			var result:Int = 0;
 			notify(MsgStartup.Finishbattle, result);
 			GameProcess.SendUIMsg(MsgUI2.Control, false);

@@ -10,7 +10,7 @@ import com.metal.message.MsgItr;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.api.BoardFaction;

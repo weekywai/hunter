@@ -3,7 +3,7 @@ package com.metal.scene;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.UnitModelType;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.proto.impl.ActorPropertyInfo;
 import com.metal.proto.impl.ItemBaseInfo;

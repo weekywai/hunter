@@ -4,7 +4,7 @@ import com.metal.config.PlayerPropType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgPlayer;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.BulletInfo;

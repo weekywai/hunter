@@ -84,7 +84,6 @@ class ViewDropItem extends ViewObject
 		//记录碰撞类型
 		preload();
 		notify(MsgActor.PostLoad, this);
-		
 	}
 	override function Notify_EnterBoard(userData:Dynamic):Void 
 	{
@@ -96,8 +95,16 @@ class ViewDropItem extends ViewObject
 				_dispear = true; 
 				_bounds.inflate(400, 300);
 			});
+		} else {
+			
 		}
 	}
+	
+	public function factor(value:Float) {
+		var ran = Math.random();
+        this.x = (1 - value) * (1 - value) * 100 + 2 * value * (1 - value) * 300 + value * value * 100;
+        this.y = (1 - value) * (1 - value) * 100 + 2 * value * (1 - value) * 300 + value * value * (ran*200+200);
+    }
 	
 	override function setAction(action:ActionType, loop:Bool = true):Void 
 	{

@@ -1,10 +1,12 @@
-package com.metal.player.core;
+package com.metal.unit.stat;
+import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.ItemType;
 import com.metal.config.PlayerPropType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgPlayer;
+import com.metal.message.MsgStartup;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
@@ -28,14 +30,16 @@ import com.metal.utils.BagUtils;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
 import haxe.ds.IntMap;
+import motion.Actuate;
 import pgr.dconsole.DC;
-import ru.stablex.ui.widgets.Text;
 /**
  * 角色状态管理(Buff) 
  * @author weeky
  */
 class PlayerStat extends Component implements IStat
 {
+	/**复活次数*/
+	public var respawnTotal(default, null):Int;
 	public var weapon:WeaponInfo;
 	public var hpMax(default, null):Int;
 	public var hp(default, null):Int;
@@ -131,6 +135,7 @@ class PlayerStat extends Component implements IStat
 		super();
 		_buffs = new IntMap();
 		_invincible = false;
+		respawnTotal = 0;
 	}
 	
 	override function onInitComponent():Void 
@@ -241,6 +246,10 @@ class PlayerStat extends Component implements IStat
 				cmd_reloadClip(userData);
 			case MsgPlayer.ChangeWeapon:
 				cmd_ChangeWeapon(userData);
+			case MsgActor.Victory:
+				Notify_Victory(userData);
+			case MsgActor.Soul:
+				Notify_Soul(userData);
 		}
 	}
 	
@@ -408,6 +417,30 @@ class PlayerStat extends Component implements IStat
 			_playerInfo.setProperty(PlayerPropType.MP, mp);
 			GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 		}
+	}
+	
+	private function Notify_Victory(userData)
+	{
+		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
+			GameProcess.root.notify(MsgStartup.TransitionMap, { hp:hp / hpMax, times:respawnTotal } );
+		} );
+	}
+	private function Notify_Soul(userData:Dynamic):Void 
+	{
+		respawnTotal++;
+		if (respawnTotal >= 10) {
+			var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+			if (battle.currentStage().DuplicateType == 9)
+			{
+				GameProcess.SendUIMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
+			}else
+			{
+				GameProcess.SendUIMsg(MsgUI.BattleFailure);
+			}
+		} else {
+			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
+		}
+		//notify(MsgActor.ExitBoard);
 	}
 	
 	private function setWeaponBuff()

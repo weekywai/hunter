@@ -22,7 +22,7 @@ import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ItemBaseInfo;

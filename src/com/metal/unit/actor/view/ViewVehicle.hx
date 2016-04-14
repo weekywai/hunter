@@ -6,7 +6,7 @@ import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgInput;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.view.ViewBase.EffConfig;

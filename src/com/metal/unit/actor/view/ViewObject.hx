@@ -17,10 +17,6 @@ class ViewObject extends ViewBase
 	public function new() 
 	{
 		super();
-		
-	}
-	override public function update():Void {
-		//setHitboxTo(_model);
 	}
 	
 	override function createAvatar(name:String, type:String):Dynamic 
@@ -31,6 +27,7 @@ class ViewObject extends ViewBase
 		var model:IAttach;
 		switch(fileType) { 
 			case ".xml":
+				//trace(type + ">>" +res);
 				var eff:TextureAtlasFix;
 				if (type == UnitModelType.Unit){   
 					eff = TextureAtlasFix.loadTexture(ResPath.getModelXML(type, name));
@@ -38,19 +35,19 @@ class ViewObject extends ViewBase
 					eff = TextureAtlasFix.loadTexture(res);
 				}
 				model = new AttachTexture(eff);
+				model.initAttach(null);
 			case ".png":
 				model = new AttachImage(res);
 			default:
 				model = null;
 		}
-		var img:Image = cast (model,Image);
+		var img:Image = cast (model, Image);
 		addGraphic(img);
 		//trace(res + " : "+a.width);
 		setHitbox(img.width, img.height);
 		//setHitbox(Std.int(img.width *0.5), img.height , Std.int(img.width / 4), Std.int(img.height / 2));
 		return model;
 	}
-	
 	
 	override private function preload():Void
 	{

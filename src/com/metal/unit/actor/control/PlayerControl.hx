@@ -185,7 +185,6 @@ class PlayerControl extends Component
 	}
 	private function cmd_DirAttack(userData:Dynamic):Void
 	{
-		trace(_inputEnable);
 		if (!_inputEnable) return;
 		var target:Point = userData.target;
 		var melee:Bool = userData.melee;
@@ -206,7 +205,7 @@ class PlayerControl extends Component
 		}else {
 			
 		}
-		trace("cmd_DirAttack");
+		
 		if(melee){
 			notify(MsgPlayer.Attack, { type:WeaponType.Melee});
 			//notify(MsgActor.Melee);

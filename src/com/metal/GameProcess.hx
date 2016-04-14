@@ -105,8 +105,7 @@ class GameProcess implements IObserver
 		_loop = new MainLoop();
 		_loop.add(root);
 		root.outgoingMessage.o = rootStage;
-		trace(StringTools.hex(MsgView.SetParent)+"-"+ (MsgView.SetParent>>8));
-		//trace(StringTools.hex(MsgView.UpdateGrid)+"-"+ MsgView.UpdateGrid>>8);
+		//trace(StringTools.hex(MsgView.SetParent)+"-"+ (MsgView.SetParent>>8));
 		root.sendMessageToChildren(MsgView.SetParent, true);
 		
 		//#if !mobile

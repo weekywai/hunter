@@ -178,7 +178,9 @@ class BaseActor extends GameBoardItem implements IActor
 			case MsgActor.PosForceUpdate:
 				Notify_PosForceUpdate(userData);
 			case MsgStat.ChangeSpeed:
-				notify_ChangeSpeed(userData);
+				Notify_ChangeSpeed(userData);
+			case MsgActor.BornPos:
+				Notify_BornPos(userData);
 		}
 		super.onUpdate(type, source, userData);
 	}
@@ -556,7 +558,7 @@ class BaseActor extends GameBoardItem implements IActor
 		transition(ActorState.Revive);
 		//_model.type  = owner.name;
 	}
-	private function notify_ChangeSpeed(userData:Dynamic):Void { }
+	private function Notify_ChangeSpeed(userData:Dynamic):Void { }
 	private function Notify_Destroying(userData:Dynamic):Void
 	{
 		
@@ -598,6 +600,10 @@ class BaseActor extends GameBoardItem implements IActor
 			dir = RIGHT;
 		x = userData.x;
 		y = userData.y;
+	}
+	private function Notify_BornPos(userData:Dynamic):Void { 
+		trace(userData);
+		_keepActive = true;
 	}
 //}
 }

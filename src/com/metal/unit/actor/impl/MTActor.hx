@@ -11,7 +11,7 @@ import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.proto.impl.BattlePrepareInfo;
 import com.metal.proto.impl.GoldGoodInfo;
 import com.metal.proto.impl.ItemBaseInfo;
@@ -32,12 +32,10 @@ import pgr.dconsole.DC;
 class MTActor extends BaseActor
 {
 	public var isVictory:Bool;
-	public var respawnTotal:Int;
 	public function new() 
 	{
 		super();
 		isVictory = false;
-		respawnTotal = 0;
 	}
 	
 	override function onInitComponent():Void 
@@ -322,7 +320,7 @@ class MTActor extends BaseActor
 		
 	}
 	
-	override function notify_ChangeSpeed(userData:Dynamic):Void 
+	override function Notify_ChangeSpeed(userData:Dynamic):Void 
 	{
 		velocity.x = velocity.x * userData[0];
 		//trace(_speed + ":"+userData+":" + userData / 100);
@@ -332,30 +330,6 @@ class MTActor extends BaseActor
 	{
 		notifyParent(MsgItr.Destory, {key:_owner.keyId, id:bindPlayerID});
 		super.Notify_Destroy(userData);
-	}
-	
-	override function Notify_Soul(userData:Dynamic):Void 
-	{
-		super.Notify_Soul(userData);
-		
-		respawnTotal++;
-		if (respawnTotal >= 10) {
-			var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
-			if (battle.currentStage().DuplicateType == 9)
-			{
-				GameProcess.SendUIMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
-			}else
-			{
-				GameProcess.SendUIMsg(MsgUI.BattleFailure);
-			}
-		} else {
-			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
-		}
-		//notify(MsgActor.ExitBoard);
-	}
-	public function getRebornTime():Int
-	{
-		return respawnTotal;
 	}
 	
 	override function Notify_Respawn(userData:Dynamic):Void 
@@ -384,9 +358,7 @@ class MTActor extends BaseActor
 		isVictory = true;
 		super.Notify_Victory(userData);		
 		velocity.x = 0;
-		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
-			GameProcess.root.notify(MsgStartup.TransitionMap);
-		} );
+		
 		
 	}
 	private function cmd_AddCollide(userData:Dynamic):Void 

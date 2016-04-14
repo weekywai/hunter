@@ -47,7 +47,7 @@ class EffectBoom1 extends EffectEntity
 		
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z016.xml");
 		var eff1:TextureAtlasFix = TextureAtlasFix.loadTexture("effect/Z014.xml");
-		
+		HXP.scene.add(this);
 		//boomEffectArray = [];
 		_numEffect = 6;
 		var ran:Float, boomEff:TextrueSpritemap;
@@ -65,7 +65,7 @@ class EffectBoom1 extends EffectEntity
 			boomEff.scale = (ran * 1 + 1);
 			boomEff.flipped = (ran <= 0.5) ? true : false;
 			boomEff.x = ran * req.width * 0.7 ;//- boomEffect2.scaledWidth / 2;
-			boomEff.y = ran * req.height * 0.7;// - boomEffect2.scaledHeight / 2;
+			boomEff.y = ran * req.height * 0.7 - boomEff.height *0.5;
 			//boomEffectArray.push(boomEff);
 			Actuate.timer(i * 0.22).onComplete (effectTween, [boomEff, ""+i]);
 		}
@@ -84,10 +84,6 @@ class EffectBoom1 extends EffectEntity
 		//_effect.angle = req.angle-90;
 		//super.start(req);
 		
-		//trace("x y " + x + ":" + y);
-		if (graphic != null )
-			graphic.resume();
-		HXP.scene.add(this);
 	}
 	private function effectTween(tex:TextrueSpritemap, name:String)
 	{
