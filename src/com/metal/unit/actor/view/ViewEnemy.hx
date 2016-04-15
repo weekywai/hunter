@@ -276,6 +276,7 @@ class ViewEnemy extends ViewActor
 		item.Num = 1;
 		item.Precent = 1;
 		var drop = [];
+		//var num:Int = 1;
 		var num:Int = Std.int(Math.random() * 6)+1;
 		for(i in 0...num)
 		    drop.push(item);

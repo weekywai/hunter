@@ -188,7 +188,7 @@ class ViewBase extends AbstractAvatar
 					unit.simType = UnitModelType.DropItem;
 					unit.id = item.ItemId;
 					unit.x = x;
-					unit.y = y - 300;
+					unit.y = y - 100;
 					notifyParent(MsgBoard.CreateUnit, unit);
 				//}else {
 					//if (Math.random()*100 <= item.Precent) {

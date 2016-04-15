@@ -1,5 +1,6 @@
 package com.metal.unit.actor.view;
 import com.haxepunk.HXP;
+import com.haxepunk.graphics.Image;
 import com.metal.message.MsgActor;
 import com.metal.proto.impl.GoldGoodInfo;
 import com.metal.proto.impl.ItemBaseInfo;
@@ -7,6 +8,9 @@ import com.metal.proto.impl.ModelInfo;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.impl.UnitActor;
 import motion.Actuate;
+import motion.MotionPath;
+import motion.MotionPath.BezierPath;
+import motion.easing.Linear;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 
@@ -97,13 +101,25 @@ class ViewDropItem extends ViewObject
 			});
 		} else {
 			
+			factor();
+			Actuate.timer(3).onComplete(function() {
+				if(_model!=null)	
+					Actuate.tween(cast(_model, Image), 0.1, { alpha:0 } ).delay(1).reflect().repeat (6).onComplete(notify, [MsgActor.Destroy]);
+			});
 		}
 	}
 	
-	public function factor(value:Float) {
-		var ran = Math.random();
-        this.x = (1 - value) * (1 - value) * 100 + 2 * value * (1 - value) * 300 + value * value * 100;
-        this.y = (1 - value) * (1 - value) * 100 + 2 * value * (1 - value) * 300 + value * value * (ran*200+200);
+	public function factor() {
+        var ran = Math.random();
+		var curX = ((ran > 0.5)?ran * 200:ran *-200);
+		var posx = _actor.x + curX;
+		var posy = _actor.y;
+		//trace("factor :" +posx+"::"+ _actor.x + "::"+_actor.y);
+		var motion:MotionPath = new MotionPath().bezier(posx, posy, posx - curX *ran*0.3, posy * ran*0.2, 1);// .line(posx, posy);
+		Actuate.motionPath(_actor, ran * 0.4 + 0.2, { x:motion.x, y:motion.y } ).ease(Linear.easeNone).onComplete(function() { 
+			if (collide("solid", x, y) != null) 
+				_actor._gravity = _actor._gravity * 3;
+		} );
     }
 	
 	override function setAction(action:ActionType, loop:Bool = true):Void 
@@ -114,7 +130,7 @@ class ViewDropItem extends ViewObject
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		//trace("drop item destorying");
-		Actuate.tween(_actor, 1, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
+		Actuate.tween(_actor, 0.8, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
 		super.Notify_Destorying(userData);
 		//notify( MsgActor.Destroy);
 	}
