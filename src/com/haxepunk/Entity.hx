@@ -145,11 +145,7 @@ class Entity extends Tweener
 	 */
 	public function removed():Void { collideEntity = null; }
 	
-	public function disposed()
-	{
-		if (graphic != null)
-			graphic.destroy();
-	}
+	public function dispose():Void {}
 	/**
 	 * Updates the Entity.
 	 */

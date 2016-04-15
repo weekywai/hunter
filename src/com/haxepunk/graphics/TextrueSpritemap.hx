@@ -38,7 +38,7 @@ class TextrueSpritemap extends Image
 	 * @param	frameHeight		Frame height.
 	 * @param	callback		Optional callback function for animation end.
 	 */
-	public function new(source:TextureAtlasFix, auto:Bool = true)
+	public function new(source:TextureAtlasFix, autoPlay:Bool = true)
 	{
 		complete = true;
 		rate = 1;
@@ -59,7 +59,7 @@ class TextrueSpritemap extends Image
 		
 
 		updateBuffer();
-		active = auto;
+		active = autoPlay;
 		//trace(_region.center+"::::"+originX);
 	}
 	
@@ -68,31 +68,36 @@ class TextrueSpritemap extends Image
 		if(animationEnd!=null)
 		animationEnd.removeAll();
 		animationEnd = null;
+		_atlas = null;
+		_rect = null;
+		_anims = null;
+		_anim = null;
 		super.destroy();
 	}
 	
-	public function updateTexture(source:TextureAtlasFix, state:String, updateAnimate:Bool = false):Void 
+	public function resetTexture(source:TextureAtlasFix, ?callbackFun:Dynamic):Void 
 	{
+		complete = true;
+		rate = 1;
+		_anims = new StringMap<AnimationFix>();
 		_timer = _frame = 0;
 		_atlas = source;
+		var names:Iterator<String> = _atlas.getRegionNames();
 		_frameCount = _atlas.getReginCount();
+		_region = _atlas.getRegion(names.next());
+		
+		if(animationEnd!=null){
+			animationEnd.removeAll();
+			if (callbackFun != null)
+				animationEnd.addOnce(callbackFun);
+		}
+
 		_imageWidth = Std.int(_region.width);
 		_imageHeight = Std.int(_region.height);
-		var playName:String = state;
-		if (updateAnimate) {
-			if (_anims.exists(playName)) {
-				var anim:AnimationFix = _anims.get(playName);
-				var frames:Array<Int> = [];
-				for (i in 0..._frameCount)
-					frames[i] = i;
-				anim.frames = frames;
-				
-			}
-		}
+		_rect = new Rectangle(0, 0, _imageWidth, _imageHeight);
+
 		updateBuffer();
-		active = true;
-		if (playName != null)
-			play(playName, true);
+		//active = true;
 	}
 	/** @private Creates the buffer. */
 	override private function createBuffer()

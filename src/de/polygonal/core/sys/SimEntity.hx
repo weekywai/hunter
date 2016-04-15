@@ -32,7 +32,9 @@ class SimEntity extends Entity implements IObservable
 			_observable = new Observable(0, this);
 		return _observable;
 	}
-	
+	/**
+	 * last is first update
+	 */
 	public function attach(o:IObserver, mask:Int = 0)
 	{
 		observable.attach(o, mask);
@@ -197,6 +199,9 @@ class SimEntity extends Entity implements IObservable
 	
 	override function onFree() 
 	{
+		//not component recieve
+		notify(MsgCore.FREE);
+		
 		var comp;
 		var node = compMap.head;
 		while (node!=null) 

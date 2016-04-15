@@ -577,6 +577,30 @@ class Image extends Graphic
 	private var _flipped:Bool;
 	private var _flip:BitmapData;
 	private static var _flips:Map<BitmapData, BitmapData> = new Map<BitmapData, BitmapData>();
+	public static function clearCache() {
+		var bmp:BitmapData;
+		for (key in _flips.keys()) 
+		{
+			bmp = _flips.get(key);
+			bmp.dispose();
+			_flips.remove(key);
+		}
+	}
 
 	private var _scale:Float;
+	
+	override public function destroy() 
+	{
+		_source = null;
+		_sourceRect = null;
+		_buffer = null;
+		_bufferRect = null;
+		_bitmap = null;
+		_region = null;
+		_tint = null;
+		_colorTransform = null;
+		_matrix = null;
+		_flip = null;
+		super.destroy();
+	}
 }

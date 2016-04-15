@@ -10,7 +10,6 @@ import com.metal.config.SfxManager;
 import com.metal.config.UnitModelType;
 import com.metal.enums.MapVo;
 import com.metal.enums.MonsVo;
-import com.metal.manager.ResourceManager;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgPlayer;
@@ -30,7 +29,6 @@ import com.metal.scene.board.view.Camera;
 import com.metal.unit.AppearUtils;
 import com.metal.unit.UnitInfo;
 import com.metal.unit.UnitUtils;
-import com.metal.unit.avatar.MTAvatar;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
 import de.polygonal.core.sys.SimEntity;
@@ -384,16 +382,15 @@ class GameMap extends Component
 			}
 			
 			//trace(ResourceManager.PreLoad+">>"+data.id);
-			if(ResourceManager.PreLoad){
-				var avater:MTAvatar = HXP.scene.create(MTAvatar, true);
-				avater.type = data.type;
-				avater.preload(modelInfo);
-				avater.active = false;
-				avater.visible = false;
-				ResourceManager.instance.addEntity(modelInfo.res, avater);
-			}else {
+			//if(ResourceManager.PreLoad){
+				//var avater:MTAvatar = HXP.scene.create(MTAvatar, true);
+				//avater.type = data.type;
+				//avater.preload(modelInfo);
+				//avater.active = false;
+				//avater.visible = false;
+			//}else {
 				SpinePunk.readSkeletonData("model", ResPath.getModelRoot(modelType, modelInfo.res));
-			}
+			//}
 		}
 	}
 	
@@ -453,6 +450,7 @@ class GameMap extends Component
 			entity = createEntity(monsterInfo.ModelType, createPos, vo.id);
 			entity.notify(MsgActor.BornPos, bornPos);
 			notify(MsgBoard.AssignUnit, entity);
+			//trace(entity);
 			if(!mapData.runKey){
 				var faction = BoardFaction.getFaction(monsterInfo.ModelType);
 				if(faction == BoardFaction.Elite || faction == BoardFaction.Machine){
@@ -481,6 +479,7 @@ class GameMap extends Component
 				unitModel = UnitModelType.Unit;
 				
 		}
+		//trace(x +" "+y);
 		return UnitUtils.createUnit(unitModel, id, faction, x, y);
 	}
 	
@@ -510,8 +509,7 @@ class GameMap extends Component
 		notify(MsgBoard.AssignUnit, player);
 		//trace("bind player" + owner.parent);
 		notify(MsgBoard.AssignPlayer, player);
-		notifyParent(MsgBoard.AssignPlayer, player);
-		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
+		
 		//trace("AssignPlayer");
 		notify(MsgBoard.StartTrigger);
 	}
@@ -526,8 +524,7 @@ class GameMap extends Component
 		notify(MsgBoard.AssignUnit, player);
 		//trace("bind Vehicle");
 		notify(MsgBoard.AssignPlayer, player);
-		notifyParent(MsgBoard.AssignPlayer, player);
-		//GameProcess.NotifyUI(MsgBoard.AssignPlayer, player);
+		//GameProcess.NotifyUI(MsgBoard.AssignPlayer);
 	}
 	
 	private function BindUint():Void
@@ -552,7 +549,11 @@ class GameMap extends Component
 				entity = UnitUtils.createUnit(UnitModelType.Unit, id, faction, obj.x, obj.y);
 			}
 			notify(MsgBoard.AssignUnit, entity);
-			enemies.push(entity.keyId);
+			//trace(faction);
+			if (faction != BoardFaction.Block){
+				enemies.push(entity.keyId);
+				//trace(enemies.length +">>"+faction);
+			}
 			enemiesMap.set(entity.keyId,obj);
 			bornPointMap.set(obj,entity.keyId);
 			if (faction == BoardFaction.Boss1 || faction == BoardFaction.Boss) {
@@ -566,6 +567,7 @@ class GameMap extends Component
 			}
 			//DC.endProfile("BindUint");
 		}
+		//trace(enemies.length);
 	}
 	/**生成循环刷新的怪物*/
 	public function BindLoopEntity(buildIndex:Int)

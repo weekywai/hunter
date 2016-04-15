@@ -27,11 +27,6 @@ interface IActor extends IBoardItem extends IDisposer
 	function canTransition(targetStateID:Int):Bool;
 	
 	/**
-	 * 控制器
-	 */
-	//function controller():ISimIntervenor;
-	
-	/**
 	 * 方向(向)
 	 */
 	var dir(get, set):Direction;
@@ -49,30 +44,4 @@ interface IActor extends IBoardItem extends IDisposer
 	 * 是否需要向右翻转
 	 * */
 	var isNeedRightFlip:Bool;
-	
-	/**
-	 * 鼠标瞄准X
-	 */
-	//function AimMouseX():Float;
-	/**
-	 * 鼠标瞄准Y
-	 */
-	//function AimMouseY():Float;
-	/**
-	 * 到瞄准点的距离
-	 */
-	//function AimLen():Float;
-	/**
-	 * 瞄准角度
-	 */
-	//function AimAngle():Float;
-	
-
-	/**
-	 * 是否攻击状态
-	 */
-	//var attack:Bool;
-	
-	
-	function getProperty(key:String):String;
 }

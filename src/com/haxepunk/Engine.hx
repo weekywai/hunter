@@ -62,7 +62,7 @@ class Engine extends Sprite
 
 		// global game properties
 		HXP.bounds = new Rectangle(0, 0, width, height);
-		HXP.assignedFrameRate = frameRate;
+		HXP.assignedFrameRate = Timebase.fps;
 		HXP.fixed = Timebase.useFixedTimeStep;//fixed;
 
 		// global game objects
@@ -288,7 +288,7 @@ class Engine extends Sprite
 	/**更新引擎*/
 	public function updateEngine():Void
 	{
-		if(parent!=null)
+		if(parent!=null && !paused)
 			onEnterFrame(null);
 	}
 	/** @private Framerate independent game loop. */
@@ -298,13 +298,8 @@ class Engine extends Sprite
 		_time = _gameTime = Timebase.stamp();// Lib.getTimer();
 		HXP._systemTime = _time - _systemTime;
 		_updateTime = _time;
-		/* 修改时间统一用 TimeBase
-		HXP.elapsed = (_time - _last) / 1000;
-		if (HXP.elapsed > maxElapsed) HXP.elapsed = maxElapsed;
-		HXP.elapsed *= HXP.rate;
-		*/
-		HXP.elapsed = Timebase.gameTimeDelta;
-		//HXP.elapsed = TimeBase.timeDelta;
+		//HXP.elapsed = Timebase.gameTimeDelta;
+		HXP.elapsed = Timebase.gameTimeDelta*0.5;
 		
 		_last = _time;
 

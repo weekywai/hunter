@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Widget id="'helpText'" name="'helpTextView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
-	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="-2">
-		<Text text="'帮  助'" defaults="'Tip'" topPt="20" />
+<Widget id="'helpText'" name="'helpText'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
+		<Text text="'帮  助'" defaults="'Tip'" topPt="6" />
 	</VBox>
 	<Text leftPt="40" topPt="30" defaults="'Gold'" format-size="35" text="'此处为帮助说明'"/>
 	

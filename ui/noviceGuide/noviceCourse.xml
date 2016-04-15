@@ -3,7 +3,7 @@
 		$this.scaleContent = $Lib.current.stage.stageWidth / 1280;" mouseEnabled="true">
     <ViewStack id="'floatBie'"  wrap="true" widthPt="100" heightPt="100"  on-display="$this.show(@content);"   >
 		
-		<Box id="'noviceCourse'" name="'noviceCourseView'" widthPt="100" heightPt="100" defaults="'Screen,Level1'" topPt="20" leftPt="10"  scaleX="0.8" scaleY="0.8" >
+		<Box id="'noviceCourse'" name="'noviceCourse'" widthPt="100" heightPt="100" defaults="'Screen,Level1'" topPt="20" leftPt="10"  scaleX="0.8" scaleY="0.8" >
 			
 			<Widget name="'noviceWidget1'" skinName="'SuerPopupBg'" w="918" h="483">
 				<Button name="'payBmp'" defaults="'payBtn,HightLight'" rightPt="-5" topPt="-70"   visible="false" />

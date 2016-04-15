@@ -5,11 +5,12 @@ import com.metal.config.SfxManager;
 import com.metal.config.UnitModelType;
 import com.metal.GameProcess;
 import com.metal.message.MsgActor;
+import com.metal.message.MsgBoard;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.api.BoardFaction;
@@ -38,6 +39,10 @@ class BattleResolver extends Component
 {
 	public var _gameMap:GameMap;
 	
+	private var _player:SimEntity;
+	public var player(get, null):SimEntity;
+	private function get_player():SimEntity { return _player; }
+	
 	private var _hitTime:Int = 3;
 	private var _injureTime:Int = 2;
 	public function new() 
@@ -64,7 +69,18 @@ class BattleResolver extends Component
 				cmd_BulletHit(userData);
 			case MsgItr.Destory:
 				cmd_Destory(userData);
+			case MsgBoard.AssignPlayer:
+				cmd_AssignPlayer(userData);
+			case MsgStartup.Finishbattle:
+				cmd_Finishbattle(userData);
 		}
+	}
+	private function cmd_Finishbattle(userData:Dynamic):Void {
+		_player = null;
+	}
+	private function cmd_AssignPlayer(userData:Dynamic):Void
+	{
+		_player = userData;
 	}
 	
 	private function cmd_Destory(userData:Dynamic):Void
@@ -74,7 +90,7 @@ class BattleResolver extends Component
 		var key:Int = userData.key;
 		var remove = _gameMap.enemies.remove(key);
 		if(remove)_gameMap.bornPointMap.set(_gameMap.enemiesMap.get(key),-1);
-		//var loopEntity = _gameMap.loopEntityId.remove(key);
+		//var loopEntity = _gameMap.loopEntityId.remove(userData);
 		//if (loopEntity && _gameMap.loopEntityId.length<=0) 
 		//{
 			//_gameMap.BindLoopEntity();
@@ -117,6 +133,7 @@ class BattleResolver extends Component
 		//trace(userData);
 		calculate(userData);
 	}
+	
 	//{战斗中计算
 	private function calculate(userData:Dynamic):Void
 	{
@@ -143,10 +160,11 @@ class BattleResolver extends Component
 			targetStat = cast target.getComponent(UnitStat);
 		}
 		//
-		if(Main.config.get("console")=="true")
+		if (Main.config.get("console") == "true") {
 			if (target.name == UnitModelType.Player ||target.name == UnitModelType.Vehicle) 
 				  return;
-		//trace(attacker.id + " " +attackerSkill);
+		}
+		
 		if (targetStat == null)
 			return;
 		var buff:Buff = targetStat.findStatusByKey(BuffType.Invincible);
@@ -227,11 +245,8 @@ class BattleResolver extends Component
 			case 2://生命
 			case 3://伤害
 		}
-		if (Main.config.get("console") == "true") {
-			damage = fixRate * damage / 100 + fixParam;
-		}else {
-			damage = fixRate * damage / 10000 + fixParam;
-		}
+		
+		damage = fixRate * damage / (10000 * Std.parseFloat(Main.config.get("maxAttack")))  + fixParam;
 		
 		//trace("damage:"+damage);
 		var ran = Math.random() > 0.5?1: -1;

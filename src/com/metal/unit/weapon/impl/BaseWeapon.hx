@@ -1,30 +1,24 @@
 package com.metal.unit.weapon.impl;
 import com.metal.component.GameSchedual;
-import com.metal.config.EquipProp;
 import com.metal.config.PlayerPropType;
-import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgPlayer;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.BulletInfo;
 import com.metal.proto.impl.SkillInfo;
-import com.metal.proto.impl.WeaponInfo;
 import com.metal.proto.manager.BulletManager;
-import com.metal.proto.manager.SkillManager;
-import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.effect.api.EffectRequest;
-import com.metal.unit.actor.api.IActor;
 import com.metal.unit.actor.impl.MTActor;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.actor.view.ViewActor;
+import com.metal.unit.actor.view.ViewPlayer;
 import com.metal.unit.stat.IStat;
 import com.metal.unit.weapon.api.IWeapon;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
-import spinehaxe.Bone;
 
 /**
  * ...
@@ -51,7 +45,7 @@ class BaseWeapon extends Component implements IWeapon
 	private var _actor:MTActor;
 	private var _stat:IStat;
 	
-	private var _avatar:MTAvatar;
+	private var _avatar:ViewActor;
 	private var _reborn:Bool = false;
 	
 	
@@ -123,9 +117,7 @@ class BaseWeapon extends Component implements IWeapon
 			case MsgInput.DirAttack:
 				cmd_DirAttack(userData);
 			case MsgActor.Respawn:
-				notify_Reborn(userData);
-			case MsgActor.Reborn:
-				notify_Reborn(userData);				
+				notify_Reborn(userData);			
 			//case MsgInput.Aim:
 				//cmd_Aim(userData);
 		}
@@ -152,7 +144,6 @@ class BaseWeapon extends Component implements IWeapon
 	
 	private function notify_PostLoad(userData:Dynamic):Void
 	{
-		//trace(userData);
 		_avatar = userData;
 	}
 	

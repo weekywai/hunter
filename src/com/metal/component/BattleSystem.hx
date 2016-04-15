@@ -4,7 +4,6 @@ import com.metal.config.BattleGradeConditionType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.RoomMissionType;
 import com.metal.manager.ResourceManager;
-import com.metal.message.MsgActor;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgStartup;
@@ -12,22 +11,19 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.network.Network;
-import com.metal.network.ZNetPacket;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.impl.GradeConditionInfo;
 import com.metal.proto.manager.GradeConditionManager;
 import com.metal.proto.manager.MapInfoManager;
-import com.metal.unit.actor.impl.MTActor;
 import com.metal.utils.effect.Animator;
 import com.metal.utils.effect.component.EffectType;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
+import haxe.Timer;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
-import haxe.Timer;
 import motion.Actuate;
 
 
@@ -173,15 +169,14 @@ class BattleSystem extends Component
 	/**切换场景**/
 	private function changeMap():Void
 	{
-		notifyDirect("GameBoard",MsgStartup.Reset);
+		notifyDirect("GameBoard", MsgStartup.Reset);
 		HXP.scene.end();
-		HXP.scene.updateLists();
 		if (_clear){
 			ResourceManager.instance.unLoadAll();
 			_clear = false;
 		}
 		GameProcess.SendUIMsg(MsgUI.BossPanel);
-		GameProcess.NotifyUI(MsgUIUpdate.StartBattle);
+		GameProcess.NotifyUI(MsgUIUpdate.StartBattle|MsgStartup.Start);
 		notifyDirect("GameBoard",MsgStartup.Start);
 		
 		_missionType = MapInfoManager.instance.getRoomInfo(Std.parseInt(currentRoomId())).MissionType;		
@@ -208,12 +203,12 @@ class BattleSystem extends Component
 	}
 	
 	/**通关评级*/
-	private function rate():Int
+	private function rate(data:Dynamic):Int
 	{
 		var rateStarNum:Int = 0;
 		var reachArr:Array<Bool> = new Array();
-		var hpPercent:Float = PlayerUtils.getPlayerStat().hp/PlayerUtils.getPlayerStat().hpMax;
-		var rebornTime:Int = cast(PlayerUtils.getPlayer().getComponent(MTActor), MTActor).getRebornTime();
+		var hpPercent:Float = data.hp;
+		var rebornTime:Int = data.times;
 		for (i in 0...conditionTypeArr.length) 
 		{
 			switch (conditionTypeArr[i]) 
@@ -306,6 +301,7 @@ class BattleSystem extends Component
 	
 	private function cmd_BattleClear(userData:Dynamic)
 	{
+		trace("cmd_BattleClear");
 		var count = _curMap;
 		count++;
 		if (count < _roomArray.length) {
@@ -323,6 +319,7 @@ class BattleSystem extends Component
 	private function cmd_TransitionMap(userData:Dynamic):Void
 	{
 		_curMap++;
+		//trace(_roomArray);
 		if (_curMap < _roomArray.length) {
 			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, -1);
 			Animator.start(this, "", EffectType.SCREEN_CLOSE_EAT, null, true, changeMap);
@@ -330,7 +327,7 @@ class BattleSystem extends Component
 		}
 		else if (_curMap >= _roomArray.length-1){
 			//notify(MsgStartup.Reset);
-			_duplicateInfo.setRate(rate());
+			_duplicateInfo.setRate(rate(userData));
 			var result:Int = 0;
 			notify(MsgStartup.Finishbattle, result);
 			GameProcess.SendUIMsg(MsgUI2.Control, false);

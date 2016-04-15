@@ -9,6 +9,7 @@ import com.metal.config.ResPath;
 import com.metal.config.UnitModelType;
 import com.metal.message.MsgEffect;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.GameBoard;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletComponent;
@@ -43,15 +44,18 @@ class BulletSkillShiny extends BulletEntity
 	
 	override private function onDispose():Void 
 	{
-		//_bullet.destroy();
+		if(_bullet!=null)
+			_bullet.destroy();
 		_bullet = null;
-		_bullet2 = null;
+		if (_bullet2 != null)
+			_bullet2 = null;
 		_attacker = null;
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		xmlBullet();
 	}
 	
@@ -62,9 +66,13 @@ class BulletSkillShiny extends BulletEntity
 	{
 		key = false;
 		var eff2:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Z006.xml"));
-		_bullet2 = new TextrueSpritemap(eff2);
+		if(_bullet2==null){
+			_bullet2 = new TextrueSpritemap(eff2);
+			_bullet2.animationEnd.add(onComplete2);
+		}else{
+			_bullet2.resetTexture(eff2, onComplete2);
+		}
 		_bullet2.add("shinySceen", eff2.getReginCount(), 20);
-		_bullet2.animationEnd.add(onComplete2);
 		if (eff2.ox != 0 || eff2.oy != 0) {
 			_bullet2.originX = eff2.ox;
 			_bullet2.originY = eff2.oy;
@@ -76,9 +84,13 @@ class BulletSkillShiny extends BulletEntity
 		//_bullet2.y = -1320;
 		
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("mxjn01_2.xml"));
-		_bullet = new TextrueSpritemap(eff);
+		if(_bullet==null){
+			_bullet = new TextrueSpritemap(eff);
+			_bullet.animationEnd.add(onComplete);
+		}else{
+			_bullet.resetTexture(eff, onComplete);
+		}
 		_bullet.add("shinyBody", eff.getReginCount(), 20);
-		_bullet.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0) {
 			_bullet.originX = eff.ox;
 			_bullet.originY = eff.oy;
@@ -93,7 +105,7 @@ class BulletSkillShiny extends BulletEntity
 		_bullet.visible = true;
 		//graphic = _bullet;
 		addGraphic(_bullet);
-		_bullet.play("shinyBody");
+		_bullet.play("shinyBody", true);
 		
 	}
 	
@@ -111,7 +123,7 @@ class BulletSkillShiny extends BulletEntity
 		//graphic = _bullet2;
 		_bullet2.scaleX = 8;
 		_bullet2.scaleY = 8;
-		_bullet2.play("shinySceen");
+		_bullet2.play("shinySceen", true);
 		
 	}
 	
@@ -199,7 +211,6 @@ class BulletSkillShiny extends BulletEntity
 					}
 					
 					effT.add("clearEff", eff.getReginCount(), 25);
-					effT.animationEnd.add(onComplete3);
 					effT.centerOrigin();
 					addGraphic(effT);
 					effT.play("clearEff");
@@ -211,11 +222,6 @@ class BulletSkillShiny extends BulletEntity
 				}
 			//}
 		}
-	}
-	
-	private function onComplete3(name):Void
-	{
-		//removeGraphic(clearEff.shift());
 	}
 	
 	override function onCheck():Void 

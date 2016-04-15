@@ -2,13 +2,15 @@ package com.metal.player.utils;
 import com.metal.config.PlayerPropType;
 import com.metal.enums.BagInfo;
 import com.metal.enums.GunType;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.component.GameSchedual;
 import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.GoodsProtoManager;
+import com.metal.scene.board.impl.BattleResolver;
 import com.metal.unit.stat.IStat;
 import com.metal.unit.weapon.impl.BaseWeapon;
 import com.metal.unit.weapon.impl.WeaponFactory;
+import de.polygonal.core.es.EntityUtil;
 import de.polygonal.core.sys.SimEntity;
 import openfl.errors.Error;
 
@@ -26,12 +28,13 @@ class PlayerUtils
 	
 	public static function getPlayerStat():IStat
 	{
-		return cast getSchedual().playerEntity.getComponent(PlayerStat);
+		return getPlayer().getComponent(PlayerStat);
 	}
 	
 	public static function getPlayer():SimEntity
 	{
-		return getSchedual().playerEntity;
+		var battle:BattleResolver = EntityUtil.findBoardComponent(BattleResolver);
+		return battle.player;
 	}
 	
 	/**获取角色Info*/

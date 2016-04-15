@@ -18,8 +18,6 @@ class GameBoard extends Component
 {
 	public var units(default, null):List<SimEntity>;
 	private var _startAI:Bool;
-	// 类型缓冲 u:UnitType  v:Faction
-	//private var _typeCache:DLL<Dynamic>; // Type, Faction
 	
 	public function new() 
 	{
@@ -42,8 +40,9 @@ class GameBoard extends Component
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
 		switch(type) {
-			case MsgStartup.Start:
-				cmd_Start(userData);
+			//case MsgStartup.Start:
+				//trace("Start");
+				//cmd_Start(userData);
 			case MsgStartup.Reset:
 				cmd_Reset(userData);
 			case MsgBoard.AssignUnit:
@@ -55,9 +54,9 @@ class GameBoard extends Component
 		}
 		super.onUpdate(type, source, userData);
 	}
-	private function cmd_Start(userData:Dynamic):Void {
-		
-	}
+	//private function cmd_Start(userData:Dynamic):Void {
+		//
+	//}
 	private function cmd_Reset(userData:Dynamic):Void {
 		var itr = units.iterator();
 		var item:SimEntity = itr.next();
@@ -75,6 +74,7 @@ class GameBoard extends Component
 	}
 	private function cmd_StartAI()
 	{
+		trace("cmd_StartAI");
 		GameProcess.NotifyUI(MsgBoard.AssignPlayer);
 		var itr = units.iterator();
 		var item:SimEntity = itr.next();
@@ -91,7 +91,7 @@ class GameBoard extends Component
 		item.free();
 	}
 	
-	public function addUnitEntity(item:SimEntity):Bool {
+	private function addUnitEntity(item:SimEntity):Bool {
 		if (isDisposed) 
 			return false;
 		
@@ -105,7 +105,7 @@ class GameBoard extends Component
 		owner.add(item);
 		// 发送进入游戏板信号
 		item.notify(MsgActor.EnterBoard);
-		if (_startAI){
+		if (_startAI) {
 			item.notify(MsgInput.SetInputEnable, true);
 		}
 		return true;

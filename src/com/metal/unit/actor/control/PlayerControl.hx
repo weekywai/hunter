@@ -83,8 +83,6 @@ class PlayerControl extends Component
 				cmd_SetInputEnable(userData);
 			case MsgActor.Respawn:
 				cmd_Respawn(userData);
-			case MsgActor.Reborn:
-				cmd_Respawn(userData);
 		}
 	}
 	
@@ -207,7 +205,7 @@ class PlayerControl extends Component
 		}else {
 			
 		}
-		//trace("cmd_DirAttack");
+		
 		if(melee){
 			notify(MsgPlayer.Attack, { type:WeaponType.Melee});
 			//notify(MsgActor.Melee);

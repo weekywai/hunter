@@ -107,6 +107,11 @@ class Input
 	 * Not available in html5.
 	 */
 	public static var middleMouseReleased:Bool;
+	
+#if android
+	public dynamic static function onAndroidBack() : Void {}
+#end
+
 #end
 
 	/**
@@ -479,10 +484,16 @@ class Input
 
 	private static function onKeyUp(e:KeyboardEvent = null)
 	{
+		#if android
+		if (e.keyCode == 27) {
+			e.stopImmediatePropagation ();
+			onAndroidBack();
+		}
+		#end
 		var code:Int = keyCode(e);
 		if (code == -1) // No key
 			return;
-
+		
 		if (_key[code])
 		{
 			_key[code] = false;

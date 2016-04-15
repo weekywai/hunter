@@ -1,34 +1,31 @@
 package spinepunk;
 
 import com.haxepunk.Graphic;
-import com.haxepunk.graphics.atlas.AtlasData;
-import com.haxepunk.graphics.Image;
 import com.haxepunk.HXP;
 import com.haxepunk.Mask;
-import com.haxepunk.masks.Hitbox;
-import com.haxepunk.masks.Imagemask;
-import com.haxepunk.masks.Polygon;
 import com.haxepunk.RenderMode;
+import com.haxepunk.graphics.Image;
+import com.haxepunk.graphics.atlas.AtlasData;
+import com.haxepunk.masks.Polygon;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
 import openfl.Assets;
 import openfl.display.BitmapData;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import spinehaxe.Bone;
+import spinehaxe.Skeleton;
+import spinehaxe.SkeletonData;
+import spinehaxe.SkeletonJson;
+import spinehaxe.Slot;
 import spinehaxe.animation.AnimationState;
 import spinehaxe.animation.AnimationStateData;
 import spinehaxe.atlas.TextureAtlas;
 import spinehaxe.attachments.Attachment;
 import spinehaxe.attachments.BoundingBoxAttachment;
 import spinehaxe.attachments.RegionAttachment;
-import spinehaxe.Bone;
 import spinehaxe.platform.nme.BitmapDataTexture;
 import spinehaxe.platform.nme.BitmapDataTextureLoader;
-import spinehaxe.Skeleton;
-import spinehaxe.SkeletonData;
-import spinehaxe.SkeletonJson;
-import spinehaxe.SkeletonJson;
-import spinehaxe.Slot;
 
 using Lambda;
 
@@ -70,7 +67,7 @@ class SpinePunk extends Graphic {
     public var stateData:AnimationStateData;
     public var angle:Float=0;
     public var speed:Float=1;
-    public var color:Int=-1;
+    public var colors:Int =-1;
     public var dynamicHitbox:Bool=true;
     public var mainHitbox:Rectangle;
     public var scaleX:Float=1;
@@ -84,8 +81,8 @@ class SpinePunk extends Graphic {
     var firstFrame = true;
 	private var _scale:Float = 1;
     
-    var wrapperAngles:ObjectMap<RegionAttachment, Float>;
-    var cachedImages:ObjectMap<RegionAttachment, Image>;
+    private var wrapperAngles:ObjectMap<RegionAttachment, Float>;
+    private var cachedImages:ObjectMap<RegionAttachment, Image>;
     
     public function new(skeletonData:SkeletonData,  smooth=true) {
         super();
@@ -93,6 +90,29 @@ class SpinePunk extends Graphic {
 		name = skeletonData.name;
         init(skeletonData);
     }
+	
+	override public function destroy() 
+	{
+		weaponHitslot = null;
+		
+		hitboxSlots = null;
+		hitSlots = null;
+		hitboxes = null;
+		weaponBox = null;
+		mask = null;
+		skeleton = null;
+		skeletonData.dispose();
+		skeletonData = null;
+		state.dispose();
+		state = null;
+		stateData = null;
+		mainHitbox = null;
+		name = null;
+		rect1 = null;
+		rect2 = null;
+		wrapperAngles = null;
+		cachedImages = null;
+	}
 	public function init(data:SkeletonData):Void 
 	{
 		skeletonData = data;
@@ -257,7 +277,7 @@ class SpinePunk extends Graphic {
                 regionAttachment = cast attachment;
                 //regionAttachment.updateVertices(slot);
                 wrapper = getImage(regionAttachment);
-                wrapper.color = (color!=-1)?color:colorInt(slot);
+                wrapper.color = (colors!=-1)?colors:colorInt(slot);
                 wrapperAngle = wrapperAngles.get(regionAttachment);
                 wrapper.alpha = slot.a;
                 region = cast regionAttachment.region;
@@ -289,7 +309,7 @@ class SpinePunk extends Graphic {
 						//trace(weaponBox);
 					}
 				}
-				
+				/*
 				if (mask!=null)
 					continue;
 				//判断非碰撞骨骼
@@ -322,9 +342,10 @@ class SpinePunk extends Graphic {
                         _aabb.height = y1 - y0;
                     }
                 }
-				
+				*/
             }
         }
+		/*
 		if (mask!=null)
 			return;
 		_aabb = box;
@@ -334,7 +355,7 @@ class SpinePunk extends Graphic {
             mainHitbox = _aabb;
             firstFrame = false;
         }
-		
+		*/
 		
     }
     
@@ -419,8 +440,8 @@ class SpinePunk extends Graphic {
         
         wrapper.smooth = smooth;
         
-        wrapper.originX = (region.regionWidth / 2);
-        wrapper.originY = (region.regionHeight / 2);
+        wrapper.originX = (region.regionWidth * 0.5);
+        wrapper.originY = (region.regionHeight * 0.5);
         if (region.rotate) {
             wrapper.angle = -90;
         }
@@ -430,4 +451,6 @@ class SpinePunk extends Graphic {
         
         return wrapper;
     }
+	
+	
 }

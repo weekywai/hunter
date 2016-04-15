@@ -39,11 +39,6 @@ import haxe.Unserializer;
  */
 class GameSchedual extends Component
 {
-
-	private var _player:SimEntity;
-	public var playerEntity(get, null):SimEntity;
-	private function get_playerEntity():SimEntity { return _player; }
-	
 	private var _newMap:IntMap<NewsInfo>;
 	public var newMapInfo(get, null):IntMap<NewsInfo>;
 	private function get_newMapInfo():IntMap<NewsInfo> { return _newMap; }
@@ -98,12 +93,8 @@ class GameSchedual extends Component
 				cmd_UpdateBag(userData);
 			case MsgNet.UpdateResources:
 				cmd_updateResource(userData);
-			case MsgBoard.AssignPlayer:
-				cmd_AssignPlayer(userData);
 			case MsgStartup.GameInit:
 				//cmd_GameInit();
-			case MsgStartup.Finishbattle:
-				cmd_Finishbattle(userData);
 			case MsgNet.OpenStage: //更新开启副本
 				cmd_OpenStage(userData);
 			case MsgPlayer.UpdateMoney:
@@ -140,10 +131,6 @@ class GameSchedual extends Component
 		trace("cmd_GameInit");
 	}
 	
-	private function cmd_Finishbattle(userData:Dynamic)
-	{
-		_player = null;
-	}
 	private function cmd_PostBoot():Void { }
 	private function cmd_OpenStage(userData:Dynamic):Void { }
 	private function cmd_playerInfo(userData:Dynamic)
@@ -302,10 +289,6 @@ class GameSchedual extends Component
 		GameProcess.NotifyUI(MsgUIUpdate.UpdateResources);
 	}
 	
-	private function cmd_AssignPlayer(userData:Dynamic)
-	{
-		_player = userData;
-	}
 	
 	private function cmd_UpdateSkill(userData:Dynamic)
 	{

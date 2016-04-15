@@ -25,8 +25,8 @@ class StopGame extends BaseCmd
 		super.onInitComponent();
 		GameProcess.instance.pauseGame(true);
 		var btn:Button;
-		_widget.getChildAs("suerBtn", Button).onRelease = suerBtn_click;
-		_widget.getChildAs("closeBtn", Button).onRelease = closeBtn_click;
+		_widget.getChildAs("yesBtn", Button).onRelease = suerBtn_click;
+		_widget.getChildAs("noBtn", Button).onRelease = closeBtn_click;
 	}
 	/**继续游戏*/
 	private function suerBtn_click(e):Void

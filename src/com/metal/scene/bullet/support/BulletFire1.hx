@@ -1,21 +1,22 @@
 package com.metal.scene.bullet.support;
 
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.TextrueSpritemap;
-import com.haxepunk.HXP;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.BaseActor;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 
 /**
  * ...
@@ -55,8 +56,9 @@ class BulletFire1 extends BulletEntity
 		SfxManager.getAudio(AudioType.Fire).stop();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		//判断资源类型
 		_count = 0;
 		canRemove = false;
@@ -72,21 +74,32 @@ class BulletFire1 extends BulletEntity
 	{
 		trace("====");
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q114.xml"));
-		_fireStart = new TextrueSpritemap(eff);
+		if(_fireStart==null){
+			_fireStart = new TextrueSpritemap(eff);
+			
+			_fireStart.animationEnd.add(onStartComplete);
+		}else {
+			_fireStart.resetTexture(eff, onStartComplete);
+		}
 		_fireStart.add("fireStart", eff.getReginCount(), 25,false);
-		_fireStart.animationEnd.add(onStartComplete);
 		_fireStart.centerOrigin();
 		addGraphic(_fireStart);
-		_fireStart.play("fireStart");
+		_fireStart.play("fireStart", true);
 		_fireStart.scaleX = 1.3;
 		_fireStart.scaleY = 1.3;
 		_fireStart.x = 70;//-_fireStart.scaledHeight / 2;
 		_fireStart.y = 40;
 		
 		var eff1:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q115.xml"));
-		_fire = new TextrueSpritemap(eff1);
+		if(_fire==null){
+			_fire = new TextrueSpritemap(eff1);
+			_fire.animationEnd.add(onComplete);
+		}else {
+			_fire.resetTexture(eff1, onComplete);
+		}
+		
 		_fire.add("fire", eff1.getReginCount(), 25,true);
-		_fire.animationEnd.add(onComplete);
+		
 		addGraphic(_fire);
 		_fire.visible = false;
 		_fire.scaleX = 2.55;
@@ -96,9 +109,14 @@ class BulletFire1 extends BulletEntity
 		_fire.y = -110;
 		
 		var eff2:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes("Q116.xml"));
-		_fireEnd = new TextrueSpritemap(eff2);
+		if(_fireEnd==null){
+			_fireEnd = new TextrueSpritemap(eff2);
+			_fireEnd.animationEnd.add(onEndComplete);
+		}else {
+			_fireEnd.resetTexture(eff2, onEndComplete);
+		}
+		
 		_fireEnd.add("fireEnd", eff2.getReginCount(), 25, false);
-		_fireEnd.animationEnd.add(onEndComplete);
 		_fireEnd.centerOrigin();
 		addGraphic(_fireEnd);
 		_fireEnd.visible = false;
@@ -115,7 +133,7 @@ class BulletFire1 extends BulletEntity
 	{
 		_fireStart.visible = false;
 		_fire.visible = true;
-		_fire.play("fire");
+		_fire.play("fire", true);
 	}
 	
 	private function onComplete(name):Void
@@ -127,7 +145,7 @@ class BulletFire1 extends BulletEntity
 			_fire.visible = false;
 			_fire.pause();
 			_fireEnd.visible = true;
-			_fireEnd.play("fireEnd");
+			_fireEnd.play("fireEnd", true);
 		}
 	}
 	
@@ -169,7 +187,7 @@ class BulletFire1 extends BulletEntity
 		if(collideEntity.type != "solid")
 		{
 			//trace("collideEntity " + collideEntity);
-			var avatar:MTAvatar = cast(collideEntity, MTAvatar);
+			var avatar:ViewDisplay = cast(collideEntity, ViewDisplay);
 			_hitInfo.target = avatar.owner;
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
 			owner.notify(MsgItr.BulletHit, _hitInfo);

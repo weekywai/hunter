@@ -2,7 +2,6 @@ package com.metal.scene.bullet.impl;
 
 import com.haxepunk.HXP;
 import com.metal.config.UnitModelType;
-import com.metal.message.MsgBullet;
 import com.metal.message.MsgEffect;
 import com.metal.message.MsgItr;
 import com.metal.proto.impl.BulletInfo;
@@ -12,7 +11,7 @@ import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.api.IBullet;
 import com.metal.scene.effect.api.EffectRequest;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import com.metal.unit.render.ViewPhysics;
 import de.polygonal.core.sys.SimEntity;
 import signals.Signal1;
@@ -66,7 +65,7 @@ class BulletEntity extends ViewPhysics implements IBullet
 	
 	override private function onDispose():Void 
 	{
-		trace("bullect dispose");
+		//trace("bullect dispose");
 		if (scene != null)
 			scene.clearRecycled(Type.getClass(this));
 		removeCall.removeAll();
@@ -103,12 +102,8 @@ class BulletEntity extends ViewPhysics implements IBullet
 	{
 		if (info == null) throw "info is null";
 		this.info = info;
-		onInit();
 	}
-	/**继承*/
-	private function onInit():Void {
-		//override 
-	}
+	
 	public function start(req:BulletRequest):Void 
 	{
 		//trace("bulletEntity " + req);
@@ -194,7 +189,7 @@ class BulletEntity extends ViewPhysics implements IBullet
 		if(collideEntity.type != "solid")
 		{
 			//trace("collideEntity " + collideEntity.type);
-			var avatar:MTAvatar = cast(collideEntity, MTAvatar);
+			var avatar:ViewDisplay = cast(collideEntity, ViewDisplay);
 			_hitInfo.target = avatar.owner;
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
 			owner.notify(MsgItr.BulletHit, _hitInfo);

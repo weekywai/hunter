@@ -1,14 +1,16 @@
 package com.metal.unit.actor.view;
 import com.haxepunk.HXP;
+import com.haxepunk.graphics.Image;
 import com.metal.message.MsgActor;
 import com.metal.proto.impl.GoldGoodInfo;
 import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.impl.ModelInfo;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.avatar.TexDropAvatar;
-import de.polygonal.core.event.IObservable;
 import motion.Actuate;
+import motion.MotionPath;
+import motion.MotionPath.BezierPath;
+import motion.easing.Linear;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 
@@ -16,12 +18,10 @@ import openfl.geom.Rectangle;
  * 掉落物品
  * @author li
  */
-class ViewDropItem extends BaseViewActor
+class ViewDropItem extends ViewObject
 {
-	private var _info:ItemBaseInfo;
 	private var vx:Float = 3;
 	private var vy:Float = 4;
-	private var _timer:Dynamic;
 	private var _bounds:Rectangle;
 	private var _dispear:Bool;
 	public function new() 
@@ -29,25 +29,24 @@ class ViewDropItem extends BaseViewActor
 		super();
 		_dispear = false;
 	}
-	override function onInitComponent():Void 
+	override function onInit():Void 
 	{
-		super.onInitComponent();
-		_actor = owner.getComponent(UnitActor);
-		_info = owner.getProperty(ItemBaseInfo);
+		super.onInit();
 		_bounds = new Rectangle(HXP.camera.x, HXP.camera.y, HXP.width*0.8 + HXP.camera.x, HXP.height * 0.7 + HXP.camera.y);
 	}
 	
 	override public function onDispose():Void 
 	{
 		Actuate.stop(this);
+		_bounds = null;
 		super.onDispose();
-		
 	}
-	override public function onDraw() 
+	override public function update() 
 	{
 		if (isDisposed)
 			return;
-		super.onDraw();
+		super.update();
+		// random fly icon
 		if (_actor.isRunMap) {
 			if (!_dispear){
 				if (_actor.x <= _bounds.left) {
@@ -73,28 +72,22 @@ class ViewDropItem extends BaseViewActor
 		}
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		//判断加载类型
+		_actor = owner.getComponent(UnitActor);
 		//trace(owner.getProperty(ItemBaseInfo));
 		var info = owner.getProperty(ItemBaseInfo);
 		if (info == null)
 			info = owner.getProperty(GoldGoodInfo);
 		if (info == null)
 			throw new Error("info is null" );
-		var source:String = info.SwfId;
 		//trace(source);
-		_modelInfo = new ModelInfo();
-		_modelInfo.res = source;
-		if (_avatar == null) {
-			_avatar = HXP.scene.create(TexDropAvatar,true);
-		}
+		_info = new ModelInfo();
+		_info.res = info.SwfId;
 		//记录碰撞类型
-		_avatar.init(owner);
-		
-		_avatar.preload(_modelInfo);
-		notify(MsgActor.PostLoad, _avatar);
-		
+		preload();
+		notify(MsgActor.PostLoad, this);
 	}
 	override function Notify_EnterBoard(userData:Dynamic):Void 
 	{
@@ -106,26 +99,38 @@ class ViewDropItem extends BaseViewActor
 				_dispear = true; 
 				_bounds.inflate(400, 300);
 			});
+		} else {
+			
+			factor();
+			Actuate.timer(3).onComplete(function() {
+				if(_model!=null)	
+					Actuate.tween(cast(_model, Image), 0.1, { alpha:0 } ).delay(1).reflect().repeat (6).onComplete(notify, [MsgActor.Destroy]);
+			});
 		}
 	}
+	
+	public function factor() {
+        var ran = Math.random();
+		var curX = ((ran > 0.5)?ran * 200:ran *-200);
+		var posx = _actor.x + curX;
+		var posy = _actor.y;
+		//trace("factor :" +posx+"::"+ _actor.x + "::"+_actor.y);
+		var motion:MotionPath = new MotionPath().bezier(posx, posy, posx - curX *ran*0.3, posy * ran*0.2, 1);// .line(posx, posy);
+		Actuate.motionPath(_actor, ran * 0.4 + 0.2, { x:motion.x, y:motion.y } ).ease(Linear.easeNone).onComplete(function() { 
+			if (collide("solid", x, y) != null) 
+				_actor._gravity = _actor._gravity * 3;
+		} );
+    }
 	
 	override function setAction(action:ActionType, loop:Bool = true):Void 
 	{
 		//super.setAction(action, loop);
 	}
-	override function Notify_Destory(userData:Dynamic):Void 
-	{
-		if(_timer!=null)
-			_timer.cancel();
-			//_timer.stop();
-		_timer = null;
-		super.Notify_Destory(userData);
-	}
 	
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		//trace("drop item destorying");
-		Actuate.tween(_actor, 1, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
+		Actuate.tween(_actor, 0.8, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
 		super.Notify_Destorying(userData);
 		//notify( MsgActor.Destroy);
 	}

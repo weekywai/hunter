@@ -36,7 +36,8 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override public function removed():Void 
 	{
-		owner = null;
+		//if(graphic!=null)
+			//graphic.pause();
 		info = null;
 		super.removed();
 	}
@@ -46,10 +47,7 @@ class EffectEntity extends ViewDisplay implements IEffect
 		_offset = false;
 		super.init(body);
 	}
-	/**继承*/
-	private function onInit():Void {
-		//override 
-	}
+	
 	public function start(req:EffectRequest):Void 
 	{
 		info = EffectManager.instance.getProto(req.Key);
@@ -58,9 +56,16 @@ class EffectEntity extends ViewDisplay implements IEffect
 		_angle = req.angle;
 		if (req.collide)
 			validateCollide(req.attackType);
+		onStart(req);
+		//if(graphic!=null)
+			//graphic.resume();
 		HXP.scene.add(this);
 	}
 	
+	private function onStart(req:EffectRequest)
+	{
+		//override
+	}
 	/** end recycle */
 	private function recycle():Void {
 		if(scene!=null)

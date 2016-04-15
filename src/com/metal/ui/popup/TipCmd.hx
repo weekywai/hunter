@@ -21,16 +21,12 @@ class TipCmd extends BaseCmd
 		super();
 		onInitComponent();
 		SfxManager.getAudio(AudioType.t001).play();
+		//_widget = UIBuilder.get("tipPopup");
 		_widget = UIBuilder.get("flagTip");
 		callbackFun = new Signal1();
-		super.onInitComponent();
 		onEnabel();
 	}
-	/**设置标题*/
-	/*private function set_txt(text:String):String
-	{
-		return _widget.getChildAs("tipTxt", Text).text = text;
-	}*/
+	
 	private function onEnabel():Void
 	{
 		_widget.getChildAs("noBtn", Button).onPress = noBtn_click;
@@ -40,7 +36,8 @@ class TipCmd extends BaseCmd
 	private function noBtn_click(e):Void
 	{	
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('popup').free(); callbackFun.dispatch(false);
+		_widget.getParent('popup').free(); 
+		callbackFun.dispatch(false);
 		dispose();
 		
 	}
@@ -48,7 +45,8 @@ class TipCmd extends BaseCmd
 	private function yesBtn_click(e):Void
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('popup').free(); callbackFun.dispatch(true);
+		_widget.getParent('popup').free(); 
+		callbackFun.dispatch(true);
 		dispose();
 	}
 	

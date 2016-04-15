@@ -6,6 +6,7 @@ import assets.manager.misc.FileType;
 import assets.manager.misc.LoaderStatus;
 import com.haxepunk.debug.Console;
 import com.haxepunk.Tween.TweenType;
+import com.haxepunk.graphics.Image;
 import com.haxepunk.tweens.misc.Alarm;
 import com.haxepunk.tweens.misc.MultiVarTween;
 import haxe.Timer;
@@ -1048,6 +1049,7 @@ class HXP
 			Assets.cache.removeBitmapData(name);
 			_bitmap.remove(name);
 		}
+		Image.clearCache();
 	}
 
 	/**

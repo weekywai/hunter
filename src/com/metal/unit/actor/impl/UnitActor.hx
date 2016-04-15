@@ -37,7 +37,12 @@ class UnitActor extends BaseActor
 			notify(MsgActor.Destroy);
 		}
 	}
-	override function notify_ChangeSpeed(userData:Dynamic):Void 
+	/*override function Notify_Move(userData:Dynamic) 
+	{
+		trace(x+" " +y);
+		super.Notify_Move(userData);
+	}*/
+	override function Notify_ChangeSpeed(userData:Dynamic):Void 
 	{
 		//_speed = _speed * userData[0];
 	}
@@ -66,6 +71,7 @@ class UnitActor extends BaseActor
 	override function Notify_Destroy(userData:Dynamic):Void 
 	{
 		notifyParent(MsgItr.Destory, {key:owner.keyId, id:bindPlayerID});
+		//notifyParent(MsgItr.Destory, owner.keyId);
 		if(faction != BoardFaction.Block)
 			super.Notify_Destroy(userData);
 	}

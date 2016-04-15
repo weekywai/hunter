@@ -307,7 +307,17 @@ class Scene extends Tweener
 	public function clearRecycledAll()
 	{
 		var e:Entity;
-		for (e in _recycled)
+		var keys = _recycled.keys();
+		/*for (k in keys)
+		{
+			e = _recycled.get(k);
+			if (e == null) {
+				_recycled.remove(k);
+				continue;
+			}
+			clearRecycled(Type.getClass(e));
+		}*/
+		for (e in _recycled) 
 		{
 			clearRecycled(Type.getClass(e));
 		}

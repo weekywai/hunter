@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Widget id="'activity'" name="'shopView'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
+<Widget id="'activity'" name="'activity'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
 	<VBox widthPt="100" name="'allTip'" skinName="'TipBgImg'" leftPt="27" topPt="0">
 		<Text name="'tipsName'" text="'任 务'" defaults="'Tip'" topPt="6" />
 	</VBox>

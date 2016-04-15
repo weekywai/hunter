@@ -1,17 +1,18 @@
 package com.metal.unit.actor.view;
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
 import com.haxepunk.HXP;
+import com.haxepunk.graphics.Image;
 import com.haxepunk.math.Vector;
 import com.metal.component.BattleSystem;
 import com.metal.config.UnitModelType;
 import com.metal.enums.EffectEnum.EffectAniType;
+import com.metal.message.MsgActor;
 import com.metal.message.MsgItr;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.MonsterInfo;
 import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.BulletManager;
-import com.metal.proto.manager.SkillManager;
+import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
@@ -19,11 +20,9 @@ import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.api.IActor;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.ai.MonsterAI;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import com.metal.unit.stat.UnitStat;
 import com.metal.unit.weapon.api.AttackTypeList;
-import haxe.ds.IntMap;
 import motion.Actuate;
 import openfl.geom.Point;
 import spinehaxe.Event;
@@ -32,14 +31,13 @@ import spinehaxe.Event;
  * ...
  * @author weeky
  */
-class ViewEnemy extends BaseViewActor
+class ViewEnemy extends ViewActor
 {
 	private var _player:IActor;
 	private var temp1:Vector;
 	private var temp2:Vector;
-	private var _info:MonsterInfo;
+	private var _mInfo:MonsterInfo;
 	private var _bulletReq:BulletRequest;
-	private var _ai:MonsterAI;
 	private var _weapon:Entity;
 	private var _skill:SkillInfo;
 	
@@ -60,7 +58,9 @@ class ViewEnemy extends BaseViewActor
 	{
 		//trace("initHpBar");
 		hpImage = Image.createRect(hpWidth, hpHeight, 0xff0000);
+		//hpBarSkin = HXP.scene.create(Entity, true, [_actor.x, _actor.y, Image.createRect(hpWidth, hpHeight, 0x000000, 0.5)]);
 		hpBarSkin = new Entity(_actor.x,_actor.y,Image.createRect(hpWidth,hpHeight,0x000000,0.5));
+		//hpBar = HXP.scene.create(Entity, true, [_actor.x, _actor.y, hpImage]);
 		hpBar = new Entity(_actor.x, _actor.y, hpImage);
 		hpMask=	Image.createRect(hpWidth, hpHeight, 0x000000,0.1);
 		hpBar.addGraphic(hpMask);
@@ -109,27 +109,70 @@ class ViewEnemy extends BaseViewActor
 		hpImage = null;
 		hpMask = null;
 	}
-	override function onInitComponent():Void 
+	override function onInit():Void 
 	{
-		super.onInitComponent();
-		_actor = owner.getComponent(UnitActor);
-		_ai = owner.getComponent(MonsterAI);
+		super.onInit();
 		_targetPos = new Point();
-		_stat=owner.getComponent(UnitStat);
-		initHpBar();
 	}
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	
+	override public function onDispose():Void 
 	{
-		super.cmd_PostBoot(userData);
-		_info = owner.getProperty(MonsterInfo);
+		super.onDispose();
+		temp1 = null;
+		temp2 = null;
+		_player = null;
+		_bulletReq = null;
+		_weapon = null;
+		_mInfo = null;
+		disposeHpBar();
+	}
+	override public function update() 
+	{
+		//滚屏死亡移动
+		if (isDisposed || _isFree)
+			return;
+		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded){
+			_actor.x -= 15;
+			trace("roll");
+		}
+		super.update();
+		
+		if (_weapon != null && !_meleeHit && _attcking) {
+			//trace("melee");
+			_weapon.setHitboxTo(getGunHitbox());
+			_weapon.x = x;
+			_weapon.y = y;
+			var hitEntity = _weapon.collide(UnitModelType.Player, _weapon.x, _weapon.y);
+			if (hitEntity != null){
+				_meleeHit = true;
+				var hitInfo = new BulletHitInfo();
+				hitInfo.atk = _bulletReq.atk;
+				hitInfo.fix = _bulletReq.fix;
+				hitInfo.target = cast(hitEntity, ViewDisplay).owner;
+				hitInfo.renderType=BattleResolver.resolveAtk(_bulletReq.critPor);
+				notifyParent(MsgItr.BulletHit, hitInfo);
+			}
+		}
+		updateHpBarXY();
+	}
+	override private function Notify_PostBoot(userData:Dynamic):Void
+	{
+		_actor = owner.getComponent(UnitActor);
+		_stat = owner.getComponent(UnitStat);
+		
+		super.Notify_PostBoot(userData);
+		_mInfo = owner.getProperty(MonsterInfo);
+		var faction = BoardFaction.getFaction(_mInfo.ModelType);
+		if(faction != BoardFaction.Boss1 && faction != BoardFaction.Boss)
+			initHpBar();
 		_bulletReq = new BulletRequest();
-		//trace(_info.SkillId);
+		//trace(_mInfo.SkillId);
 		_skill = owner.getProperty(SkillInfo);
 		_bulletReq.info = BulletManager.instance.getInfo(_skill.BulletID);
 		_bulletReq.attacker = owner;
 		//_bulletReq.attackerType = owner.name;
-		_bulletReq.atk = _info.Atk;
-		_bulletReq.critPor= _info.CritPor;
+		_bulletReq.atk = _mInfo.Atk;
+		_bulletReq.critPor= _mInfo.CritPor;
 		_bulletReq.dir = _actor.dir;
 		_bulletReq.fix = _skill.Effect.copy();
 		//检测是否有buff
@@ -143,54 +186,13 @@ class ViewEnemy extends BaseViewActor
 		
 		if (_skill.AttackType == AttackTypeList.Cut){
 			_weapon = new Entity();
-			_avatar.setGunHitbox("gun_1");
-			//_avatar.setGunHitbox("gun_1");
+			setGunHitbox("gun_1");
 			HXP.scene.add(_weapon);
 		}
 		
-		_avatar.animationState().onEvent.add(onEventCallback);
-		_avatar.animationState().onStart.add(onStartCallback);
-		_avatar.animationState().onComplete.add(onCompleteCallback);
-	}
-	
-	override public function onDispose():Void 
-	{
-		super.onDispose();
-		temp1 = null;
-		temp2 = null;
-		_player = null;
-		_bulletReq = null;
-		_ai = null;
-		_weapon = null;
-		_info = null;
-		disposeHpBar();
-	}
-	override public function onDraw() 
-	{
-		//if (_actor.stateID == ActorState.Move)
-			//trace(_info.res);
-		//滚屏死亡移动
-		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded)
-			_actor.x-=15;
-		super.onDraw();
-		
-		if (_weapon != null && !_meleeHit && _attcking) {
-			//trace("melee");
-			_weapon.setHitboxTo(_avatar.getGunHitbox());
-			_weapon.x = _avatar.x;
-			_weapon.y = _avatar.y;
-			var hitEntity = _weapon.collide(UnitModelType.Player, _weapon.x, _weapon.y);
-			if (hitEntity != null){
-				_meleeHit = true;
-				var hitInfo = new BulletHitInfo();
-				hitInfo.atk = _bulletReq.atk;
-				hitInfo.fix = _bulletReq.fix;
-				hitInfo.target = cast(hitEntity, MTAvatar).owner;
-				hitInfo.renderType=BattleResolver.resolveAtk(_bulletReq.critPor);
-				notifyParent(MsgItr.BulletHit, hitInfo);
-			}
-		}
-		updateHpBarXY();
+		animationState().onEvent.add(onEventCallback);
+		animationState().onStart.add(onStartCallback);
+		animationState().onComplete.add(onCompleteCallback);
 	}
 	
 	override function Notify_ChangeSpeed(userData:Dynamic):Void 
@@ -201,9 +203,9 @@ class ViewEnemy extends BaseViewActor
 	{
 		super.Notify_Injured(userData);
 		//受击特效
-		if (_modelInfo.hit != 0) {
-			startEffect(_modelInfo.hit);
-		}
+		//trace(type+" "+ _info.ID);
+		if (_info.hit != 0) 
+			startEffect(_info.hit);
 		//文字特效
 		var msg:String = (userData.damage==0)?"miss":Std.string(userData.damage);
 		startEffect(0, EffectAniType.Text, msg,userData.renderType);
@@ -213,42 +215,11 @@ class ViewEnemy extends BaseViewActor
 	{
 		super.Notify_Destorying(userData);
 		disposeHpBar();
-		if (_info.isBoom) {
+		if (_mInfo.isBoom) {
 			//通知处理爆炸
-			startEffect(0, _info.boomType+4);
+			startEffect(0, _mInfo.boomType+4);
 		}
-		var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
-		//trace(dropRan);
-		if (Math.random() <= 0.2*rate) {
-			var index:Int = 0;
-			var ran = Math.random() * 20;
-			switch(ran) {
-				case 1,2: index = 0;
-				case 3: index = 1;
-				case 4,5: index = 2;
-				case 6,7,8,9,10: index = 3;
-				//case 11,12,13: index = 4;
-				//case 14: index = 5;
-				//case 14,15,16,17: index = 6;
-				//case 18,19,20: index = 7;
-			}
-			//10602-2-1|10601-1-1|10603-2-1|10604-1-1|10608-5-1|10610-3-1|10607-1-1|10609-5-1
-			//index = Std.int(Math.random() * 4)+3;//测试
-			//无手枪掉落
-			
-			var item = _info.dropItem[index];
-			if (item == null) {//Bug
-				trace("Model id:" + _info.ID +">>" + _modelInfo.ID);
-				return;
-			}
-			if(item.ItemId==0){//Bug
-				trace("Model id:" + _info.ID +">>" + _modelInfo.ID);
-				return;
-			}
-			var drop =	[item];
-			//掉落物品在此解锁
-			//createDropItem(drop);
-		}
+		onDropItem();
 	}
 	override function Notify_Destory(userData:Dynamic):Void 
 	{
@@ -265,6 +236,52 @@ class ViewEnemy extends BaseViewActor
 		startEffect(userData);
 	}
 	
+	private function onDropItem()
+	{
+		/*var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
+		//trace(dropRan);
+		if (Math.random() <= 0.2*rate) {
+			var index:Int = 0;
+			var ran = Math.random() * 20;
+			switch(ran) {
+				case 1,2: index = 0;
+				case 3: index = 1;
+				case 4,5: index = 2;
+				case 6,7,8,9,10: index = 3;
+				//case 11,12,13: index = 4;
+				//case 14: index = 5;
+				//case 14,15,16,17: index = 6;
+				//case 18,19,20: index = 7;
+			}
+			
+			//10602-2-1|10601-1-1|10603-2-1|10604-1-1|10608-5-1|10610-3-1|10607-1-1|10609-5-1 10201
+			//index = Std.int(Math.random() * 4)+3;//测试
+			//无手枪掉落
+			
+			var item = _mInfo.dropItem[index];
+			if (item == null) {//Bug
+				trace("Model id:" + _mInfo.ID +">>" + _info.ID);
+				return;
+			}
+			if(item.ItemId==0){//Bug
+				trace("Model id:" + _mInfo.ID +">>" + _info.ID);
+				return;
+			}
+			var drop =	[item];
+			//掉落物品在此解锁
+			createDropItem(drop);
+		}*/
+		var item = new DropItemInfo();
+		item.ItemId = 10201;
+		item.Num = 1;
+		item.Precent = 1;
+		var drop = [];
+		//var num:Int = 1;
+		var num:Int = Std.int(Math.random() * 6)+1;
+		for(i in 0...num)
+		    drop.push(item);
+		createDropItem(drop);
+	}
 	private function onEventCallback(value:Int, event:Event):Void {
 		//trace("callback"); 
 		if (isDisposed)
@@ -279,10 +296,8 @@ class ViewEnemy extends BaseViewActor
 		if (value == "attack_1")
 		{
 			//_attcking = true;
-			if (_ai != null) {
 				//trace("onStartCallback");
-				_ai.setAttackStatus(true);
-			}
+			notify(MsgActor.AttackStatus ,true);
 		}
 	}
 	
@@ -293,10 +308,8 @@ class ViewEnemy extends BaseViewActor
 		if (value == "attack_1")
 		{
 			_attcking = false;
-			if (_ai != null) {
 				//trace("onCompleteCallback");
-				_ai.setAttackStatus(false);
-			}
+			notify(MsgActor.AttackStatus , false);
 			_actor.transition(ActorState.Stand);
 		}
 	}

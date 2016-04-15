@@ -8,6 +8,7 @@ import com.haxepunk.HXP;
 import com.metal.config.ResPath;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgEffect;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
 import openfl.geom.Point;
@@ -34,23 +35,24 @@ class BulletBallLightning extends BulletEntity
 	private var _fightPoint:Point;//丢出去的x,y
 	private inline static var groundY:Int = 704;
 	
-	private var _req:BulletRequest;
-	
 	public function new(x:Float=0, y:Float=0) 
 	{
 		super(x, y);
 	}
 	override private function onDispose():Void 
 	{
-		//_bullet.destroy();
+		if(_bullet!=null)
+			_bullet.destroy();
 		_bullet = null;
+		if(_bullet2!=null)
+			_bullet2.destroy();
 		_bullet2 = null;
-		_req = null;
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		//判断资源类型
 		switch (info.buffMovieType) {
 			case EffectAniType.Image:
@@ -64,6 +66,8 @@ class BulletBallLightning extends BulletEntity
 	
 	private function imageBullet():Void
 	{
+		if(_bullet!=null)
+			_bullet.destroy();
 		_bullet = new Image(ResPath.getBulletRes(info.img));
 		_bullet.centerOrigin();
 		var box = Image.createCircle(Std.int(_bullet.height * 0.25));
@@ -77,9 +81,12 @@ class BulletBallLightning extends BulletEntity
 	{
 		
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bullet2 = new TextrueSpritemap(eff);
+		if(_bullet==null){
+			_bullet2 = new TextrueSpritemap(eff);
+		}else {
+			_bullet2.resetTexture(eff);
+		}
 		_bullet2.add("blast", eff.getReginCount(), 25);
-		_bullet2.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0 ) {
 			
 			_bullet2.originX = eff.ox;
@@ -93,16 +100,11 @@ class BulletBallLightning extends BulletEntity
 		}
 		
 		graphic = _bullet2;
-		_bullet2.play("blast");
+		_bullet2.play("blast", true);
 		var box = Image.createCircle(Std.int(_bullet2.height * 0.2));
 		box.centerOO();
 		setHitboxTo(box);
 		////this.setHitbox(90,90, 30,30);
-	}
-	
-	private function onComplete(name):Void
-	{
-		//recycle();
 	}
 	
 	/**抛物线*/
@@ -116,7 +118,7 @@ class BulletBallLightning extends BulletEntity
 	}
 	private function initRunInfo(dir:Bool):Void {
 		//根据朝向
-		var pos:Point = new Point((dir?_req.targetX:_req.targetX),
+		var pos:Point = new Point((dir?_tx:_tx),
 			_parabola);//704刚好是落地的Y
 		
 		xSpeed = ((pos.x - this.x) / t1) * _rate;
@@ -127,7 +129,6 @@ class BulletBallLightning extends BulletEntity
 	override public function start(req:BulletRequest):Void 
 	{
 		super.start(req);
-		_req = req;
 		x = req.x ;// - HXP.camera.x;// - _bullet2.width;
 		y = req.y ;// + HXP.camera.y;// - _bullet2.height;
 		_parabola = HXP.width - req.info.param;// req.info.param;//从屏幕底部算起
@@ -172,7 +173,7 @@ class BulletBallLightning extends BulletEntity
 					y -= 150;
 				_effectReq.y -= 50;
 				collideEntity = e;
-			}else {
+			} else {
 				return;
 			}
 		}

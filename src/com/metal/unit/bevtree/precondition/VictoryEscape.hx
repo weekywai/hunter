@@ -16,7 +16,7 @@ class VictoryEscape extends BevNodePrecondition
 	{
 		super.evaluate(input);
 		var inputData:MonsterInputData = cast(input, MonsterInputData);
-		if (inputData.isEscape == 2 && inputData.Victory) {
+		if (inputData.Victory) {
 			return true;
 		}
 		return false;

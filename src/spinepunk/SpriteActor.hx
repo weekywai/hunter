@@ -75,8 +75,10 @@ class SpriteActor extends Sprite{
 		return info;
 	}
 	private function render(e:Event):Void {
-        var delta = (haxe.Timer.stamp() - lastTime) / 2;
-        lastTime = haxe.Timer.stamp();
+        var delta = Timebase.timeDelta;
+		lastTime = Timebase.stamp();
+        //var delta = (haxe.Timer.stamp() - lastTime) * 0.5;
+        //lastTime = haxe.Timer.stamp();
         _actor.state.update(delta);
         _actor.state.apply(_actor.skeleton);
         //if (state.getAnimation().getName() == "stand") {

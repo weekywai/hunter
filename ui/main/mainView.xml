@@ -150,7 +150,7 @@
 		</Widget>
 	</ViewStack>
 	<!--界面加载-->
-	<MainStack id="'allView'" widthPt="100" heightPt="100" topPt="11">
+	<MainStack id="'allView'" widthPt="100" heightPt="100" topPt="11" trans:Slide-duration="0.2" trans:Slide-direction="'bottom'">
 		<!--<meta:include src="ui/reward/reward.xml"/>-->
 	</MainStack>
 </Widget>

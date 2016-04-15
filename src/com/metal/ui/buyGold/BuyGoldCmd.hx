@@ -29,7 +29,7 @@ class BuyGoldCmd extends BaseCmd
 	override function onInitComponent():Void 
 	{
 		SfxManager.getAudio(AudioType.t001).play();
-		_widget = UIBuilder.get("gold");
+		_widget = UIBuilder.get("golds");
 		super.onInitComponent();
 		setData();
 	}

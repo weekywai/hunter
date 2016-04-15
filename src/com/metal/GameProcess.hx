@@ -74,7 +74,7 @@ class GameProcess implements IObserver
 	public static var HXT:HxTelemetry;
 	#end
 	
-	private var onDrawId:Int = 0;
+	//private var onDrawId:Int = 0;
 	private var _debugTxt:TextField;
 	private var _fps:FPS;
 	private var _loop:MainLoop;
@@ -105,8 +105,7 @@ class GameProcess implements IObserver
 		_loop = new MainLoop();
 		_loop.add(root);
 		root.outgoingMessage.o = rootStage;
-		trace(StringTools.hex(MsgView.SetParent)+"-"+ (MsgView.SetParent>>8));
-		//trace(StringTools.hex(MsgView.UpdateGrid)+"-"+ MsgView.UpdateGrid>>8);
+		//trace(StringTools.hex(MsgView.SetParent)+"-"+ (MsgView.SetParent>>8));
 		root.sendMessageToChildren(MsgView.SetParent, true);
 		
 		//#if !mobile
@@ -160,7 +159,7 @@ class GameProcess implements IObserver
 		//+ "\nrealDelta:" + TimeBase.timeDelta + "\ngameDelta:" +Timebase.gameTimeDelta;
 		//+ "\nRealTime::" + Timebase.realTime + "\nGameTime:" +Timebase.gameTime;
 		#if actuate_manual_update
-		if (onDrawId == 0)
+		//if (onDrawId == 0)
 			SimpleActuator.stage_onEnterFrame (null);
 		#end
 		if (_render)
@@ -169,9 +168,9 @@ class GameProcess implements IObserver
 	private function update()
 	{
 		render.updateEngine();
-		#if actuate_manual_update
-		SimpleActuator.stage_onEnterFrame (null);
-		#end
+		//#if actuate_manual_update
+		//SimpleActuator.stage_onEnterFrame (null);
+		//#end
 		
 		#if telemetry
 		HXT.advance_frame();
@@ -191,7 +190,7 @@ class GameProcess implements IObserver
 		_board.addComponent(new BattleResolver());
 		_board.drawable = true;
 		root.add(_board);
-		onDrawId = 1;
+		//onDrawId = 1;
 		
 		#if debug
         HXP.console.enable();

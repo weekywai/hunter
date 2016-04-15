@@ -9,6 +9,7 @@ import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.weapon.impl.BaseWeapon;
+import openfl.geom.Point;
 import spinehaxe.Bone;
 
 /**
@@ -27,11 +28,12 @@ class WeaponAuto extends BaseWeapon
 	{
 		super.initInfo(info);
 		_weaponSubId = GoodsProtoManager.instance.getSubID(weaponID);
-		trace("initInfo");
+		//trace("initInfo");
 	}
 	override public function onTick(timeDelta:Float) 
 	{
-		super.onTick(timeDelta);
+		if (!isInit)
+			return;
 		if (isShooting) {
 			//trace("isShooting"+bulletCount+"::"+maxBulletCount);
 			if (!_stat.holdFire || bulletCount <= 0) {
@@ -81,10 +83,9 @@ class WeaponAuto extends BaseWeapon
 	/**更新角色坐标修正子弹发射点*/
 	private function updateReq():Void 
 	{
-		//trace("updateReq");
-		var gun:Bone =  _avatar.getBone("muzzle_1");
-		bulletReq.x = _avatar.x + gun.worldX * _avatar.getScale();
-		bulletReq.y = _avatar.y + gun.worldY * _avatar.getScale();
+		var p:Point =  _avatar.getGunPoint("muzzle_1");
+		bulletReq.x = p.x;
+		bulletReq.y = p.y;
 		//bulletReq.bulletAngle = gun.worldRotation;//保留，以后子弹发射用angle控制，不用target控制
 		//trace("bulletReq.bulletAngle: "+bulletReq.bulletAngle);
 		isDirWrong = false;

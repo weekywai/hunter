@@ -22,13 +22,12 @@ import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.impl.GameMap;
-import com.metal.ui.popup.TipCmd;
 import com.metal.ui.warehouse.WarehouseCmd;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
@@ -39,10 +38,10 @@ import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
 import motion.Actuate;
 import motion.easing.Quad;
+import openfl.Lib;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
-import openfl.Lib;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.BmpText;
@@ -57,7 +56,7 @@ using com.metal.enums.Direction;
  */
 class ControllCmd extends BaseCmd
 {
-	private var cPoint:Point;
+	private var _wheel:Wheel;
 	private var currentPoint:Point;
 	private var aRadius:Float = 100;
 	private var _example:Widget;
@@ -90,6 +89,7 @@ class ControllCmd extends BaseCmd
 	//boss 信息
 	private var _bossPanel:Widget;
 	private var _player:SimEntity;
+	
 	private var _playerInfo:PlayerInfo;
 	/**没有操作时间*/
 	private var _controlTime:Int;
@@ -179,6 +179,8 @@ class ControllCmd extends BaseCmd
 	
 	override function onInitComponent():Void 
 	{
+		//trace("initControl");
+		_wheel = new Wheel();
 		_maxTouchW = Lib.current.stage.stageWidth * 0.2;
 		status = NONE;
 		touchID = -1;
@@ -187,9 +189,8 @@ class ControllCmd extends BaseCmd
 		_rightBtn = _widget.getChildAs("rightBtn", Button);
 		//计算控制按钮中心点
 		_center = _widget.getChild("dirPanel");
-		//cPoint = new Point(248 * Main.Scale, 600 * Main.Scale);
-		cPoint = new Point(_center.x, _center.y);
-		currentPoint = cPoint;
+		_wheel.cPoint = new Point(_center.x, _center.y);
+		currentPoint = _wheel.cPoint;
 		_count = 0;
 		_slice = 0;
 		_mapW = 0;
@@ -198,12 +199,8 @@ class ControllCmd extends BaseCmd
 		_battle = GameProcess.root.getComponent(BattleSystem);
 		_holdFire = false;
 		_attackBtn = _widget.getChildAs("attackBtn", Button);
-		_attackBtn.onPress = onAttackPress;
-		_attackBtn.onRelease = onAttackRelease;
 		_jumpBtn = _widget.getChildAs("jumpBtn", Button);
-		_jumpBtn.onPress = onJumpPress;
 		_knifeBtn = _widget.getChildAs("knifeBtn", Button);
-		_knifeBtn.onPress = onKnifePress;
 		
 		_timeLimit = _widget.getChildAs("timeLimit", BmpText);
 		_timeLimit.label.visible = false;
@@ -256,7 +253,7 @@ class ControllCmd extends BaseCmd
 		_thumb = _widget.getChild("thumb");
 		setWeaponPanel();
 		_mission = _widget.getChildAs("mission", Text);
-		//cmd_AssignPlayer(PlayerUtils.getPlayer());
+		//cmd_AssignPlayer();
 	}
 	private function cmd_UpdateBullet(userData:Dynamic)
 	{
@@ -327,19 +324,19 @@ class ControllCmd extends BaseCmd
 				//cmd_bossFight(userData);
 			case MsgUIUpdate.BossInfoUpdate:
 				cmd_BossInfoUpdate(userData);
-			case MsgBoard.AssignPlayer:
-				cmd_AssignPlayer();
 			case MsgUIUpdate.NewBieUI:
 				cmd_NewBieUI(userData);
 			//case MsgUIUpdate.UpdateThumb:
 				//cmd_UpdateThumb(userData);
+			case MsgBoard.AssignPlayer:
+				cmd_AssignPlayer();
 			case MsgUIUpdate.UpdateCountDown:
 				cmd_UpdateCountDown(userData);		
 			case MsgUIUpdate.UpdateMissionTxt:
 				cmd_UpdateMissionTxt(userData);				
 			case MsgUI2.InitThumb:
 				cmd_InitThumb(userData);
-			case MsgStartup.Start:
+			case MsgUIUpdate.StartBattle:
 				cmd_Start(userData);
 			case MsgUI2.FinishBattleTip:
 				cmd_FinishBattleTip(userData);
@@ -403,11 +400,12 @@ class ControllCmd extends BaseCmd
 		_rightBtn = null;
 		_jumpBtn = null;
 		_knifeBtn = null;
-		cPoint= null;
+		
 		currentPoint = null;
 		status = null;
 		_battle = null;
-		//_widget.free();
+		_wheel.dispose();
+		_wheel = null;
 		super.onDispose();
 	}
 	
@@ -418,15 +416,24 @@ class ControllCmd extends BaseCmd
 		if (isDisposed) return;
 		//if (_battle!=null && _battle.curMap != 1)
 			//updateThumb();
-		setDirection(currentPoint);
+		var s = _wheel.setDirection(currentPoint);
+		if (s == NONE){
+			if(status != NONE)
+				_player.notify(MsgInput.UIJoystickInput, s);
+		}else{
+			_player.notify(MsgInput.UIJoystickInput, s);
+		}
+		status = s;
+		showPressed();
 		
 		if (Input.multiTouchSupported) {
 			Input.touchPoints(onTouch);
 			if(!Lambda.has(Input.touchOrder, touchID)) {
 				touchID = -1;
-				currentPoint = cPoint;
+				currentPoint = _wheel.cPoint;
 			}
 		}
+		
 		//if (!_runKey && !_onShowgo){
 			//var time = Lib.getTimer() - _controlTime;
 			//if (time >= 5000)
@@ -543,8 +550,7 @@ class ControllCmd extends BaseCmd
 		}
 		
 		var touchPoint = new Point(Input.mouseX, Input.mouseY);
-		//trace(Point.distance(cPoint, touchPoint));
-		if (Point.distance(cPoint, touchPoint) <= _maxTouchW)
+		if (Point.distance(_wheel.cPoint, touchPoint) <= _maxTouchW)
 		{
 			if (HXP.stage != null) HXP.stage.addEventListener(MouseEvent.MOUSE_MOVE, thumb_mouseMove);
 			currentPoint = touchPoint;
@@ -554,10 +560,10 @@ class ControllCmd extends BaseCmd
 	private function thumb_mouseMove(event:MouseEvent):Void
 	{
 		var touchPoint = new Point(Input.mouseX, Input.mouseY);
-		var disPos = Point.distance(cPoint, touchPoint);
+		var disPos = Point.distance(_wheel.cPoint, touchPoint);
 		if (disPos > aRadius && disPos <= _maxTouchW)
 		{
-			currentPoint = ccpAdd(cPoint, ccpMult(ccpNormalize(ccpSub(touchPoint, cPoint)), aRadius));
+			currentPoint = _wheel.ccpAdd(_wheel.cPoint, _wheel.ccpMult(_wheel.ccpNormalize(_wheel.ccpSub(touchPoint, _wheel.cPoint)), aRadius));
 		}
 		else if(disPos < aRadius)
 		{
@@ -565,59 +571,18 @@ class ControllCmd extends BaseCmd
 		}
 		else
 		{
-			currentPoint = cPoint;
+			currentPoint = _wheel.cPoint;
 			HXP.stage.removeEventListener(MouseEvent.MOUSE_MOVE, thumb_mouseMove);
 		}
 	}
 	
 	private function thumb_mouseUp(event:MouseEvent):Void
 	{
-		currentPoint = cPoint;
+		currentPoint = _wheel.cPoint;
 		if (HXP.stage != null) {
 			HXP.stage.removeEventListener(MouseEvent.MOUSE_UP, thumb_mouseUp);
 			HXP.stage.removeEventListener(MouseEvent.MOUSE_MOVE, thumb_mouseMove);
 		}
-	}
-	public function ccpSub(point1:Point, point2:Point):Point
-	{
-		var result:Point = new Point((point1.x - point2.x), (point1.y - point2.y));
-		return result;
-	}
-	
-	public function ccpNormalize(point1:Point):Point
-	{
-		var originPoint:Point = new Point(0, 0);
-		var result:Point;
-		var dis:Float = Point.distance(point1, originPoint);
-		if (dis == 0)
-		{
-			return (new Point(1.0, 0));
-		}
-		else
-		{
-			var x = point1.x / dis;
-			var y = point1.y / dis;
-			result = new Point(x, y);
-			return result;
-		}
-	}
-	
-	public function ccpMult(point1:Point, num:Float):Point
-	{
-		var result:Point;
-		var x = point1.x * num;
-		var y = point1.y * num;
-		result = new Point(x, y);
-		return result;
-	}
-	
-	public function ccpAdd(point1:Point, point2:Point):Point
-	{
-		var result:Point;
-		var x = point1.x + point2.x;
-		var y = point1.y + point2.y;
-		result = new Point(x, y);
-		return result;
 	}
 	
 	private function onTouch(e:Touch)
@@ -629,7 +594,7 @@ class ControllCmd extends BaseCmd
 		//var touchPoint = new Point(e.x/Main.Scale, e.x/Main.Scale);
 		//var touchPoint = new Point(Input.mouseFlashX, Input.mouseFlashY);
 		//DC.log(touchPoint+">>"+Input.mouseFlashX + ":" + Input.mouseFlashY+"<<"+Main.Scale);
-		var disPos = Point.distance(cPoint, touchPoint);
+		var disPos = Point.distance(_wheel.cPoint, touchPoint);
 		if (disPos <= _maxTouchW)
 		{
 			touchID = e.id;
@@ -638,7 +603,7 @@ class ControllCmd extends BaseCmd
 			
 			if (disPos > aRadius && disPos <= _maxTouchW)
 			{
-				currentPoint = ccpAdd(cPoint, ccpMult(ccpNormalize(ccpSub(touchPoint, cPoint)), aRadius));
+				currentPoint = _wheel.ccpAdd(_wheel.cPoint, _wheel.ccpMult(_wheel.ccpNormalize(_wheel.ccpSub(touchPoint, _wheel.cPoint)), aRadius));
 			}
 			else if(disPos < aRadius)
 			{
@@ -646,62 +611,9 @@ class ControllCmd extends BaseCmd
 			}
 			else
 			{
-				currentPoint = cPoint;
+				currentPoint = _wheel.cPoint;
 			}
 		}
-	}
-	
-	public function setDirection(point:Point):Void
-	{
-		if (point.y == cPoint.y && point.x == cPoint.x)
-		{
-			//trace("zero");
-			if (status != NONE)
-			{
-				//trace(Lib.getTimer() - _controlTime);
-				_controlTime = Lib.getTimer();
-				status = NONE;
-				_player.notify(MsgInput.UIJoystickInput, status);
-			}
-		}
-		else
-		{
-			var realPos:Point = new Point(point.x - cPoint.x, point.y - cPoint.y);
-			realPos.y = realPos.y * ( -1);
-			//按键区域：左、右
-			if (realPos.x >= 0)
-			{
-				//trace("right");
-				status = RIGHT;
-				_player.notify(MsgInput.UIJoystickInput, status);
-			}
-			else if (realPos.x < 0)
-			{
-				//trace("left");
-				status = LEFT;
-				_player.notify(MsgInput.UIJoystickInput, status);
-			}
-			//按键区域：左、右、下
-			/*if (realPos.x >= 0 && (realPos.x + realPos.y) > 0)
-			{
-				//trace("right");
-				status = RIGHT;
-				_player.notify(MsgInput.UIJoystickInput, status);
-			}
-			else if (realPos.x < 0 && (realPos.x - realPos.y) < 0)
-			{
-				//trace("left");
-				status = LEFT;
-				_player.notify(MsgInput.UIJoystickInput, status);
-			}
-			else if (realPos.y < 0 &&  (realPos.y + realPos.x) < 0 && (realPos.y - realPos.x) < 0)
-			{
-				//trace("down");
-				status = BOTTOM;
-				_player.notify(MsgInput.UIJoystickInput, status);
-			}*/
-		}
-		showPressed();
 	}
 	
 	private function showPressed():Void 
@@ -717,26 +629,10 @@ class ControllCmd extends BaseCmd
 		}
 	}
 	
+	
 	private function cmd_UpdateInfo(userData):Void 
 	{
 		if (_playerInfo == null) return;
-		/*
-		if (_player!=cast(GameProcess.root.getComponent(GameSchedual),GameSchedual).playerEntity) 
-		{
-			trace("something changed the _player, so I update here _player");
-			_player = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerEntity;
-		}
-		if (_playerInfo!=cast(GameProcess.root.getComponent(GameSchedual),GameSchedual).playerInfo) 
-		{
-			trace("something changed the _playerInfo, so I update here ");
-			_playerInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
-		}
-		if (stat!=cast(GameProcess.root.getComponent(GameSchedual),GameSchedual).playerEntity.getComponent(PlayerStat)) 
-		{
-			trace("something changed the _playerstat, so I update here");
-			stat=cast(GameProcess.root.getComponent(GameSchedual),GameSchedual).playerEntity.getComponent(PlayerStat);
-		}
-		*/
 		_hpBar.value =  stat.hp / stat.hpMax * 100;
 		_mpBar.value =  stat.mp / stat.mpMax * 100;
 		_hptext.text = Std.string(stat.hp);
@@ -788,10 +684,13 @@ class ControllCmd extends BaseCmd
 		_bossPanel.getChildAs("bossHP", Progress).value = userData.percent;
 		_bossPanel.getChildAs("hpPercent", Text).text = Std.string(userData.hp < 0?0:userData.hp);
 	}
-	private function cmd_AssignPlayer():Void 
+	
+	private function cmd_AssignPlayer()
 	{
 		_player = PlayerUtils.getPlayer();
 		stat = _player.getComponent(PlayerStat);
+		_jumpBtn.onPress = onJumpPress;
+		_knifeBtn.onPress = onKnifePress;
 		_attackBtn.onPress = onAttackPress;
 		_attackBtn.onRelease = onAttackRelease;
 		_jumpBtn.onPress = onJumpPress;
@@ -836,6 +735,7 @@ class ControllCmd extends BaseCmd
 		//var slice = _slice / _count;
 		//Actuate.tween(_thumb.getChild("thumbPlayer"), 0.5, { x:player.x + slice } );
 	//}
+	
 	private function cmd_InitThumb(userData:Dynamic):Void
 	{
 		//trace("cmd_InitThumb");
@@ -857,7 +757,7 @@ class ControllCmd extends BaseCmd
 	}
 	private function cmd_UpdateMissionTxt(userData:Dynamic):Void
 	{
-		trace("cmd_UpdateMissionTxt");
+		//trace("cmd_UpdateMissionTxt");
 		switch (userData) 
 		{
 			case RoomMissionType.Kill_All:
@@ -870,22 +770,20 @@ class ControllCmd extends BaseCmd
 		} 
 		
 		_mission.label.alpha = 0.01;
-		Actuate.tween(_mission.label, 2, { alpha:1 } ).onComplete(function() {
-										
-		});	
+		Actuate.tween(_mission.label, 2, { alpha:1 } );	
 	}
 	private function cmd_Start(userData:Dynamic):Void
 	{
 		trace("cmd_Start");
-		_battle = GameProcess.root.getComponent(BattleSystem);
+		//_battle = GameProcess.root.getComponent(BattleSystem);
 		for (btn in _skillBtns) 
 		{
 			btn.text = "";
 			btn.disabled = false;
 		}		
 		GameProcess.root.notify(MsgStartup.PauseCountDown, false);
-		notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(EntityUtil.findBoardComponent(GameMap).mapData.mapId)).MissionType);
-		trace("notify(MsgUIUpdate.UpdateMissionTxt");
+		//notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(EntityUtil.findBoardComponent(GameMap).mapData.mapId)).MissionType);
+		//trace("notify(MsgUIUpdate.UpdateMissionTxt");
 		//_skill0Btn.text = _skill1Btn.text = _skill2Btn.text = _skill3Btn.text = _skill4Btn.text = "";
 		//_skill0Btn.disabled = _skill1Btn.disabled = _skill2Btn.disabled = _skill3Btn.disabled = _skill4Btn.disabled = false;
 	}

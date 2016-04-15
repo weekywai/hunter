@@ -1,18 +1,19 @@
 package com.metal.scene.bullet.support;
 
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.TextrueSpritemap;
-import com.haxepunk.HXP;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.enums.EffectEnum.EffectAniType;
 import com.metal.message.MsgEffect;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import motion.Actuate;
 
 /**
@@ -43,8 +44,14 @@ class BulletMissile1 extends BulletEntity
 		super.onDispose();
 		//scene.remove(_warn);
 		Actuate.stop(this);
+		if(_bullet!=null)
+			_bullet.destroy();
 		_bullet = null;
+		if(_bullet2!=null)
+			_bullet2.destroy();
 		_bullet2 = null;
+		if(_warning!=null)
+			_warning.destroy();
 		_warning = null;
 		_warn = null;
 		_req = null;
@@ -52,8 +59,9 @@ class BulletMissile1 extends BulletEntity
 		_dir = null;
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		//判断资源类型
 		_dir = "up";
 		canRemove = false;
@@ -67,6 +75,8 @@ class BulletMissile1 extends BulletEntity
 	
 	private function imageBullet():Void
 	{
+		if (_bullet != null)
+			_bullet.destroy();
 		_bullet = new Image(ResPath.getBulletRes(info.img));
 		_bullet.centerOrigin();
 		var box = Image.createCircle(Std.int(_bullet.height * 0.25));
@@ -79,9 +89,12 @@ class BulletMissile1 extends BulletEntity
 	private function xmlBullet():Void
 	{
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bullet2 = new TextrueSpritemap(eff);
+		if (_bullet2 == null) {
+			_bullet2 = new TextrueSpritemap(eff);
+		}else{
+			_bullet2.resetTexture(eff);
+		}
 		_bullet2.add("blast", eff.getReginCount(), 25);
-		_bullet2.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0) {
 			_bullet2.originX = eff.ox ;// - _bullet2.width * 0.5;
 			_bullet2.originY = eff.oy;
@@ -100,14 +113,10 @@ class BulletMissile1 extends BulletEntity
 		}
 		
 		setHitboxTo(box);
-		_bullet2.play("blast");
+		_bullet2.play("blast", true);
 		Actuate.tween(this, 1, { } ).onComplete(createWarning);
 	}
 	
-	private function onComplete(name:String):Void
-	{
-		//recycle();
-	}
 	
 	override public function start(req:BulletRequest):Void 
 	{
@@ -132,6 +141,7 @@ class BulletMissile1 extends BulletEntity
 		if (isDisposed)
 			return;
 		//super.update();
+		onCheck();
 		if(_dir == "up")
 			moveUp();
 		else if (_dir == "down")
@@ -150,7 +160,7 @@ class BulletMissile1 extends BulletEntity
 	
 	private function moveDown():Void
 	{
-		//x += -_speed;
+		//x += -_speed;`
 		//x += - _speed * (HXP.halfWidth - _warn.x) / (HXP.height + 10);
 		y += _speed;
 	}
@@ -172,9 +182,11 @@ class BulletMissile1 extends BulletEntity
 		{
 			_warn = new Entity();
 			var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getEffectRes(info.warning, 4));
-			_warning = new TextrueSpritemap(eff);
+			if(_warning==null)
+				_warning = new TextrueSpritemap(eff);
+			else
+				_warning.resetTexture(eff);
 			_warning.add("warning", eff.getReginCount(), 25);
-			_warning.animationEnd.add(onComplete);
 			if (eff.ox != 0 || eff.oy != 0 ) {
 				_warning.originX = eff.ox;
 				_warning.originY = eff.oy;
@@ -183,7 +195,7 @@ class BulletMissile1 extends BulletEntity
 				_warning.centerOrigin();
 			}
 			_warn.addGraphic(_warning);
-			_warning.play("warning");
+			_warning.play("warning", true);
 			//_warn.x = HXP.width * (Math.random()*0.3 + 0.1);
 			_warn.x = _tx;
 			_warn.y = HXP.height;
@@ -214,7 +226,7 @@ class BulletMissile1 extends BulletEntity
 		if(collideEntity.type != "solid")
 		{
 			//trace("collideEntity " + collideEntity);
-			var avatar:MTAvatar = cast(collideEntity, MTAvatar);
+			var avatar:ViewDisplay = cast(collideEntity, ViewDisplay);
 			_hitInfo.target = avatar.owner;
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
 			owner.notify(MsgItr.BulletHit, _hitInfo);

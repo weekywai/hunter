@@ -28,20 +28,20 @@ class ViewRoobet extends ViewEnemy
 		_gunBone2 = null;
 	}
 	
-	override private function cmd_PostBoot(userData:Dynamic):Void
+	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
-		super.cmd_PostBoot(userData);
+		super.Notify_PostBoot(userData);
 		
-		_gunBone1 = _avatar.getBone("muzzle_1");
-		_gunBone2 = _avatar.getBone("muzzle_2");
+		_gunBone1 = getBone("muzzle_1");
+		_gunBone2 = getBone("muzzle_2");
 	}
 	override private function onEventCallback(value:Int, event:Event):Void
 	{
 		if ( event.data.name == "attack_1") 
 		{
-			var gun1:Bone =  _avatar.getBone("muzzle_1");
-			var bulletX = _avatar.x + _gunBone1.worldX;
-			var bulletY = _avatar.y + _gunBone1.worldY;
+			var gun1:Bone =  getBone("muzzle_1");
+			var bulletX = x + _gunBone1.worldX;
+			var bulletY = y + _gunBone1.worldY;
 			//需要检测方向
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;
@@ -49,9 +49,9 @@ class ViewRoobet extends ViewEnemy
 			_bulletReq.targetY = bulletY;
 			notifyParent(MsgBullet.Create, _bulletReq);
 			
-			var gun2:Bone =  _avatar.getBone("muzzle_2");
-			var bulletX = _avatar.x + _gunBone2.worldX;
-			var bulletY = _avatar.y + _gunBone2.worldY;
+			var gun2:Bone =  getBone("muzzle_2");
+			var bulletX = x + _gunBone2.worldX;
+			var bulletY = y + _gunBone2.worldY;
 			//需要检测方向
 			_bulletReq.x = bulletX;
 			_bulletReq.y = bulletY;

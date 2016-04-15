@@ -15,9 +15,6 @@ class ActorStateDestroyed extends FState
 	
 	override public function update(instance:Dynamic):Void 
 	{
-		//var actor:MTActor = cast instance;
-		//actor.owner.notify(MsgActor.ExitBoard);
-		//super.update(instance);
 	}
 	
 }

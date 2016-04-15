@@ -12,7 +12,7 @@ import openfl.errors.Error;
  * ...
  * @author weeky
  */
-class GameBoardItem extends Component implements IBoardItem
+class GameBoardItem extends Component
 {
 	var _itemType:Int = 0;
 	public var unitType(get, null):Int;
@@ -41,19 +41,11 @@ class GameBoardItem extends Component implements IBoardItem
 	public var y(default, default):Float = 0;
 	//private function get_y():Float { return _quadItem.Y; }
 	
-	public function attackable():Bool { return true; }
-	public function aimable():Bool { return true; }
-	public function showInRadar():Bool { return true; }
-	public function alwaysCanSee():Bool { return false; }
-	public function canDamage():Bool { return true; }
-	public function hitTestFaction():Bool { return true; }
-	
 	public function new() {
 		super();
 	}
 	override function onDispose():Void {
 		detachFromBoard();
-		//_quadItem = null;
 		super.onDispose();
 	}
 	override function onInitComponent():Void 
@@ -93,7 +85,7 @@ class GameBoardItem extends Component implements IBoardItem
 	}
 	
 	function initItemType(type:Int):Void {
-		if (!isInBoard()) throw "is in gameboard list";
+		if (!isInBoard()) throw "not in gameboard list";
 		_itemType = type;
 	}
 }

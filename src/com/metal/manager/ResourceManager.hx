@@ -1,12 +1,11 @@
 package com.metal.manager;
-import com.haxepunk.Entity;
 import com.haxepunk.Graphic;
-import com.haxepunk.graphics.atlas.Atlas;
-import com.haxepunk.graphics.atlas.AtlasData;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.haxepunk.HXP;
-import com.metal.unit.avatar.MTAvatar;
+import com.haxepunk.graphics.atlas.AtlasData;
+import com.haxepunk.graphics.atlas.BitmapFontAtlas;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import de.polygonal.ds.pooling.DynamicObjectPool;
+import de.polygonal.ds.pooling.ObjectPool;
 import haxe.ds.StringMap;
 import openfl.errors.Error;
 import spinehaxe.SkeletonJson;
@@ -23,12 +22,11 @@ class ResourceManager
 	
 	private static var _graphicPool:DynamicObjectPool<Graphic>;
 	private static var _graphicCache:StringMap<Array<Graphic>>;
-	private var _cacheEntity:StringMap<Array<Entity>>;
 	
 	public function new() {	
 		_graphicCache = new StringMap();
 		_graphicPool = new DynamicObjectPool(null, fabricate);
-		_cacheEntity = new StringMap();
+		//_graphicPool.allocate(false, Graphic);
 	}
 	
 	public function getResource(id:String):Graphic 
@@ -81,31 +79,10 @@ class ResourceManager
 		return Type.createInstance(_classType, _args);
 	}
 	
-	public function addEntity(type:String, e:Entity)
-	{
-		
-		if (_cacheEntity.exists(type)) {
-			_cacheEntity.get(type).push(e);
-		}else {
-			_cacheEntity.set(type, [e]);
-		}
-	}
-	
-	public function getEntity(type:String):Entity
-	{
-		
-		if (_cacheEntity.exists(type)) {
-			var a =  _cacheEntity.get(type).shift();
-			//if(type=="m111")
-			//trace(_cacheEntity.get(type) + ">>" + a);
-			return a;
-		}
-		return null;
-	}
 	
 	public function reclaim():Void 
 	{
-		var count = _graphicPool.reclaim();
+		//var count = _graphicPool.reclaim();
 		//trace("Graphic reclaim :" + count);
 	}
 	
@@ -123,19 +100,10 @@ class ResourceManager
 		}
 		_graphicCache = new StringMap();
 		_graphicPool.free();
-		for (key in _cacheEntity.keys()) 
-		{
-			var list = _cacheEntity.get(key);
-			for (e in list) 
-			{
-				HXP.scene.remove(e);
-				cast(e, MTAvatar).dispose();
-			}
-		}
-		_cacheEntity = new StringMap();
 		SpinePunk.clear();
 		SkeletonJson.clearJson();
-		TextureAtlasFix.clearCacahes();
+		BitmapFontAtlas.clear();
+		TextureAtlasFix.clear();
 		AtlasData.destroyAll();
 		HXP.removeAllBitmap();
 	}

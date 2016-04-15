@@ -61,8 +61,8 @@ class Camera extends Component
 		switch(type){
 			case MsgStartup.Reset:
 				cmd_Reset();
-			case MsgStartup.Start:
-				cmd_Start();
+			//case MsgStartup.Start:
+				//cmd_Start();
 			case MsgStartup.AssignMap:
 				cmd_AssignMap(userData);
 			case MsgBoard.AssignPlayer:
@@ -182,10 +182,7 @@ class Camera extends Component
 		HXP.resetCamera();
 		_lockBounds = new Bounds();
 	}
-	private function cmd_Start():Void
-	{
-		
-	}
+	//private function cmd_Start():Void { }
 	private function cmd_AssignMap(userData:Dynamic):Void
 	{
 		var tmx:TmxMap = userData.map;
@@ -204,7 +201,7 @@ class Camera extends Component
 	
 	private function cmd_AssignPlayer(userData:Dynamic):Void
 	{
-		trace(userData);
+		//trace(userData);
 		var player:SimEntity = userData;
 		_actor = cast player.getComponent(MTActor);
 		HXP.camera.y = _actor.y - HXP.halfHeight;

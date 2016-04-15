@@ -183,7 +183,7 @@ class ViewStack extends Widget{
     *
     */
     @:noCompletion private function get_currentIdx() : Int {
-        var idx : Int = 0;
+        var idx : Int = -1;
         // var idx : Int = this._history[ this._history.length - 1 ];
         // //if idx is out of bounds, get currently visible child index
         // if( idx >= this.numChildren ){

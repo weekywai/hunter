@@ -82,6 +82,7 @@ class WeaponController extends Component
 	}
 	private function cmd_PostBoot():Void
 	{
+		//trace("cmd_PostBoot");
 		var skillInfo = getSkill();
 		var playerInfo = PlayerUtils.getInfo();
 		createWeapon(WeaponType.Shoot, skillInfo);
@@ -95,9 +96,11 @@ class WeaponController extends Component
 	}
 	private  function cmd_Attack(userData:Dynamic):Void
 	{
+		
 		var weapon:BaseWeapon = _weaponUsing.get(userData.type);
-		if (!weapon.isShooting)
+		if (!weapon.isShooting) {
 			weapon.onUpdate(MsgPlayer.ShootStart, owner, null);
+		}
 	}
 	private function cmd_ChangeWeapon(userData:Dynamic):Void
 	{

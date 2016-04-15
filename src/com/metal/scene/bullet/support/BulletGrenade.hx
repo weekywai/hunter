@@ -1,22 +1,22 @@
 package com.metal.scene.bullet.support;
 import com.haxepunk.Entity;
-import com.haxepunk.graphics.atlas.TextureAtlasFix;
+import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.TextrueSpritemap;
-import com.haxepunk.HXP;
+import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.enums.Direction;
 import com.metal.message.MsgItr;
+import com.metal.proto.impl.BulletInfo;
 import com.metal.scene.board.impl.BattleResolver;
 import com.metal.scene.bullet.api.BulletHitInfo;
 import com.metal.scene.bullet.api.BulletRequest;
 import com.metal.scene.bullet.impl.BulletEntity;
-import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.actor.impl.BaseActor;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.actor.impl.UnitActor;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import openfl.geom.Point;
 /**
  * 主角手雷
@@ -26,7 +26,7 @@ class BulletGrenade extends BulletEntity
 {
 
 	private var _bulletGraphic:TextrueSpritemap;
-	
+	private var _box:Image;
 	/**运动轨迹辅助参数**/
 	private var xSpeed:Float;
 	private var ySpeed:Float;
@@ -51,19 +51,27 @@ class BulletGrenade extends BulletEntity
 		super.onDispose();
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		_collides = [];
 		//_bulletGraphic = new Image(ResPath.getBulletRes(info.img));
 		var atlas:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		_bulletGraphic = new TextrueSpritemap(atlas);
+		if(_bulletGraphic==null){
+			_bulletGraphic = new TextrueSpritemap(atlas);
+		}else {
+			_bulletGraphic.resetTexture(atlas);
+		}
 		_bulletGraphic.add("grende", atlas.getReginCount(), 25, false);
-		_bulletGraphic.play("grende");
+		
+		_bulletGraphic.play("grende", true);
 		_bulletGraphic.scale = 1;
 		
-		var box = Image.createCircle(Std.int(_bulletGraphic.height * 0.5));
-		box.centerOO();
-		setHitboxTo(box);
+		if (_box != null)
+			_box.destroy();
+		_box = Image.createCircle(Std.int(_bulletGraphic.height * 0.5));
+		_box.centerOO();
+		setHitboxTo(_box);
 		graphic = _bulletGraphic;
 		t0 = 0;
 		_delay = 60;
@@ -107,6 +115,7 @@ class BulletGrenade extends BulletEntity
 			onCollide();
 		}
 		_delay--;
+		//trace(_delay);
 		if (_delay <= 0) {
 			if (computeInCamera()) {
 				//trace("not in camera");
@@ -133,12 +142,13 @@ class BulletGrenade extends BulletEntity
 		if (_collides.length > 0) return;
 		collideTypesInto(_collideTypes, x, y, _collides);
 		if (_collides.length > 0) {
+			//trace(_collides);
 			SfxManager.getAudio(AudioType.Canon).play();
 			for (e in _collides) 
 			{
 				if(e.type != "solid")
 				{
-					var avatar:MTAvatar = cast(e, MTAvatar);
+					var avatar:ViewDisplay = cast(e, ViewDisplay);
 					var hit = new BulletHitInfo();
 					hit.target = avatar.owner;
 					hit.atk = _hitInfo.atk;

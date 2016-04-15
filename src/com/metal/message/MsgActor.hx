@@ -28,7 +28,7 @@ package com.metal.message;
 	Destroy,			//完成死亡
 	Soul,				//灵魂状态
 	Respawn,            //复活
-	Reborn,             //复活 
+	AttackStatus,       //攻击状态 
 	Enter				//进场
 ]))
 class MsgActor{}

@@ -1,5 +1,6 @@
 package com.metal.scene.bullet.support;
 import com.haxepunk.HXP;
+import com.metal.proto.impl.BulletInfo;
 //import com.metal.particle.Explosion;
 import openfl.geom.Point;
 
@@ -16,10 +17,10 @@ class BulletMissile2 extends BulletMissile
 		super(x, y);
 	}
 	
-	override function onInit():Void 
+	override public function setInfo(info:BulletInfo):Void
 	{
+		super.setInfo(info);
 		canRemove = false;
-		super.onInit();
 	}
 	override function xmlBullet():Void 
 	{

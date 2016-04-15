@@ -6,12 +6,12 @@ import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
+import com.metal.message.MsgInput;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
-import com.metal.message.MsgUtils;
-import com.metal.player.core.PlayerStat;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.proto.impl.BattlePrepareInfo;
 import com.metal.proto.impl.GoldGoodInfo;
 import com.metal.proto.impl.ItemBaseInfo;
@@ -20,7 +20,7 @@ import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState;
-import com.metal.unit.avatar.MTAvatar;
+import com.metal.unit.render.ViewDisplay;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
 import motion.Actuate;
@@ -32,12 +32,10 @@ import pgr.dconsole.DC;
 class MTActor extends BaseActor
 {
 	public var isVictory:Bool;
-	public var respawnTotal:Int;
 	public function new() 
 	{
 		super();
 		isVictory = false;
-		respawnTotal = 0;
 	}
 	
 	override function onInitComponent():Void 
@@ -60,6 +58,7 @@ class MTActor extends BaseActor
 			return;
 		if (isVictory)
 			return;
+			//trace(_model);
 		var e = _model.collide(UnitModelType.DropItem, x , y);
 		if (e != null) 
 			pickItem(e);
@@ -90,6 +89,8 @@ class MTActor extends BaseActor
 	{
 		trace("Notify_ThrowBomb");
 		//trace("stateID: " + stateID);
+		if (owner.name == UnitModelType.Vehicle) 
+			return;
 		if (stateID == ActorState.Melee || stateID == ActorState.ThrowBomb) return;
 		transition(ActorState.ThrowBomb);
 	}
@@ -104,6 +105,9 @@ class MTActor extends BaseActor
 			velocity.y = -_jumpHeight; 
 			//trace("FirstJump: "+stateID);
 		}else {
+			//trace(owner.name + ">>" + UnitModelType.Vehicle);
+			if (owner.name == UnitModelType.Vehicle) 
+				return;
 			transition(ActorState.DoubleJump);
 			velocity.y = -_jumpHeight; 
 			//trace("DoubleJump: " + stateID);
@@ -239,7 +243,7 @@ class MTActor extends BaseActor
 	{
 		trace("npc collide");
 		entity.type = "";
-		var target:MTAvatar = cast(entity, MTAvatar);
+		var target:ViewDisplay = cast(entity, ViewDisplay);
 		var item:SimEntity = target.owner;
 		item.notify(MsgActor.Destroying);
 	}
@@ -247,7 +251,7 @@ class MTActor extends BaseActor
 	private function pickItem(entity:Entity):Void
 	{
 		entity.type = "";
-		var target:MTAvatar = cast(entity, MTAvatar);
+		var target:ViewDisplay = cast(entity, ViewDisplay);
 		var item:SimEntity = target.owner;
 		//item.notify(MsgActor.Destroy);
 		if (item.parent!=null) {
@@ -316,7 +320,7 @@ class MTActor extends BaseActor
 		
 	}
 	
-	override function notify_ChangeSpeed(userData:Dynamic):Void 
+	override function Notify_ChangeSpeed(userData:Dynamic):Void 
 	{
 		velocity.x = velocity.x * userData[0];
 		//trace(_speed + ":"+userData+":" + userData / 100);
@@ -324,32 +328,8 @@ class MTActor extends BaseActor
 	
 	override function Notify_Destroy(userData:Dynamic):Void 
 	{
-		notifyParent(MsgItr.Destory, {key:owner.keyId, id:bindPlayerID});
+		notifyParent(MsgItr.Destory, {key:_owner.keyId, id:bindPlayerID});
 		super.Notify_Destroy(userData);
-	}
-	
-	override function Notify_Soul(userData:Dynamic):Void 
-	{
-		super.Notify_Soul(userData);
-		
-		respawnTotal++;
-		if (respawnTotal >= 10) {
-			var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
-			if (battle.currentStage().DuplicateType == 9)
-			{
-				GameProcess.SendUIMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
-			}else
-			{
-				GameProcess.SendUIMsg(MsgUI.BattleFailure);
-			}
-		} else {
-			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
-		}
-		//notify(MsgActor.ExitBoard);
-	}
-	public function getRebornTime():Int
-	{
-		return respawnTotal;
 	}
 	
 	override function Notify_Respawn(userData:Dynamic):Void 
@@ -359,15 +339,18 @@ class MTActor extends BaseActor
 	}
 	override function Notify_Escape(userData:Dynamic):Void 
 	{
+		//ai update many execute 
+		//trace("Victory Escape:");
 		//trace("Victory Escape:"+(HXP.camera.x + HXP.width) +">>>" + x);
-		//if (x >= HXP.camera.x+HXP.width){
-			GameProcess.root.notify(MsgStartup.TransitionMap);
-		//}else {
-			//if (onWall) {
-				//transition(ActorState.Jump);
-			//}
-			//Notify_Move(Direction.RIGHT);
-		//}
+		if (x >= HXP.camera.x + HXP.width) {
+			//TODO only one execute
+			//GameProcess.root.notify(MsgStartup.TransitionMap);
+		}else {
+			if (onWall) {
+				transition(ActorState.Jump);
+			}
+			Notify_Move(Direction.RIGHT);
+		}
 	}
 	override function Notify_Victory(userData:Dynamic):Void 
 	{
@@ -375,9 +358,8 @@ class MTActor extends BaseActor
 		isVictory = true;
 		super.Notify_Victory(userData);		
 		velocity.x = 0;
-		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
-			GameProcess.root.notify(MsgStartup.TransitionMap);
-		} );
+		
+		
 	}
 	private function cmd_AddCollide(userData:Dynamic):Void 
 	{

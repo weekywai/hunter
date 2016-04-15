@@ -15,14 +15,14 @@ package com.metal.message;
 	LatestFashion,      //时装
 	CreateModel,        //创建模型
 	BossPanel,
-	HintPanel,			//消息提示界面
 	Through,     		//打开副本界面
 	EndlessCopy,        //无尽副本界面    
 	BattleResult,    	//打开副本胜利结算界面
 	BattleFailure,    	//打开副本失败结算界面
 	RevivePanel,        //买活界面
-	BuyGold,            //购买金币
-	BuyDiamonds,        //购买钻石
+	BuyDiamonds,        //购买钻石   
+	HintPanel,			//消息提示界面 problem can't send
+	BuyGolds,           //购买金币
 	TreasureHunt,       //购买宝箱
 	AwardPanel,         //奖励任务界面
 	RewardPanel,		//奖励活跃度界面

@@ -238,5 +238,13 @@ class BitmapFontAtlas extends TextureAtlas
 	}
 
 	private static var _fonts:Map<String, BitmapFontAtlas>;
+	public static function clear()
+	{
+		var keys = _fonts.keys();
+		for (key in keys) 
+		{
+			_fonts.remove(key);
+		}
+	}
 	private static var _DEFAULT_GLYPHS:String = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 }
