@@ -91,8 +91,8 @@ class MTActor extends BaseActor
 		//trace("stateID: " + stateID);
 		if (owner.name == UnitModelType.Vehicle) 
 			return;
-		if (stateID == ActorState.Melee || stateID == ActorState.ThrowBomb) return;
-		transition(ActorState.ThrowBomb);
+		//if (stateID == ActorState.Melee || stateID == ActorState.ThrowBomb) return;
+		//transition(ActorState.ThrowBomb);
 	}
 	override function Notify_Jump(userData:Dynamic):Void 
 	{

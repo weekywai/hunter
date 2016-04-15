@@ -102,9 +102,9 @@ class ViewDropItem extends ViewObject
 		} else {
 			
 			factor();
-			Actuate.timer(3).onComplete(function() {
+			Actuate.timer(Math.random()*1+2).onComplete(function() {
 				if(_model!=null)	
-					Actuate.tween(cast(_model, Image), 0.1, { alpha:0 } ).delay(1).reflect().repeat (6).onComplete(notify, [MsgActor.Destroy]);
+					Actuate.tween(cast(_model, Image), 0.2, { alpha:0 } ).delay(0.6).reverse().repeat (6).onComplete(notify, [MsgActor.Destroy]);
 			});
 		}
 	}
@@ -130,7 +130,7 @@ class ViewDropItem extends ViewObject
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		//trace("drop item destorying");
-		Actuate.tween(_actor, 0.8, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
+		Actuate.tween(_actor, 0.6, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
 		super.Notify_Destorying(userData);
 		//notify( MsgActor.Destroy);
 	}
