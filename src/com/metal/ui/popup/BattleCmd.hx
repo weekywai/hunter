@@ -114,8 +114,8 @@ class BattleCmd extends BaseCmd
 	{
 		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + tempInfo.ResId + '.png' , x:10, y:10 } );
 		//品质
-		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId), x:13, y:13 } );
-		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId, 0), x:5, y:5 } );
+		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:13, y:13 } );
+		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID, 0), x:5, y:5 } );
 		var oneGoods = UIBuilder.buildFn('ui/popup/oneGoods.xml')( { } );
 		oneGoods.getChildAs("img", Bmp).addChild(quality);
 		oneGoods.getChildAs("img", Bmp).addChild(img);

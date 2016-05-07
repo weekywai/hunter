@@ -1,21 +1,23 @@
 package com.metal.ui.main;
+import com.metal.component.BagpackSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.BagType;
 import com.metal.config.EquipProp;
 import com.metal.config.PlayerPropType;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
+import com.metal.enums.BagInfo;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.ProtoUtils;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.impl.ArmsInfo;
 import com.metal.proto.impl.StrengthenInfo;
-import com.metal.proto.impl.WeaponInfo;
 import com.metal.proto.manager.ModelManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.noviceGuide.NoviceCourseCmd;
+import com.metal.utils.BagUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
@@ -27,7 +29,7 @@ import ru.stablex.ui.widgets.Tip;
 import ru.stablex.ui.widgets.Widget;
 import spinepunk.SpriteActor;
 
-
+using com.metal.proto.impl.ItemProto;
 /**
  * ...
  * @author hyg
@@ -223,7 +225,7 @@ class MainCmd extends BaseCmd
 	private function showModel():Void 
 	{
 		var info = PlayerUtils.getInfo();
-		var modelInfo = ModelManager.instance.getProto(info.getProperty(PlayerPropType.ROLEID));
+		var modelInfo = ModelManager.instance.getProto(info.data.ROLEID);
 		var modelContainer:Widget = _widget.getChildAs("modelStage", Widget);
 		if (modelContainer.numChildren > 0) modelContainer.removeChildren();
 		_model = new SpriteActor(ResPath.getModelRoot("player", modelInfo.res), 'model',1.7, modelInfo.skin);
@@ -247,8 +249,8 @@ class MainCmd extends BaseCmd
 		_model = null;
 		
 		var info = PlayerUtils.getInfo();
-		//trace(info.getProperty(PlayerPropType.ROLEID));
-		var modelInfo = ModelManager.instance.getProto(info.getProperty(PlayerPropType.ROLEID));
+		//trace(info.getProperty(PlayerProp.ROLEID));
+		var modelInfo = ModelManager.instance.getProto(info.data.ROLEID);
 		var modelContainer:Widget = _widget.getChildAs("modelStage", Widget);
 		//trace(modelInfo.skin);
 		_model = new SpriteActor(ResPath.getModelRoot("player", modelInfo.res), 'model',1.7, modelInfo.skin);
@@ -264,64 +266,43 @@ class MainCmd extends BaseCmd
 	private function updatePlayerType(data:Dynamic):Void
 	{
 		//bug 可能重复操作
-		var schedual = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual);
-		var playerInfo:PlayerInfo = schedual.playerInfo;
-		_widget.getChildAs("playerName", Text).text = "昵称：" + playerInfo.Name;
-		//_widget.getChildAs("HP", Text).text = "" + playerInfo.getProperty(PlayerPropType.MAX_HP);
-		//trace(data);
-		//var weapon:WeaponInfo =  cast GoodsProtoManager.instance.getItemById(playerInfo.getProperty(PlayerPropType.WEAPON));
-		//trace(schedual.equipBagData.itemArr[0].itemId);
-		//trace(playerInfo.getProperty(PlayerPropType.WEAPON));
-		//var weapon:WeaponInfo = cast schedual.equipBagData.getItem(playerInfo.getProperty(PlayerPropType.WEAPON));
-		var weapon:WeaponInfo = cast schedual.equipBagData.getItemByKeyId(playerInfo.getProperty(PlayerPropType.WEAPON));
-		//trace("playerInfo.getProperty(PlayerPropType.WEAPON): "+playerInfo.getProperty(PlayerPropType.WEAPON));
-		//trace("weapon: " + weapon);
-		//for (i in 0...schedual.equipBagData.itemArr.length) 
-		//{
-			//trace("schedual.equipBagData: "+schedual.equipBagData.itemArr[i].keyId);
-			//trace("schedual.equipBagData: "+schedual.equipBagData.itemArr[i].itemId);
-			//trace("currentBullet: "+schedual.equipBagData.itemArr[i].currentBullet);
-			//trace("currentBackupBullet: "+schedual.equipBagData.itemArr[i].currentBackupBullet);
-		//}
-		
-		//var armData:ArmsInfo = cast GoodsProtoManager.instance.getItemById(playerInfo.getProperty(PlayerPropType.ARMOR));
-		var armData:ArmsInfo = cast schedual.equipBagData.getItemByKeyId(playerInfo.getProperty(PlayerPropType.ARMOR));
-		
+		var playerInfo:PlayerInfo = PlayerUtils.getInfo();
+		_widget.getChildAs("playerName", Text).text = "昵称：" + playerInfo.data.NAME;
+		var weapon:EquipInfo = ProtoUtils.castType(BagUtils.bag.getItemByKeyId(playerInfo.data.WEAPON));
+		var armData:EquipInfo = ProtoUtils.castType(BagUtils.bag.getItemByKeyId(playerInfo.data.ARMOR));
 		var leftBtn:Button = _widget.getChildAs("leftEquipBtn", Button);
 		var rightBtn:Button = _widget.getChildAs("rightEquipBtn", Button);
 		if (leftBtn.numChildren > 0) leftBtn.removeChildren();
 		if (rightBtn.numChildren > 0) rightBtn.removeChildren();
-		if (weapon != null&& weapon.ResId!=null)
+		if (weapon != null && weapon.ResId != null)
 		{
 			var weaponIco = UIBuilder.create(Box, { 
 							skinName:'forgeImg12',
 							children : [
-								UIBuilder.create(Box, { skinName : "forgelvImg" + weapon.InitialQuality, children : [
+								UIBuilder.create(Box, { skinName : "forgelvImg" + weapon.Color, children : [
 									UIBuilder.create(Bmp, { src:'icon/' + weapon.ResId + '.png' } )
 								] } )
-							]
-						});
-			
+							]});
 			leftBtn.addChild(weaponIco);
 		}
 		if (armData != null && armData.ResId != null) {
 			var armIco = UIBuilder.create(Box, { 
 				skinName:'forgeImg12',
 				children : [
-					UIBuilder.create(Box, { skinName : "forgelvImg" + armData.InitialQuality, children : [
+					UIBuilder.create(Box, { skinName : "forgelvImg" + armData.Color, children : [
 						UIBuilder.create(Bmp, { src:'icon/' + armData.ResId + '.png' } )
 					] } )
 				]
 			});
 			rightBtn.addChild(armIco);
 		}
-		var curWeapon:StrengthenInfo = EquipProp.Strengthen(weapon, weapon.strLv);
+		var curWeapon:StrengthenInfo = EquipProp.Strengthen(weapon, weapon.vo.strLv);
 		var maxWeapon:StrengthenInfo = EquipProp.Strengthen(weapon, weapon.MaxStrengthenLevel);
 		//trace(weapon);
 		var curAtk = EquipProp.compute(weapon.Att, curWeapon.Attack);
 		var maxAtk = EquipProp.compute(weapon.Att, maxWeapon.Attack);
 		
-		var curArm:StrengthenInfo = EquipProp.Strengthen(armData, armData.strLv);
+		var curArm:StrengthenInfo = EquipProp.Strengthen(armData, armData.vo.strLv);
 		var maxArm:StrengthenInfo = EquipProp.Strengthen(armData, armData.MaxStrengthenLevel);
 		var curHP = EquipProp.compute(armData.Hp, curArm.HPvalue);
 		var maxHP = EquipProp.compute(armData.Hp, maxArm.HPvalue);
@@ -344,6 +325,6 @@ class MainCmd extends BaseCmd
 		else 
 			defen.tip.text = "您的攻击力已经是最强！期待新版本的发布吧！";
 		
-		_widget.getChildAs("Att", Text).text = Std.string(Std.int(playerInfo.getProperty(PlayerPropType.FIGHT) + curAtk + playerInfo.getProperty(PlayerPropType.MAX_HP) + curHP));
+		_widget.getChildAs("Att", Text).text = Std.string(Std.int(playerInfo.data.FIGHT + curAtk + playerInfo.data.MAX_HP + curHP));
 	}
 }

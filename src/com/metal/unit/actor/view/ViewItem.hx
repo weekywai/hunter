@@ -27,7 +27,7 @@ class ViewItem extends ViewActor
 	{
 		//判断加载类型
 		_actor = owner.getComponent(UnitActor);
-		var source:Int = owner.getProperty(MonsterInfo).res;
+		var source:Int = owner.getPropertyByCls(MonsterInfo).res;
 		//trace(source);
 		_info = ModelManager.instance.getProto(source);
 		if (_info == null)

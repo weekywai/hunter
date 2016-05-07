@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.Gold_Info;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -21,6 +23,13 @@ class Gold_Manager
 	public function new() 
 	{
 		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.GoldShop);
+		for (i in req) 
+		{
+			var info:Gold_Info = new Gold_Info();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	
 	public function getProto(key:Int):Gold_Info
@@ -29,7 +38,7 @@ class Gold_Manager
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -37,7 +46,7 @@ class Gold_Manager
 			var gold:Gold_Info = new Gold_Info();
 			gold.readXml(propText);
 			_data.set(gold.Id, gold);
-		}
+		}*/
 	}
 	
 }

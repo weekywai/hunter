@@ -54,7 +54,7 @@ class LatestFahionCmd extends BaseCmd
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
 		var info = PlayerUtils.getInfo();
-		if (info.getProperty(PlayerPropType.ROLEID) != 1002) {
+		if (info.data.ROLEID != 1002) {
 			sendMsg(MsgUI.Tips, { msg:"是否立刻充值500元！", type:TipsType.buyTip, callback:buyFun} );
 			//var tipCmd:TipCmd = new TipCmd();
 			//tipCmd.onInitComponent();
@@ -73,7 +73,7 @@ class LatestFahionCmd extends BaseCmd
 		info.res = 1002;
 		var modelInfo = ModelManager.instance.getProto(info.res);
 		modelInfo.skin = 2;
-		notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.ROLEID, data:1002 } );//更新记录
+		notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.ROLEID, data:1002 } );//更新记录
 		notify(MsgUIUpdate.UpdateModel);
 		sendMsg(MsgUIUpdate.ClearMainView);
 		notify(MsgUIUpdate.UpdataReturnBtn, true);

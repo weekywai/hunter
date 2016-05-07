@@ -92,11 +92,11 @@ class ViewBase extends AbstractAvatar
 		var source:Int;
 		switch(owner.name) {
 			case UnitModelType.Player:
-				source = PlayerUtils.getInfo().getProperty(PlayerPropType.ROLEID);
+				source = PlayerUtils.getInfo().data.ROLEID;
 			case UnitModelType.Vehicle:
 				source = PlayerUtils.getInfo().vehicle;
 			case UnitModelType.Unit,UnitModelType.Boss,UnitModelType.Elite:
-				source = owner.getProperty(MonsterInfo).res;
+				source = owner.getPropertyByCls(MonsterInfo).res;
 			//case UnitModelType.Npc:
 				//source = owner.getProperty(MonsterInfo).res;
 			default:
@@ -106,7 +106,7 @@ class ViewBase extends AbstractAvatar
 		_info = ModelManager.instance.getProto(source);
 		//怪物飞行 
 		if(owner.name == UnitModelType.Unit)
-			_info.fly = owner.getProperty(MonsterInfo).ModelType;
+			_info.fly = owner.getPropertyByCls(MonsterInfo).ModelType;
 		preload();
 		setAction(ActionType.idle_1);
 		
@@ -183,7 +183,7 @@ class ViewBase extends AbstractAvatar
 			unit.faction = BoardFaction.Item;
 			for (item in dropItem) 
 			{
-				//trace(item.ItemId+">>"+item.Precent);
+				//trace(item.ID+">>"+item.Precent);
 				//if (item.Precent == 100) {
 					unit.simType = UnitModelType.DropItem;
 					unit.id = item.ItemId;
@@ -193,7 +193,7 @@ class ViewBase extends AbstractAvatar
 				//}else {
 					//if (Math.random()*100 <= item.Precent) {
 						//unit.simType = UnitModelType.Item;
-						//unit.id = item.ItemId;
+						//unit.id = item.ID;
 						//unit.x = x;
 						//unit.y = (_actor.isGrounded)?HXP.height * 0.6:y - height;
 						//notifyParent(MsgBoard.CreateUnit, unit);

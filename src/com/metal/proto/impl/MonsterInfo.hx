@@ -110,52 +110,52 @@ class MonsterInfo
 		dropItem = new Array();
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ID = XmlUtils.GetInt(data, "ID");
-		BehaviorType = XmlUtils.GetInt(data, "BehaviorType");
-		FixedType = XmlUtils.GetInt(data, "FixedType");
-		Name = XmlUtils.GetString(data, "Name");
-		//Lv = XmlUtils.GetInt(data, "Lv");
+		ID = data.ID;
+		BehaviorType = data.BehaviorType;
+		FixedType = data.FixedType;
+		Name = data.Name;
+		//Lv = data.Lv;
 		if (FixedType == 0)
 		{
-			EnAt = ParseBornAt(XmlUtils.GetString(data, "EnAt"));
-			BornAt = ParseBornAt(XmlUtils.GetString(data, "BornAt"));
+			EnAt = ParseBornAt(data.EnAt);
+			BornAt = ParseBornAt(data.BornAt);
 			Leave = BornAt;
 		}
 		if (BehaviorType == 2)
 		{
-			PatrolPath = ParsePatrolPath(XmlUtils.GetString(data, "PatrolPath"));
+			PatrolPath = ParsePatrolPath(data.PatrolPath);
 		}
-		//MaxHp = XmlUtils.GetInt(data, "MaxHp");
-		//Atk = XmlUtils.GetInt(data, "Atk");
-		//Def = XmlUtils.GetInt(data, "Def");
-		CritPor = XmlUtils.GetInt(data, "CritPor");
-		AiType = XmlUtils.GetInt(data, "AiType");
-		ModelType = XmlUtils.GetInt(data, "ModelType");
-		SkillId = XmlUtils.GetInt(data, "SkillId");
-		//Skill = ParseSkillSlots(XmlUtils.GetString(data, "SkillSlots"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId2"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId3"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId4"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId5"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId6"));
-		Skill.push(XmlUtils.GetInt(data, "SkillId7"));
-		//Summon = ParseSummon(XmlUtils.GetString(data, "Summon"));
-		AlertRadius = XmlUtils.GetFloat(data, "AlertRadii") / 10000;
-		AttackRadius = XmlUtils.GetFloat(data, "AtkRadii") / 10000;
-		ChaseRadius = XmlUtils.GetFloat(data, "ChaseRadii") / 10000;
-		ResidenceTime = XmlUtils.GetInt(data, "ResidenceTime");
-		AtkNum = XmlUtils.GetInt(data, "AtkNum");
-		PublicCD = XmlUtils.GetFloat(data, "PublicCd");
-		Lock = XmlUtils.GetInt(data, "Lock");
-		dropItem = DropItemInfo.ParseDropItem(XmlUtils.GetString(data, "DropItem1"));
-		res = XmlUtils.GetInt(data, "ModelPic");
-		boomType = XmlUtils.GetInt(data, "IsExplosion");
+		//MaxHp = data.MaxHp;
+		//Atk = data.Atk;
+		//Def = data.Def;
+		CritPor = data.CritPor;
+		AiType = data.AiType;
+		ModelType = data.ModelType;
+		SkillId = data.SkillId;
+		//Skill = ParseSkillSlots(data.SkillSlots);
+		Skill.push(data.SkillId);
+		Skill.push(data.SkillId2);
+		Skill.push(data.SkillId3);
+		Skill.push(data.SkillId4);
+		Skill.push(data.SkillId5);
+		Skill.push(data.SkillId6);
+		Skill.push(data.SkillId7);
+		//Summon = ParseSummon(data.Summon);
+		AlertRadius = data.AlertRadii / 10000;
+		AttackRadius = data.AtkRadii / 10000;
+		ChaseRadius = data.ChaseRadii / 10000;
+		ResidenceTime = data.ResidenceTime;
+		AtkNum = data.AtkNum;
+		PublicCD = data.PublicCd;
+		Lock = data.Lock;
+		dropItem = DropItemInfo.ParseDropItem(data.DropItem1);
+		res = data.ModelPic;
+		boomType = data.IsExplosion;
 		isBoom = boomType != 0;
-		ScoreType = XmlUtils.GetInt(data, "ScoreType");
-		Property = XmlUtils.GetInt(data, "Property");
+		ScoreType = data.ScoreType;
+		Property = data.Property;
 	}
 	
 	private function ParseBornAt(value:String):Point
@@ -232,8 +232,9 @@ class DropItemInfo
 	{
 		
 	}
-	public static function ParseDropItem(value:String):Array<DropItemInfo>
+	public static function ParseDropItem(data:Dynamic):Array<DropItemInfo>
 	{
+		var value:String = Std.string(data);
 		var itemMap:Array<DropItemInfo> = new Array();
 		if (value == "")
 			return itemMap;

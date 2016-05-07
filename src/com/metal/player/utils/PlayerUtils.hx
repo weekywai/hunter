@@ -2,6 +2,7 @@ package com.metal.player.utils;
 import com.metal.config.PlayerPropType;
 import com.metal.enums.BagInfo;
 import com.metal.enums.GunType;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.unit.stat.PlayerStat;
 import com.metal.component.GameSchedual;
 import com.metal.proto.impl.SkillInfo;
@@ -10,6 +11,7 @@ import com.metal.scene.board.impl.BattleResolver;
 import com.metal.unit.stat.IStat;
 import com.metal.unit.weapon.impl.BaseWeapon;
 import com.metal.unit.weapon.impl.WeaponFactory;
+import com.metal.utils.BagUtils;
 import de.polygonal.core.es.EntityUtil;
 import de.polygonal.core.sys.SimEntity;
 import openfl.errors.Error;
@@ -42,17 +44,14 @@ class PlayerUtils
 	{
 		return getSchedual().playerInfo;
 	}
-	public static function getEquipBag():BagInfo
-	{
-		return getSchedual().equipBagData;
-	}
+	
 	public static function getUseWeaponId(id:Int=0):Int 
 	{
 		var weaponId:Int;
 		if(id==0){
 			var info:PlayerInfo = getSchedual().playerInfo;
-			//weaponId = info.getProperty(PlayerPropType.WEAPON);111
-			weaponId =cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(info.getProperty(PlayerPropType.WEAPON)).itemId;
+			//weaponId = info.getProperty(PlayerProp.WEAPON);111
+			weaponId = BagUtils.bag.getItemByKeyId(info.data.WEAPON).ID;
 		}else {
 			weaponId = id;
 		}

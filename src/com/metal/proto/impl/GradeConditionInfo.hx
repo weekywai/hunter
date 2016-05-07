@@ -1,6 +1,4 @@
 package com.metal.proto.impl;
-import com.utils.XmlUtils;
-import haxe.xml.Fast;
 
 /**
  * 通关星级判断条件
@@ -24,13 +22,13 @@ class GradeConditionInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "Id");
-		ConditionType = XmlUtils.GetInt(data, "ConditionType");
-		Description = XmlUtils.GetString(data, "Description");
-		Condition = XmlUtils.GetString(data, "Condition");
-		Txt1 = XmlUtils.GetString(data, "Txt1");
-		Txt2 = XmlUtils.GetString(data, "Txt2");		
+		Id = data.Id;
+		ConditionType = data.ConditionType;
+		Description = data.Description;
+		Condition = data.Condition;
+		Txt1 = data.Txt1;
+		Txt2 = data.Txt2;		
 	}
 }

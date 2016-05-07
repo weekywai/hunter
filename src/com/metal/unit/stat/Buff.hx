@@ -7,8 +7,6 @@ import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgView;
 import com.metal.proto.impl.BuffInfo;
-import com.metal.proto.impl.WeaponInfo;
-import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.unit.actor.api.IActor;
 import com.metal.unit.actor.impl.MTActor;
 import com.metal.unit.weapon.impl.WeaponController;

@@ -42,7 +42,7 @@ class ResurrectionCmd extends BaseCmd
 	/*确定复活*/
 	private function suerBtn_click(e):Void
 	{
-		if (PlayerUtils.getInfo().getProperty(PlayerPropType.GEM) < _price)
+		if (PlayerUtils.getInfo().data.GEM < _price)
 		{
 			_widget.getChildAs("tipTxt", Text).text = "钻石不足";
 			_widget.getChild("yesBtn").visible = false;

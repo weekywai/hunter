@@ -2,6 +2,7 @@ package com.metal;
 import com.haxepunk.Engine;
 import com.haxepunk.HXP;
 import com.haxepunk.Sfx;
+import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.component.RewardSystem;
@@ -101,6 +102,7 @@ class GameProcess implements IObserver
 		root = new SimEntity("Game", true, true);
 		UIRoot = new UIManager();
 		root.addComponent(new GameSchedual());
+		
 		root.add(UIRoot);
 		_loop = new MainLoop();
 		_loop.add(root);
@@ -126,6 +128,7 @@ class GameProcess implements IObserver
 	/** after login */
 	public function initGame():Void
 	{
+		root.addComponent(new BagpackSystem());
 		root.addComponent(new GameFactory());
 		root.addComponent(new TaskSystem());
 		root.addComponent(new BattleSystem());

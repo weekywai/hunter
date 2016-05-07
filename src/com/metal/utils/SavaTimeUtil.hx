@@ -109,7 +109,7 @@ class SavaTimeUtil
 								}
 								if (minutes / 5 >= 1)
 								{
-									//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( _playInfo.getProperty(PlayerPropType.POWER) + Math.floor(minutes / 5),PlayerPropType.POWER);
+									//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( _playInfo.getProperty(PlayerProp.POWER) + Math.floor(minutes / 5),PlayerProp.POWER);
 									//latestFlag = true;
 									//upDate_Vit(null);
 									
@@ -118,13 +118,13 @@ class SavaTimeUtil
 							{
 								//加满
 								//latestFlag = true;
-								//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerPropType.POWER);
+								//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
 								//upDate_Vit(null);
 							}
 						}else
 						{
 							//latestFlag = true;
-							//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerPropType.POWER);
+							//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
 							//upDate_Vit(null);
 							//加满体力
 						}
@@ -132,7 +132,7 @@ class SavaTimeUtil
 				}else
 				{
 					//latestFlag = true;
-					//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerPropType.POWER);
+					//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
 					//upDate_Vit(null);
 					//加满体力
 				}

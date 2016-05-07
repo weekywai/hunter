@@ -1,5 +1,5 @@
 package com.metal.enums;
-import com.metal.proto.impl.ItemBaseInfo;
+import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 
 
 

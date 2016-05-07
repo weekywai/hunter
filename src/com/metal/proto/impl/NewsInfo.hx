@@ -9,10 +9,10 @@ import haxe.xml.Fast;
 class NewsInfo
 {
 	public var Id:UInt;
-	public var newsName:String;
+	public var Name:String;
 	public var isDraw:Int = 0;//是否已领取
-	public var newsNum:Int;
-	public var newsDesc:String;
+	public var Num:Int;
+	public var Description:String;
 	public function new() 
 	{
 		//Id = 1;
@@ -21,11 +21,11 @@ class NewsInfo
 		//newsNum = 100000;
 		//newsDesc = "所有玩家";
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "ID");
-		newsName = XmlUtils.GetString(data, "Name");
-		newsDesc= XmlUtils.GetString(data, "Description");
-		newsNum= XmlUtils.GetInt(data, "Num");
+		Id = data.Id;
+		Name = data.Name;
+		Description= data.Description;
+		Num= data.Num;
 	}
 }

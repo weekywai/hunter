@@ -1,4 +1,5 @@
 package com.metal.unit.stat;
+import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.ItemType;
@@ -10,12 +11,10 @@ import com.metal.message.MsgStartup;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.ProtoUtils;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.impl.ArmsInfo;
 import com.metal.proto.impl.BuffInfo;
-import com.metal.proto.impl.EquipItemBaseInfo;
-import com.metal.proto.impl.WeaponInfo;
 import com.metal.proto.manager.BuffManager;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.proto.manager.SkillManager;
@@ -32,6 +31,8 @@ import de.polygonal.core.sys.Component;
 import haxe.ds.IntMap;
 import motion.Actuate;
 import pgr.dconsole.DC;
+
+using com.metal.proto.impl.ItemProto;
 /**
  * 角色状态管理(Buff) 
  * @author weeky
@@ -40,7 +41,7 @@ class PlayerStat extends Component implements IStat
 {
 	/**复活次数*/
 	public var respawnTotal(default, null):Int;
-	public var weapon:WeaponInfo;
+	public var weapon:EquipInfo;
 	public var hpMax(default, null):Int;
 	public var hp(default, null):Int;
 	public var mpMax(default, null):Int;
@@ -91,11 +92,11 @@ class PlayerStat extends Component implements IStat
 	private function set_holdFire(value:Bool):Bool
 	{	
 		//开火状态条件
-		if (weapon.currentBullet <= 0 && weapon.currentBackupBullet<=0) {
+		if (weapon.vo.Bullets <= 0 && weapon.vo.Clips<=0) {
 			//通知购买子弹
-			GameProcess.SendUIMsg(MsgUI.Recharge, Math.floor((weapon.ClipCost/weapon.OneClip)*(weapon.OneClip+weapon.MaxBackupBullet)));
+			GameProcess.SendUIMsg(MsgUI.Recharge, Math.floor((weapon.ClipCost / weapon.OneClip) * (weapon.OneClip + weapon.MaxBackupBullet)));
 		}
-		if (weapon.currentBullet<=0 || _actor.stateID!=ActorState.Attack && _actor.stateID!=ActorState.Stand && _actor.stateID!=ActorState.Move && _actor.stateID!=ActorState.Jump && _actor.stateID!=ActorState.DoubleJump) 
+		if (weapon.vo.Bullets<=0 || _actor.stateID!=ActorState.Attack && _actor.stateID!=ActorState.Stand && _actor.stateID!=ActorState.Move && _actor.stateID!=ActorState.Jump && _actor.stateID!=ActorState.DoubleJump) 
 		{
 			_holdFire = false;
 			return _holdFire;
@@ -143,29 +144,29 @@ class PlayerStat extends Component implements IStat
 		super.onInitComponent();
 		_actor = owner.getComponent(MTActor);
 		_playerInfo = PlayerUtils.getInfo();
-		hpMax = _playerInfo.getProperty(PlayerPropType.MAX_HP);
-		hp = _playerInfo.getProperty(PlayerPropType.HP);
+		hpMax = _playerInfo.data.MAX_HP;
+		hp = _playerInfo.data.HP;
 		//hp = hpMax;
-		mpMax = _playerInfo.getProperty(PlayerPropType.MAX_MP);
-		mp = _playerInfo.getProperty(PlayerPropType.MP);
+		mpMax = _playerInfo.data.MAX_MP;
+		mp = _playerInfo.data.MP;
 		//mp = mpMax;
-		atk = _playerInfo.getProperty(PlayerPropType.FIGHT);
+		atk = _playerInfo.data.FIGHT;
 		_damageModify = SkillManager.instance.getInfo(2511).Effect;
 		//trace("onInitComponent");
-		weapon = cast(cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(_playerInfo.getProperty(PlayerPropType.WEAPON)));
+		weapon = ProtoUtils.castType(BagUtils.bag.getItemByKeyId(_playerInfo.data.WEAPON));
 	}
 	/**消费子弹*/
 	private function cmd_consumeBullet(userData:Int=1)
 	{		
-		if (weapon.currentBullet < userData) return; 
-		//trace("cmd_consumeBullet"+weapon.currentBullet);
-		weapon.currentBullet -= userData;
+		if (weapon.vo.Bullets < userData) return; 
+		//trace("cmd_consumeBullet"+weapon.vo.Bullets);
+		weapon.vo.Bullets -= userData;
 		//通知界面更新
 		GameProcess.NotifyUI(MsgUIUpdate.UpdateBullet, weapon);
 		//注意备用子弹是否无限
-		if (weapon.currentBullet<userData) 
+		if (weapon.vo.Bullets<userData) 
 		{
-			if (weapon.currentBackupBullet>0) 
+			if (weapon.vo.Clips>0) 
 			{
 				//通知换弹夹动作
 				notify(MsgPlayer.Reload);
@@ -176,14 +177,14 @@ class PlayerStat extends Component implements IStat
 	private function cmd_reloadClip(userData:Dynamic)
 	{
 		//注意备用子弹是否无限
-		if (weapon.currentBackupBullet >= weapon.OneClip - weapon.currentBullet) 
+		if (weapon.vo.Clips >= weapon.OneClip - weapon.vo.Bullets) 
 		{
-			weapon.currentBackupBullet -= weapon.OneClip - weapon.currentBullet;
-			weapon.currentBullet = weapon.OneClip;
+			weapon.vo.Clips -= weapon.OneClip - weapon.vo.Bullets;
+			weapon.vo.Bullets = weapon.OneClip;
 		}else 
 		{
-			weapon.currentBullet += weapon.currentBackupBullet;
-			weapon.currentBackupBullet = 0;
+			weapon.vo.Bullets += weapon.vo.Clips;
+			weapon.vo.Clips = 0;
 		}
 		//通知界面更新
 		GameProcess.NotifyUI(MsgUIUpdate.UpdateBullet, weapon);
@@ -282,7 +283,7 @@ class PlayerStat extends Component implements IStat
 		}else {
 			hp = modifyHP;
 		}
-		_playerInfo.setProperty(PlayerPropType.HP, hp);
+		_playerInfo.data.HP = hp;
 		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 	}
 	private function cmd_DoubleScore(userData:Dynamic):Void
@@ -346,7 +347,7 @@ class PlayerStat extends Component implements IStat
 		else
 			hp = Std.int(hp - userData.damage);
 		//trace("hp: "+hp);
-		_playerInfo.setProperty(PlayerPropType.HP, hp);
+		_playerInfo.data.HP = hp;
 		//不用存储
 		GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 		if (hp <= 0) {
@@ -371,8 +372,8 @@ class PlayerStat extends Component implements IStat
 	private function cmd_EnterBoard():Void
 	{
 		//trace("cmd_EnterBoard");
-		//hpMax = _playerInfo.getProperty(PlayerPropType.MAX_HP);
-		//hp = _playerInfo.getProperty(PlayerPropType.HP);
+		//hpMax = _playerInfo.getProperty(PlayerProp.MAX_HP);
+		//hp = _playerInfo.getProperty(PlayerProp.HP);
 		//setWeaponBuff();
 	}
 	
@@ -380,8 +381,8 @@ class PlayerStat extends Component implements IStat
 	{
 		hp = hpMax;
 		mp = mpMax;
-		_playerInfo.setProperty(PlayerPropType.HP, hpMax);
-		_playerInfo.setProperty(PlayerPropType.MP, mpMax);
+		_playerInfo.data.HP = hpMax;
+		_playerInfo.data.MP = mpMax;
 		//只有这里收到复活然后通知其他
 		notify(MsgPlayer.ItemSkill, 1411);
 		_holdFire = false;
@@ -403,8 +404,8 @@ class PlayerStat extends Component implements IStat
 	{
 		trace("cmd_ChangeWeapon");
 		_playerInfo = PlayerUtils.getInfo();
-		atk = _playerInfo.getProperty(PlayerPropType.FIGHT);
-		weapon = cast(cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(_playerInfo.getProperty(PlayerPropType.WEAPON)));
+		atk = _playerInfo.data.FIGHT;
+		weapon = ProtoUtils.castType(GameProcess.root.getComponent(BagpackSystem).bagData.getItemByKeyId(_playerInfo.data.WEAPON));
 	}
 	private function cmd_UpdateMp(userData)
 	{
@@ -414,7 +415,7 @@ class PlayerStat extends Component implements IStat
 		if (mp > mpMax){
 			mp = mpMax;
 		}else{
-			_playerInfo.setProperty(PlayerPropType.MP, mp);
+			_playerInfo.data.MP = mp;
 			GameProcess.NotifyUI(MsgUIUpdate.UpdateInfo);
 		}
 	}
@@ -445,10 +446,10 @@ class PlayerStat extends Component implements IStat
 	
 	private function setWeaponBuff()
 	{
-		var weaponInfo:EquipItemBaseInfo = BagUtils.getEquipingByPart(ItemType.IK2_ARM);
+		var weaponInfo:EquipInfo = BagUtils.getEquipingByPart(ItemType.IK2_ARM);
 		if (weaponInfo == null) 
 			return;
-		var weapon:ArmsInfo = cast GoodsProtoManager.instance.getItemById(weaponInfo.itemId,false);
+		var weapon:EquipInfo = cast GoodsProtoManager.instance.getItemById(weaponInfo.ID,false);
 		
 		if (weapon.SkillsID == -1)
 			return;

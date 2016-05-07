@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.TreasuerHuntInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -10,18 +12,25 @@ import haxe.xml.Fast;
 class TreasuerHuntManager
 {
 	public static var instance(default, null):TreasuerHuntManager = new TreasuerHuntManager();
-	public var _protpGroup:IntMap<TreasuerHuntInfo>;
+	public var _data:IntMap<TreasuerHuntInfo>;
 	public function new() 
 	{
-		_protpGroup = new IntMap<TreasuerHuntInfo>();
+		_data = new IntMap<TreasuerHuntInfo>();
+		var req = RemoteSqlite.instance.request(TableType.ChestGroup);
+		for (i in req) 
+		{
+			var info:TreasuerHuntInfo = new TreasuerHuntInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	public function getChest(key:Int):TreasuerHuntInfo
 	{
-		return _protpGroup.get(key);
+		return _data.get(key);
 	}
 	public function appendXml(data:Xml):Void
 	{
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propBuyChest:Fast, subId:Int;
@@ -31,7 +40,7 @@ class TreasuerHuntManager
 			//subId = Std.parseInt(propBuyChest.node.Level.innerData);
 			var info:TreasuerHuntInfo=new TreasuerHuntInfo() ;
 			info.readXml(propBuyChest);
-			_protpGroup.set(info.id, info);
-		}
+			_data.set(info.id, info);
+		}*/
 	}
 }

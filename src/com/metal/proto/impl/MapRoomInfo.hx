@@ -1,9 +1,7 @@
 package com.metal.proto.impl;
 import com.metal.enums.RunVo;
 import com.utils.StringUtils;
-import com.utils.XmlUtils;
 import haxe.ds.IntMap;
-import haxe.xml.Fast;
 
 /**
  * 房间数据
@@ -48,28 +46,28 @@ class MapRoomInfo
 		runData = new IntMap();
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
 		
-		Id = XmlUtils.GetInt(data, "Id");
-		MapId = XmlUtils.GetString(data, "MapID");
-		RoomType = XmlUtils.GetInt(data, "RoomType");
-		Round = XmlUtils.GetString(data, "RoundNum");
-		Events = parseEvent(XmlUtils.GetString(data, "PlayEvents"));
-		EndName = XmlUtils.GetString(data, "EndCondition");
-		vehicle = XmlUtils.GetInt(data, "Vehicle");
+		Id = data.Id;
+		MapId = data.MapID;
+		RoomType = data.RoomType;
+		Round = data.RoundNum;
+		Events = parseEvent(data.PlayEvents);
+		EndName = data.EndCondition;
+		vehicle = data.Vehicle;
 		
-		MissionType = XmlUtils.GetInt(data, "MissionType");
+		MissionType = data.MissionType;
 		
-		_layerArgs1 = XmlUtils.GetString(data, "Foreground_1");
-		_layerArgs2 = XmlUtils.GetString(data, "Middle_2_1");
-		_layerArgs3 = XmlUtils.GetString(data, "Middle_2_2");
-		_layerArgs4 = XmlUtils.GetString(data, "Middle_2_3");
-		_layerArgs5 = XmlUtils.GetString(data, "Surface_3");
-		_layerArgs6 = XmlUtils.GetString(data, "Vision_4");
-		_layerArgs7 = XmlUtils.GetString(data, "Clouds_5");
-		_layerArgs8 = XmlUtils.GetString(data, "Sky_6");
-		var tempArr:Array<String> = new Array();
+		_layerArgs1 = Std.string(data.Foreground_1);
+		_layerArgs2 = Std.string(data.Middle_2_1);
+		_layerArgs3 = Std.string(data.Middle_2_2);
+		_layerArgs4 = Std.string(data.Middle_2_3);
+		_layerArgs5 = Std.string(data.Surface_3);
+		_layerArgs6 = Std.string(data.Vision_4);
+		_layerArgs7 = Std.string(data.Clouds_5);
+		_layerArgs8 = Std.string(data.Sky_6);
+		var tempArr:Array<String> = [];
 		tempArr.push(_layerArgs1);
 		tempArr.push(_layerArgs2);
 		tempArr.push(_layerArgs3);
@@ -87,22 +85,22 @@ class MapRoomInfo
 		}
 		
 		//切割数据
-		//var str:String =  XmlUtils.GetString(data, "OneTier");
+		//var str:String =  data.OneTier;
 		//OncPicArr = new Array();
 		//OncPicArr = str.split("|");
-		//str = XmlUtils.GetString(data, "MonsterList");
+		//str = data.MonsterList;
 		//Monsters = parseEvent(str);
 	}
 	
 	public function initDefaultValues():Void {
 	
 	}
-	private function parseEvent(data:String):Array<Array<String>>
+	private function parseEvent(data:Dynamic):Array<Array<String>>
 	{
 		var temp = [];
 		var ary1 = [];
 		var ary2 = [];
-		temp = data.split("|");
+		temp = Std.string(data).split("|");
 		for (i in 0...temp.length) 
 		{
 			var str = temp[i];

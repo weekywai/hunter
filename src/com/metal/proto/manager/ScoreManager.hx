@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.ScoreInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -16,6 +18,13 @@ class ScoreManager
 	public function new() 
 	{
 		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Score);
+		for (i in req) 
+		{
+			var info:ScoreInfo = new ScoreInfo();
+			info.readXml(i);
+			_data.set(info.ScoreType, info);
+		}
 	}
 	
 	public function getInfo(Id:Int):ScoreInfo
@@ -24,7 +33,7 @@ class ScoreManager
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		//var score:Fast;
@@ -33,6 +42,6 @@ class ScoreManager
 			scoreInfo = new ScoreInfo();
 			scoreInfo.readXml(i);
 			_data.set(scoreInfo.ScoreType,scoreInfo);
-		}
+		}*/
 	}
 }

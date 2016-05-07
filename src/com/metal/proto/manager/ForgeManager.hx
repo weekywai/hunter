@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.StrengthenInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -10,19 +12,26 @@ import haxe.xml.Fast;
 class ForgeManager
 {
 	public static var instance(default, null):ForgeManager = new ForgeManager();
-	private var _protpForge:IntMap<StrengthenInfo>;
+	private var _data:IntMap<StrengthenInfo>;
 	public function new() 
 	{
-		_protpForge = new IntMap();
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Strengthen);
+		for (i in req) 
+		{
+			var info:StrengthenInfo = new StrengthenInfo();
+			info.readXml(i);
+			_data.set(info.SnID, info);
+		}
 	}
 	public function getProtoForge(key:Int):StrengthenInfo
 	{
-		return _protpForge.get(key);
+		return _data.get(key);
 	}
 	
 	public function appendXml(data:Xml):Void
 	{
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propStrengthen:Fast, subId:Int;
@@ -32,8 +41,8 @@ class ForgeManager
 			subId = Std.parseInt(propStrengthen.node.SnID.innerData);
 			var info:StrengthenInfo=new StrengthenInfo() ;
 			info.readXml(propStrengthen);
-			_protpForge.set(subId, info);
-		}
+			_data.set(subId, info);
+		}*/
 	}
 	
 }

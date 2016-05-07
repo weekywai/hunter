@@ -17,22 +17,22 @@
 	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
 		<Text name="'tipsName'" text="'仓 库'" defaults="'Tip'" topPt="6" />
 	</VBox>
-	<VBox widthPt="100" heightPt="100" leftPt="2" topPt="22" align="'top,left'" childPadding="0">
+	<VBox widthPt="100" heightPt="100" leftPt="2" topPt="22" align="'top,left'">
 		<!--<Widget skinName="'storeBtn6'">
 			<Radio name="'knifeTab'" defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'近战'" />
 		</Widget>	-->
 		<Widget skinName="'storeBtn6'">
-			<Radio name="'gunTab'" defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'枪械'"/>
-		</Widget>	
+			<Radio name="'gunTab'" defaults="'Blue'" group="'group1'" leftPt="9" topPt="16.5" align="'middle'" text="' 枪 械'" />
+		</Widget>
 		<Widget skinName="'storeBtn6'">
-			<Radio name="'armorTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'防具'"/>
-		</Widget>	
+			<Radio name="'armorTab'"defaults="'Blue'" group="'group1'"  leftPt="9" topPt="16.5" align="'middle'" text="' 防 具'"/>
+		</Widget>
 		<!--<Widget skinName="'storeBtn6'">
-			<Radio name="'petTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'僚机'"/>
+			<Radio name="'petTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'僚 机'"/>
 		</Widget>	-->
 		<Widget skinName="'storeBtn6'">
-			<Radio name="'propTab'"defaults="'storeTab'" group="'group1'" leftPt="9" topPt="17" text="'材料'"/>
-		</Widget>	
+			<Radio name="'propTab'"defaults="'Blue'" group="'group1'" leftPt="9" topPt="16.5" align="'middle'" text="' 材 料'"/>
+		</Widget>
     </VBox>	
 	
 	
@@ -100,7 +100,7 @@
 			<Bmp skinName="'xingxing'" />
 		</HBox>-->
 		
-		<Text name="'weaponName'" text="'这是一把枪'" widthPt="100" heightPt="10" topPt="12" defaults="'Gold2'" format-size="30" align="'center,middle'"/>
+		<Text name="'weaponName'" text="'这是一把枪'" widthPt="100" heightPt="10" topPt="12"  format-size="30" align="'center,middle'"/>
 		
 		<Widget name="'weaponBmp'" leftPt="15" topPt="25"/>
 		<!--<Bmp name="'weaponBmp'" skinName="'qiang1'" leftPt="15" topPt="25"/>-->

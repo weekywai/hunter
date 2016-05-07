@@ -1,8 +1,8 @@
 package com.metal.config;
-import com.metal.proto.impl.EquipItemBaseInfo;
 import com.metal.proto.impl.StrengthenInfo;
 import com.metal.proto.manager.ForgeManager;
 
+using com.metal.proto.impl.ItemProto;
 /**
  * ...
  * @author ...
@@ -31,9 +31,9 @@ class EquipProp
 				return 0;
 		}
 	}
-	public static inline function Strengthen(info:EquipItemBaseInfo, lv:Int):StrengthenInfo
+	public static inline function Strengthen(info:EquipInfo, lv:Int):StrengthenInfo
 	{
-		return ForgeManager.instance.getProtoForge(info.equipType * 1000 + lv);
+		return ForgeManager.instance.getProtoForge(info.EquipType * 1000 + lv);
 	}
 	
 	public static inline function compute(atk:Int, strengRate:Float):Int

@@ -8,7 +8,7 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.manager.DuplicateManager;
 import com.metal.proto.manager.NoviceManager;
@@ -106,10 +106,10 @@ class NoviceCourseCmd extends BaseCmd
 		var playerInfo:PlayerInfo = PlayerUtils.getInfo();
 		//trace("getinfo"+playerInfo.Name);
 		var name:String;
-		if (playerInfo.Name == null || playerInfo.Name == "")
+		if (playerInfo.data.NAME == null || playerInfo.data.NAME == "")
 			name = LoginFileUtils.getLoginData().id;
 		else
-			name = playerInfo.Name;
+			name = playerInfo.data.NAME;
 		_widget.getChildAs("noviceName", Text).text = "你好," + name+NoviceManager.instance.getProto(num).text;
 		//if(data==null) {_widget.getChildAs("noviceName", Text).text = "你好," + playerInfo.Name+NoviceManager.instance.getProto(num).text;}
 		//else { _widget.getChildAs("noviceName", Text).text = "你好," + data.id+NoviceManager.instance.getProto(num).text; }

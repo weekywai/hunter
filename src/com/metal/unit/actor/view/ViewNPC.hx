@@ -25,7 +25,7 @@ class ViewNPC extends ViewActor
 	override private function Notify_PostBoot(userData:Dynamic):Void
 	{
 		//判断加载类型
-		var source:Int = owner.getProperty(MonsterInfo).res;
+		var source:Int = owner.getPropertyByCls(MonsterInfo).res;
 		//trace(source);
 		_info = ModelManager.instance.getProto(source);
 		_actor = owner.getComponent(UnitActor);
@@ -53,7 +53,7 @@ class ViewNPC extends ViewActor
 		var items = battle.currentStage().DropItem;
 		//trace("items=="+items);
 		var ran = Math.round(Math.random() * (items.length-1));
-		//trace("RandomID: "+ran+" info:"+items[ran].ItemId);
+		//trace("RandomID: "+ran+" info:"+items[ran].ID);
 		createDropItem([items[ran]]);
 		setAction(ActionType.teshu_1, false);
 	}

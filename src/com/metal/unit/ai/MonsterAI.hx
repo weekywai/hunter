@@ -46,7 +46,7 @@ class MonsterAI extends BaseAiControl
 	override function onInitComponent():Void 
 	{
 		super.onInitComponent();
-		_monsterInfo = owner.getProperty(MonsterInfo);
+		_monsterInfo = owner.getPropertyByCls(MonsterInfo);
 		//trace(_id + ">>" + _monsterInfo.AiType);
 		_monsterRoot = AiFactory.instance.createAI(_monsterInfo.AiType);
 		_actor = owner.getComponent(UnitActor);

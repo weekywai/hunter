@@ -8,16 +8,16 @@ import haxe.xml.Fast;
  */
 class TreasuerHuntInfo
 {
-	public var id:Int;
+	public var Id:Int;
 	public var ItemList:String;
 	public function new() 
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		id = XmlUtils.GetInt(data, "ID");
-		ItemList = XmlUtils.GetString(data, "ItemList");
+		Id = data.Id;
+		ItemList = data.ItemList;
 	}
 	
 }

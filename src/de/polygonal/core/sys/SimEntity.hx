@@ -9,6 +9,7 @@ import de.polygonal.core.sys.Component;
 import de.polygonal.core.util.Assert.assert;
 import de.polygonal.core.util.ClassUtil;
 import de.polygonal.ds.Sll;
+import haxe.ds.ObjectMap;
 import haxe.ds.StringMap.StringMap;
 import openfl.errors.Error;
 
@@ -19,7 +20,7 @@ import openfl.errors.Error;
 class SimEntity extends Entity implements IObservable
 {
 	public var compMap(default, null):Sll<Component>;
-	public var propMap(default, null):StringMap<Dynamic>;
+	public var propMap(default, null):List<Dynamic>;
 	private var _initialized:Bool;
 	
 	public var keyId:Int;
@@ -49,7 +50,7 @@ class SimEntity extends Entity implements IObservable
 	{
 		super(id, isGlobal);
 		compMap = new Sll();
-		propMap = new StringMap();
+		propMap = new List();
 		_initialized = false;
 		if(autoInit)
 			init();
@@ -85,14 +86,13 @@ class SimEntity extends Entity implements IObservable
 	 * @param	prop 属性
 	 * @param	implementTypes 实现的方法
 	 */	
-	public function addProperty(prop : Dynamic) : Dynamic {
-		var id:String = ClassUtil.getUnqualifiedClassName(prop);
-		if (propMap.exists(id))
+	public function addProperty<T>(prop : T) : T {
+		if (Lambda.has(propMap, prop))
 		{
 			return prop;
 		}
 		
-		propMap.set(id, prop);
+		propMap.add(prop);
 		
 		return prop;
 	}
@@ -123,8 +123,7 @@ class SimEntity extends Entity implements IObservable
 	}
 	public function removeProp(prop:Dynamic):Bool 
 	{
-		var id:String = ClassUtil.getUnqualifiedClassName(prop);
-		return propMap.remove(id);
+		return propMap.remove(prop);
 	}
 	/**
 	 * 获取组件，通过类型形式，启动前调用此方法会报错
@@ -150,15 +149,32 @@ class SimEntity extends Entity implements IObservable
 	}
 	/**
 	 * 获取属性，通过类型形式，启动前调用此方法会报错
-	 * @param	type     类型
-	 * @param	mustFind 是否一定要找到，否则会报错
+	 * @param	field     属性
+	 * @param	val 	  变量，否则会报错
 	 * @return
 	 */	
-	public function getProperty<T:Dynamic>(type:Class<T>):T 
+	public function getProperty<T>(field:String, ?val:Dynamic):Null<T> 
 	{
-		var id:String = ClassUtil.getUnqualifiedClassName(type);
-		//trace(propMap);
-		return untyped propMap.get(id);
+		var temp = Lambda.find(propMap, function(e) {
+			if(val!=null){
+				if (Reflect.field(e, field) == val)
+					return true;
+			}else {
+				if (Reflect.field(e, field) != null)
+					return true;
+			}
+			return false;
+		});
+		return temp;
+	}
+	public function getPropertyByCls<T>(cls:Class<T>):Null<T> 
+	{
+		var temp = Lambda.find(propMap, function(e){
+			if (Type.typeof(e) == Type.typeof(cls))
+				return true;
+			return false;
+		});
+		return temp;
 	}
 	/*
 	override function onRemove(parent:Entity):Void 
@@ -215,6 +231,7 @@ class SimEntity extends Entity implements IObservable
 		}
 		compMap.clear(true);
 		compMap = null;
+		propMap.clear();
 		propMap = null;
 		observable.free();
 		observable = null;

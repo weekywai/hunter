@@ -89,9 +89,9 @@ class ThroughCmd extends BaseCmd
 						handler();
 					}
 				}else {
-					if (oneInfo.Id <= (playerInfo.getProperty(PlayerPropType.THROUGH) + 1))
+					if (oneInfo.Id <= (playerInfo.data.THROUGH + 1))
 					{
-						if (oneInfo.Id == (playerInfo.getProperty(PlayerPropType.THROUGH) + 1)) {
+						if (oneInfo.Id == (playerInfo.data.THROUGH + 1)) {
 							Actuate.effects(handlerBtn, 0.8).filter(GlowFilter, {color:0xFFFFCC, blurX:45,blurY:45, strength:1} ).repeat().reflect();
 						}
 						handlerBtn.getChild("lock").free();
@@ -113,7 +113,7 @@ class ThroughCmd extends BaseCmd
 			_scrollPanel.w = _scroll.wparent.w * (i + 1);
 		}
 		_scroll.widthPt = 100;
-		_page = Math.floor(playerInfo.getProperty(PlayerPropType.THROUGH) / 5);
+		_page = Math.floor(playerInfo.data.THROUGH / 5);
 		if (Main.config.get("console")=="true")
 			_maxPage = 12;
 		else
@@ -176,11 +176,9 @@ class ThroughCmd extends BaseCmd
 		{
 			var _playInfo = PlayerUtils.getInfo();
 			var info:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
-			if (_playInfo.getProperty(PlayerPropType.POWER) >= info.NeedPower) {
-				//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo(_playInfo.getProperty(PlayerPropType.POWER) - info.NeedPower, PlayerPropType.POWER);
-				var power = _playInfo.getProperty(PlayerPropType.POWER) - info.NeedPower;
-				notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.POWER, data:power } );
-				//FileUtils.setFileData(_playInfo, FilesType.player);
+			if (_playInfo.data.POWER >= info.NeedPower) {
+				var power = _playInfo.data.POWER - info.NeedPower;
+				notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.POWER, data:power } );
 				notify(MsgUIUpdate.Vit, _playInfo);
 				sendMsg(MsgUI.Battle, checkpoint);
 				dispose();
@@ -196,16 +194,15 @@ class ThroughCmd extends BaseCmd
 		if (flag)
 		{
 			var _playInfo = PlayerUtils.getInfo();
-			if (_playInfo.getProperty(PlayerPropType.GEM) < 100)
+			if (_playInfo.data.GEM < 100)
 			{
 				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 				return;
 			}
 			var duplicate:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
-			notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.POWER, data:_playInfo.getProperty(PlayerPropType.POWER) + (100 - duplicate.NeedPower) } );
-			//FileUtils.setFileData(_playInfo, FilesType.player);
-			notify( MsgUIUpdate.Vit,_playInfo);
-			sendMsg(MsgUI.Battle,checkpoint);
+			notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.POWER, data:_playInfo.data.POWER + (100 - duplicate.NeedPower) } );
+			notify( MsgUIUpdate.Vit, _playInfo);
+			sendMsg(MsgUI.Battle, checkpoint);
 			
 			dispose();
 		}

@@ -1,5 +1,6 @@
 package com.metal.ui.popup;
 
+import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.PlayerPropType;
@@ -47,13 +48,13 @@ class RechargeCmd extends BaseCmd
 	/*确定补满子弹*/
 	private function suerBtn_click(e):Void
 	{
-		if (PlayerUtils.getInfo().getProperty(PlayerPropType.GOLD) < _price)
+		if (PlayerUtils.getInfo().getProperty(PlayerProp.GOLD) < _price)
 		{
 			_widget.getChildAs("Load", Text).text = "金币不足";
 			_widget.getChild("suerBtn").visible = false;
 			return;
 		}
-		var tempInfo=cast(cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(PlayerUtils.getInfo().getProperty(PlayerPropType.WEAPON)));
+		var tempInfo = GameProcess.root.getComponent(BagpackSystem).equipBagData.getItemByKeyId(PlayerUtils.getInfo().WEAPON);
 		notifyRoot(MsgNet.BuyFullClip, { weapon:tempInfo, noTip:true} );
 		notify(MsgUIUpdate.UpdateBullet, tempInfo);
 		//notifyRoot(MsgPlayer.UpdateMoney, -_price);

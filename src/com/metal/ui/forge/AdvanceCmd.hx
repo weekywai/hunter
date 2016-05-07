@@ -8,16 +8,13 @@ import com.metal.message.MsgNet;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.AdvanceInfo;
-import com.metal.proto.impl.GonUpGroupInfo;
-import com.metal.proto.impl.ItemBaseInfo;
-import com.metal.proto.impl.WeaponInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.manager.AdvanceManager;
 import com.metal.proto.manager.GoodsProtoManager;
-import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
+import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.utils.BagUtils;
 import de.polygonal.core.sys.SimEntity;
 import haxe.ds.IntMap;
@@ -25,6 +22,8 @@ import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
+
+using com.metal.proto.impl.ItemProto;
 /**
  * ...
  * @author hyg
@@ -84,8 +83,8 @@ class AdvanceCmd extends ForgetBase
 			//trace("==material===" + materialArr[i][0]);
 			var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + tempInfo.ResId + '.png' , x:15, y:15 } );
 			//品质
-			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId), x:13, y:13 } );
-			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId,0), x:5, y:4 } );
+			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:13, y:13 } );
+			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID,0), x:5, y:4 } );
 			
 			var oneGoods = UIBuilder.buildFn('ui/forge/oneGoods.xml')( { } );
 			
@@ -118,14 +117,14 @@ class AdvanceCmd extends ForgetBase
 					//
 					//if (selectImg.visible)
 					//{
-						//if (meterailMap.get(oneData.itemId) == null) meterailMap.set(oneData.itemId,oneData);
+						//if (meterailMap.get(oneData.ID) == null) meterailMap.set(oneData.ID,oneData);
 					//}else
 					//{
-						//meterailMap.remove(oneData.itemId);
+						//meterailMap.remove(oneData.ID);
 					//}
 				//} );
 			
-			oneGoods.getChildAs("goodsName", Text).text = tempInfo.itemName;
+			oneGoods.getChildAs("goodsName", Text).text = tempInfo.Name;
 			if (tempInfo.strLv == null) oneGoods.getChildAs("strLv", Text).text = "";
 			else oneGoods.getChildAs("strLv", Text).text = "Lv."+tempInfo.strLv;
 		}
@@ -153,11 +152,11 @@ class AdvanceCmd extends ForgetBase
 			return;
 		}else
 		{
-			var levelUpItemId:Int = cast(GoodsProtoManager.instance.getItemById(_goodsInfo.itemId), WeaponInfo).LevelUpItemID;
+			var levelUpItemId:Int = GoodsProtoManager.instance.getItemById(_goodsInfo.ID).LevelUpItemID;
 			if (levelUpItemId == -1) return;
 			var materialInfo:AdvanceInfo = AdvanceManager.instance.getProtpAdvance(levelUpItemId);
 			var _playerInfo:PlayerInfo = PlayerUtils.getInfo();
-			if (_playerInfo.getProperty(PlayerPropType.GOLD) < materialInfo.NeedGold)
+			if (_playerInfo.data.GOLD < materialInfo.NeedGold)
 			{
 				sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup} );
 				return;
@@ -167,10 +166,11 @@ class AdvanceCmd extends ForgetBase
 			var materialArr:Array<Array<Int>> = desti.analysis(materialInfo.Mat);
 			
 			
-			var removeMat:Array<ItemBaseInfo> = [_goodsInfo];
+			var removeMat:Array<Int> = [_goodsInfo.ID];
+			//var removeMat:Array<ItemBaseInfo> = [_goodsInfo];
 			for (j in 0...materialArr.length)
 			{
-				removeMat.push(BagUtils.getOneBagInfo(materialArr[j][0]));
+				removeMat.push(materialArr[j][0]);
 			}
 			notifyRoot(MsgNet.UpdateBag, { type:0, data:removeMat } );
 			//更新背包或者装备背包
@@ -180,14 +180,14 @@ class AdvanceCmd extends ForgetBase
 				_goodsInfo.itemIndex -= 1000;
 				if (_goodsInfo.Kind == ItemType.IK2_GON)
 				{
-					notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.WEAPON, data:item});
+					notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.WEAPON, data:item});
 				}
 				else if (_goodsInfo.Kind == ItemType.IK2_ARM)
 				{
-					notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.ARMOR, data:item});
+					notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.ARMOR, data:item});
 				}
 			}else {
-				notifyRoot(MsgNet.UpdateBag, { type:1, data:[item] } );
+				notifyRoot(MsgNet.UpdateBag, { type:1, data:[item.ID] } );
 			}
 			item.itemIndex = _goodsInfo.itemIndex;
 			notifyRoot(MsgPlayer.UpdateMoney, -materialInfo.NeedGold);

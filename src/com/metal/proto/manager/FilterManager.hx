@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.FilterInfo;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
@@ -12,19 +14,25 @@ class FilterManager
 {
 	public static var instance(default, null):FilterManager = new FilterManager();
 	
-	private var _protpFilter:StringMap<FilterInfo>;
+	private var _data:StringMap<FilterInfo>;
 	public function new() 
 	{
-		_protpFilter = new StringMap();
+		_data = new StringMap();
+		var req = RemoteSqlite.instance.request(TableType.Filter);
+		for (i in req) 
+		{
+			var info:FilterInfo = new FilterInfo();
+			info.readXml(i);
+			_data.set(info.name, info);
+		}
 	}
 	public function getFilterProtp(key:String):FilterInfo
 	{
-		return _protpFilter.get(key);
+		return _data.get(key);
 	}
 	public function appendXml(data:Xml):Void
 	{
-		
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propFilter:Fast;
@@ -34,7 +42,7 @@ class FilterManager
 			var info:FilterInfo ;
 			info = new FilterInfo();
 			info.readXml(propFilter);
-			_protpFilter.set(info.name, info);
-		}
+			_data.set(info.name, info);
+		}*/
 	}
 }

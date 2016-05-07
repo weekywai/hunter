@@ -1,7 +1,4 @@
 package com.metal.proto.impl;
-import com.utils.StringUtils;
-import com.utils.XmlUtils;
-import haxe.xml.Fast;
 
 /**
  * ...
@@ -13,7 +10,7 @@ class Task_Info
 	/**id*/
 	public var Id:Int;
 	/**任务名称*/
-	public var name:String;
+	public var Name:String;
 	/**任务类型*/
 	public var taskType:String;
 
@@ -22,24 +19,10 @@ class Task_Info
 		
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "ID");
-		name = XmlUtils.GetString(data, "Name");
-		taskType = XmlUtils.GetString(data, "taskType");
+		Id = data.Id;
+		Name = data.Name;
+		taskType = data.taskType;
 	}
-	
-	private function praseEfect(data:Dynamic):Array<Int>
-	{
-		if (data == "")
-			return null;
-		var temp:Array<Int> = [];
-		var ary = Std.string(data).split(",");
-		for (i in 0...ary.length) 
-		{
-			temp.push(StringUtils.GetInt(ary[i]));
-		}
-		return temp;
-	}
-	
 }

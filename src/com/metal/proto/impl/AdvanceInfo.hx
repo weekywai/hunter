@@ -9,7 +9,7 @@ import haxe.xml.Fast;
 class AdvanceInfo
 {
 	/**目标物品ID*/
-	public var DstID:Int;
+	public var ID:Int;
 	/**目标物品名称*/
 	public var DstName:String;
 	/**所需材料*/
@@ -22,17 +22,17 @@ class AdvanceInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		DstID = XmlUtils.GetInt(data, "DstID");
-		DstName = XmlUtils.GetString(data, "DstName");
-		Mat = XmlUtils.GetString(data, "Mat");
-		NeedGold = XmlUtils.GetInt(data, "NeedGold");
-		NeedDiamond = XmlUtils.GetInt(data, "NeedDiamond");
+		ID = data.DstID;
+		DstName = data.DstName;
+		Mat = data.Mat;
+		NeedGold = data.NeedGold;
+		NeedDiamond = data.NeedDiamond;
 	}
 	public function initDefaultValues():Void
 	{
-		DstID = 0;
+		ID = 0;
 		DstName = "";
 		Mat = "";
 		NeedGold = 0;

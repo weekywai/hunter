@@ -1,6 +1,7 @@
 package com.metal.ui.forge;
 
 import com.marshgames.openfltexturepacker.TexturePackerImport.TexturePackerFrame;
+import com.metal.component.BagpackSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.EquipProp;
 import com.metal.config.ItemType;
@@ -15,16 +16,16 @@ import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.impl.ItemBaseInfo;
+import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 import com.metal.proto.impl.StrengthenInfo;
 import com.metal.proto.manager.ForgeManager;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
 import de.polygonal.core.sys.SimEntity;
-import haxe.ds.IntMap;
 import haxe.Timer;
+import haxe.ds.IntMap;
 import openfl.display.Sprite;
 import openfl.display.Tilesheet;
 import openfl.events.MouseEvent;
@@ -107,7 +108,7 @@ class StrengthenCmd extends ForgetBase
 		//强化材料显示
 		var listPanel:Widget = _widget.getChildAs("listPanel", Widget);
 		if (listPanel.numChildren > 0) listPanel.removeChildren();
-		metarialArr = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData.getUpgradeMaterial(_goodsInfo);
+		metarialArr = GameProcess.root.getComponent(BagpackSystem).bagData.getUpgradeMaterial(_goodsInfo);
 		consumptionArr = [];
 		var panelNum:Int = 0;
 		for (i in 0...metarialArr.length)
@@ -116,8 +117,8 @@ class StrengthenCmd extends ForgetBase
 			
 			var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + tempInfo.ResId + '.png' , x:15, y:15 } );
 			//品质
-			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId), x:13, y:13 } );
-			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId,0), x:5, y:4 } );
+			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:13, y:13 } );
+			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID,0), x:5, y:4 } );
 			
 			var oneGoods = UIBuilder.buildFn('ui/forge/oneGoods.xml')( { } );
 			
@@ -155,16 +156,16 @@ class StrengthenCmd extends ForgetBase
 					selectImg.visible = !selectImg.visible;
 					if (selectImg.visible)
 					{
-						//if (meterailMap.get(tempInfo.itemId) == null) 
+						//if (meterailMap.get(tempInfo.ID) == null) 
 						//{
 							consumptionArr.push(cast tempInfo);
-							//meterailMap.set(tempInfo.itemId,tempInfo);
+							//meterailMap.set(tempInfo.ID,tempInfo);
 						//}
 					}else
 					{
 						for (j in 0...consumptionArr.length)
 						{
-							if (tempInfo.itemId == consumptionArr[j].itemId && tempInfo.keyId == consumptionArr[j].keyId)
+							if (tempInfo.ID == consumptionArr[j].ID && tempInfo.keyId == consumptionArr[j].keyId)
 							{
 								consumptionArr.splice( j, 1);
 								break;
@@ -181,7 +182,7 @@ class StrengthenCmd extends ForgetBase
 					notify(MsgUIUpdate.ForgeUpdate, {type:ForgeUpdate.Price,data: "消耗金币:" +needGoldNum} );
 				} );
 				
-			oneGoods.getChildAs("goodsName", Text).text = tempInfo.itemName;
+			oneGoods.getChildAs("goodsName", Text).text = tempInfo.Name;
 			oneGoods.getChildAs("strLv", Text).text = "Lv."+tempInfo.strLv;
 		}
 		
@@ -219,34 +220,39 @@ class StrengthenCmd extends ForgetBase
 					}
 				}
 				var _playerInfo:PlayerInfo = PlayerUtils.getInfo();
-				if (_playerInfo.getProperty(PlayerPropType.GOLD) < allExp)
+				if (_playerInfo.data.GOLD < allExp)
 				{
 					GameProcess.SendUIMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup} );
 					return;
 				}
 				//先移除
 				consumptionArr.push(_goodsInfo);
-				notifyRoot(MsgNet.UpdateBag, { type:0, data:consumptionArr } );
+				var consum = [];
+				for (item in consumptionArr) 
+				{
+					consum.push(item.ID);
+				}
+				notifyRoot(MsgNet.UpdateBag, { type:0, data:consum } );
 				//再添加
 				_goodsInfo.strExp += allExp;
 				numExp(_goodsInfo.strLv);
 				
-				if (_goodsInfo.itemIndex >= 1000)
+				if (_goodsInfo.vo.Equip==1)
 				{
-					_goodsInfo.itemIndex -= 1000;
+					_goodsInfo.vo.Equip = 0;
 					if (_goodsInfo.Kind == ItemType.IK2_GON)
 					{
 						trace("weapon");
-						notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.WEAPON, data:_goodsInfo});
+						notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.WEAPON, data:_goodsInfo});
 					}
 					else if (_goodsInfo.Kind == ItemType.IK2_ARM)
 					{
 						trace("armor");
-						notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.ARMOR, data:_goodsInfo});
+						notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.ARMOR, data:_goodsInfo});
 					}
 				}else {
 					trace("normal");
-					notifyRoot(MsgNet.UpdateBag, { type:1, data:[_goodsInfo] } );
+					notifyRoot(MsgNet.UpdateBag, { type:1, data:[_goodsInfo.ID] } );
 				}
 				
 				setData(_goodsInfo);
@@ -265,7 +271,7 @@ class StrengthenCmd extends ForgetBase
 	/**升级经验等级判断*/
 	private function numExp(currLv:Int):Void
 	{
-		var strInfo:StrengthenInfo = EquipProp.Strengthen(_goodsInfo, currLv + 1);// ForgeManager.instance.getProtpForge(Std.int(_goodsInfo.itemType * 1000 + (currLv+1)));
+		var strInfo:StrengthenInfo = EquipProp.Strengthen(_goodsInfo, currLv + 1);// ForgeManager.instance.getProtpForge(Std.int(_goodsInfo.ItemType * 1000 + (currLv+1)));
 		
 		if (strInfo.MaxExp < _goodsInfo.strExp)
 		{

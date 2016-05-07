@@ -14,7 +14,7 @@ import com.metal.message.MsgInput;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
 import com.metal.unit.stat.PlayerStat;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.manager.PlayerModelManager;
 import com.metal.scene.board.impl.BattleResolver;
@@ -170,7 +170,7 @@ class ViewPlayer extends ViewActor
 	
 	override function Notify_Soul(userData:Dynamic):Void 
 	{
-		//var info:PlayerModelInfo = PlayerModelManager.instance.getInfo(_info.getProperty(PlayerPropType.ROLEID));
+		//var info:PlayerModelInfo = PlayerModelManager.instance.getInfo(_info.getProperty(PlayerProp.ROLEID));
 		//createDropItem(info.dropItem);
 	}
 	override function Notify_Respawn(userData:Dynamic):Void 
@@ -377,7 +377,7 @@ class ViewPlayer extends ViewActor
 				for (e in collides) 
 				{
 					var hitInfo = new BulletHitInfo();
-					hitInfo.atk = PlayerModelManager.instance.getInfo(_playerInfo.getProperty(PlayerPropType.ROLEID)).Att*10;//近身5倍攻击力
+					hitInfo.atk = PlayerModelManager.instance.getInfo(_playerInfo.data.ROLEID).Att*10;//近身5倍攻击力
 					hitInfo.fix = _weapon.bulletReq.fix;
 					hitInfo.melee = true;
 					//trace(Type.typeof(e));

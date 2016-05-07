@@ -2,14 +2,13 @@ package com.metal.ui.forge;
 
 import com.metal.config.BagType;
 import com.metal.config.EquipProp;
+import com.metal.config.ItemType;
 import com.metal.config.SfxManager;
 import com.metal.enums.NoviceOpenType;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.proto.impl.ArmsInfo;
 import com.metal.proto.impl.StrengthenInfo;
-import com.metal.proto.impl.WeaponInfo;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.ui.BaseCmd;
 import de.polygonal.core.event.IObservable;
@@ -21,6 +20,8 @@ import ru.stablex.ui.widgets.TabPage;
 import ru.stablex.ui.widgets.TabStack;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
+
+using com.metal.proto.impl.ItemProto;
 /**
  * ...
  * @author hyg
@@ -136,8 +137,8 @@ class ForgeCmd extends BaseCmd
 			_goodsPanel.free(true);
 		_goodsPanel = new Widget();
 		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/big/' + goodsData.ResId + '.png' ,x:-173,y:-87} );
-		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsData.itemId,3) ,x:-183,y:-94} );
-		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsData.itemId, 2), x: -201 , y: -112 } );
+		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsData.ID,3) ,x:-183,y:-94} );
+		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsData.ID, 2), x: -201 , y: -112 } );
 		_goodsPanel.addChild(quality);
 		_goodsPanel.addChild(img);
 		_goodsPanel.addChild(quality_1);
@@ -145,17 +146,17 @@ class ForgeCmd extends BaseCmd
 		_select.addChild(_goodsPanel);
 	
 		var equipLv:StrengthenInfo = EquipProp.Strengthen(goodsData, goodsData.strLv);
-		if (Std.is(goodsData, WeaponInfo))
+		if (goodsData.Kind == ItemType.IK2_GON)
 		{
 			_goodsType.text = "攻击";
 			_goodsValue.text = "+" + Math.floor(goodsData.Att * equipLv.Attack / 10000);
-		}else if (Std.is(goodsData, ArmsInfo))
+		}else if (goodsData.Kind == ItemType.IK2_ARM)
 		{
 			_goodsType.text = "生命";
 			_goodsValue.text = "+" + Math.floor(goodsData.Hp * equipLv.HPvalue / 10000);
 			
 		}
-		_goodsLv.resetFormat(EquipProp.levelColor(goodsData.InitialQuality), 24);
+		_goodsLv.resetFormat(EquipProp.levelColor(goodsData.Color), 24);
 		_goodsLv.text = "LV:"+goodsData.strLv;
 	}
 	

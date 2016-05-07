@@ -24,19 +24,19 @@ class BuffInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "SN");
-		typeId = XmlUtils.GetInt(data, "BuffID");
-		level = XmlUtils.GetInt(data, "LV");
-		name = XmlUtils.GetString(data, "Name");
-		desc= XmlUtils.GetString(data, "Desc");
-		kind= XmlUtils.GetInt(data, "Type");
-		areaDamage = XmlUtils.GetInt(data, "AreaDamage");
-		EffectScript = praseList(XmlUtils.GetString(data, "EffectScript"));
-		overlap = XmlUtils.GetInt(data, "OverlapNum");
-		icon = XmlUtils.GetString(data, "Icon");
-		res = XmlUtils.GetString(data, "resIds");
+		Id = data.Id;
+		typeId = data.BuffID;
+		level = data.LV;
+		name = data.Name;
+		desc= data.Desc;
+		kind= data.Type;
+		areaDamage = data.AreaDamage;
+		EffectScript = praseList(data.EffectScript);
+		overlap = data.OverlapNum;
+		icon = data.Icon;
+		res = data.resIds;
 	}
 	private function praseList(data:Dynamic):Array<Int>
 	{

@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.AppearInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -16,7 +18,14 @@ class AppearManager
 	
 	public function new() 
 	{
-		_data = new IntMap();	
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Appear);
+		for (i in req) 
+		{
+			var info:AppearInfo = new AppearInfo();
+			info.readXml(i);
+			_data.set(info.ID, info);
+		}
 	}
 	
 	public function getProto(key:Int):AppearInfo
@@ -25,7 +34,7 @@ class AppearManager
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -33,6 +42,6 @@ class AppearManager
 			var info:AppearInfo = new AppearInfo();
 			info.readXml(propText);
 			_data.set(info.ID, info);
-		}
+		}*/
 	}
 }

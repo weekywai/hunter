@@ -2,6 +2,7 @@ package com.metal;
 import com.metal.config.ResPath;
 import com.metal.message.MsgNet;
 import com.metal.message.MsgPlayer;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.manager.ActorPropertyManager;
 import com.metal.proto.manager.AdvanceManager;
 import com.metal.proto.manager.AppearManager;
@@ -10,7 +11,7 @@ import com.metal.proto.manager.BuffManager;
 import com.metal.proto.manager.BulletManager;
 import com.metal.proto.manager.ChestManager;
 import com.metal.proto.manager.DecompositionManager;
-import com.metal.proto.manager.Diamond_Manager;
+import com.metal.proto.manager.DiamondManager;
 import com.metal.proto.manager.DuplicateManager;
 import com.metal.proto.manager.EffectManager;
 import com.metal.proto.manager.FilterManager;
@@ -28,11 +29,12 @@ import com.metal.proto.manager.NoviceManager;
 import com.metal.proto.manager.PlayerModelManager;
 import com.metal.proto.manager.ScoreManager;
 import com.metal.proto.manager.SkillManager;
-import com.metal.proto.manager.Task_Manager;
 import com.metal.proto.manager.TaskManager;
+import com.metal.proto.manager.QuestsManager;
 import com.metal.proto.manager.TreasuerHuntManager;
 import com.metal.utils.LoginFileUtils;
 import openfl.Assets;
+
 
 /**
  * 加载资源
@@ -48,7 +50,7 @@ class LoadSource
 		_praseProto = new Map();
 		_praseProto.set("prop_actor", ActorPropertyManager);
 		_praseProto.set("prop_item", GoodsProtoManager);
-		_praseProto.set("prop_quest", TaskManager);
+		_praseProto.set("prop_quest", QuestsManager);
 		_praseProto.set("prop_stage", DuplicateManager);
 		_praseProto.set("prop_stageroom", MapInfoManager);
 		_praseProto.set("prop_gradeCondition", GradeConditionManager);
@@ -63,7 +65,7 @@ class LoadSource
 		_praseProto.set("prop_monster_appear", AppearManager);
 		_praseProto.set("prop_appear", MonsterAppeatManager);
 		_praseProto.set("prop_level_up_equip", AdvanceManager);
-		_praseProto.set("prop_diamond_shop", Diamond_Manager);
+		_praseProto.set("prop_diamond_shop", DiamondManager);
 		_praseProto.set("prop_filter", FilterManager);
 		_praseProto.set("prop_buff", BuffManager);
 		_praseProto.set("prop_buy_chest", ChestManager);
@@ -71,7 +73,7 @@ class LoadSource
 		_praseProto.set("prop_score", ScoreManager);
 		_praseProto.set("prop_partner", PlayerModelManager);
 		_praseProto.set("prop_Live_Ness", LiveNessManager);
-		_praseProto.set("prop_task", Task_Manager);
+		_praseProto.set("prop_task", TaskManager);
 		_praseProto.set("prop_gold_shop", Gold_Manager);
 		_praseProto.set("prop_text", NoviceManager);
 		_praseProto.set("prop_news", NewsManager);
@@ -80,7 +82,7 @@ class LoadSource
 	
 	private function parseProto()
 	{
-		var source:String;
+		/*var source:String;
 		var xml:Xml; 
 		for (key in _praseProto.keys()) 
 		{
@@ -89,11 +91,12 @@ class LoadSource
 			xml = Xml.parse(Assets.getText(source));
 			_praseProto.get(key).instance.appendXml(xml);
 			_praseProto.remove(key);
-		}
+		}*/
 		isLoaded = true;
 		//trace("MsgNet.AssignAccount");
-		GameProcess.root.notify(MsgNet.AssignAccount);
+		//GameProcess.root.notify(MsgNet.AssignAccount);
 		GameProcess.root.notify(MsgPlayer.UpdateInitFileData, null);
 	}
+	
 	
 }

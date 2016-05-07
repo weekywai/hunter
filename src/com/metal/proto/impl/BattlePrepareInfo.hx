@@ -21,14 +21,14 @@ class BattlePrepareInfo
 		HasNum = 0;
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ID = XmlUtils.GetInt(data, "ID");
-		MaxNum = XmlUtils.GetInt(data, "MaxNum");
-		SkillId = XmlUtils.GetInt(data, "Skills");
-		Gold = XmlUtils.GetInt(data, "Gold");
-		Dimond = XmlUtils.GetInt(data, "Dimond");
-		useType = XmlUtils.GetInt(data, "UseType");
+		ID = data.ID;
+		MaxNum = data.MaxNum;
+		SkillId = data.Skills;
+		Gold = data.Gold;
+		Dimond = data.Dimond;
+		useType = data.UseType;
 	}
 	
 }

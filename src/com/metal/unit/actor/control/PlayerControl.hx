@@ -237,9 +237,9 @@ class PlayerControl extends Component
 	}
 	private function Input_Skill(userData:Dynamic):Void {
 		if(userData==null)
-			notify(MsgPlayer.ChangeSkill, PlayerUtils.getInfo().getProperty(PlayerPropType.SKILL1));
+			notify(MsgPlayer.ChangeSkill, PlayerUtils.getInfo().data.SKILL1);
 		else
-			notify(MsgPlayer.ChangeSkill, PlayerUtils.getInfo().getProperty(userData));
+			notify(MsgPlayer.ChangeSkill, Reflect.field(PlayerUtils.getInfo().data, "SKILL"+userData));
 	}
 	
 	private function Stand():Bool {

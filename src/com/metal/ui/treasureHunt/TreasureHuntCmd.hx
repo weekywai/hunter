@@ -1,6 +1,5 @@
 package com.metal.ui.treasureHunt;
 
-import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.SfxManager;
 import com.metal.enums.NoviceOpenType;
@@ -10,15 +9,14 @@ import com.metal.message.MsgNet;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
-import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ChestInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.manager.ChestManager;
 import com.metal.proto.manager.TreasuerHuntManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.ui.popup.GainGoodsCmd;
-import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
@@ -74,7 +72,7 @@ class TreasureHuntCmd extends BaseCmd
 			SfxManager.getAudio(AudioType.Btn).play();
 			num = 1;
 			_chestInfo = ChestManager.instance.getChest(1);
-			if (_playerInfo.getProperty(PlayerPropType.GEM) < _chestInfo.NeedDiamond)
+			if (_playerInfo.data.GEM < _chestInfo.NeedDiamond)
 			{
 				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 				return;
@@ -94,7 +92,7 @@ class TreasureHuntCmd extends BaseCmd
 			SfxManager.getAudio(AudioType.Btn).play();
 			num = 2;
 			_chestInfo = ChestManager.instance.getChest(2);
-			if (_playerInfo.getProperty(PlayerPropType.GEM) < _chestInfo.NeedDiamond)
+			if (_playerInfo.data.GEM < _chestInfo.NeedDiamond)
 			{
 				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 				return;
@@ -112,7 +110,7 @@ class TreasureHuntCmd extends BaseCmd
 		{
 			
 			var itemIdList:Array<Int> = [];
-			var hunt = _playerInfo.getProperty(PlayerPropType.HUNT);
+			var hunt = _playerInfo.data.HUNT;
 			trace(hunt);
 			if (num == 1)
 			{
@@ -129,7 +127,7 @@ class TreasureHuntCmd extends BaseCmd
 				{
 					itemIdList.push(getData(num));
 				}
-				notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.HUNT, data:hunt + 1 } );
+				notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.HUNT, data:hunt + 1 } );
 			}
 			else if (num == 2)
 			{
@@ -147,7 +145,7 @@ class TreasureHuntCmd extends BaseCmd
 						itemIdList.push(getData(num));
 					}
 				}
-				notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.HUNT, data:hunt + 10 } );
+				notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.HUNT, data:hunt + 10 } );
 			}
 			
 			notifyRoot(MsgPlayer.UpdateGem, -_chestInfo.NeedDiamond);
@@ -155,11 +153,7 @@ class TreasureHuntCmd extends BaseCmd
 			var gainGoods:GainGoodsCmd = new GainGoodsCmd();
 			gainGoods.onInitComponent();
 			gainGoods.setData(itemIdList);
-			
 			notifyRoot(MsgMission.Update, { type:"forge", data: { id:10 }} );
-			FileUtils.setFileData(_playerInfo, FilesType.Player);
-			FileUtils.setFileData(null, FilesType.Bag);
-			
 			//init();
 		}
 	}

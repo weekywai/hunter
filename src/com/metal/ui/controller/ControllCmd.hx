@@ -2,6 +2,7 @@ package com.metal.ui.controller;
 import com.haxepunk.HXP;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Touch;
+import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.GuideText;
@@ -11,6 +12,7 @@ import com.metal.config.ResPath;
 import com.metal.config.RoomMissionType;
 import com.metal.config.SfxManager;
 import com.metal.config.StageType;
+import com.metal.enums.BagInfo;
 import com.metal.enums.MapVo;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgActor;
@@ -22,14 +24,14 @@ import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
-import com.metal.unit.stat.PlayerStat;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.impl.ItemBaseInfo;
+import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.impl.GameMap;
 import com.metal.ui.warehouse.WarehouseCmd;
 import com.metal.unit.actor.api.ActorState;
+import com.metal.unit.stat.PlayerStat;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
 import com.metal.utils.BagUtils;
 import com.metal.utils.CountDown;
@@ -137,14 +139,14 @@ class ControllCmd extends BaseCmd
 			_usingTipArr.push(_widget.getChildAs("usingTip" + i, Text));
 		}		
 		//设置首发武器
-		var weaponInfo:ItemBaseInfo = gameSchedual.equipBagData.getItemByKeyId(_playerInfo.getProperty(PlayerPropType.WEAPON));
+		var weaponInfo:ItemBaseInfo = BagUtils.bag.getItemByKeyId(_playerInfo.data.WEAPON);
 		_weaponInfoArr.push(weaponInfo);
 		WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[0]);
 		_weaponArr[0].onPress = function(e) { setUsingWeapon(0); };
 		//设置备用武器
 		for (i in 1..._weaponNum) 
 		{
-			weaponInfo = gameSchedual.bagData.backupWeaponArr.get(i);
+			weaponInfo = BagUtils.bag.backupWeaponArr.get(i);
 			_weaponInfoArr.push(weaponInfo);
 			if (weaponInfo!=null) 
 			{
@@ -165,14 +167,11 @@ class ControllCmd extends BaseCmd
 		}
 		if (!setModel) return;
 		//修改人物模型和参数
-		var gameSchedual:GameSchedual = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual);
-		gameSchedual.bagData.setBackup(_weaponInfoArr[_lastWeaponIndex],  _weaponInfoArr[index].backupIndex);
-		BagUtils.changeEquip(cast _weaponInfoArr[index], ItemType.IK2_GON);
-		notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.WEAPON, data: _weaponInfoArr[index]} );
+		var bagData:BagInfo = GameProcess.root.getComponent(BagpackSystem).bagData;
+		bagData.setBackup(_weaponInfoArr[_lastWeaponIndex],  _weaponInfoArr[index].vo.sortInt);
+		notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.WEAPON, data: _weaponInfoArr[index]} );
 		GameProcess.root.notify(MsgPlayer.ChangeWeapon, { type:WeaponType.Shoot } );	
 		notify(MsgUIUpdate.UpdateBullet, _weaponInfoArr[index]);
-		//trace("after change");
-		//trace("using id: "+_weaponInfoArr[index].keyId);
 		
 		_lastWeaponIndex = index;
 	}
@@ -211,7 +210,7 @@ class ControllCmd extends BaseCmd
 		
 		_bulletTxt=_widget.getChildAs("bulletTxt", Text);
 		//判断是否隐藏技能锁
-		var skillshow = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).skillData;
+		var skillshow = GameProcess.root.getComponent(GameSchedual).skillData;
 		_skillBtns = [];
 		for (i in 0...5) 
 		{
@@ -258,7 +257,7 @@ class ControllCmd extends BaseCmd
 	private function cmd_UpdateBullet(userData:Dynamic)
 	{
 		if(userData!=null)
-		_bulletTxt.text = "子弹数 "+userData.currentBullet+"/"+userData.currentBackupBullet;
+		_bulletTxt.text = "子弹数 "+userData.vo.Bullets+"/"+userData.vo.Clips;
 	}
 	//mp闪烁效果
 	var addnum:Float = 0;
@@ -709,11 +708,11 @@ class ControllCmd extends BaseCmd
 		var timeStr:String = Std.string(time != 0?time:"");
 		var id:Int = userData.id;
 		var index:Int = -1;
-		if (id == _playerInfo.getProperty(PlayerPropType.SKILL1))  index = 0;
-		else if (id == _playerInfo.getProperty(PlayerPropType.SKILL2)) index = 1;
-		else if (id == _playerInfo.getProperty(PlayerPropType.SKILL3)) index = 2;
-		else if (id == _playerInfo.getProperty(PlayerPropType.SKILL4)) index = 3;
-		else if (id == _playerInfo.getProperty(PlayerPropType.SKILL5)) index = 4;
+		if (id == _playerInfo.data.SKILL1)  index = 0;
+		else if (id == _playerInfo.data.SKILL2) index = 1;
+		else if (id == _playerInfo.data.SKILL3) index = 2;
+		else if (id == _playerInfo.data.SKILL4) index = 3;
+		else if (id == _playerInfo.data.SKILL5) index = 4;
 		if (index == -1)
 			return;
 		_skillBtns[index].text = timeStr;

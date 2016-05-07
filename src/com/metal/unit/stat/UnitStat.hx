@@ -60,12 +60,12 @@ class UnitStat extends Component implements IStat
 	{
 		super.onInitComponent();
 		_actor = owner.getComponent(UnitActor);
-		_info = owner.getProperty(MonsterInfo);
+		_info = owner.getPropertyByCls(MonsterInfo);
 		hpMax = _info.MaxHp;
 		hp = _info.MaxHp;
 		//trace(hp + ">>" + hpMax);
 		atk = _info.Atk;
-		var skill:SkillInfo = owner.getProperty(SkillInfo);
+		var skill:SkillInfo = owner.getPropertyByCls(SkillInfo);
 		if(skill != null)
 			_damageModify = skill.Effect;
 	}

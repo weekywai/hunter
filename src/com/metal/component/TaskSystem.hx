@@ -1,13 +1,15 @@
 package com.metal.component;
 
 import com.metal.config.FilesType;
+import com.metal.config.TableType;
 import com.metal.message.MsgMission;
 import com.metal.message.MsgNet;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.impl.QuestInfo;
-import com.metal.proto.manager.TaskManager;
+import com.metal.proto.manager.QuestsManager;
 import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
@@ -51,11 +53,13 @@ class TaskSystem extends Component
 			case MsgNet.QuestList:
 				cmd_QuestList(userData);
 			case MsgStartup.BattleResult:
-				cmd_updateCopy(userData);
+				cmd_BattleResult(userData);
 			//case MsgMission.Init:
 				//cmd_initTask(userData);
 			case MsgMission.Update:
 				cmd_Update(userData);
+			case MsgMission.UpdateCopy:
+				cmd_UpdateCopy(userData);
 				
 		}
 		super.onUpdate(type, source, userData);
@@ -70,7 +74,7 @@ class TaskSystem extends Component
 	 */
 	public function cmd_initTask(userData:Dynamic):Void
 	{
-		taskArr = TaskManager.instance.get_protpTask();
+		taskArr = QuestsManager.instance.get_protpTask();
 		_taskMap = FileUtils.getTask();// TaskManager.instance.Task;
 		taskArrbtn = [false, false, false, false, false, false];
 		taskArrbtn2 = [false, false, false, false, false, false];
@@ -91,12 +95,16 @@ class TaskSystem extends Component
 		//trace("===========questList==========="+data);
 	}
 	/**更新副本任务*/
-	private function cmd_updateCopy(duplicateInfo:DuplicateInfo):Void
+	private function cmd_BattleResult(duplicateInfo:DuplicateInfo):Void
 	{
 		if (duplicateInfo != null)
 		{
 			searchTask(duplicateInfo.DuplicateType,duplicateInfo);
 		}
+	}
+	private function cmd_UpdateCopy(userData:Dynamic):Void
+	{
+		searchTask(userData);
 	}
 	/*锻造任务更新*/
 	private function cmd_updateForge(userData:Dynamic):Void
@@ -104,71 +112,70 @@ class TaskSystem extends Component
 		var type:Int = Reflect.field(userData, "id");
 		var info = Reflect.field(userData, "info");//Iteminfo
 		if (_taskMap == null) return;
+		var task:QuestInfo;
 		for (i in _taskMap.keys())
 		{
-			var task = _taskMap.get(i);
+			task = _taskMap.get(i);
 			if (type == task.RunType || task.RunType == 8)
 			{
 				if (task.RunType == 8)
 				{
 					if (info != null)
 					{
-						if (info.equipType == 1 &&info.strLv>=task.Count)
+						if (info.equipType == 1 &&info.strLv>=task.vo.Count)
 						{
-							if(task.state!=2)task.state = 1;
-						}else if (info.equipType == 13 && info.strLv >= task.Count)
+							if (task.vo.State != 2)
+								task.vo.State = 1;
+						}else if (info.equipType == 13 && info.strLv >= task.vo.Count)
 						{
-							if(task.state!=2)task.state = 1;
+							if (task.vo.State != 2)
+								task.vo.State = 1;
 						}
 					}
 				}
 				
-				task.Finish += 1;
+				task.vo.Finish += 1;
 				
-				if (task.Finish >= task.Count)
+				if (task.vo.Finish >= task.vo.Count)
 				{
-					task.Finish = task.Count;
-					if(task.state!=2)task.state = 1;
+					task.vo.Finish = task.vo.Count;
+					if (task.vo.State != 2) 
+						task.vo.State = 1;
 				}
-				
-				
 			}
 		}
-		FileUtils.setFileData(null, FilesType.Task);
+		updateSql(task.Id);
 	}
 	
 	private function cmd_Update(userData:Dynamic):Void
 	{
 		if(userData.type=="task"){
-		var info:QuestInfo = userData.data;
-		_taskMap.get(info.SN).state = 2;
-		FileUtils.setFileData(null, FilesType.Task);
-		}else if (userData.type=="forge") {
+			var info:QuestInfo = userData.data;
+			_taskMap.get(info.Id).vo.State = 2;
+			updateSql(info.Id);
+		}else if (userData.type == "forge") {
 			cmd_updateForge(userData.data);
 		}
 	}
+	
+	
 	/**根据任务类型查找任务并更新副本任务*/
-	public function searchTask(type:Int,duplicateInfo:DuplicateInfo=null):Void
+	private function searchTask(type:Int,duplicateInfo:DuplicateInfo=null):Void
 	{
 		if (_taskMap == null) return;
+		var task:QuestInfo;
 		for (i in _taskMap.keys())
 		{
-			var task = _taskMap.get(i);
+			task = _taskMap.get(i);
 			//if (type == 0)//普通关卡
 			//{
-				if ((task.RunType == 2&&type == 0))
+				if ((task.RunType == 2 && type == 0))
 				{
-					//task.Finish += 1;
-					//
-					//if (task.Finish >= task.Count)
-					//{
-						//task.Finish = task.Count;
-						
 					if (duplicateInfo != null)
 					{
-						if (task.state!= 2&&task.SN == duplicateInfo.Id)
+						if (task.vo.State != 2 && task.Id == duplicateInfo.Id)
 						{
-							task.state = 1;
+							task.vo.State = 1;
 							break;
 						}
 						
@@ -176,17 +183,25 @@ class TaskSystem extends Component
 					
 				}else if ((task.RunType == 12 && type == 9) || (task.RunType == 13 && type == 10) || (task.RunType == 14 && type == 11) || (task.RunType == 15 && type == 12))
 				{
-					task.Finish += 1;
+					task.vo.Finish += 1;
 					
-					if (task.Finish >= task.Count)
+					if (task.vo.Finish >= task.vo.Count)
 					{
-						task.Finish = task.Count;
-						if(task.state!=2)task.state = 1;
+						task.vo.Finish = task.vo.Count;
+						if (task.vo.State != 2)
+							task.vo.State = 1;
 					}
 				}
 			//}
 		}
-		FileUtils.setFileData(null, FilesType.Task);
+		
+		updateSql(task.Id);
+	}
+	
+	private function updateSql(id:Int)
+	{
+		var vo = taskMap.get(id).vo;
+		RemoteSqlite.instance.updateProfile(TableType.P_Task,vo,{Id:vo.Id});
 	}
 	
 		/**解析任务网络数据包*/

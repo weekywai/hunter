@@ -12,7 +12,7 @@ class PlayerModelInfo
 {
 
 	/**id*/
-	public var SN:Int;
+	public var Id:Int;
 	/**角色名字*/
 	public var Name:String;
 	/**角色资料*/
@@ -23,24 +23,24 @@ class PlayerModelInfo
 	public var MP:Int;
 	public var model:Int;
 	/**技能id**/
-	public var skillId:Int;
+	public var SkillId:Int;
 	public var dropItem:Array<DropItemInfo>;
 	
 	public function new() 
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		SN = XmlUtils.GetInt(data, "SN");
-		Name = XmlUtils.GetString(data, "Name");
-		JobEffectDesc = XmlUtils.GetString(data, "JobEffectDesc");
-		HP = XmlUtils.GetInt(data, "HP");
-		Att = XmlUtils.GetInt(data, "Att");
-		MP = XmlUtils.GetInt(data, "MP");
-		model = XmlUtils.GetInt(data, "model");
-		skillId = XmlUtils.GetInt(data, "SkillId");
-		dropItem = ParseDropItem(XmlUtils.GetString(data, "DropItem1"));
+		Id = data.Id;
+		Name = data.Name;
+		JobEffectDesc = data.JobEffectDesc;
+		HP = data.HP;
+		Att = data.Att;
+		MP = data.MP;
+		model = data.model;
+		SkillId = data.SkillId;
+		dropItem = ParseDropItem(data.DropItem1);
 	}
 	private function ParseDropItem(value:String):Array<DropItemInfo>
 	{

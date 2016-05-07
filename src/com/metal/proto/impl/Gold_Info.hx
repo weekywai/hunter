@@ -25,26 +25,12 @@ class Gold_Info
 		
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "SN");
-		Description = XmlUtils.GetString(data, "Description");
-		Gold = XmlUtils.GetInt(data, "Gold");
-		Price = XmlUtils.GetInt(data, "Price");
-		Proportion = XmlUtils.GetInt(data, "Proportion");
+		Id = data.Id;
+		Description = data.Description;
+		Gold = data.Gold;
+		Price = data.Price;
+		Proportion = data.Proportion;
 	}
-	
-	private function praseEfect(data:Dynamic):Array<Int>
-	{
-		if (data == "")
-			return null;
-		var temp:Array<Int> = [];
-		var ary = Std.string(data).split(",");
-		for (i in 0...ary.length) 
-		{
-			temp.push(StringUtils.GetInt(ary[i]));
-		}
-		return temp;
-	}
-	
 }

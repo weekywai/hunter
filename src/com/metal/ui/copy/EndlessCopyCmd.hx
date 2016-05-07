@@ -1,12 +1,9 @@
 package com.metal.ui.copy;
 
-import com.metal.component.GameSchedual;
-import com.metal.component.RewardSystem;
-import com.metal.component.TaskSystem;
-import com.metal.config.FilesType;
 import com.metal.config.GuideText;
 import com.metal.config.PlayerPropType;
 import com.metal.manager.UIManager.TipsType;
+import com.metal.message.MsgMission;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.player.utils.PlayerUtils;
@@ -14,7 +11,6 @@ import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.manager.DuplicateManager;
 import com.metal.ui.BaseCmd;
 import com.metal.ui.popup.BattleCmd;
-import com.metal.utils.FileUtils;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
 
@@ -40,8 +36,6 @@ class EndlessCopyCmd extends BaseCmd
 	}
 	private function initData():Void
 	{
-		
-		
 		_widget.getChildAs("endlessBtn",Button).onPress = openEndless;
 		_widget.getChildAs("ormorBtn",Button).onPress = openOrmor;
 		_widget.getChildAs("weaponsBtn",Button).onPress = openWeapons;
@@ -93,13 +87,9 @@ class EndlessCopyCmd extends BaseCmd
 		{
 			var _playInfo = PlayerUtils.getInfo();
 			var _duplicateInfo:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
-			if (_playInfo.getProperty(PlayerPropType.POWER) >= _duplicateInfo.NeedPower) {
-				cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).searchTask(taskType);
-				cast(GameProcess.root.getComponent(RewardSystem), RewardSystem).updateEndlessTask(taskType);
-				//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo(_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower, PlayerPropType.POWER);
-				notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower});
-				
-				FileUtils.setFileData(_playInfo, FilesType.Player);
+			if (_playInfo.data.POWER >= _duplicateInfo.NeedPower) {
+				notifyRoot(MsgMission.UpdateCopy, taskType);
+				notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.POWER, data:_playInfo.data.POWER - _duplicateInfo.NeedPower } );
 				sendMsg(MsgUI.Battle,checkpoint);
 				dispose();
 			}else
@@ -115,14 +105,10 @@ class EndlessCopyCmd extends BaseCmd
 	{
 		if (flag)
 		{
-			var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
-			
+			var _playInfo = PlayerUtils.getInfo();
 			var _duplicateInfo:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
-			cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).searchTask(taskType);
-			cast(GameProcess.root.getComponent(RewardSystem), RewardSystem).updateEndlessTask(taskType);
-			//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo(_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower, PlayerPropType.POWER);
-			notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_playInfo.getProperty(PlayerPropType.POWER) - _duplicateInfo.NeedPower});
-			FileUtils.setFileData(_playInfo, FilesType.Player);
+			notifyRoot(MsgMission.UpdateCopy, taskType);
+			notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.POWER, data:_playInfo.data.POWER - _duplicateInfo.NeedPower } );
 			sendMsg(MsgUI.Battle,checkpoint);
 			dispose();
 		}

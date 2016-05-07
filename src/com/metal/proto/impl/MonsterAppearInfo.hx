@@ -19,12 +19,12 @@ class MonsterAppearInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ID = XmlUtils.GetInt(data, "ID");
-		Direction = XmlUtils.GetInt(data, "Direction");
-		BehaviorType = XmlUtils.GetInt(data, "BehaviorType");
-		ApperType = XmlUtils.GetInt(data, "ApperType");
+		ID = data.ID;
+		Direction = data.Direction;
+		BehaviorType = data.BehaviorType;
+		ApperType = data.ApperType;
 	}
 	
 }

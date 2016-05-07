@@ -31,18 +31,18 @@ class AppearInfo
 		BornAt = [];
 		EnAt = [];
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ID = XmlUtils.GetInt(data, "ID");
-		type = XmlUtils.GetInt(data, "Type");
-		delay = XmlUtils.GetFloat(data, "Delayed");
-		interval = XmlUtils.GetFloat(data, "Interval");
-		enemies = parseList(XmlUtils.GetString(data, "MonsterList"));
-		BornAt = parsePoint(XmlUtils.GetString(data, "BornAt"));
-		EnAt = parsePoint(XmlUtils.GetString(data, "EnAt"));
-		Enter = XmlUtils.GetInt(data, "Enter");
+		ID = data.ID;
+		type = data.Type;
+		delay = data.Delayed;
+		interval = data.Interval;
+		enemies = parseList(data.MonsterList);
+		BornAt = parsePoint(data.BornAt);
+		EnAt = parsePoint(data.EnAt);
+		Enter = data.Enter;
 	}
-	private function parseList(data:String):Array<Int>
+	/*private function parseList(data:String):Array<Int>
 	{
 		var temp = [];
 		var ary = [];
@@ -53,12 +53,24 @@ class AppearInfo
 			ary.push(StringUtils.GetInt(i));
 		}
 		return ary;
+	}*/
+	private function parseList(data:Dynamic):Array<Int>
+	{
+		if (data == "")
+			return null;
+		var temp:Array<Int> = [];
+		var ary = Std.string(data).split(",");
+		for (i in 0...ary.length) 
+		{
+			temp.push(StringUtils.GetInt(ary[i]));
+		}
+		return temp;
 	}
-	private function parsePoint(data:String):Array<Point>
+	private function parsePoint(data:Dynamic):Array<Point>
 	{
 		var ary:Array<Point> = new Array();
 		var pos:Array<String> = new Array();
-		pos = data.split("|");
+		pos = Std.string(data).split("|");
 		for (i in pos)
 		{
 			var perPos:Array<String> = new Array();

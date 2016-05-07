@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.LiveNessInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -22,6 +24,13 @@ class LiveNessManager
 	public function new() 
 	{
 		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Live);
+		for (i in req) 
+		{
+			var info:LiveNessInfo = new LiveNessInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	
 	public function getProto(key:Int):LiveNessInfo
@@ -30,7 +39,7 @@ class LiveNessManager
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -38,7 +47,7 @@ class LiveNessManager
 			var liveness:LiveNessInfo = new LiveNessInfo();
 			liveness.readXml(propText);
 			_data.set(liveness.Id, liveness);
-		}
+		}*/
 	}
 	
 }

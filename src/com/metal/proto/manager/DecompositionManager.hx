@@ -1,4 +1,6 @@
 package com.metal.proto.manager; 
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.DecompositionInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -10,18 +12,25 @@ import haxe.xml.Fast;
 class DecompositionManager
 {
 	public static var instance(default, null):DecompositionManager = new DecompositionManager();
-	private var _protoDecom:IntMap<DecompositionInfo>;
+	private var _data:IntMap<DecompositionInfo>;
 	public function new() 
 	{
-		_protoDecom = new IntMap<DecompositionInfo>();
+		_data = new IntMap<DecompositionInfo>();
+		var req = RemoteSqlite.instance.request(TableType.Decompoe);
+		for (i in req) 
+		{
+			var info:DecompositionInfo = new DecompositionInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	public function getProtoDecom(id:Int):DecompositionInfo
 	{
-		return _protoDecom.get(id);
+		return _data.get(id);
 	}
 	public function appendXml(data:Xml):Void
 	{
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		var propDecomposition:Fast, id:Int;
 		for (propDecomposition in source.nodes.propDecomposition)
@@ -29,8 +38,8 @@ class DecompositionManager
 			id = Std.parseInt(propDecomposition.node.ID.innerData);
 			var decomInfo:DecompositionInfo = new DecompositionInfo();
 			decomInfo.readXml(propDecomposition);
-			_protoDecom.set(id,decomInfo);
-		}
+			_data.set(id,decomInfo);
+		}*/
 	}
 	
 }

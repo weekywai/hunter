@@ -1,6 +1,4 @@
 package com.metal.proto.impl;
-import com.utils.XmlUtils;
-import haxe.xml.Fast;
 
 /**
  * atk值 = actorInfo.hp/rate2*5
@@ -9,7 +7,7 @@ import haxe.xml.Fast;
  */
 class ActorPropertyInfo
 {
-	public var Lv:Int;
+	public var Level:Int;
 	/**模型类型*/
 	public var HP:Int;
 	/**模型资源类型*/
@@ -23,13 +21,13 @@ class ActorPropertyInfo
 	public function new() 
 	{
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Lv = XmlUtils.GetInt(data, "Level");
-		HP = XmlUtils.GetInt(data, "HP");
-		ATK = XmlUtils.GetInt(data, "ATK");
-		CD = XmlUtils.GetFloat(data, "CD");
-		DEF = XmlUtils.GetInt(data, "DEF");
-		DPS = XmlUtils.GetInt(data, "DPS");
+		Level = data.Level;
+		HP = data.HP;
+		ATK = data.ATK;
+		CD = data.CD;
+		DEF = data.DEF;
+		DPS = data.DPS;
 	}
 }

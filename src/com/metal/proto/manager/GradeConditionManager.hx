@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.GradeConditionInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -13,19 +15,26 @@ class GradeConditionManager
 	
 	public function new() 
 	{
-		gradeConditionData = new IntMap();
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Grade);
+		for (i in req) 
+		{
+			var info:GradeConditionInfo = new GradeConditionInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	
-	public var gradeConditionData:IntMap<GradeConditionInfo>;
+	public var _data:IntMap<GradeConditionInfo>;
 	
 	/**提示*/
 	public function getGradeConditionInfo(id:Int):GradeConditionInfo
 	{
-		return gradeConditionData.get(id);
+		return _data.get(id);
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propGradeCondition:Fast;
@@ -33,8 +42,8 @@ class GradeConditionManager
 		for (propGradeCondition in source.nodes.propGradeCondition) {
 			tempInfo = new GradeConditionInfo();
 			tempInfo.readXml(propGradeCondition);
-			gradeConditionData.set(tempInfo.Id,tempInfo);
-		}
+			_data.set(tempInfo.Id,tempInfo);
+		}*/
 	}
 	
 	

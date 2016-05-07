@@ -1,11 +1,13 @@
 package com.metal.unit.weapon.impl;
+import com.metal.component.BagpackSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.PlayerPropType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgPlayer;
+import com.metal.proto.ProtoUtils;
 import com.metal.unit.stat.PlayerStat;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.BulletInfo;
 import com.metal.proto.impl.SkillInfo;
@@ -61,7 +63,7 @@ class BaseWeapon extends Component implements IWeapon
 		_stat = cast owner.getComponent(PlayerStat);
 		//trace(owner);
 		var playerInfo:PlayerInfo = PlayerUtils.getInfo();
-		bulletReq.atk = playerInfo.getProperty(PlayerPropType.FIGHT);
+		bulletReq.atk = playerInfo.data.FIGHT;
 		//trace("bulletReq.atk: "+bulletReq.atk);
 		bulletReq.attacker = owner;
 	}
@@ -73,7 +75,7 @@ class BaseWeapon extends Component implements IWeapon
 		//trace(skillInfo.BulletID);
 		var playerInfo:PlayerInfo = PlayerUtils.getInfo();
 		bulletInfo = BulletManager.instance.getInfo(skillInfo.BulletID);
-		bulletReq.atk = playerInfo.getProperty(PlayerPropType.FIGHT);
+		bulletReq.atk = playerInfo.data.FIGHT;
 		//trace("bulletReq.atk: "+bulletReq.atk);
 		//trace(bulletInfo);
 		bulletReq.info = bulletInfo;
@@ -88,9 +90,9 @@ class BaseWeapon extends Component implements IWeapon
 		bulletCount = maxBulletCount = skillInfo.num;
 		//每秒60帧
 		//shootTime = skillInfo.CDTime * 60;
-		//weaponID = PlayerUtils.getInfo().getProperty(PlayerPropType.WEAPON);111
-		var weapon =cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.getItemByKeyId(PlayerUtils.getInfo().getProperty(PlayerPropType.WEAPON));
-		weaponID = weapon.itemId;
+		//weaponID = PlayerUtils.getInfo().getProperty(PlayerProp.WEAPON);111
+		var weapon = ProtoUtils.castType(GameProcess.root.getComponent(BagpackSystem).bagData.getItemByKeyId(PlayerUtils.getInfo().data.WEAPON));
+		weaponID = weapon.ID;
 		bulletReq.critPor = weapon.CritPor;
 	}
 	

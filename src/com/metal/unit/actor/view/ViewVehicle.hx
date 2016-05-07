@@ -112,7 +112,7 @@ class ViewVehicle extends ViewActor
 	override function Notify_Soul(userData:Dynamic):Void 
 	{
 		/*var playerInfo = PlayerUtils.getInfo();
-		var info:PlayerModelInfo = PlayerModelManager.instance.getInfo(playerInfo.getProperty(PlayerPropType.ROLEID));
+		var info:PlayerModelInfo = PlayerModelManager.instance.getInfo(playerInfo.getProperty(PlayerProp.ROLEID));
 		createDropItem(info.dropItem);*/
 	}
 	

@@ -161,13 +161,13 @@ class ViewEnemy extends ViewActor
 		_stat = owner.getComponent(UnitStat);
 		
 		super.Notify_PostBoot(userData);
-		_mInfo = owner.getProperty(MonsterInfo);
+		_mInfo = owner.getPropertyByCls(MonsterInfo);
 		var faction = BoardFaction.getFaction(_mInfo.ModelType);
 		if(faction != BoardFaction.Boss1 && faction != BoardFaction.Boss)
 			initHpBar();
 		_bulletReq = new BulletRequest();
 		//trace(_mInfo.SkillId);
-		_skill = owner.getProperty(SkillInfo);
+		_skill = owner.getPropertyByCls(SkillInfo);
 		_bulletReq.info = BulletManager.instance.getInfo(_skill.BulletID);
 		_bulletReq.attacker = owner;
 		//_bulletReq.attackerType = owner.name;
@@ -263,7 +263,7 @@ class ViewEnemy extends ViewActor
 				trace("Model id:" + _mInfo.ID +">>" + _info.ID);
 				return;
 			}
-			if(item.ItemId==0){//Bug
+			if(item.ID==0){//Bug
 				trace("Model id:" + _mInfo.ID +">>" + _info.ID);
 				return;
 			}

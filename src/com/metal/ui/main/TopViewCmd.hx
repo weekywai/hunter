@@ -1,7 +1,6 @@
 package com.metal.ui.main;
 import com.metal.component.GameSchedual;
-import com.metal.config.FilesType;
-import com.metal.config.PlayerPropType;
+import com.metal.config.PlayerPropType.PlayerProp;
 import com.metal.config.SfxManager;
 import com.metal.enums.NoviceOpenType;
 import com.metal.manager.UIManager.TipsType;
@@ -14,16 +13,12 @@ import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.ui.BaseCmd;
-import com.metal.utils.FileUtils;
 import com.metal.utils.LoginFileUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
-import sys.FileSystem;
-import sys.io.File;
-import sys.io.FileOutput;
 
 /**
  * ...
@@ -54,11 +49,9 @@ class TopViewCmd extends BaseCmd
 	{
 		//trace("onInitComponent");
 		_widget = UIBuilder.get("topview");
-		//playerInfo = FileUtils.getPlayerInfos();
 		notify(MsgUIUpdate.UpdateInfo);
 		super.onInitComponent();
 		vitFlag = false;
-		var _bagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
 			
 		currTime = new Array();
 		initUI();
@@ -78,9 +71,6 @@ class TopViewCmd extends BaseCmd
 		{
 			case MsgUIUpdate.UpdateInfo:
 				cmd_update(userData);
-			/*case MsgUI.MainPanel:
-				cmd_update(userData);
-				trace("user000");*/
 			case MsgUIUpdate.Vit:
 				latestFlag = true;
 				upDate_Vit(userData);
@@ -144,7 +134,7 @@ class TopViewCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.Btn).play();
 		
 		var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
-		if (_playInfo.getProperty(PlayerPropType.POWER) >= _maxPower)
+		if (_playInfo.data.POWER >= _maxPower)
 		{
 			sendMsg(MsgUI.Tips, { msg:"体力已达上限", type:TipsType.tipPopup} );
 		}else{
@@ -160,17 +150,16 @@ class TopViewCmd extends BaseCmd
 		if (flag)
 		{
 			var _playerInfo = PlayerUtils.getInfo();
-			if (_playerInfo.getProperty(PlayerPropType.GEM) < 100)
+			if (_playerInfo.data.GEM < 100)
 			{
 				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 				return;
 			}
-			notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.POWER, data:_maxPower } );
+			notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.POWER, data:_maxPower } );
 			upDate_Vit();
 			notifyRoot(MsgPlayer.UpdateGem, -100);
 			readTime();
 			notifyRoot(MsgMission.Update, { type:"forge", data: { id:16 }} );
-			//FileUtils.setFileData(_playerInfo, FilesType.player);
 		}
 	}
 	
@@ -210,14 +199,13 @@ class TopViewCmd extends BaseCmd
 		//notifyRoot(MsgPlayer.UpdateInfo, obj);
 		var playerInfo = PlayerUtils.getInfo();
 		//trace("tviweplo.name="+playerInfo.Name);
-		moneyNum = playerInfo.getProperty(PlayerPropType.GOLD);
-		gemNum = playerInfo.getProperty(PlayerPropType.GEM);
+		moneyNum = playerInfo.data.GOLD;
+		gemNum = playerInfo.data.GEM;
 		//trace(_widget.getChildAs("jinbikuang", Text).text);
 		_widget.getChildAs("jinbikuang", Text).text = Std.string(moneyNum);
 		_widget.getChildAs("zuanshikuang", Text).text = Std.string(gemNum);
 		//trace(_widget.name);
 		//notify(MsgUIUpdate.UpdateUI, _widget.getChildAs("jinbi", Text));
-		FileUtils.setFileData(playerInfo, FilesType.Player);
 		
 		//notifyRoot(MsgView.NewBie, 1);
 	}
@@ -225,16 +213,9 @@ class TopViewCmd extends BaseCmd
 	private function upDate_Vit(data:Dynamic = null):Void
 	{
 		var _playInfo = PlayerUtils.getInfo();
-		if (_playInfo.getProperty(PlayerPropType.POWER) > _maxPower)
-			notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerPropType.POWER, data:_maxPower } );
-		_widget.getChildAs("vitTxt", Text).text = _playInfo.getProperty(PlayerPropType.POWER) + "/" + _maxPower;
+		_widget.getChildAs("vitTxt", Text).text = _playInfo.data.POWER + "/" + _maxPower;
 		if (latestFlag)
-		{
-			saveFile(_filePath);
-		}else
-		{
-			
-		}
+			notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.NOWTIME, data:Date.now()} );
 	}
 	override public function onTick(timeDelta:Float) 
 	{
@@ -244,44 +225,13 @@ class TopViewCmd extends BaseCmd
 	/**读取体力恢复时间*/
 	private function readTime():Void
 	{
-		#if sys
-		var path:String = FileUtils.getPath() + "proto/";
-		_filePath = path + "asdf.txt";
-		if (!FileSystem.exists(path))
-		{
-			FileSystem.createDirectory(path);
-		}
-		if (!FileSystem.exists(_filePath)) {
-			saveFile(_filePath);
-		}
-		
-		//read the message
-		var sanityCheck:String = File.getContent(_filePath);
-		
-		var fin = File.read(_filePath, false);
-		var lineNum = 0;
-		var str:String = fin.readLine();
-		currTime = [];
-		var strArr = str.split(",");
-		for (i in 0...strArr.length)
-		{
-			currTime.push(Std.parseInt(strArr[i]));
-		}
-		fin.close();
-		#end
+		getCurrTimes(Date.fromString(PlayerUtils.getInfo().data.NOWTIME));
+		//trace(PlayerUtils.getInfo().data.NOWTIME);
 	}
-	/**保存体力提升时当前的时间*/
-	private function saveFile(filePath:String)
-	{
-		var f:FileOutput = File.write( filePath, false );
-		f.writeString(getCurrTimes());
-		f.close();
-	}
+	
 	/**获取时间*/
-	private function getCurrTimes():String
+	private function getCurrTimes(myDate:Date):String
 	{
-		var myDate = Date.now();
-		
 		var str:String = "";
 		
 		currTime = [];
@@ -310,7 +260,7 @@ class TopViewCmd extends BaseCmd
 	{
 		if (currTime != null && currTime.length > 0)
 		{
-			var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
+			var _playInfo = PlayerUtils.getInfo();
 			var nowDate = Date.now();
 			if (currTime[0] >= nowDate.getFullYear())
 			{
@@ -333,7 +283,10 @@ class TopViewCmd extends BaseCmd
 								}
 								if (minutes / 5 >= 1)
 								{
-									notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_playInfo.getProperty(PlayerPropType.POWER) + Math.floor(minutes / 5)});
+									var power = _playInfo.data.POWER + Math.floor(minutes / 5);
+									if (power > _maxPower)
+										power = _maxPower;
+									notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.POWER, data:power } );
 									latestFlag = true;
 									upDate_Vit(null);
 									
@@ -342,13 +295,13 @@ class TopViewCmd extends BaseCmd
 							{
 								//加满
 								latestFlag = true;
-								notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_maxPower});
+								notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.POWER, data:_maxPower } );
 								upDate_Vit(null);
 							}
 						}else
 						{
 							latestFlag = true;
-							notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_maxPower});
+							notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.POWER, data:_maxPower } );
 							upDate_Vit(null);
 							//加满体力
 						}
@@ -356,7 +309,7 @@ class TopViewCmd extends BaseCmd
 				}else
 				{
 					latestFlag = true;
-					notifyRoot(MsgPlayer.UpdateInfo,{type:PlayerPropType.POWER,data:_maxPower});
+					notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.POWER, data:_maxPower } );
 					upDate_Vit(null);
 					//加满体力
 				}
@@ -370,7 +323,7 @@ class TopViewCmd extends BaseCmd
 	
 	override function onClose():Void 
 	{
-		saveFile(_filePath);
+		notifyRoot(MsgPlayer.UpdateInfo, { type:PlayerProp.NOWTIME, data:Date.now()} );
 		_widget = null;
 		//SfxManager.getAudio(BGMType.b001).stop();
 		super.onClose();

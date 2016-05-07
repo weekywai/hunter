@@ -6,13 +6,16 @@ import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgMission;
+import com.metal.message.MsgNet;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
-import com.metal.proto.impl.ItemBaseInfo;
+import com.metal.proto.ProtoUtils;
+import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.scene.board.api.BoardFaction;
 import com.metal.unit.UnitInfo;
+import com.metal.utils.BagUtils;
 import com.metal.utils.FileUtils;
 import haxe.Serializer;
 import haxe.Unserializer;
@@ -122,37 +125,18 @@ class DevCheat
 			return;
 		}
 		var map:Map<Int,ItemBaseInfo> = new Map();
-		var bagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
-		var newArr:Array<ItemBaseInfo> = new Array();
-		for(i in 0...Std.parseInt(args[1])){
-			var goodsInfo:ItemBaseInfo = new ItemBaseInfo();
+		var bagInfo = BagUtils.bag;
+		var newArr:Array<Int> = new Array();
+		var goodsInfo:ItemBaseInfo = null;
+		for (i in 0...Std.parseInt(args[1]))
+		{
 			goodsInfo = GoodsProtoManager.instance.getItemById(Std.parseInt(args[0]));
 			if (goodsInfo != null)
 			{
-				newArr.push(goodsInfo);
+				newArr.push(goodsInfo.ID);
 			}
 		}
-		var _index:Int = 0;
-		
-		var arr:Array < ItemBaseInfo> = Unserializer.run(Serializer.run(newArr));//DeepCopy.clone(newArr);// .copy();
-		
-		for (items in arr)
-		{
-			var _oneInfo:ItemBaseInfo = cast items;
-			if (_oneInfo.Kind==ItemType.IK2_GON) 
-			{
-				_oneInfo.setStartBullet();
-				trace("set StartClip");
-			}
-			bagInfo.itemArr.push(_oneInfo);
-		}
-		//for (i in 0...bagInfo.itemArr.length)
-		//{
-			//bagInfo.itemArr[i].itemIndex = i + 1;
-		//}
-		cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).setBagData(bagInfo, 11111);
-		FileUtils.setFileData(bagInfo, FilesType.Bag);
-		
+		GameProcess.root.notify(MsgNet.UpdateBag, { type:1, data:newArr } );
 	}
 	
 	private function cmd_Regist(args:Array<String>):Void 
@@ -187,10 +171,10 @@ class DevCheat
 		
 	}
 
-	private function clone():ItemBaseInfo
-	{
-		return new ItemBaseInfo();
-	}
+	//private function clone():ItemBaseInfo
+	//{
+		//return new ItemBaseInfo();
+	//}
 	private function test(str:String)
 	{
 		trace(str);

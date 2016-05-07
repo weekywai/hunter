@@ -9,17 +9,17 @@ import haxe.xml.Fast;
  */
 class NoviceInfo
 {
-	public var ID:Int;
+	public var Id:Int;
 	public var text:String;
 
 	public function new() 
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ID = XmlUtils.GetInt(data, "ID");
-		text = XmlUtils.GetString(data, "text");
+		Id = data.Id;
+		text = data.text;
 	}
 	
 	private function praseEfect(data:Dynamic):Array<Int>

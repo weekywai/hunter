@@ -1,6 +1,4 @@
 package com.metal.proto.impl;
-import com.utils.XmlUtils;
-import haxe.xml.Fast;
 
 /**
  * atk值 = actorInfo.hp/rate2*5
@@ -39,30 +37,30 @@ class ModelInfo
 	public function new() 
 	{
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ID = XmlUtils.GetInt(data, "Id");
-		type1 = XmlUtils.GetInt(data, "Type1");
-		type = XmlUtils.GetInt(data, "Type");
-		gun1 = parseList(XmlUtils.GetString(data, "gun1"));
-		gun2 = parseList(XmlUtils.GetString(data, "gun2"));
-		gun3 = parseList(XmlUtils.GetString(data, "gun3"));
-		gun4 = parseList(XmlUtils.GetString(data, "gun4"));
-		gun5 = parseList(XmlUtils.GetString(data, "gun5"));
-		//unSlot = parseList(XmlUtils.GetString(data, "UnBone"));
-		flip = XmlUtils.GetInt(data, "IsFlip");
-		scale = XmlUtils.GetFloat(data, "Size");
-		res = XmlUtils.GetString(data, "ModelPic");
-		hit = XmlUtils.GetInt(data, "hit");
-		skin = XmlUtils.GetInt(data, "skin");
-		rate1 = XmlUtils.GetFloat(data, "rate1");
-		rate2 = XmlUtils.GetInt(data, "rate2");
+		ID = data.Id;
+		type1 = data.Type1;
+		type = data.Type;
+		gun1 = parseList(data.gun1);
+		gun2 = parseList(data.gun2);
+		gun3 = parseList(data.gun3);
+		gun4 = parseList(data.gun4);
+		gun5 = parseList(data.gun5);
+		//unSlot = parseList(data.UnBone);
+		flip = data.IsFlip;
+		scale = data.Size;
+		res = data.ModelPic;
+		hit = data.hit;
+		skin = data.skin;
+		rate1 = data.rate1;
+		rate2 = data.rate2;
 	}
 	
-	private function parseList(data:String):Array<String>
+	private function parseList(data:Dynamic):Array<String>
 	{
 		var temp = [];
-		temp = data.split(",");
+		temp = Std.string(data).split(",");
 		return temp;
 	}
 }

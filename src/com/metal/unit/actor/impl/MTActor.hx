@@ -1,30 +1,24 @@
 package com.metal.unit.actor.impl;
 import com.haxepunk.Entity;
 import com.haxepunk.HXP;
-import com.metal.component.BattleSystem;
 import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
 import com.metal.message.MsgActor;
-import com.metal.message.MsgInput;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
-import com.metal.message.MsgStartup;
-import com.metal.message.MsgUI;
-import com.metal.unit.stat.PlayerStat;
 import com.metal.proto.impl.BattlePrepareInfo;
-import com.metal.proto.impl.GoldGoodInfo;
-import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.manager.BattlePrepareManager;
 import com.metal.proto.manager.GoodsProtoManager;
-import com.metal.scene.board.api.BoardFaction;
 import com.metal.scene.effect.api.EffectRequest;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.render.ViewDisplay;
+import com.metal.unit.stat.PlayerStat;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
-import motion.Actuate;
 import pgr.dconsole.DC;
+
+using com.metal.proto.impl.ItemProto;
 /**
  * ...
  * @author weeky
@@ -255,18 +249,16 @@ class MTActor extends BaseActor
 		var item:SimEntity = target.owner;
 		//item.notify(MsgActor.Destroy);
 		if (item.parent!=null) {
-			var itemInfo:ItemBaseInfo = item.getProperty(ItemBaseInfo);
-			if (itemInfo == null) 
-				itemInfo = item.getProperty(GoldGoodInfo);
-			if (Std.is(itemInfo, GoldGoodInfo)) {
+			var itemInfo:ItemBaseInfo = item.getProperty("Kind");
+			if (itemInfo != null && itemInfo.Kind == ItemType.IK2_GOLD) {
 				item.notify(MsgActor.Destroying);
 				return;
 			}
-			DC.log("pickup item" + itemInfo.itemId);
-			var itemKind2:Int = GoodsProtoManager.instance.getItemLittleKind(itemInfo.itemId);
+			DC.log("pickup item" + itemInfo.ID);
+			var itemKind2:Int = GoodsProtoManager.instance.getItemLittleKind(itemInfo.ID);
 			if (itemKind2 == ItemType.IK2_BUFF) {
-				var info:BattlePrepareInfo = BattlePrepareManager.instance.getProtoBattlePrepareByID(itemInfo.itemId);
-				trace("pickup buff itemId:"+ itemInfo.itemId + " SkillID: " + info.SkillId);
+				var info:BattlePrepareInfo = BattlePrepareManager.instance.getProtoBattlePrepareByID(itemInfo.ID);
+				trace("pickup buff itemId:"+ itemInfo.ID + " SkillID: " + info.SkillId);
 				notify(MsgPlayer.ItemSkill, info.SkillId);
 			}
 			item.notify(MsgActor.Destroy);

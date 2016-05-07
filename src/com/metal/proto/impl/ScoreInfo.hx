@@ -19,10 +19,10 @@ class ScoreInfo
 		
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		ScoreType = XmlUtils.GetInt(data, "ScoreType");
-		Score = XmlUtils.GetInt(data, "Score");
+		ScoreType = data.ScoreType;
+		Score = data.Score;
 	}
 	
 }

@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.SkillInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -12,18 +14,25 @@ class SkillManager
 	public static var instance(default, null):SkillManager = new SkillManager();
 	public function new() 
 	{
-		proto = new IntMap();
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Skill);
+		for (i in req) 
+		{
+			var info:SkillInfo = new SkillInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
-	public var proto:IntMap<SkillInfo>;
+	public var _data:IntMap<SkillInfo>;
 	
 	/**提示*/
 	public function getInfo(Id:Int):SkillInfo
 	{
-		return proto.get(Id);
+		return _data.get(Id);
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var room:Fast;
@@ -31,7 +40,7 @@ class SkillManager
 		for (skill in source.nodes.propSkill) {
 			info = new SkillInfo();
 			info.readXml(skill);
-			proto.set(info.Id,info);
-		}
+			_data.set(info.Id,info);
+		}*/
 	}
 }

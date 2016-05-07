@@ -2,11 +2,13 @@ package com.metal.component;
 
 import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
+import com.metal.config.TableType;
 import com.metal.message.MsgMission;
 import com.metal.message.MsgNet;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUIUpdate;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.impl.LiveNessInfo;
 import com.metal.proto.manager.LiveNessManager;
@@ -55,12 +57,12 @@ class RewardSystem extends Component
 				cmd_BattleResult(userData);
 			case MsgMission.Reward:
 				cmd_AddReward(userData);
-			//case MsgMission.Init:
-				//cmd_initReward(userData);
 			case MsgMission.Forge:
 				cmd_updateForge(userData);
 			case MsgMission.UpdateReward:
 				cmd_updateReward(userData);
+			case MsgMission.UpdateCopy:
+				Cmd_UpdateCopy(userData);
 		}
 		super.onUpdate(type, source, userData);
 	}
@@ -83,8 +85,9 @@ class RewardSystem extends Component
 	//更新奖励选项
 	private function cmd_AddReward(data:Dynamic):Void
 	{
-		_liveNessList.get(Std.parseInt(data[0])).Num = Std.parseInt(data[1]);
-		FileUtils.setFileData(_liveNessList, FilesType.Active);
+		var info = _liveNessList.get(Std.parseInt(data[0]));
+		info.vo.Times = Std.parseInt(data[1]);
+		updateSql(info);
 		notify(MsgUIUpdate.Reward, data);
 	}
 	/**更新并保存奖励任务数据*/
@@ -101,19 +104,20 @@ class RewardSystem extends Component
 				||info.TaskType == 4 && duplicateInfo.DuplicateType == 11
 				||info.TaskType == 5&&duplicateInfo.DuplicateType == 12)
 				{
-					info.Num += 1;
-					if (info.Num >= info.Count )
+					info.vo.Times += 1;
+					if (info.vo.Times >= info.Count )
 					{
-						info.Num = info.Count;
+						info.vo.Times = info.Count;
 					}
+					updateSql(info);
 				}
 			}
-			FileUtils.setFileData(_liveNessList, FilesType.Active);
 		//}
 	}
 	/*特殊副本*/
-	public function updateEndlessTask(type:Int):Void
+	private function Cmd_UpdateCopy(userData:Dynamic):Void
 	{
+		var type:Int = userData;
 		for ( key in _liveNessList.keys())
 		{
 			var info = _liveNessList.get(key);
@@ -122,14 +126,14 @@ class RewardSystem extends Component
 			||info.TaskType == 4 && type == 11
 			||info.TaskType == 5&&type== 12)
 			{
-				info.Num += 1;
-				if (info.Num >= info.Count )
+				info.vo.Times += 1;
+				if (info.vo.Times >= info.Count )
 				{
-					info.Num = info.Count;
+					info.vo.Times = info.Count;
 				}
+				updateSql(info);
 			}
 		}
-		FileUtils.setFileData(_liveNessList, FilesType.Active);
 	}
 	/*锻造任务更新*/
 	private function cmd_updateForge(userData:Dynamic):Void
@@ -139,29 +143,33 @@ class RewardSystem extends Component
 		{
 			var info = _liveNessList.get(key);
 			if(type == info.TaskType){
-				info.Num += 1;
-				if (info.Num >= info.Count )
+				info.vo.Times += 1;
+				if (info.vo.Times >= info.Count )
 				{
-					info.Num = info.Count;
+					info.vo.Times = info.Count;
 				}
+				updateSql(info);
 			}
 		}
-		FileUtils.setFileData(_liveNessList, FilesType.Active);
 	}
 	
 	private function cmd_updateReward(userData:Dynamic):Void
 	{
 		if(userData.type=="online"){
 			var i:Int = userData.data;
-			notify(MsgNet.UpdateInfo, { type:PlayerPropType.DAY, data:i + 1 } );
+			notify(MsgNet.UpdateInfo, { type:PlayerProp.DAY, data:i + 1 } );
 			rewardArrbtn[i] = true;
-			//FileUtils.setFileData(null, FilesType.player);
 			SavaTimeUtil.saveFile();
 		}else if (userData.type=="active") {
 			var info:LiveNessInfo = userData.data;
-			_liveNessList.get(info.Id).isDraw = 1;
-			FileUtils.setFileData(null, FilesType.Active);
+			_liveNessList.get(info.Id).vo.Draw = 1;
+			updateSql(info);
 			
 		}
+	}
+	
+	private function updateSql(data:LiveNessInfo)
+	{
+		RemoteSqlite.instance.updateProfile(TableType.P_Active, data.vo, { Id:data.Id } );
 	}
 }

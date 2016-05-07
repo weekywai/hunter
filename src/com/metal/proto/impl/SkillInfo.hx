@@ -50,26 +50,26 @@ class SkillInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "SN");
-		Name = XmlUtils.GetString(data, "Name");
-		Desc = XmlUtils.GetString(data, "Desc");
-		Kind = XmlUtils.GetInt(data, "Type");
-		Lock = XmlUtils.GetInt(data, "Lock");
-		CDTime = XmlUtils.GetFloat(data, "CDTime");
-		Consume = XmlUtils.GetInt(data, "Consume");
-		attradius = XmlUtils.GetFloat(data, "attradius");
-		AttackType = XmlUtils.GetInt(data, "AttackType");
-		BulletID = XmlUtils.GetInt(data, "BulletID");
-		angle = XmlUtils.GetInt(data, "angle");
-		num = XmlUtils.GetInt(data, "num");
-		interval = XmlUtils.GetFloat(data, "interval");
-		buffTarget = XmlUtils.GetInt(data, "bufftarget");
-		buffId = XmlUtils.GetInt(data, "buffid");
-		buffTime = XmlUtils.GetInt(data, "bufftime");
-		Radius = XmlUtils.GetInt(data, "Radius");
-		Effect = praseEfect(XmlUtils.GetString(data, "Effect"));
+		Id = data.SN;
+		Name = data.Name;
+		Desc = data.Desc;
+		Kind = data.Type;
+		Lock = data.Lock;
+		CDTime = data.CDTime;
+		Consume = data.Consume;
+		attradius = data.attradius;
+		AttackType = data.AttackType;
+		BulletID = data.BulletID;
+		angle = data.angle;
+		num = data.num;
+		interval = data.interval;
+		buffTarget = data.bufftarget;
+		buffId = data.buffid;
+		buffTime = data.bufftime;
+		Radius = data.Radius;
+		Effect = praseEfect(data.Effect);
 	}
 	
 	private function praseEfect(data:Dynamic):Array<Int>

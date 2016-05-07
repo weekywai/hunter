@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.MonsterAppearInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -14,6 +16,13 @@ class MonsterAppeatManager
 	public function new() 
 	{
 		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.MonsterAppear);
+		for (i in req) 
+		{
+			var info:MonsterAppearInfo = new MonsterAppearInfo();
+			info.readXml(i);
+			_data.set(info.ID, info);
+		}
 	}
 	
 	public function getData(id:Int):MonsterAppearInfo
@@ -23,7 +32,7 @@ class MonsterAppeatManager
 	
 	public function  appendXml(data:Xml):Void
 	{
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -31,6 +40,6 @@ class MonsterAppeatManager
 			var info:MonsterAppearInfo = new MonsterAppearInfo();
 			info.readXml(propText);
 			_data.set(info.ID, info);
-		}
+		}*/
 	}
 }

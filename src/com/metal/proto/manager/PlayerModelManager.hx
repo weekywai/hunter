@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.PlayerModelInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -15,7 +17,14 @@ public static var instance(default, null):PlayerModelManager = new PlayerModelMa
 	
 	public function new() 
 	{
-		_data = new IntMap();	
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Partner);
+		for (i in req) 
+		{
+			var info:PlayerModelInfo = new PlayerModelInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	/**playermodel*/
 	public function getInfo(key:Int):PlayerModelInfo
@@ -24,7 +33,7 @@ public static var instance(default, null):PlayerModelManager = new PlayerModelMa
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -32,7 +41,7 @@ public static var instance(default, null):PlayerModelManager = new PlayerModelMa
 			var model:PlayerModelInfo = new PlayerModelInfo();
 			model.readXml(propText);
 			_data.set(model.SN, model);
-		}
+		}*/
 	}
 	
 }

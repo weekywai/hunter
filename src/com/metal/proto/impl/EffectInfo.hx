@@ -23,12 +23,12 @@ class EffectInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "ID");
-		type = XmlUtils.GetInt(data, "Type");
-		res = XmlUtils.GetString(data, "Res");
-		kind = XmlUtils.GetInt(data, "Kind");
-		speed = XmlUtils.GetFloat(data, "speed");
+		Id = data.ID;
+		type = data.Type;
+		res = data.Res;
+		kind = data.Kind;
+		speed = data.speed;
 	}
 }

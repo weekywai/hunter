@@ -112,9 +112,9 @@ class LoginRegistCmd extends BaseCmd
 	{
 		sendMsg(MsgUI2.Loading, true);
 		LoginFileUtils.saveLogin(loginData, name);
-		notifyRoot(MsgNet.AssignAccount);
+		//notifyRoot(MsgNet.AssignAccount);
 		if(name!=null){
-			PlayerUtils.getInfo().Name = name;
+			PlayerUtils.getInfo().data.NAME = name;
 			//sendMsg(MsgUI2.Loading, true);
 		}
 		var main = UIBuilder.buildFn('ui/mainIndex.xml')( { } );

@@ -267,6 +267,13 @@
 			states-up-ico-src   = "'ui/main/xiadianshianniupingmu1.png'"
             states-down-ico-src = "'ui/main/xiadianshianniupingmu2.png'"
 		/>
+		<Blue
+            format-size="28"
+            format-color="0xb8ffff"
+            format-bold="false"
+			states-up-ico-src   = "'ui/storehouse/storehouse/anniu1-3.png'"
+            states-down-ico-src = "'ui/storehouse/storehouse/anniu1-2.png'"
+		/>
 	</Radio>
 	<TabPage>
 		<TabPages

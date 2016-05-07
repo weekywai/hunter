@@ -54,8 +54,8 @@ class EvolutionCmd extends ForgetBase
 		//装备展示图
 		var widgetPanel:Widget = new Widget();
 		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/big/' + goodsInfo.ResId + '.png' ,x:-85,y:-85} );
-		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsInfo.itemId,3) ,x:-95,y:-92} );
-		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsInfo.itemId, 2), x: -113 , y: -110 } );
+		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsInfo.ID,3) ,x:-95,y:-92} );
+		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(goodsInfo.ID, 2), x: -113 , y: -110 } );
 		widgetPanel.addChild(quality);
 		widgetPanel.addChild(img);
 		widgetPanel.addChild(quality_1);
@@ -96,7 +96,7 @@ class EvolutionCmd extends ForgetBase
 		var bag:BagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
 		for (j in 0...bag.itemArr.length)
 		{
-			if (bag.itemArr[j].itemId == goodsInfo.itemId && bag.itemArr[j].keyId!=goodsInfo.keyId) 
+			if (bag.itemArr[j].ID == goodsInfo.ID && bag.itemArr[j].keyId!=goodsInfo.keyId) 
 			{ 
 				
 				meterailArr.push (bag.itemArr[j]);
@@ -111,8 +111,8 @@ class EvolutionCmd extends ForgetBase
 			var tempInfo = cast meterailArr[i];
 			
 			//品质
-			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId), x:13, y:13 } );
-			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId,0), x:5, y:4 } );
+			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:13, y:13 } );
+			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID,0), x:5, y:4 } );
 			
 			
 			var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + tempInfo.ResId + '.png' , x:15, y:15 } );
@@ -161,7 +161,7 @@ class EvolutionCmd extends ForgetBase
 						{
 							for (j in 0...selectMeterail.length)
 							{
-								if (oneData.itemId == selectMeterail[j].itemId && oneData.keyId == selectMeterail[j].keyId)
+								if (oneData.ID == selectMeterail[j].ID && oneData.keyId == selectMeterail[j].keyId)
 								{
 									selectMeterail.splice( j, 1);
 									break;
@@ -207,8 +207,12 @@ class EvolutionCmd extends ForgetBase
 			_widget.getChildAs("effPanel", Widget).addChild(eff);
 			eff.onPlay();
 			goodsInfo.Upgrade += 1;
-			
-			notifyRoot(MsgNet.UpdateBag, { type:0, data:selectMeterail } );
+			var metal:Array<Int> = [];
+			for (item in selectMeterail) 
+			{
+				metal.push(item.ID);
+			}
+			notifyRoot(MsgNet.UpdateBag, { type:0, data:metal } );
 			notifyRoot(MsgMission.Update, {type:"forge",data:{id:6, info:goodsInfo } });
 			notifyRoot(MsgMission.Forge, 7);
 			setData();

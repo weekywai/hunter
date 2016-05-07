@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.ChestInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -10,18 +12,25 @@ import haxe.xml.Fast;
 class ChestManager
 {
 	public static var instance(default, null):ChestManager = new ChestManager();
-	private var _protpChest:IntMap<ChestInfo>;
+	private var _data:IntMap<ChestInfo>;
 	public function new() 
 	{
-		_protpChest = new IntMap<ChestInfo>();
+		_data = new IntMap<ChestInfo>();
+		var req = RemoteSqlite.instance.request(TableType.Chest);
+		for (i in req) 
+		{
+			var info:ChestInfo = new ChestInfo();
+			info.readXml(i);
+			_data.set(info.Level, info);
+		}
 	}
 	public function getChest(key:Int):ChestInfo
 	{
-		return _protpChest.get(key);
+		return _data.get(key);
 	}
 	public function appendXml(data:Xml):Void
 	{
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propBuyChest:Fast, subId:Int;
@@ -31,7 +40,7 @@ class ChestManager
 			//subId = Std.parseInt(propBuyChest.node.Level.innerData);
 			var info:ChestInfo=new ChestInfo() ;
 			info.readXml(propBuyChest);
-			_protpChest.set(info.Level, info);
-		}
+			_data.set(info.Level, info);
+		}*/
 	}
 }

@@ -1,19 +1,18 @@
 package com.metal.unit.actor.view;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
+import com.metal.config.ItemType;
 import com.metal.message.MsgActor;
-import com.metal.proto.impl.GoldGoodInfo;
-import com.metal.proto.impl.ItemBaseInfo;
 import com.metal.proto.impl.ModelInfo;
 import com.metal.unit.actor.api.ActorState.ActionType;
 import com.metal.unit.actor.impl.UnitActor;
 import motion.Actuate;
 import motion.MotionPath;
-import motion.MotionPath.BezierPath;
 import motion.easing.Linear;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 
+using com.metal.proto.impl.ItemProto;
 /**
  * 掉落物品
  * @author li
@@ -77,9 +76,9 @@ class ViewDropItem extends ViewObject
 		//判断加载类型
 		_actor = owner.getComponent(UnitActor);
 		//trace(owner.getProperty(ItemBaseInfo));
-		var info = owner.getProperty(ItemBaseInfo);
-		if (info == null)
-			info = owner.getProperty(GoldGoodInfo);
+		var info = owner.getProperty("Kind");
+		//if (info == null)
+			//info = owner.getProperty("Kind", ItemType.IK2_GOLD);
 		if (info == null)
 			throw new Error("info is null" );
 		//trace(source);

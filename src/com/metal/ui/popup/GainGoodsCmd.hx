@@ -1,17 +1,12 @@
 package com.metal.ui.popup;
-import com.metal.component.GameSchedual;
 import com.metal.config.EquipProp;
-import com.metal.config.FilesType;
 import com.metal.config.SfxManager;
-import com.metal.proto.impl.WeaponInfo;
+import com.metal.message.MsgNet;
 import com.metal.proto.manager.GoodsProtoManager;
-import com.metal.utils.FileUtils;
-import openfl.Lib;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Box;
 import ru.stablex.ui.widgets.Button;
-import ru.stablex.ui.widgets.HBox;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.VBox;
 import ru.stablex.ui.widgets.Widget;
@@ -45,16 +40,17 @@ class GainGoodsCmd extends BaseCmd
 	/**设置数据，显示获得物品*/
 	public function setData(data:Array<Int>):Void
 	{
-		var _bagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
 		var panel = _widget.getChildAs("panel",Widget);
-		if (panel.numChildren > 0) panel.removeChildren();
+		if (panel.numChildren > 0) 
+			panel.removeChildren();
 		for (i in 0...data.length)
 		{
-			var tempInfo = GoodsProtoManager.instance.getItemById(data[i]);
+			var id = data[i];
+			var tempInfo = GoodsProtoManager.instance.getItemById(id);
 			if (tempInfo != null) {
 				
-				var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId), x:14, y:15 } );
-				var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId,0), x:7, y:8 } );
+				var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:14, y:15 } );
+				var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID,0), x:7, y:8 } );
 				
 				var len:Int = data.length;
 				if (data.length > 5)
@@ -63,8 +59,8 @@ class GainGoodsCmd extends BaseCmd
 				};
 				
 				var nameTxt:Text = UIBuilder.create(Text, {x:0,y:111 } );
-				nameTxt.resetFormat(EquipProp.levelColor(""+tempInfo.InitialQuality), 24, true);
-				nameTxt.text = tempInfo.itemName;
+				nameTxt.resetFormat(EquipProp.levelColor(""+tempInfo.Color), 24, true);
+				nameTxt.text = tempInfo.Name;
 				
 				var bg:VBox = UIBuilder.create(VBox, {
 					w:150,
@@ -75,7 +71,7 @@ class GainGoodsCmd extends BaseCmd
 						UIBuilder.create(Box, { 
 							skinName:'forgeImg12',
 							children : [
-								UIBuilder.create(Box, { skinName : "forgelvImg" + tempInfo.InitialQuality, children : [
+								UIBuilder.create(Box, { skinName : "forgelvImg" + tempInfo.Color, children : [
 									UIBuilder.create(Bmp, { src:'icon/' + tempInfo.ResId + '.png' } )
 								] } )
 							]
@@ -84,13 +80,9 @@ class GainGoodsCmd extends BaseCmd
 					]
 				} );
 				panel.addChild(bg);
-				
-				_bagInfo.itemArr.push(tempInfo);
 			}
 		}
-		cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).setBagData(_bagInfo, 11111);
-		FileUtils.setFileData(_bagInfo, FilesType.Bag);
-		
+		GameProcess.root.notify(MsgNet.UpdateBag, { type:1, data:data } );
 	}
 	override function onDispose():Void 
 	{

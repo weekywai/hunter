@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.ActorPropertyInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -14,6 +16,13 @@ class ActorPropertyManager
 	public function new() 
 	{
 		_data = new IntMap<ActorPropertyInfo>();
+		var req = RemoteSqlite.instance.request(TableType.Actor);
+		for (i in req) 
+		{
+			var info:ActorPropertyInfo = new ActorPropertyInfo();
+			info.readXml(i);
+			_data.set(info.Level, info);
+		}
 	}
 	public function getProto(key:Int):ActorPropertyInfo
 	{
@@ -21,7 +30,7 @@ class ActorPropertyManager
 	}
 	public function appendXml(data:Xml):Void
 	{
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propActor:Fast;
@@ -29,6 +38,6 @@ class ActorPropertyManager
 			var info:ActorPropertyInfo = new ActorPropertyInfo();
 			info.readXml(propActor);
 			_data.set(info.Lv, info);
-		}
+		}*/
 	}
 }

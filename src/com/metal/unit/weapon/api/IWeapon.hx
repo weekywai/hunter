@@ -1,7 +1,6 @@
 package com.metal.unit.weapon.api;
 import com.metal.proto.impl.BulletInfo;
 import com.metal.proto.impl.SkillInfo;
-import com.metal.proto.impl.WeaponInfo;
 
 /**
  * @author weeky

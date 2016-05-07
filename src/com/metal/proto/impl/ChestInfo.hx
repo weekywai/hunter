@@ -21,13 +21,13 @@ class ChestInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Level = XmlUtils.GetInt(data, "Level");
-		NeedDiamond = XmlUtils.GetInt(data, "NeedDiamond");
-		ItemListGroup = XmlUtils.GetString(data, "ItemListGroup");
-		MaxItemNum = XmlUtils.GetInt(data, "MaxItemNum");
-		Activity = XmlUtils.GetString(data, "Activity");
+		Level = data.Level;
+		NeedDiamond = data.NeedDiamond;
+		ItemListGroup = data.ItemListGroup;
+		MaxItemNum = data.MaxItemNum;
+		Activity = data.Activity;
 	}
 	public function initDefaultValues():Void
 	{

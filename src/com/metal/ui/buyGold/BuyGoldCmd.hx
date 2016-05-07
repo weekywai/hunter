@@ -68,7 +68,7 @@ class BuyGoldCmd extends BaseCmd
 	{
 		
 		var price:String = "";
-		if (PlayerUtils.getInfo().getProperty(PlayerPropType.GEM) < Gold_Manager.instance.getProto(btnNum).Price)
+		if (PlayerUtils.getInfo().data.GEM < Gold_Manager.instance.getProto(btnNum).Price)
 		{
 			sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 			return;

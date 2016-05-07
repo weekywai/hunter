@@ -1,11 +1,11 @@
 package com.metal.enums;
 import com.metal.config.ItemType;
-import com.metal.proto.impl.ArmsInfo;
-import com.metal.proto.impl.GonUpLevelInfo;
-import com.metal.proto.impl.ItemBaseInfo;
-import com.metal.proto.impl.WeaponInfo;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
+import com.metal.proto.ProtoUtils;
 import haxe.ds.IntMap;
 
+using com.metal.proto.impl.ItemProto;
 /**
  * ...
  * @author 3D
@@ -19,20 +19,13 @@ class BagInfo
 	public var useNum:Int;//cell_count（ubyte）当前背包已经使用的格子数
 	/**记录备用背包对应位置的物品*/
 	public var backupWeaponArr:IntMap<ItemBaseInfo>;
-	public var itemArr:Array<ItemBaseInfo>;//
-	//public var itemMap:IntMap<ItemBaseInfo>;//itemMap.get(itemIndex)=ItemBaseInfo
+	public var itemArr:Array<ItemBaseInfo>;
 	/**通过itemIndex找对应的ItemBaseInfo*/
 	public function getItemByKeyId(keyId:Int):ItemBaseInfo
 	{
-		//for (item in itemArr) 
-		//{
-			//if (item.itemIndex == itemIndex)
-				//return item;
-		//}
-		//return null;
 		for (item in itemArr) 
 		{
-			if (item.keyId == keyId)
+			if (item.vo.keyId == keyId)
 				return item;
 		}
 		return null;
@@ -41,12 +34,12 @@ class BagInfo
 	public function buildBackupWeaponMap()
 	{
 		backupWeaponArr = new IntMap();
-		for (i in 0...itemArr.length) 
+		for (item in itemArr) 
 		{
-			if (itemArr[i].backupIndex!=-1) 
+			if (item.vo.sortInt!=-1) 
 			{
-				backupWeaponArr.set(itemArr[i].backupIndex, itemArr[i]);
-				//trace("backupIndex: "+itemArr[i].backupIndex+" ,keyid: "+itemArr[i].keyId);
+				backupWeaponArr.set(item.vo.sortInt, item);
+				//trace("sortInt: "+itemArr[i].sortInt+" ,keyid: "+itemArr[i].keyId);
 			}			
 		}
 	}
@@ -54,126 +47,104 @@ class BagInfo
 	public function setBackup(weapon:ItemBaseInfo,index:Int)
 	{
 		var oldBackup:ItemBaseInfo = backupWeaponArr.get(index);
-		if (oldBackup!=null) oldBackup.backupIndex = -1;
+		if (oldBackup != null) {
+			oldBackup.vo.sortInt = -1;
+			RemoteSqlite.instance.updateProfile(TableType.P_Goods, oldBackup.vo, {ID:oldBackup.ID});
+		}
 		backupWeaponArr.set(index, weapon);
 		if (weapon != null) {
-			weapon.backupIndex = index;	
+			weapon.vo.sortInt = index;
+			RemoteSqlite.instance.updateProfile(TableType.P_Goods, weapon.vo, {ID:weapon.ID});
 			//trace("index: "+index);
 			//trace("weapon.keyId: "+weapon.keyId);
 		}
 	}
-	public function new() 
-	{
-		
-	}
+	public function new() {}
+	
 	public function getItem(id:Int):ItemBaseInfo
 	{
 		for (item in itemArr) 
 		{
-			if (item.itemId == id)
+			if (item.ID == id)
 				return item;
 		}
 		return null;
-	}
-	/**背包排序  sortInt从小到大*/
-	public function sort():Void
-	{
-		for (i in 0...itemArr.length)
-		{
-			itemArr[i].itemIndex = i + 1;
-			
-			
-			/***进化材料的SubId不知哪改为0    如果SubId不更改，则可省去下面的判断直接用SubId作为排序条件***/
-			if (itemArr[i].SubId == 0)
-			{
-				itemArr[i].sortInt = 101;
-			
-			}
-			else
-			{
-				itemArr[i].sortInt = itemArr[i].SubId;
-			}	
-		}
-		itemArr.sort(autoSortByIndex);
-		//for (i in 0...itemArr.length) 
-		//{
-			//for (j in (i+1)...itemArr.length) 
-			//{
-				//if (itemArr[i].keyId==itemArr[j].keyId) 
-				//{
-					//trace("same object in itemArr!!!!");
-					//trace("i: "+i);
-					//trace("j: "+j);
-					//trace("itemArr[i].itemId: "+itemArr[i].keyId);
-					////trace("itemArr[j].itemId: "+itemArr[j].itemId);
-				//}
-			//}
-		//}
-	}
-	
-	private function autoSortByIndex(a:Dynamic,b:Dynamic):Int
-	{
-		//#if !neko
-			if (a.sortInt == b.sortInt)
-				return 0;
-			if (a.sortInt > b.sortInt)
-				return 1;
-			else
-				return -1;
 	}
 	
 	/*背包中拿所有强化材料*/
 	public function getUpgradeMaterial(goodsInfo:ItemBaseInfo):Array<ItemBaseInfo>
 	{
 		var infoArr:Array<ItemBaseInfo> = [];
-		for ( i in 0...itemArr.length)
+		for ( item in itemArr)
 		{
-			var key:Int = itemArr[i].itemId;
-			var oneData = itemArr[i];
-			if ((Std.is(oneData, GonUpLevelInfo) || Std.is(oneData, WeaponInfo) || Std.is(oneData, ArmsInfo)) && goodsInfo.keyId != oneData.keyId)
+			var key:Int = item.ID;
+			if ((item.Kind == ItemType.IK2_GON_UPGRADE || item.Kind == ItemType.IK2_GON || item.Kind == ItemType.IK2_ARM) && goodsInfo.vo.keyId != item.vo.keyId)
 			{
-				infoArr.push(cast oneData);
+				infoArr.push(item);
 			}
 		}
 		return infoArr;
 	}
-	/*从背包中删除物品*/
-	public function removeGoods(goods:Array<ItemBaseInfo>):Void
+	
+	/**背包所有已穿装备*/
+	public function getEquiped():Array<ItemBaseInfo>
 	{
-		for (j in 0...goods.length)
+		var infoArr:Array<ItemBaseInfo> = [];
+		for ( item in itemArr)
 		{
-			var itemId = goods[j].itemId;
-			var index = goods[j].itemIndex;
-			var keyId = goods[j].keyId;
-			var currArr:Array<ItemBaseInfo> = [];
-			for (i in 0...itemArr.length)
+			if (item.vo.Equip)
+				infoArr.push(item);
+		}
+		return infoArr;
+	}
+	
+	/*从背包中删除物品*/
+	public function removeGoods(goodsList:Array<Int>):Void
+	{
+		for (Id in goodsList)
+		{
+			for (item in itemArr)
 			{
-				if (itemId == itemArr[i].itemId && keyId == itemArr[i].keyId)
+				if (Id == item.ID)
 				{
-					itemArr[i].itemIndex = 0;
-					
-				}else
-				{
-					currArr.push(itemArr[i]);
+					itemArr.remove(item);
 				}
 			}
-			itemArr = currArr;
 		}
+		RemoteSqlite.instance.deleteProfile(TableType.P_Goods, "ID", goodsList);
 		trace("over == " + itemArr.length);
 	}
-	public function addGoods(goods:Array<ItemBaseInfo>):Void
+	public function addGoods(goods:Array<Int>):Void
 	{		
-		//trace("addGoods");
-		/**初次获得设置子弹数*/
-		for (i in 0...goods.length) 
+		trace("addGoods");
+		var req = RemoteSqlite.instance.request(TableType.Item, "ID", goods.join(","));
+		var save = [], values = [];
+		var data:Array<ItemBaseInfo> = [];
+		var item:ItemBaseInfo;
+		for (d in req) 
 		{
-			if (goods[i].Kind==ItemType.IK2_GON && goods[i].firstGet) 
-			{
-				goods[i].setStartBullet();
-				trace("set StartClip");
-			}
+			item = d;
+			data.push(item);
+			/**初次获得设置子弹数*/
+			if (item.Kind == ItemType.IK2_GON)
+				save.push({ ID:d.ID, Kind:d.Kind, Bullets:d.OneClip, Clips:d.StartClip });
+			else
+				save.push( { ID:d.ID, Kind:d.Kind, Bullets:0, Clips:0} );
+			values.push(d.ID);
 		}
-		itemArr = itemArr.concat(goods);
-		sort();
+		RemoteSqlite.instance.addProfile(TableType.P_Goods, save);
+		//获取记录vo
+		req = RemoteSqlite.instance.requestProfile(TableType.P_Goods, "ID", values.join(","));
+		for (item in data) 
+		{
+			var vo:Dynamic = Lambda.find(req, function(e) { 
+				if (e.ID == item.ID)
+					return true;
+				return false;
+			} );
+			if(vo!=null)
+				item.vo = vo;
+		}
+		itemArr = itemArr.concat(data);
 	}
 }

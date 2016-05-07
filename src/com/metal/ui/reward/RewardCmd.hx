@@ -91,7 +91,7 @@ class RewardCmd extends BaseCmd
 		var reward1 = _widget.getChildAs("reward1", VBox);
 		var rewardArrbtn = rewardComp.rewardArrbtn;
 		var playInfo = PlayerUtils.getInfo();
-		var signInNum = playInfo.getProperty(PlayerPropType.DAY);
+		var signInNum = playInfo.data.DAY;
 		
 		for (k in 0...signInNum)
 		{
@@ -161,19 +161,19 @@ class RewardCmd extends BaseCmd
 			oneActive.name = "list" + j;
 			livelyBtn = oneActive.getChildAs("livelyBtn" , Button);
 			//if (liveInfo.isDraw!=1)activePanel.addChild(oneActive);
-			oneActive.getChildAs("msg", Text).text = liveInfo.name;
+			oneActive.getChildAs("msg", Text).text = liveInfo.Name;
 			oneActive.getChildAs("lively", Text).text = "" + liveInfo.Point;
-			if (liveInfo.Num >= liveInfo.Count)
+			if (liveInfo.vo.Times >= liveInfo.Count)
 			{
 				oneActive.getChildAs("part", Text).text = liveInfo.Count + "/" + liveInfo.Count;
 				livelyBtn.text = "领取";
 				livelyBtn.disabled = false;
 			}else
 			{
-				oneActive.getChildAs("part", Text).text = liveInfo.Num + "/" + liveInfo.Count;
+				oneActive.getChildAs("part", Text).text = liveInfo.vo.Times + "/" + liveInfo.Count;
 			}
 			//是否已领取
-			if (liveInfo.isDraw==1)
+			if (liveInfo.vo.Draw==1)
 			{
 				livelyBtn.text = "已领取";
 				livelyBtn.disabled = true;
@@ -188,13 +188,13 @@ class RewardCmd extends BaseCmd
 				{
 					SfxManager.getAudio(AudioType.Btn).play();
 					var btn = e.currentTarget;
-					if (liveInfo.Num >= liveInfo.Count)
+					if (liveInfo.vo.Times >= liveInfo.Count)
 					{
-						trace(liveInfo.Num+">>>"+liveInfo.Count);
+						trace(liveInfo.vo.Times+">>>"+liveInfo.Count);
 						btn.disabled = true;
 						btn.format.color = 0xb8ffff;
 						btn.text = "已领取";
-						liveInfo.isDraw = 1;
+						liveInfo.vo.Draw = 1;
 						livelyNum += liveInfo.Point;
 						_widget.getChildAs("livelyNum", Progress).value = livelyNum;
 						currActieNum.text = "当前活跃度(" + livelyNum + "/100)";
@@ -222,7 +222,6 @@ class RewardCmd extends BaseCmd
 		}
 		_widget.getChildAs("livelyNum", Progress).value = livelyNum;
 		_widget.getChildAs("currActieNum", Text).text = "当前活跃度(" + livelyNum + "/100)";
-		FileUtils.setFileData(infoMap, FilesType.Active);
 	}
 	override public function onDispose():Void
 	{

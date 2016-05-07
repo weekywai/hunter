@@ -3,7 +3,6 @@ import com.metal.proto.impl.MonsterInfo.DropItemInfo;
 import com.utils.StringUtils;
 import com.utils.XmlUtils;
 import openfl.geom.Point;
-import haxe.xml.Fast;
 
 /**
  * ...
@@ -112,41 +111,41 @@ class DuplicateInfo
 		
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "ID");
-		RoomId = ParseRoomId(XmlUtils.GetString(data, "RoomID"));
-		DuplicateName = XmlUtils.GetString(data, "Name");
-		StageName = XmlUtils.GetString(data, "Stage");
-		Description = XmlUtils.GetString(data, "Desc");
-		DuplicateType = XmlUtils.GetInt(data, "Type");
-		//NeedLv = XmlUtils.GetInt(data, "NeedLevel");
-		NeedPower = XmlUtils.GetInt(data, "NeedPower");
-		//NeedGold = XmlUtils.GetInt(data, "NeedGold");
-		AllowTimes = XmlUtils.GetInt(data, "Times");
-		StagePassType = XmlUtils.GetInt(data, "StagePassType");
-		//MonsterList = XmlUtils.GetString(data, "MonsterList");
-		//Icon = XmlUtils.GetString(data, "Icon");
-		//ReviveType = XmlUtils.GetInt(data, "ReliveType");
-		//VIPLv = XmlUtils.GetInt(data, "NeedVip");
-		CanGetItemNum = XmlUtils.GetInt(data, "CanGetItemNum");
-		DropChestMax = XmlUtils.GetInt(data, "DropChestMax");
-		PreDuplicateId = XmlUtils.GetInt(data, "PreID");
-		//NeedItem = XmlUtils.GetInt(data, "NeedItem");
-		//StagePower = XmlUtils.GetInt(data, "StagePower");
-		//Coordinate = ParseCoordinate(XmlUtils.GetString(data, "Coordinate"));
-		//AreaType = XmlUtils.GetInt(data, "AreaType");
-		BossName = XmlUtils.GetString(data, "BossName");
-		//BossLv = XmlUtils.GetInt(data, "BossLv");
-		BossFeatures = XmlUtils.GetString(data, "BossFeature");
-		DropItem1 = ParseItem(XmlUtils.GetString(data, "DropItem1"));
-		DropItem2 = ParseItem(XmlUtils.GetString(data, "DropItem2"));
-		DropItem3 = ParseItem(XmlUtils.GetString(data, "DropItem3"));
-		DropItem = ParseDropItem(XmlUtils.GetString(data, "DropItem"));
-		BuffRate = XmlUtils.GetFloat(data, "Buff");
-		//Condition2 = XmlUtils.GetString(data, "Condition2");
-		GradeCondition = ParseGradeCondition(XmlUtils.GetString(data, "GradeCondition"));
-		TimeLimit=XmlUtils.GetInt(data, "TimeLimit");
+		Id = data.ID;
+		RoomId = ParseRoomId(data.RoomID);
+		DuplicateName = data.Name;
+		StageName = data.Stage;
+		Description = data.Desc;
+		DuplicateType = data.Type;
+		//NeedLv = data.NeedLevel;
+		NeedPower = data.NeedPower;
+		//NeedGold = data.NeedGold;
+		AllowTimes = data.Times;
+		StagePassType = data.StagePassType;
+		//MonsterList = data.MonsterList;
+		//Icon = data.Icon;
+		//ReviveType = data.ReliveType;
+		//VIPLv = data.NeedVip;
+		CanGetItemNum = data.CanGetItemNum;
+		DropChestMax = data.DropChestMax;
+		PreDuplicateId = data.PreID;
+		//NeedItem = data.NeedItem;
+		//StagePower = data.StagePower;
+		//Coordinate = ParseCoordinate(data.Coordinate);
+		//AreaType = data.AreaType;
+		BossName = data.BossName;
+		//BossLv = data.BossLv;
+		BossFeatures = data.BossFeature;
+		DropItem1 = ParseItem(data.DropItem1);
+		DropItem2 = ParseItem(data.DropItem2);
+		DropItem3 = ParseItem(data.DropItem3);
+		DropItem = ParseDropItem(data.DropItem);
+		BuffRate = data.Buff;
+		//Condition2 = data.Condition2;
+		GradeCondition = ParseGradeCondition(data.GradeCondition);
+		TimeLimit=data.TimeLimit;
 	}
 	
 	private function ParseRoomId(value:String):Array<String>
@@ -170,11 +169,11 @@ class DuplicateInfo
 		return point;
 	}
 	
-	private function ParseItem(value:String):Array<Array<String>>
+	private function ParseItem(value:Dynamic):Array<Array<String>>
 	{
 		var itemArray:Array<String> = new Array();
 		var itemMap:Array<Array<String>> = new Array();
-		itemArray = value.split("|");
+		itemArray = Std.string(value).split("|");
 		for ( item in itemArray )
 		{
 			var i:Array<String> = new Array();

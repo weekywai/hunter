@@ -1,6 +1,4 @@
 package com.metal.proto.impl;
-import com.utils.XmlUtils;
-import haxe.xml.Fast;
 
 /**
  * ...
@@ -14,10 +12,10 @@ class DecompositionInfo
 	{
 		Items = new Array();
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "ID");
-		analytical(XmlUtils.GetString(data, "Items"));
+		Id = data.ID;
+		analytical(data.Items);
 	}
 	private function analytical(str:String):Void
 	{

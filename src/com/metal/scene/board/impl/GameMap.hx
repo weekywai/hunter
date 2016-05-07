@@ -702,7 +702,7 @@ class GameMap extends Component
 					unit.id = 10610;					
 			}
 			
-			//unit.id = item.ItemId;
+			//unit.id = item.ID;
 			unit.x = obj.x;
 			unit.y = obj.y;
 			notifyParent(MsgBoard.CreateUnit, unit);	

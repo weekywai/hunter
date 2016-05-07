@@ -1,8 +1,9 @@
 package com.metal.ui.warehouse ;
 
+import com.metal.component.BagpackSystem;
 import com.metal.component.GameSchedual;
+import com.metal.config.BagType;
 import com.metal.config.EquipProp;
-import com.metal.config.FilesType;
 import com.metal.config.ItemType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.PropertyType;
@@ -16,13 +17,11 @@ import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.player.utils.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
+import com.metal.proto.ProtoUtils;
 import com.metal.proto.impl.AdvanceInfo;
-import com.metal.proto.impl.ArmsInfo;
 import com.metal.proto.impl.DecompositionInfo;
-import com.metal.proto.impl.ItemBaseInfo;
-import com.metal.proto.impl.WeaponInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.manager.AdvanceManager;
 import com.metal.proto.manager.DecompositionManager;
 import com.metal.proto.manager.ForgeManager;
@@ -31,11 +30,10 @@ import com.metal.ui.BaseCmd;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
 import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.utils.BagUtils;
-import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
 import haxe.Serializer;
 import haxe.Unserializer;
-import haxe.ds.ObjectMap;
+import haxe.ds.IntMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Button;
@@ -45,6 +43,7 @@ import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.VBox;
 import ru.stablex.ui.widgets.Widget;
 
+using com.metal.proto.impl.ItemProto;
 /**
  * ...仓库
  * @author hyg
@@ -53,16 +52,16 @@ class WarehouseCmd extends BaseCmd
 {
 	private var _openType:Int =ItemType.IK2_GON;
 	private var _bagInfo:BagInfo;
-	private var _equipBagData:BagInfo;
 	private var _panel:VBox;
 	/**枪*/
-	private var _gunInfo:Array<ItemBaseInfo>;
+	private var _gunInfo:IntMap<ItemBaseInfo>;
 	/**防具*/
-	private var _asmInfo:Array<ItemBaseInfo>;
+	private var _asmInfo:IntMap<ItemBaseInfo>;
 	/**进阶材料*/
 	private var _materialInfo:Array<ItemBaseInfo>;
 	
-	private var _itemTextMap:ObjectMap<ItemBaseInfo,Text>;
+	//private var _itemTextMap:ObjectMap<ItemBaseInfo,Text>;
+	private var _itemMap:IntMap<ItemBaseInfo>;
 	
 	private var isClose:Bool;
 	
@@ -123,13 +122,20 @@ class WarehouseCmd extends BaseCmd
 	
 	public function new(data:Dynamic) 
 	{
+		if(data == BagType.OPENTYPE_ARMS)
+			_openType = ItemType.IK2_ARM;
+		else if(data == BagType.OPENTYPE_WEAPON)
+			_openType = ItemType.IK2_GON;
+		else
+			_openType = ItemType.IK2_GON_PROMOTED;
 		super();
 	}
 	
 	override function onInitComponent():Void 
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
-		_itemTextMap = new ObjectMap();
+		//_itemTextMap = new ObjectMap();
+		_itemMap = GoodsProtoManager.instance.getAll();
 		_widget = UIBuilder.get("warehouse");
 		
 		isClose = false;
@@ -149,8 +155,7 @@ class WarehouseCmd extends BaseCmd
 	private function initUI():Void
 	{
 		_panel = _widget.getChildAs("scrollPanel", VBox);
-		_bagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
-		_equipBagData = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData;
+		_bagInfo = GameProcess.root.getComponent(BagpackSystem).bagData;
 		
 		getItem();		
 		setType();
@@ -160,17 +165,14 @@ class WarehouseCmd extends BaseCmd
 		//setTabListen("petTab");
 		setTabListen("propTab",ItemType.IK2_GON_PROMOTED);		
 		
-		//默认显示类型
-		_widget.getChildAs("gunTab", Radio).down();
-		setScroll(ItemType.IK2_GON);
-		showWeaponPanel();
 		notifyRoot(MsgView.NewBie, NoviceOpenType.NoviceText34);
 	}
 	
 	/**设置tab的监听*/
 	private function setTabListen(tabName:String,type:Int=0)
 	{
-		_widget.getChildAs(tabName, Radio).onPress = function(e) 
+		var radio:Radio = _widget.getChildAs(tabName, Radio);
+		radio.onPress = function(e) 
 		{
 			_openType = type; 
 			setScroll(_openType);
@@ -182,27 +184,34 @@ class WarehouseCmd extends BaseCmd
 				showWeaponPanel();
 			}
 		};
+		//打开显示类型
+		if (_openType == type){
+			radio.onPress(null);
+			radio.selected = true;
+		}
 	}
 	
 	/**更新展示类型数据*/
 	private function setType():Void
 	{
-		_asmInfo = []; 
-		_gunInfo = []; 
+		_asmInfo = GoodsProtoManager.instance.getAllItem(ItemType.IK2_ARM); 
+		_gunInfo = GoodsProtoManager.instance.getAllItem(ItemType.IK2_GON);
 		_materialInfo = []; 
 		//已装备
-		for (equipItem in _equipBagData.itemArr)
+		for (equipItem in _bagInfo.itemArr)
 		{
-			if (equipItem.Kind == ItemType.IK2_ARM) 
-			{
-				_asmInfo.push(equipItem);
-			}else if (equipItem.Kind == ItemType.IK2_GON) 
-			{
-				_gunInfo.push(equipItem);
-			}
+			//if(equipItem.vo.Equip==1){
+				if (equipItem.Kind == ItemType.IK2_ARM) 
+				{
+					_asmInfo.set(equipItem.ID, equipItem);
+				}else if (equipItem.Kind == ItemType.IK2_GON) 
+				{
+					_gunInfo.set(equipItem.ID, equipItem);
+				}
+			//}
 		}
-		_asmInfo = _asmInfo.concat(BagUtils.getItemArrByType(ItemType.IK2_ARM));
-		_gunInfo = _gunInfo.concat(BagUtils.getItemArrByType(ItemType.IK2_GON));
+		//_asmInfo = _asmInfo.concat(BagUtils.getItemArrByType(ItemType.IK2_ARM));
+		//_gunInfo = _gunInfo.concat(BagUtils.getItemArrByType(ItemType.IK2_GON));
 		_materialInfo = BagUtils.getItemArrByType(ItemType.IK2_GON_PROMOTED);
 	}
 	
@@ -210,67 +219,80 @@ class WarehouseCmd extends BaseCmd
 	private function setScroll(type:Int,isUpdataPad:Bool=true)
 	{
 		if (_unparent) return;
-		if (_panel.numChildren > 0) _panel.removeChildren();
-		var itemArr:Array<ItemBaseInfo> = [];		
+		if (_panel.numChildren > 0) 
+			_panel.removeChildren();
 		//未装备
 		switch (type) 
 		{
 			case ItemType.IK2_ARM:
-				itemArr = _asmInfo;
+				updateEquipPanel(_asmInfo, isUpdataPad);
 			case ItemType.IK2_GON:
-				itemArr = _gunInfo;
+				updateEquipPanel(_gunInfo, isUpdataPad);
+			case ItemType.IK2_GON_PROMOTED:
+				_equipPanel.visible = false;
+				_materialPanel.visible = true;
+				updateMaterialPanel();
 		}
-		if (type==ItemType.IK2_GON_PROMOTED) 
-		{
-			_equipPanel.visible = false;
-			_materialPanel.visible = true;
-			updateMaterialPanel();
-		}else 
-		{
-			_equipPanel.visible = true;
-			_materialPanel.visible = false;
-			for (i in 0...itemArr.length) {
+	}
+	private function updateEquipPanel(itemMap:IntMap<ItemBaseInfo>, isUpdataPad:Bool)
+	{
+		_equipPanel.visible = true;
+		_materialPanel.visible = false;
+		for (item in itemMap) {
+			if (item.vo != null) {
 				//默认显示第一条项目
-				if (itemArr[i].itemIndex >= 1000 && isUpdataPad) 
+				if ((item.vo.Equip && isUpdataPad)) 
 				{
-					_itemTextMap.set(itemArr[i],equipGoods(itemArr[i], true));
-					updataPad(itemArr[i]);
-				}else if (itemArr[i].keyId ==_currentInfo.keyId && !isUpdataPad) 
-				{
-					_itemTextMap.set(itemArr[i],equipGoods(itemArr[i], true));
-					updataPad(itemArr[i]);
-				}else 
-				{
-					_itemTextMap.set(itemArr[i],equipGoods(itemArr[i]));
-				}			
+					//_itemTextMap.set(item,equipGoods(item, true));
+					equipGoods(item, true);
+					updataPad(item);
+				//}
+				//else if(_currentInfo!=null && item.vo.keyId == _currentInfo.vo.keyId && !isUpdataPad)
+				//{
+					//updataPad(item);
+					//_itemTextMap.set(item, equipGoods(item));
+				}else{
+					//equipGoods(item);
+				}
+			}else {
+				equipGoods(item);
 			}
 		}
-		
 	}
 	/**材料栏*/
 	private function updateMaterialPanel()
 	{
-		var bagData = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
-		var item:ItemBaseInfo = bagData.getItem(ItemType.AdvanceMaterial_1);
+		var item:ItemBaseInfo = _bagInfo.getItem(ItemType.AdvanceMaterial_1);
 		_materialNum1.text = "X " + (item == null?0:item.itemNum);
-		item= bagData.getItem(ItemType.AdvanceMaterial_2);
+		item= _bagInfo.getItem(ItemType.AdvanceMaterial_2);
 		_materialNum2.text =  "X " + (item == null?0:item.itemNum);
-		item= bagData.getItem(ItemType.AdvanceMaterial_3);
+		item= _bagInfo.getItem(ItemType.AdvanceMaterial_3);
 		_materialNum3.text= "X " + (item == null?0:item.itemNum);
 	}
 	/**滚动条*/
 	private function updateScroll()
 	{
-		for (obj in _itemTextMap.keys()) 
+		
+		for (item in _itemMap) 
 		{
-			if (obj.itemIndex >= 1000 || obj.backupIndex!=-1) 
+			if (item.vo.Equip) 
+			{
+				//_itemTextMap.get(obj).text = "已装备";
+			}else 
+			{
+				//_itemTextMap.get(obj).text = "";
+			}
+		}
+		/*for (obj in _itemTextMap.keys()) 
+		{
+			if (obj.itemIndex >= 1000 || obj.sortInt!=-1) 
 			{
 				_itemTextMap.get(obj).text = "已装备";
 			}else 
 			{
 				_itemTextMap.get(obj).text = "";
 			}
-		}
+		}*/
 	}
 	
 	/*更新滚动条一个项目*/
@@ -283,7 +305,10 @@ class WarehouseCmd extends BaseCmd
 			updataPad(_info);
 		};		
 		var text:Text = oneGoods.getChildAs("text", Text);
-		if (_info.itemIndex >= 1000 ||_info.backupIndex!=-1) text.text = "已装备";
+		if(_info.vo!=null)
+			if (_info.vo.Equip || _info.vo.sortInt !=-1) 
+				text.text = "已装备";
+		//if (_info.itemIndex >= 1000 ||_info.sortInt!=-1) text.text = "已装备";
 		//weaponRadio.skinName = "";
 		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + _info.ResId + '.png', x:0, y:0 } );
 		img.mouseEnabled = false;
@@ -326,54 +351,23 @@ class WarehouseCmd extends BaseCmd
 		_materialNum2=_widget.getChildAs("materialNum2", Text);
 		_materialNum3=_widget.getChildAs("materialNum3", Text);
 		
-		//_rechargeBtn.onPress = function(e) {
-			//trace("BuyFullClip");
-			//notifyRoot(MsgNet.BuyFullClip, { weapon:_currentInfo, text:_widget.getChildAs("description2", Text)});
-		//}
 		_rechargeOneBtn.onPress = function(e) {
 			trace("BuyOneClip");
 			notifyRoot(MsgNet.BuyOneClip, _currentInfo);
 		}
-
-		//_maxStrengthenBtn = _widget.getChildAs("maxStrengthenBtn", Button);
-		//_maxStrengthenBtn.onPress = function(e) {
-			//var playerInfo = PlayerUtils.getInfo();
-			//
-			//if (playerInfo.getProperty(PlayerPropType.GOLD)<maxStrengthenMoney) 
-			//{
-				//AlertTips.openTip("金币不足", "tipPopup");
-			//}else 
-			//{
-				//notifyRoot(MsgPlayer.UpdateMoney, -maxStrengthenMoney);
-				//var tempInfo = cast _currentInfo;
-				//tempInfo.strLv=tempInfo.MaxStrengthenLevel;
-				//updataPad(_currentInfo);
-				//notify(MsgUIUpdate.ForgeUpdate, {type:ForgeUpdate.Success, data:_currentInfo});
-			//}			
-		//}
-		
 	}
-	
-	//private function addmsg(labelText:String, descriptionText:String) {
-		//var label:Text=new Text();
-		//label.text = labelText;
-		//label.defaults = "Tip";
-		//
-		//var description:Text=new Text();
-		//description.text = descriptionText;
-		//description.defaults = "Gold2";
-	//}
 	
 	/**更新面板显示*/
 	private function updataPad(_info:ItemBaseInfo)
 	{
-		this._currentInfo = _info;
-		var tempInfo = cast _info;
-		_dressedBmp.visible = (_info.itemIndex >= 1000 ||_info.backupIndex!=-1);
+		_currentInfo = _info;
+		var tempInfo:EquipInfo =  ProtoUtils.castType(_info);
+		_dressedBmp.visible = (_info.vo.Equip ||_info.vo.sortInt!=-1);
+		//_dressedBmp.visible = (_info.itemIndex >= 1000 ||_info.sortInt!=-1);
 		//_dressBtn.visible = !_dressedBmp.visible;		
 		
-		_itemName.resetFormat(EquipProp.levelColor(cast tempInfo.InitialQuality), 30);
-		_itemName.text = tempInfo.itemName;
+		_itemName.resetFormat(EquipProp.levelColor(Std.string(tempInfo.Color)), 30);
+		_itemName.text = tempInfo.Name;
 		
 		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/big/' + tempInfo.ResId + '.png', x:0, y:0 } );
 		img.mouseEnabled = false;	
@@ -383,11 +377,11 @@ class WarehouseCmd extends BaseCmd
 		_itemImg.addChild(img);
 		_description.text = tempInfo.Description;		
 		
-		if (Std.is(tempInfo, WeaponInfo)||Std.is(tempInfo,ArmsInfo)) 
+		if (tempInfo.Kind == ItemType.IK2_GON||tempInfo.Kind == ItemType.IK2_ARM) 
 		{
-			var weaponLv = EquipProp.Strengthen(cast tempInfo, tempInfo.strLv);
+			var weaponLv = EquipProp.Strengthen(tempInfo, tempInfo.vo.strLv);
 			//强化键
-			if (tempInfo.strLv == tempInfo.MaxStrengthenLevel)
+			if (tempInfo.vo.strLv == tempInfo.MaxStrengthenLevel)
 			{
 				if (tempInfo.LevelUpItemID != -1) {
 					_moneyBmp.visible = false;
@@ -405,7 +399,7 @@ class WarehouseCmd extends BaseCmd
 					for (i in 0...materialArr.length) 
 					{
 						needItem = GoodsProtoManager.instance.getItemById(materialArr[i][0], false);
-						needList += needItem.itemName+" X" + materialArr[i][1]+"\n";
+						needList += needItem.Name+" X" + materialArr[i][1]+"\n";
 					}
 					needList +="金币 X" +materialInfo.NeedGold;
 					trace("materialArr: "+materialArr);
@@ -420,10 +414,10 @@ class WarehouseCmd extends BaseCmd
 			}else 
 			{
 				_widget.getChildAs("item4", Text).text = "强化消耗";
-				var subId=tempInfo.equipType * 1000 + tempInfo.strLv;
+				var subId = tempInfo.EquipType * 1000 + tempInfo.vo.strLv;
 				var strengthenInfo = ForgeManager.instance.getProtoForge(subId);
 				var nextStrengthenInfo = ForgeManager.instance.getProtoForge(subId + 1);
-				strengthenMoney = (nextStrengthenInfo.MaxMoney - strengthenInfo.MaxMoney)*_currentInfo.InitialQuality;
+				strengthenMoney = (nextStrengthenInfo.MaxMoney - strengthenInfo.MaxMoney)*_currentInfo.Color;
 				//trace("nextStrengthenInfo.MaxMoney: "+nextStrengthenInfo.MaxMoney);
 				//trace("strengthenInfo.MaxMoney: "+strengthenInfo.MaxMoney);
 				//trace("subId: "+subId);
@@ -434,29 +428,28 @@ class WarehouseCmd extends BaseCmd
 				_strengthenBtn.text = "强化";
 				_strengthenBtn.onPress = function(e) {
 					var playerInfo = PlayerUtils.getInfo();
-					if (playerInfo.getProperty(PlayerPropType.GOLD)<strengthenMoney) 
+					if (playerInfo.data.GOLD<strengthenMoney) 
 					{
 						sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup } );
 					}else 
 					{
 						notifyRoot(MsgPlayer.UpdateMoney, -strengthenMoney);
-						var tempInfo = cast _currentInfo;
+						var tempInfo =  ProtoUtils.castType(_currentInfo);
 						tempInfo.strLv++;
 						updataPad(_currentInfo);
 						//notify(MsgUIUpdate.ForgeUpdate, { type:ForgeUpdate.Success, data:_currentInfo } );
-						FileUtils.setFileData(null, FilesType.Bag);
-						FileUtils.setFileData(null, FilesType.EquipBag);
 						notifyRoot(MsgMission.Update, { type:"forge", data: { id:3, info:_currentInfo }} );
 						notifyRoot(MsgMission.Forge, 6);
 						notify(MsgUIUpdate.UpdateModel);
 						sendMsg(MsgUI.Tips, { msg:"强化成功", type:TipsType.tipPopup } );
-						if (_currentInfo.itemIndex >= 1000) {
+						if (_currentInfo.vo.Equip) {
+						//if (_currentInfo.itemIndex >= 1000) {
 							if (_currentInfo.Kind == ItemType.IK2_ARM) 
 							{
-								notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.ARMOR, data:_currentInfo } );
+								notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.ARMOR, data:_currentInfo } );
 							}else if (_currentInfo.Kind == ItemType.IK2_GON) 
 							{
-								notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.WEAPON, data:_currentInfo } );
+								notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.WEAPON, data:_currentInfo } );
 							}
 						}
 					}			
@@ -465,12 +458,12 @@ class WarehouseCmd extends BaseCmd
 			}
 			//_strengthenBtn.visible = !_maxStrengthenBmp.visible;
 			//_maxStrengthenBtn.visible=!_maxStrengthenBmp.visible;
-			_widget.getChildAs("strengthenLv", Text).text = "" + tempInfo.strLv + "/" + tempInfo.MaxStrengthenLevel;
+			_widget.getChildAs("strengthenLv", Text).text = "" + tempInfo.vo.strLv + "/" + tempInfo.MaxStrengthenLevel;
 			
 			
 			_decomposeBtn.visible = true;
 			//装备键
-			if (tempInfo.itemIndex>=1000 ||tempInfo.backupIndex!=-1) 
+			if (tempInfo.itemIndex>=1000 ||tempInfo.vo.sortInt!=-1) 
 			{
 				_dressBtn.onPress = function (e) { };
 				//装备中，不可分解
@@ -484,8 +477,7 @@ class WarehouseCmd extends BaseCmd
 						changeWeapon(_currentInfo);	
 						
 					}else if (_currentInfo.Kind == ItemType.IK2_ARM){
-						BagUtils.changeEquip(cast _currentInfo, ItemType.IK2_ARM);
-						notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.ARMOR, data:_currentInfo } );
+						notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.ARMOR, data:_currentInfo } );
 						updateScroll();
 					}			
 				}
@@ -495,11 +487,11 @@ class WarehouseCmd extends BaseCmd
 				};
 			}			
 			
-			if (Std.is(tempInfo, WeaponInfo)) {	
+			if (tempInfo.Kind == ItemType.IK2_GON) {	
 				//_rechargeBtn.visible = true;
 				_rechargeOneBtn.visible = true;				
 				_widget.getChildAs("item0", Text).text="武器伤害";
-				_widget.getChildAs("description0", Text).text = Std.string(Math.floor(cast(_currentInfo,WeaponInfo).Att * cast weaponLv.Attack / 10000));
+				_widget.getChildAs("description0", Text).text = Std.string(Math.floor(ProtoUtils.castType(_currentInfo).Att * cast weaponLv.Attack / 10000));
 				
 				_widget.getChildAs("item1", Text).text = "属性";
 				_widget.getChildAs("item1", Text).visible = true;
@@ -507,18 +499,19 @@ class WarehouseCmd extends BaseCmd
 				
 				_widget.getChildAs("item2", Text).text = "子弹数";
 				_widget.getChildAs("item2", Text).visible = true;
-				_widget.getChildAs("description2", Text).text = tempInfo.currentBullet+"/"+tempInfo.currentBackupBullet;
+				_widget.getChildAs("description2", Text).text = tempInfo.vo.Bullets+"/"+tempInfo.vo.Clips;
 				
 				//_widget.getChildAs("item3", Text).text="特性";
 				//_widget.getChildAs("description3", Text).text = Std.string(tempInfo.Characteristic);	
 				_widget.getChildAs("item3", Text).visible = false;
 				_widget.getChildAs("description3", Text).text = "";
-			}else if (Std.is(tempInfo,ArmsInfo)) 
+			}
+			else if (tempInfo.Kind == ItemType.IK2_ARM) 
 			{
 				//_rechargeBtn.visible = false;
 				_rechargeOneBtn.visible = false;
 				_widget.getChildAs("item0", Text).text="生命";
-				_widget.getChildAs("description0", Text).text = Std.string(Math.floor(cast(_currentInfo,ArmsInfo).Hp * cast weaponLv.HPvalue / 10000));
+				_widget.getChildAs("description0", Text).text = Std.string(Math.floor(ProtoUtils.castType(_currentInfo).Hp * cast weaponLv.HPvalue / 10000));
 				
 				_widget.getChildAs("item1", Text).text = "防御";
 				_widget.getChildAs("item1", Text).visible = false;
@@ -562,11 +555,9 @@ class WarehouseCmd extends BaseCmd
 			var schedual = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual);
 			SfxManager.getAudio(AudioType.t001).play();
 			if(tempInfo.Kind == ItemType.IK2_GON){
-				BagUtils.changeEquip(cast tempInfo, ItemType.IK2_GON);
-				notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.WEAPON, data:tempInfo});
+				notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.WEAPON, data:tempInfo});
 			}else if (tempInfo.Kind == ItemType.IK2_ARM){
-				BagUtils.changeEquip(cast tempInfo, ItemType.IK2_ARM);
-				notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.ARMOR, data:tempInfo});
+				notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.ARMOR, data:tempInfo});
 			}
 			notify(MsgUIUpdate.UpdateModel);
 
@@ -591,7 +582,6 @@ class WarehouseCmd extends BaseCmd
 		_startWeapon.onPress = function (e) { };
 		_weapon1.onPress = function (e) { };
 		_weapon2.onPress = function (e) { };
-		FileUtils.setFileData(null, FilesType.Bag);
 		showWeaponPanel();
 		//更新scroll
 		updateScroll();
@@ -628,9 +618,15 @@ class WarehouseCmd extends BaseCmd
 	{
 		//trace("showWeaponPanel");	
 		_weaponPanel.visible = true;
-		setWeaponBmp(_equipBagData.itemArr[0],_startWeapon);
+		var equips = _bagInfo.getEquiped();
+		var weapon = Lambda.find(equips, function(e) {
+			if (e.Kind == ItemType.IK2_GON)
+				return true;
+			return false;
+		});
+		setWeaponBmp(weapon, _startWeapon);
 		setWeaponBmp(_bagInfo.backupWeaponArr.get(1) , _weapon1);
-		setWeaponBmp(_bagInfo.backupWeaponArr.get(2),_weapon2);		
+		setWeaponBmp(_bagInfo.backupWeaponArr.get(2), _weapon2);
 	}
 	/**武器图片*/
 	public static function setWeaponBmp(tempInfo:ItemBaseInfo,widget:Button)
@@ -640,7 +636,7 @@ class WarehouseCmd extends BaseCmd
 		//trace("widget.name: "+widget.name);
 		var box = UIBuilder.create(Widget, {
 			name:"weaponBmp",
-			skinName : "forgelvImg"+tempInfo.InitialQuality,
+			skinName : "forgelvImg"+tempInfo.Color,
 			children : [
 				UIBuilder.create(Bmp, {
 					src:'icon/' + tempInfo.ResId + '.png', 
@@ -660,17 +656,15 @@ class WarehouseCmd extends BaseCmd
 	{
 		if (!flag) return;
 		txtStr = "获得物品：";
-		var itemArr:Array<ItemBaseInfo> = [];
-		itemArr.push(_currentInfo);
-		var num:Int = _currentInfo.Property * 10 + _currentInfo.InitialQuality;
+		var num:Int = _currentInfo.Property * 10 + _currentInfo.Color;
 		trace("_currentInfo.Property: "+_currentInfo.Property);
-		trace("_currentInfo.InitialQuality: " + _currentInfo.InitialQuality);
+		trace("_currentInfo.Color: " + _currentInfo.Color);
 		trace("num: " + num);
 		
 		var decomInfo:DecompositionInfo = DecompositionManager.instance.getProtoDecom(num);
 		decomData(decomInfo);
 		
-		notifyRoot(MsgNet.UpdateBag, { type:0, data:itemArr } );
+		notifyRoot(MsgNet.UpdateBag, { type:0, data:[_currentInfo.ID]} );
 		sendMsg(MsgUI.Tips, { msg:txtStr, type:TipsType.tipPopup } );
 		notifyRoot(MsgMission.Update, {type:"forge",data:{id:13 }} );
 		notifyRoot(MsgMission.Forge, 9);
@@ -682,7 +676,7 @@ class WarehouseCmd extends BaseCmd
 	/*装备分解处理*/
 	private function decomData(_decomInfo:DecompositionInfo):Void
 	{
-		var goods:Array<ItemBaseInfo> = [];
+		var goods:Array<Int> = [];
 		var num:Int;
 		var itemInfo:ItemBaseInfo = null;
 		for (data in _decomInfo.Items)
@@ -695,9 +689,9 @@ class WarehouseCmd extends BaseCmd
 					for (i in 0...data[2])
 					{
 						itemInfo = Unserializer.run(Serializer.run(GoodsProtoManager.instance.getItemById(data[0])));
-						goods.push(itemInfo);						
+						goods.push(data[0]);						
 					}
-					txtStr += itemInfo.itemName+" x" + data[2] + "   ";
+					txtStr += itemInfo.Name+" x" + data[2] + "   ";
 				}else
 				{
 					notifyRoot(MsgPlayer.UpdateMoney, data[2]);
@@ -717,7 +711,7 @@ class WarehouseCmd extends BaseCmd
 		if (levelUpItemId == -1) return;
 		var _playerInfo:PlayerInfo = PlayerUtils.getInfo();
 		var materialInfo:AdvanceInfo = AdvanceManager.instance.getProtpAdvance(levelUpItemId);
-		if (_playerInfo.getProperty(PlayerPropType.GOLD) < materialInfo.NeedGold)
+		if (_playerInfo.data.GOLD < materialInfo.NeedGold)
 		{
 			sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup } );
 			return;
@@ -725,11 +719,10 @@ class WarehouseCmd extends BaseCmd
 		
 		
 		var desti:DetailAnalysis = new DetailAnalysis();
-		var materialArr:Array<Array<Int>> = desti.analysis(materialInfo.Mat);			
-		var bagData = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;		
+		var materialArr:Array<Array<Int>> = desti.analysis(materialInfo.Mat);	
 		for (i in 0...materialArr.length)
 		{	
-			if (bagData.getItem(materialArr[i][0])==null || bagData.getItem(materialArr[i][0]).itemNum<materialArr[i][1])
+			if (_bagInfo.getItem(materialArr[i][0])==null || _bagInfo.getItem(materialArr[i][0]).itemNum<materialArr[i][1])
 			{
 				sendMsg(MsgUI.Tips, { msg:"材料不足\n分解可获得进阶材料", type:TipsType.tipPopup } );
 				return;
@@ -737,39 +730,37 @@ class WarehouseCmd extends BaseCmd
 		}		
 		
 		var newInfo = GoodsProtoManager.instance.getItemById(levelUpItemId);
-		newInfo.backupIndex = oldInfo.backupIndex;
-		newInfo.itemIndex = oldInfo.itemIndex;
+		newInfo.vo.sortInt = oldInfo.vo.sortInt;
 		_currentInfo = newInfo;
 		
-		if (newInfo.itemIndex>=1000) 
+		if (newInfo.vo.Equip) 
 		{
 			if (newInfo.Kind == ItemType.IK2_GON)
 			{
-				notifyRoot(MsgNet.UpdateInfo, { type:PlayerPropType.WEAPON, data:newInfo } );
+				notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.WEAPON, data:newInfo } );
 				showWeaponPanel();
 			}
 			else if (newInfo.Kind == ItemType.IK2_ARM)
 			{
-				notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.ARMOR, data:newInfo});
+				notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.ARMOR, data:newInfo});
 			}
 		}else 
 		{
-			notifyRoot(MsgNet.UpdateBag, { type:1, data:[newInfo] } );
+			notifyRoot(MsgNet.UpdateBag, { type:1, data:[newInfo.ID] } );
 		}
-		if (newInfo.backupIndex!=-1) 
+		if (newInfo.vo.sortInt!=-1) 
 		{
-			var gameSchedual:GameSchedual = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual);
-			gameSchedual.bagData.setBackup(newInfo,  newInfo.backupIndex);
+			_bagInfo.setBackup(newInfo,  newInfo.vo.sortInt);
 			showWeaponPanel();
 		}
 			
 			
-		var removeMat:Array<ItemBaseInfo> = [oldInfo];
+		var removeMat:Array<Int> = [oldInfo.ID];
 		for (j in 0...materialArr.length)
 		{
 			for (i in 0...materialArr[j][1]) 
 			{
-				removeMat.push(BagUtils.getOneBagInfo(materialArr[j][0]));
+				removeMat.push(materialArr[j][0]);
 			}			
 		}
 		notifyRoot(MsgNet.UpdateBag, { type:0, data:removeMat } );		

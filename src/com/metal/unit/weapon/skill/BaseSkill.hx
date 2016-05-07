@@ -61,7 +61,7 @@ class BaseSkill extends BaseWeapon
 	{
 		if (isItem)
 			return;
-		var mp = PlayerUtils.getInfo().getProperty(PlayerPropType.MP) - skillInfo.Consume;
+		var mp = PlayerUtils.getInfo().data.MP - skillInfo.Consume;
 		if (mp < 0){
 			throw "mp="+mp+" < 0";
 		}

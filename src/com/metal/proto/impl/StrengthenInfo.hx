@@ -1,7 +1,5 @@
 package com.metal.proto.impl;
-import com.metal.proto.impl.WeaponInfo;
 import com.utils.XmlUtils;
-import haxe.ds.IntMap;
 import haxe.xml.Fast;
 
 /**
@@ -28,15 +26,15 @@ class StrengthenInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		SnID = XmlUtils.GetInt(data, "SnID");
-		//strengthLevel = XmlUtils.GetInt(data, "StrengthLevel");
-		HPvalue = XmlUtils.GetInt(data, "Hp");
-		Attack = XmlUtils.GetInt(data, "Att");
-		//DestParam = data, "DestParam");
-		MaxExp = XmlUtils.GetInt(data, "MaxExp");
-		MaxMoney = XmlUtils.GetInt(data, "MaxMoney");
+		SnID = data.SnID;
+		//strengthLevel = data.StrengthLevel;
+		HPvalue = data.Hp;
+		Attack = data.Att;
+		//DestParam = data.DestParam;
+		MaxExp = data.MaxExp;
+		MaxMoney = data.MaxMoney;
 	}
 	public function initDefaultValues():Void
 	{

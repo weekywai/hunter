@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.EffectInfo;
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
@@ -16,7 +18,14 @@ class EffectManager
 	
 	public function new() 
 	{
-		_data = new IntMap();	
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.Effect);
+		for (i in req) 
+		{
+			var info:EffectInfo = new EffectInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	/**bullet*/
 	public function getProto(key:Int):EffectInfo
@@ -25,7 +34,7 @@ class EffectManager
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -33,7 +42,7 @@ class EffectManager
 			var eff:EffectInfo = new EffectInfo();
 			eff.readXml(propText);
 			_data.set(eff.Id, eff);
-		}
+		}*/
 	}
 	
 }

@@ -41,21 +41,21 @@ class BulletInfo
 	{
 	}
 	
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		Id = XmlUtils.GetInt(data, "ID");
-		type = XmlUtils.GetInt(data, "type");
-		param = XmlUtils.GetInt(data, "param");
-		speed = XmlUtils.GetInt(data, "speed");
-		size = XmlUtils.GetInt(data, "size");
-		behavior = XmlUtils.GetInt(data, "effecttype");
-		buffTarget = XmlUtils.GetInt(data, "bufftarget");
-		buffId = XmlUtils.GetInt(data, "buffid");
-		buffTime = XmlUtils.GetInt(data, "bufftime");
-		img = XmlUtils.GetString(data, "img");
-		isThrough = XmlUtils.GetInt(data, "IsThrough");
-		buffMovieType = XmlUtils.GetInt(data, "IsXml");
-		effId = XmlUtils.GetInt(data, "effimg");
-		warning = XmlUtils.GetString(data, "warning");
+		Id = data.ID;
+		type = data.type;
+		param = data.param;
+		speed = data.speed;
+		size = data.size;
+		behavior = data.effecttype;
+		buffTarget = data.bufftarget;
+		buffId = data.buffid;
+		buffTime = data.bufftime;
+		img = data.img;
+		isThrough = data.IsThrough;
+		buffMovieType = data.IsXml;
+		effId = data.effimg;
+		warning = data.warning;
 	}
 }

@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.Gold_Info;
 import com.metal.proto.impl.NewsInfo;
 import haxe.ds.IntMap;
@@ -22,6 +24,13 @@ class NewsManager
 	public function new() 
 	{
 		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.News);
+		for (i in req) 
+		{
+			var info:NewsInfo = new NewsInfo();
+			info.readXml(i);
+			_data.set(info.Id, info);
+		}
 	}
 	
 	public function getProto(key:Int):NewsInfo
@@ -30,7 +39,7 @@ class NewsManager
 	}
 	
 	public function appendXml(data:Xml):Void {
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var propText:Fast;
@@ -38,7 +47,7 @@ class NewsManager
 			var news:NewsInfo = new NewsInfo();
 			news.readXml(propText);
 			_data.set(news.Id, news);
-		}
+		}*/
 	}
 	
 }

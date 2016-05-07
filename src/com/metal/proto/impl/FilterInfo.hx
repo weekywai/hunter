@@ -16,10 +16,10 @@ class FilterInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		id = XmlUtils.GetInt(data, "ID");
-		name = XmlUtils.GetString(data, "String");
+		id = data.ID;
+		name = data.String;
 	}
 	
 }

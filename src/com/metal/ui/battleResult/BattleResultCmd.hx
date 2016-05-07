@@ -11,10 +11,10 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.DuplicateInfo;
-import com.metal.proto.impl.ItemBaseInfo;
+import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.ui.BaseCmd;
 import com.metal.utils.DropItemUtils;
@@ -25,6 +25,7 @@ import ru.stablex.ui.widgets.Bmp;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Text;
 import ru.stablex.ui.widgets.Widget;
+
 
 /**
  * 胜利结算
@@ -64,7 +65,8 @@ class BattleResultCmd extends BaseCmd
 	{
 		goodsBox = _widget.getChildAs("goodsBox", Widget); 
 		if (goodsBox.numChildren > 0) goodsBox.removeChildren();
-		var rewardGoods:Array<ItemBaseInfo> = [];
+		var rewardGoods:Array<Int> = [];
+		//var rewardGoods:Array<ItemBaseInfo> = [];
 		
 		var duplicateArr:Array<Array<Int>> = [];
 		if (_duplicateInfo.DuplicateType == 0 )
@@ -80,8 +82,8 @@ class BattleResultCmd extends BaseCmd
 			
 			var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + tempInfo.ResId + '.png' , x:10, y:10 } );
 			//品质
-			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId), x:13, y:13 } );
-			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.itemId,0), x:5, y:5 } );
+			var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:13, y:13 } );
+			var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID,0), x:5, y:5 } );
 			var oneGoods = UIBuilder.buildFn('ui/popup/oneGoods.xml')( { } );
 			var len:Int = duplicateArr.length;
 			
@@ -97,7 +99,7 @@ class BattleResultCmd extends BaseCmd
 			
 			goodsBox.addChild(oneGoods);
 			
-			oneGoods.getChildAs("goodsName", Text).text = tempInfo.itemName;
+			oneGoods.getChildAs("goodsName", Text).text = tempInfo.Name;
 			oneGoods.getChildAs("goodsNum", Text).text = "x" + duplicateArr[i][1];
 			
 			if (duplicateArr[i][0] == 10201)
@@ -108,15 +110,16 @@ class BattleResultCmd extends BaseCmd
 			else
 			{
 				for(j in 0...duplicateArr[i][1]){
-					rewardGoods.push(tempInfo);
+					//rewardGoods.push(tempInfo);
+					rewardGoods.push(duplicateArr[i][0]);
 				}
 			}
 		}
 		
 		var playerInfo:PlayerInfo = PlayerUtils.getInfo();
-		if (playerInfo.getProperty(PlayerPropType.THROUGH) < _duplicateInfo.Id && _duplicateInfo.DuplicateType == 0) 
+		if (playerInfo.data.THROUGH < _duplicateInfo.Id && _duplicateInfo.DuplicateType == 0) 
 		{
-			notifyRoot(MsgNet.UpdateInfo, {type:PlayerPropType.THROUGH, data:_duplicateInfo.Id});
+			notifyRoot(MsgNet.UpdateInfo, {type:PlayerProp.THROUGH, data:_duplicateInfo.Id});
 		}
 		notifyRoot(MsgNet.UpdateBag, {type:1, data:rewardGoods});
 		setStar();

@@ -1,13 +1,17 @@
 package com.metal.utils;
+import com.metal.component.BagpackSystem;
 import com.metal.component.GameSchedual;
 import com.metal.component.RewardSystem;
 import com.metal.component.TaskSystem;
 import com.metal.config.FilesType;
 import com.metal.config.PlayerPropType;
+import com.metal.config.TableType;
 import com.metal.enums.BagInfo;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.network.RemoteSqlite;
+import com.metal.proto.impl.ItemProto.GoodsVo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.impl.ItemBaseInfo;
+import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 import com.metal.proto.impl.LiveNessInfo;
 import com.metal.proto.impl.MapStarInfo;
 import com.metal.proto.impl.NewbieInfo;
@@ -15,11 +19,11 @@ import com.metal.proto.impl.NewsInfo;
 import com.metal.proto.impl.QuestInfo;
 import com.metal.proto.manager.LiveNessManager;
 import com.metal.proto.manager.NewsManager;
-import com.metal.proto.manager.TaskManager;
+import com.metal.proto.manager.QuestsManager;
 import crashdumper.hooks.openfl.HookOpenFL;
-import haxe.ds.IntMap;
 import haxe.Serializer;
 import haxe.Unserializer;
+import haxe.ds.IntMap;
 import sys.FileSystem;
 import sys.io.File;
 import sys.io.FileOutput;
@@ -29,23 +33,18 @@ import sys.io.FileOutput;
  */
 /**任务数据*/
 typedef TaskVo = {
-	Finish:Int, 
-	state:Int, 
-	Count:Int, 
+	@:optional var Id:Int;
+	var Finish:Int;
+	var State:Int;
+	var Count:Int;
 }
 /**活动数据*/
 typedef ActiveVo = {
-	Num:Int, 
-	isDraw:Int,
+	@:optional var Id:Int;
+	var Times:Int; 
+	var Draw:Int;
 }
-/**物品数据*/
-typedef GoodsVo = {
-	strLv:Int, 
-	Upgrade:Int, 
-	sortInt:Int,
-	itemStr:Int,
-	bagType:Int,
-}
+
 class FileUtils
 {
 	
@@ -110,9 +109,11 @@ class FileUtils
 			return;
 			//trace(LoginFileUtils.Id);
 		var fileContent = File.getContent(_path +LoginFileUtils.Id);
-		if (fileContent==null || fileContent=="")
+		if (fileContent == null || fileContent == "")
 			return;
+			trace(fileContent);
 		_data = Unserializer.run(fileContent);
+		
 		FilesType.fileMap = _data;
 		//_data = Json.parse(fileContent);
 	}
@@ -123,15 +124,13 @@ class FileUtils
 		switch(fileType)
 		{
 			case FilesType.Player:
-				setPlayerInfo(fileType);
+				//setPlayerInfo();
 			case FilesType.Active:
 				setActive(fileType);
 			case FilesType.Task:
 				setTask(fileType);
 			case FilesType.Bag:
-				setBagData(fileType);
-			case FilesType.EquipBag:
-				setEquipBag(fileType);
+				//setBagData(fileType);
 			case FilesType.News:
 				setNewsInfo(fileType);
 			case FilesType.StageStar:
@@ -140,6 +139,7 @@ class FileUtils
 				setNewbieData(fileType);
 		}
 	}
+	
 	/**所有数据*/
 	public static function analyticalData():Void
 	{
@@ -149,23 +149,29 @@ class FileUtils
 		}
 	}
 	/**储存角色信息*/
-	private static function setPlayerInfo(type:Int):Void
+	private static function setPlayerInfo():Void
 	{
-		saveMap(type, PlayerUtils.getInfo());
+		var player = PlayerUtils.getInfo();
+		var fields = Reflect.fields(player.data);
+		var values:Array<Dynamic> = [];
+		for (i in fields) 
+		{
+			values.push(Reflect.field(player, i));
+		}
+		RemoteSqlite.instance.addProfile(TableType.P_Info, values);
 	}
-
+	
 	/**获取角色信息*/
 	static public function getPlayerInfo():PlayerInfo
 	{
-		if (!FileExits) 
-			return null;
-		parseData();
-		if (_data == null)
+		var request = RemoteSqlite.instance.requestProfile(TableType.P_Info);
+		if (request==null){
 			return initPlayer();
-		var playInfo:PlayerInfo = FilesType.fileMap.get(FilesType.Player);
-		if (playInfo == null) 
-			return initPlayer();
-		return playInfo;
+		}
+		trace("has playerinfo");
+		var p = new PlayerInfo();	
+		p.data = request[0];
+		return p;
 	}
 	/**活跃度*/
 	private static function setActive(type:Int):Void
@@ -183,27 +189,23 @@ class FileUtils
 	public static function getActive():IntMap<LiveNessInfo>
 	{
 		var activeInfo = LiveNessManager.instance.LiveNess;
-		parseData();
-		if (_data == null)
+		var	req = RemoteSqlite.instance.requestProfile(TableType.P_Active);
+		if (req == null)
 			return activeInfo;
-		var activeMap:IntMap<ActiveVo> = FilesType.fileMap.get(FilesType.Active);
-		if (activeMap == null)
-			return activeInfo;
-		for (i in activeInfo.keys())
+		var taskMap:IntMap<ActiveVo>;
+		for (active in req)
 		{
-			var active:ActiveVo = activeMap.get(i);
 			if (active != null) {
-				var liveInfo:LiveNessInfo = activeInfo.get(i);
-				liveInfo.Num = active.Num;
-				liveInfo.isDraw = active.isDraw;
-			 }
+				var questInfo:LiveNessInfo = activeInfo.get(active.Id);
+				questInfo.vo = active;
+			}
 		}
 		return activeInfo;
 	}
 	/**消息*/
 	private static function setNewsInfo(type:Int):Void
 	{
-		var newsInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).newMapInfo;
+		/*var newsInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).newMapInfo;
 		var newsMap:IntMap<Int> = new IntMap();
 		//trace("save news:");
 		for (key in newsInfo.keys())
@@ -211,60 +213,50 @@ class FileUtils
 			var info = newsInfo.get(key);
 			newsMap.set(key, info.isDraw);
 		}
-		saveMap(type, newsMap);
+		saveMap(type, newsMap);*/
 	}
 	/**获取消息*/
 	public static function getNewsInfo():IntMap<NewsInfo>
 	{
-		var newsMap:IntMap<NewsInfo> = NewsManager.instance.data;
-		parseData();
-		if (_data == null)
-			return newsMap;
-		var news:IntMap<Int> = FilesType.fileMap.get(FilesType.News);
-		if (news == null)
-			return newsMap;
-		for (key in newsMap.keys())
-		{
-			if (news.exists(key)) {
-				var info:NewsInfo = newsMap.get(key);
-				info.isDraw = news.get(key);
+		var req = RemoteSqlite.instance.requestProfile(TableType.P_News);
+		if (req!=null){
+			for (news in req)
+			{
+				var info:NewsInfo = NewsManager.instance.data.get(news.Id);
+				info.isDraw = news.isDraw;
 			}
 		}
-		return newsMap;
+		return NewsManager.instance.data;
 	}
 	
 	/**任务*/
 	private static function setTask(type:Int):Void
 	{
 		trace("setTask");
-		var taskInfo = cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).taskMap;
+		/*var taskInfo = GameProcess.root.getComponent(TaskSystem).taskMap;
 		var taskMap:IntMap<TaskVo> = new IntMap();
 		for (key in taskInfo.keys())
 		{	
-			var task:TaskVo = cast taskInfo.get(key);
+			var task:TaskVo = taskInfo.get(key).vo;
 			taskMap.set(key, task);
 		}
-		saveMap(type, taskMap);
+		RemoteSqlite.instance.updateProfile(TableType.P_Task,);*/
+		//saveMap(type, taskMap);
 	}
 	/**获取任务*/
 	public static function getTask():IntMap<QuestInfo>
 	{
 		trace("getTask");
-		var taskInfo = TaskManager.instance.Task;
-		parseData();
-		if (_data == null)
+		var taskInfo = QuestsManager.instance.Task;
+		var	taskArr = RemoteSqlite.instance.requestProfile(TableType.P_Task);
+		if (taskArr == null)
 			return taskInfo;
-		var taskMap:IntMap<TaskVo> = FilesType.fileMap.get(FilesType.Task);
-		if (taskMap == null)
-			return taskInfo;
-		for (key in taskInfo.keys())
+		var taskMap:IntMap<TaskVo>;
+		for (task in taskArr)
 		{
-			var task:TaskVo = taskMap.get(key);
 			if (task != null) {
-				var questInfo:QuestInfo = taskInfo.get(key);
-				questInfo.Finish = task.Finish;
-				questInfo.state = task.state;
-				questInfo.Count = task.Count;
+				var questInfo:QuestInfo = taskInfo.get(task.Id);
+				questInfo.vo = task;
 			}
 		}
 		return taskInfo;
@@ -272,7 +264,7 @@ class FileUtils
 	/**背包*/
 	private static function setBagData(type:Int):Void
 	{
-		var bagInfo:BagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
+		var bagInfo:BagInfo = GameProcess.root.getComponent(BagpackSystem).bagData;
 		//for (i in 0...bagInfo.itemArr.length) 
 		//{
 			//if (bagInfo.itemArr[i].backupIndex!=-1) 
@@ -288,14 +280,20 @@ class FileUtils
 	/**获取背包数据*/
 	public static function getBagData():BagInfo
 	{
-		parseData();
-		if (_data == null)
+		var requst = RemoteSqlite.instance.requestProfile(TableType.P_Goods);
+		if (requst==null) {
 			return null;
-			
-		var currArr:Array<ItemBaseInfo> = FilesType.fileMap.get(FilesType.Bag);
-		var bagInfo:BagInfo = new BagInfo();
-		if (currArr.length > 0) bagInfo.itemArr = currArr;
+		}
 		
+		//var base = RemoteSqlite.instance.request(TableType.Item,);
+		var item:GoodsVo;
+		var currArr:Array<GoodsVo> = [];
+		for (i in requst) {
+			item = i;
+			currArr.push(item);
+		}
+		var bagInfo:BagInfo = new BagInfo();
+		//bagInfo.itemArr = currArr;
 		return bagInfo;
 	}
 	
@@ -303,17 +301,18 @@ class FileUtils
 	private static function setMapStarData(type:Int):Void
 	{		
 		//trace("setMapStarData");
-		saveMap(type, MapStarInfo.instance.dataMap);
+		//saveMap(type, MapStarInfo.instance.dataMap);
 	}
 	/**关卡星级*/
 	public static function getMapStarData():IntMap<Int>
 	{
-		parseData();
-		if (_data == null)
-			return null;
-		var currArr:IntMap<Int> = FilesType.fileMap.get(FilesType.StageStar);		
-		if (currArr != null ) MapStarInfo.instance.dataMap = currArr;
-		//trace("MapStarInfo.instance.dataMap: "+MapStarInfo.instance.dataMap);
+		var	req = RemoteSqlite.instance.requestProfile(TableType.P_Map);
+		if (req != null){
+			for (i in req) 
+			{
+				MapStarInfo.instance.dataMap.set(i.Id, i.StarCount);
+			}
+		}
 		return MapStarInfo.instance.dataMap;
 	}
 	
@@ -335,41 +334,22 @@ class FileUtils
 		return NewbieInfo.instance.dataArr;
 	}
 	
-	/**装备背包*/
-	private static function setEquipBag(type:Int):Void
-	{
-		var equipBag:BagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData;
-		saveMap(type, equipBag.itemArr);
-	}
-	/**获取装备背包数据*/
-	public static function getEquipBag():BagInfo
-	{
-		parseData();
-		if (_data == null)
-			return null;
-		var currArr:Array<ItemBaseInfo> = FilesType.fileMap.get(FilesType.EquipBag);
-		var equipBag:BagInfo = new BagInfo();
-		equipBag.itemArr = currArr;
-		return equipBag;
-	}
-	
-	
 	/*设置单个背包数据属性*/
 	private static function setItemData(_itemInfo:Dynamic,dyna:Dynamic):Void
 	{
 		if (dyna != null)
 		{
-			_itemInfo.itemType = dyna.itemType;//save_type（ubyte）物品类型（大类）
+			_itemInfo.ItemType = dyna.ItemType;//save_type（ubyte）物品类型（大类）
 			/**物品小类*/
 			_itemInfo.Kind = dyna.Kind;
-			_itemInfo.itemId = dyna.itemId;//item_id_（int）物品id
+			_itemInfo.ID = dyna.ID;//item_id_（int）物品id
 			_itemInfo.itemName = dyna.itemName;//物品名
 			_itemInfo.itemIndex = dyna.itemIndex;//index_（ubyte）物品索引
 			_itemInfo.itemNum = dyna.itemNum;//item_num_（uint）物品数量
 			_itemInfo.itemState = dyna.itemState;//item_bind_（ubyte）物品绑定状态
 			_itemInfo.PickUp = dyna.PickUp;//是否被拾取
 			/**初始品质*/
-			_itemInfo.InitialQuality = dyna.InitialQuality;
+			_itemInfo.Color = dyna.InitialQuality;
 			/**初始等级*/
 			_itemInfo.InitialLevel = dyna.InitialLevel;
 			/**图表资源名称*/
@@ -400,35 +380,37 @@ class FileUtils
 	}
 	private static function initPlayer():PlayerInfo
 	{
-		var playerInfo = new PlayerInfo();
-		playerInfo.Id = 1;
-		playerInfo.Name = "me";
-		playerInfo.setProperty(PlayerPropType.ROLEID, 1001);
-		playerInfo.setProperty(PlayerPropType.POWER, 100);
-		playerInfo.setProperty(PlayerPropType.LV, 1);
-		playerInfo.setProperty(PlayerPropType.SEX, 1);
-		playerInfo.setProperty(PlayerPropType.EXP, 1);
-		playerInfo.setProperty(PlayerPropType.GEM, 100);
-		playerInfo.setProperty(PlayerPropType.BOUNDGEM, 0);
-		playerInfo.setProperty(PlayerPropType.GOLD, 0);
-		playerInfo.setProperty(PlayerPropType.VIP, 1);
-		playerInfo.setProperty(PlayerPropType.DAY, 0);
-		playerInfo.setProperty(PlayerPropType.MP, 100);
-		playerInfo.setProperty(PlayerPropType.MAX_MP, 100);
-		playerInfo.setProperty(PlayerPropType.HP, 300);
-		playerInfo.setProperty(PlayerPropType.MAX_HP, 300);
-		playerInfo.setProperty(PlayerPropType.FIGHT, 100);
-		//playerInfo.setProperty(PlayerPropType.WEAPON, 401);//101 203 303 403
-		//playerInfo.setProperty(PlayerPropType.ARMOR, 501);//403 503 603 703
-		playerInfo.setProperty(PlayerPropType.SKILL1, 911);
-		playerInfo.setProperty(PlayerPropType.SKILL2, 0);
-		playerInfo.setProperty(PlayerPropType.SKILL3, 0);
-		playerInfo.setProperty(PlayerPropType.SKILL4, 0);
-		playerInfo.setProperty(PlayerPropType.SKILL5, 0);
-		playerInfo.setProperty(PlayerPropType.SOUNDS, 1);
-		playerInfo.setProperty(PlayerPropType.BGM, 1);
-		playerInfo.setProperty(PlayerPropType.THROUGH, 0);
-		playerInfo.setProperty(PlayerPropType.HUNT, 0);
+		var playerInfo:PlayerInfo = new PlayerInfo();
+		playerInfo.data = { Id:1,
+							NAME:"me",
+							ROLEID:1001,
+							POWER:100,
+							LV:1,
+							EXP:1,
+							GEM:100,
+							GOLD:0,
+							VIP:1,
+							DAY:0,
+							MP:100,
+							MAX_MP:100,
+							HP:300,
+							MAX_HP:300,
+							FIGHT:100,
+							CRITICAL_LEVEL:100,
+							SKILL1:911,
+							SKILL2:0,
+							SKILL3:0,
+							SKILL4:0,
+							SKILL5:0,
+							THROUGH:0,
+							HUNT:0,
+							NOWTIME:Date.now().toString(),
+							WEAPON:0,
+							ARMOR:0,
+							SOUNDS:1,
+							BGM:1,
+							NEWBIE:""
+		}
 		return playerInfo;
 	}
 	/**初始化装备背包*/
@@ -436,8 +418,8 @@ class FileUtils
 	{
 		var equipBag:BagInfo = new BagInfo();
 		var items:Array<Int> = [401, 501];
-		playerInfo.setProperty(PlayerPropType.WEAPON, items[0]);//101 203 303 403
-		playerInfo.setProperty(PlayerPropType.ARMOR, items[1]);//403 503 603 703
+		playerInfo.setProperty(PlayerProp.WEAPON, items[0]);//101 203 303 403
+		playerInfo.setProperty(PlayerProp.ARMOR, items[1]);//403 503 603 703
 		
 		equipBag.itemArr = new Array<ItemBaseInfo>();
 		equipBag.parnerId = 0;
@@ -450,8 +432,8 @@ class FileUtils
 			var item:ItemBaseInfo = Unserializer.run(Serializer.run(GoodsProtoManager.instance.getItemById(items[i])));
 			item.itemIndex = 1000+i; // 区分装备
 			equipBag.itemArr.push(item);
-			if (item.Kind == ItemType.IK2_ARM) playerInfo.setProperty(PlayerPropType.ARMOR, item.itemId);
-			else playerInfo.setProperty(PlayerPropType.WEAPON, item.itemId);
+			if (item.Kind == ItemType.IK2_ARM) playerInfo.setProperty(PlayerProp.ARMOR, item.ID);
+			else playerInfo.setProperty(PlayerProp.WEAPON, item.ID);
 		}
 		trace("initEquipBag::" + equipBag);
 		return equipBag;

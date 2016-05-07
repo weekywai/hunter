@@ -11,7 +11,7 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
-import com.metal.player.utils.PlayerInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.DuplicateInfo;
 import com.metal.proto.impl.GradeConditionInfo;
@@ -255,10 +255,10 @@ class BattleSystem extends Component
 		
 		
 		var info:PlayerInfo = PlayerUtils.getInfo();
-		var hpMax = info.getProperty(PlayerPropType.MAX_HP);
-		var mpMax = info.getProperty(PlayerPropType.MAX_MP);
-		info.setProperty(PlayerPropType.HP, hpMax);
-		info.setProperty(PlayerPropType.MP, mpMax);
+		var hpMax = info.data.MAX_HP;
+		var mpMax = info.data.MAX_MP;
+		info.data.HP = hpMax;
+		info.data.MP = mpMax;
 		Animator.start(this, "", EffectType.OPEN, null, true, startGame);
 		GameProcess.instance.startGame();
 		notifyDirect("GameBoard",MsgStartup.Reset);
@@ -354,8 +354,8 @@ class BattleSystem extends Component
 		_socre = 0;
 		
 		var info:PlayerInfo = PlayerUtils.getInfo();
-		var hpMax = info.getProperty(PlayerPropType.MAX_HP);
-		info.setProperty(PlayerPropType.HP, hpMax);
+		var hpMax = info.data.MAX_HP;
+		info.data.HP = hpMax;
 		
 		GameProcess.instance.startGame();
 		notifyDirect("GameBoard", MsgStartup.Reset);

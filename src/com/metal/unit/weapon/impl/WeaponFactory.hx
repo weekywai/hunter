@@ -1,5 +1,5 @@
 package com.metal.unit.weapon.impl;
-import com.metal.proto.impl.WeaponInfo;
+import com.metal.proto.impl.ItemProto.EquipInfo;
 import com.metal.unit.weapon.normal.WeaponAuto;
 import com.metal.unit.weapon.normal.WeaponMelee;
 import com.metal.unit.weapon.skill.SkillBuff;
