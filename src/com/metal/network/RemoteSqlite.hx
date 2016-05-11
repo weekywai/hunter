@@ -143,19 +143,19 @@ class RemoteSqlite
 	{
 		var req:String = "INSERT INTO " + table;
 		if (fields != null) {
-			req += "VALUES (" + fields.join(",") +")";
+			req += " VALUES (" + fields.join(",") +")";
 		}
 		if (rows != null) {
 			var keys = Reflect.fields(rows);
 			var f = keys.join(",");
-			req += " ( " + check(f) + " ) ";
+			req += " ( " + f + " ) ";
 			var values = [];
 			for (key in keys) 
 			{
 				values.push(check(Reflect.field(rows, key)));
 			}
 			var v = values.join(",");
-			req += "VALUES (" + v +")";
+			req += " VALUES (" + v +")";
 		}
 		_data.request (req);
 	}

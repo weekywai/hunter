@@ -24,7 +24,7 @@ class AdvanceInfo
 	}
 	public function readXml(data:Dynamic):Void
 	{
-		ID = data.DstID;
+		ID = data.ID;
 		DstName = data.DstName;
 		Mat = data.Mat;
 		NeedGold = data.NeedGold;

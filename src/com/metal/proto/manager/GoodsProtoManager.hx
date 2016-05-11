@@ -89,6 +89,8 @@ class GoodsProtoManager
 				src = "icon/quality/" + getItemById(id).Color + "_2" + ".png";//大 外框
 			case 3:
 				src = "icon/quality/" + getItemById(id).Color + "_3" + ".png";//大 内背景
+			case 4:
+				src = "storeListBtn" + getItemById(id).Color;//滚动背景
 		}
 		return src;
 	}

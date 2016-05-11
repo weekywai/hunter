@@ -122,11 +122,11 @@ class TaskSystem extends Component
 				{
 					if (info != null)
 					{
-						if (info.equipType == 1 &&info.strLv>=task.vo.Count)
+						if (info.equipType == 1 &&info.strLv>=task.vo.Times)
 						{
 							if (task.vo.State != 2)
 								task.vo.State = 1;
-						}else if (info.equipType == 13 && info.strLv >= task.vo.Count)
+						}else if (info.equipType == 13 && info.strLv >= task.vo.Times)
 						{
 							if (task.vo.State != 2)
 								task.vo.State = 1;
@@ -136,9 +136,9 @@ class TaskSystem extends Component
 				
 				task.vo.Finish += 1;
 				
-				if (task.vo.Finish >= task.vo.Count)
+				if (task.vo.Finish >= task.vo.Times)
 				{
-					task.vo.Finish = task.vo.Count;
+					task.vo.Finish = task.vo.Times;
 					if (task.vo.State != 2) 
 						task.vo.State = 1;
 				}
@@ -185,9 +185,9 @@ class TaskSystem extends Component
 				{
 					task.vo.Finish += 1;
 					
-					if (task.vo.Finish >= task.vo.Count)
+					if (task.vo.Finish >= task.vo.Times)
 					{
-						task.vo.Finish = task.vo.Count;
+						task.vo.Finish = task.vo.Times;
 						if (task.vo.State != 2)
 							task.vo.State = 1;
 					}

@@ -61,8 +61,7 @@ class BagUtils
 			_bag.itemArr.push(temp);
 		}
 	}
-	
-	
+		
 	/**传入一个小类型
 	 * 返回当前背包中此类型的所有物品*/
 	public static function getItemArrByType(type:Int):Array<ItemBaseInfo>

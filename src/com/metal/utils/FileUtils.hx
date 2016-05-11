@@ -36,7 +36,7 @@ typedef TaskVo = {
 	@:optional var Id:Int;
 	var Finish:Int;
 	var State:Int;
-	var Count:Int;
+	var Times:Int;
 }
 /**活动数据*/
 typedef ActiveVo = {

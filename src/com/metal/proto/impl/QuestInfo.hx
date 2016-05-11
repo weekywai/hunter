@@ -61,7 +61,7 @@ class QuestInfo extends TaskInfoVo
 		RepeatType =  data.RepeatType;
 		//State = 0;
 		rewardItem = ParseDropItem(data.CRewardItem);
-		vo = { Finish:0, State:0, Count:0 };
+		vo = { Id:data.Id, Finish:0, State:0, Times:0 };
 	}
 	
 	private function ParseDropItem(value:String):Array<Array<String>>

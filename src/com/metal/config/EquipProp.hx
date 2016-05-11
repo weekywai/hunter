@@ -26,7 +26,7 @@ class EquipProp
 			case "3":
 				return 0x478ae2;/**BLUE*/
 			case "4":
-				return 0xf557f6;/**GREEN*/
+				return 0xf557f6;/**purple*/
 			default:
 				return 0;
 		}

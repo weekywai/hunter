@@ -1,7 +1,7 @@
 package com.metal.component;
 
 import com.metal.config.ItemType;
-import com.metal.config.PlayerPropType;
+import com.metal.config.PlayerPropType.PlayerProp;
 import com.metal.config.SfxManager;
 import com.metal.config.TableType;
 import com.metal.enums.BagInfo;
@@ -12,12 +12,10 @@ import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
 import com.metal.network.RemoteSqlite;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.ProtoUtils;
 import com.metal.proto.impl.ItemProto.EquipInfo;
+import com.metal.proto.impl.ItemProto.GoodsVo;
 import com.metal.proto.impl.ItemProto.ItemBaseInfo;
 import com.metal.proto.impl.PlayerInfo;
-import com.metal.proto.manager.GoodsProtoManager;
-import com.metal.utils.FileUtils;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
 
@@ -78,7 +76,29 @@ class BagpackSystem extends Component
 		switch(userData.type) {
 			case 0: _bagData.removeGoods(userData.data);
 			case 1: _bagData.addGoods(userData.data);
+			case 2:	
+				var vo:GoodsVo = userData.data;
+				updateInfo(vo);
 		}
+	}
+	private function updateInfo(equip:GoodsVo)
+	{
+		var keyId:Int=0, propType:PlayerProp =null;
+		if (equip.Kind == ItemType.IK2_GON) {
+			keyId = playerInfo.data.WEAPON;
+			propType = PlayerProp.WEAPON;
+		}else if (equip.Kind == ItemType.IK2_ARM) {
+			keyId = playerInfo.data.ARMOR;
+			propType = PlayerProp.ARMOR;
+		}
+		var item = bagData.getItemByKeyId(keyId);
+		if (item == null)
+			return;
+		item.vo.Equip = false;
+		_bagData.updateGoods(item.vo); 	//RemoteSqlite.instance.updateProfile(TableType.P_Goods, { Equip:0 }, { keyId:playerInfo.data.WEAPON } );
+		_bagData.updateGoods(equip); 	//RemoteSqlite.instance.updateProfile(TableType.P_Goods, { Equip:1 }, { keyId:equip.keyId } );
+		notify(MsgNet.UpdateInfo, { type:propType, data:bagData.getItemByKeyId(equip.keyId) } );
+		GameProcess.NotifyUI(MsgUIUpdate.Warehouse, equip.ID);
 	}
 	
 	//{****************背包*****************************
@@ -121,7 +141,7 @@ class BagpackSystem extends Component
 					playerInfo.data.WEAPON = item.keyId;
 				}
 				//添加入数据库
-				RemoteSqlite.instance.addProfile(TableType.P_Goods,null, item.vo);
+				RemoteSqlite.instance.addProfile(TableType.P_Goods, null, item.vo);
 			}
 		}else {
 			var values:String = "";

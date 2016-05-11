@@ -141,7 +141,7 @@ class ControllCmd extends BaseCmd
 		//设置首发武器
 		var weaponInfo:ItemBaseInfo = BagUtils.bag.getItemByKeyId(_playerInfo.data.WEAPON);
 		_weaponInfoArr.push(weaponInfo);
-		WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[0]);
+		//WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[0]);
 		_weaponArr[0].onPress = function(e) { setUsingWeapon(0); };
 		//设置备用武器
 		for (i in 1..._weaponNum) 
@@ -152,7 +152,7 @@ class ControllCmd extends BaseCmd
 			{
 				_weaponArr[i].onPress = function(e) {setUsingWeapon(i);	};
 			}
-			WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[i]);
+			//WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[i]);
 		}
 		
 		//首次设置武器，不更换人物模型，因为别处已更改

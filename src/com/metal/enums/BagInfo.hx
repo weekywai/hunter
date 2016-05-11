@@ -51,13 +51,14 @@ class BagInfo
 			oldBackup.vo.sortInt = -1;
 			RemoteSqlite.instance.updateProfile(TableType.P_Goods, oldBackup.vo, {ID:oldBackup.ID});
 		}
+		
 		backupWeaponArr.set(index, weapon);
-		if (weapon != null) {
+		if(weapon!=null){
 			weapon.vo.sortInt = index;
-			RemoteSqlite.instance.updateProfile(TableType.P_Goods, weapon.vo, {ID:weapon.ID});
-			//trace("index: "+index);
-			//trace("weapon.keyId: "+weapon.keyId);
+			RemoteSqlite.instance.updateProfile(TableType.P_Goods, weapon.vo, { ID:weapon.ID } );
 		}
+		//trace("index: "+index);
+		//trace("weapon.keyId: "+weapon.keyId);
 	}
 	public function new() {}
 	
@@ -118,7 +119,7 @@ class BagInfo
 	{		
 		trace("addGoods");
 		var req = RemoteSqlite.instance.request(TableType.Item, "ID", goods.join(","));
-		var save = [], values = [];
+		var save = [], values = [], vo:Dynamic = null;
 		var data:Array<ItemBaseInfo> = [];
 		var item:ItemBaseInfo;
 		for (d in req) 
@@ -127,12 +128,14 @@ class BagInfo
 			data.push(item);
 			/**初次获得设置子弹数*/
 			if (item.Kind == ItemType.IK2_GON)
-				save.push({ ID:d.ID, Kind:d.Kind, Bullets:d.OneClip, Clips:d.StartClip });
+				vo = { ID:d.ID, Kind:d.Kind, Bullets:d.OneClip, Clips:d.StartClip };
 			else
-				save.push( { ID:d.ID, Kind:d.Kind, Bullets:0, Clips:0} );
+				vo = { ID:d.ID, Kind:d.Kind, Bullets:0, Clips:0 };
+			save.push(vo);
 			values.push(d.ID);
+			RemoteSqlite.instance.addProfile(TableType.P_Goods, null, vo);
 		}
-		RemoteSqlite.instance.addProfile(TableType.P_Goods, save);
+		
 		//获取记录vo
 		req = RemoteSqlite.instance.requestProfile(TableType.P_Goods, "ID", values.join(","));
 		for (item in data) 
@@ -146,5 +149,12 @@ class BagInfo
 				item.vo = vo;
 		}
 		itemArr = itemArr.concat(data);
+	}
+	public function updateGoods(vo:GoodsVo):Void
+	{		
+		//trace("updateGoods" + vo);
+		var item = getItemByKeyId(vo.keyId);
+		item.vo = vo;
+		RemoteSqlite.instance.updateProfile(TableType.P_Goods, vo, {keyId:vo.keyId} );
 	}
 }

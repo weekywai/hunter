@@ -57,12 +57,12 @@ class GameProcess implements IObserver
 	
 	public static var root(default, null):SimEntity;
 	public static var UIRoot(default, null):SimEntity;
-	/** send message to UImanager */
+	/** send message to UIManager */
 	public static function SendUIMsg(type:Int, userData:Dynamic = null)
 	{
 		UIRoot.sendMMsg(type, userData);
 	}
-	/** notify UImanager compent */
+	/** notify UIManager compent */
 	public static function NotifyUI(type:Int, userData:Dynamic = null)
 	{
 		UIRoot.notify(type, userData);

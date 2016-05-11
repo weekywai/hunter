@@ -3,6 +3,7 @@ package ru.stablex.ui.widgets;
 import flash.display.DisplayObject;
 import flash.events.MouseEvent;
 import flash.Lib;
+import openfl.geom.Point;
 import ru.stablex.ui.events.WidgetEvent;
 
 
@@ -19,8 +20,8 @@ class Tip extends Floating{
     public var label : Text;
     //Setter and getter for `.label.text`
     public var text(get_text,set_text) : String;
-
-
+	
+	public var follow:Bool;
     /**
     * Constructor. Create label object.
     *
@@ -35,6 +36,8 @@ class Tip extends Floating{
         //do not affect mouse input
         this.mouseEnabled  = false;
         this.mouseChildren = false;
+		
+		this.follow = true;
     }//function new()
 
 
@@ -65,12 +68,35 @@ class Tip extends Floating{
         this._removeTargetListeners();
 
         this.target = w;
-
-        this.target.addUniqueListener(MouseEvent.MOUSE_OVER, this.showTooltip);
-        this.target.addUniqueListener(WidgetEvent.FREE, this.freeTooltip);
+		if(follow) {
+			this.target.addUniqueListener(MouseEvent.MOUSE_OVER, this.showTooltip);
+			this.target.addUniqueListener(WidgetEvent.FREE, this.freeTooltip);
+		}
     }//function bindTo()
-
-
+	
+	/**
+	 * 
+	 */
+	public function showByPos(lp:Float=0, tP:Float=0)
+	{
+		var golbal = target.localToGlobal(new Point());
+		this.left = golbal.x + this.target._width * lp / 100;
+		this.top = golbal.y + this.target._height * tP / 100;
+		//trace(target.x +":"+ target.localToGlobal(new Point()));
+		 /*this.left = (
+            target.w + this.w <= Lib.current.stage.stageWidth
+                ? Lib.current.mouseX + 10
+                : Lib.current.stage.stageWidth - this.w
+        );
+        this.top = (
+            Lib.current.mouseY + 10 + this.h <= Lib.current.stage.stageHeight
+                ? Lib.current.mouseY + 10
+                : Lib.current.mouseY - 10 - this.h
+        );*/
+		this.renderTo = null;
+		this.refresh();
+		this.show();
+	}
     /**
     * Called on rolling mouse over target widget
     *

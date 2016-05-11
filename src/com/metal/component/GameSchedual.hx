@@ -138,10 +138,9 @@ class GameSchedual extends Component
 					var fightNum:Int =  Std.int(weapon.Att * weaponLv.Attack / 10000) + base.Att;
 					//trace("fightNum: "+fightNum);
 					playerInfo.data.FIGHT = fightNum;
-					if (playerInfo.data.WEAPON != weapon.keyId)
-						RemoteSqlite.instance.updateProfile(TableType.P_Goods, {Equip:0}, {ID:playerInfo.data.WEAPON} );
 					playerInfo.data.WEAPON = weapon.vo.keyId;
-					RemoteSqlite.instance.updateProfile(TableType.P_Goods, {Equip:1}, {ID:weapon.ID} );
+					RemoteSqlite.instance.updateProfile(TableType.P_Info, { FIGHT:fightNum, WEAPON:weapon.vo.keyId } );
+					//trace( weapon.vo.ID);
 				case PlayerProp.ARMOR:
 					var armor:EquipInfo = ProtoUtils.castType(userData.data);
 					var armorLv = EquipProp.Strengthen(armor, armor.vo.strLv);
@@ -149,10 +148,8 @@ class GameSchedual extends Component
 					var equipHP:Int = Std.int(armor.Hp * armorLv.HPvalue / 10000) + base.HP;
 					playerInfo.data.HP = equipHP;
 					playerInfo.data.MAX_HP = equipHP;
-					if (playerInfo.data.ARMOR != armor.keyId)
-						RemoteSqlite.instance.updateProfile(TableType.P_Goods, {Equip:0}, {ID:playerInfo.data.ARMOR} );
 					playerInfo.data.ARMOR = armor.vo.keyId;
-					RemoteSqlite.instance.updateProfile(TableType.P_Goods, {Equip:1}, {ID:armor.ID} );
+					RemoteSqlite.instance.updateProfile(TableType.P_Info, { HP:equipHP, MAX_HP:equipHP, ARMOR:armor.vo.keyId } );
 				default:
 					if (userData.type == PlayerProp.ROLEID){
 						playerInfo.data.ROLEID = userData.data;
