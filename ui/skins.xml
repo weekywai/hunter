@@ -35,8 +35,10 @@
 	<storeBtn4:Img src="'ui/storehouse/storehouse/anniu1-2.png'"/>
 	<storeBtn5:Img src="'ui/storehouse/storehouse/anniu1-3.png'"/>
 	<storeBtn6:Img src="'ui/storehouse/storehouse/anniu1-4.png'"/>
-	<storeBtn7:Img src="'ui/storehouse/storehouse/anniu2-1.png'"/>
-	<storeBtn8:Img src="'ui/storehouse/storehouse/anniu2-2.png'"/>
+	<storeListBtn1:Img src="'ui/storehouse/storehouse/anniu2-1.png'"/>
+	<storeListBtn2:Img src="'ui/storehouse/storehouse/anniu2-2.png'"/>
+	<storeListBtn3:Img src="'ui/storehouse/storehouse/anniu2-3.png'"/>
+	<storeListBtn4:Img src="'ui/storehouse/storehouse/anniu2-4.png'"/>
 	<storeBtn9:Img src="'ui/storehouse/storehouse/anniu3-1.png'"/>
 	<storeBtn10:Img src="'ui/storehouse/storehouse/anniu3-2.png'"/>
 	<storeBtn11:Img src="'ui/storehouse/storehouse/anniu4.png'"/>

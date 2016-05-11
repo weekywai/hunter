@@ -271,8 +271,16 @@
             format-size="28"
             format-color="0xb8ffff"
             format-bold="false"
-			states-up-ico-src   = "'ui/storehouse/storehouse/anniu1-3.png'"
-            states-down-ico-src = "'ui/storehouse/storehouse/anniu1-2.png'"
+			states-up-skinName   = "'storeBtn5'"
+            states-down-skinName = "'storeBtn4'"
+		/>
+		<!--states-down-skinName = "'storeListBtn1'"-->
+		<!--states-up-skinName   = "'storeListMask'"-->
+		<oneList
+			
+			states-up-skin:Paint-color = "0"
+			states-up-skin:Paint-alpha = "0.5"
+			states-down-skin:Paint-alpha = "0"
 		/>
 	</Radio>
 	<TabPage>
@@ -290,6 +298,7 @@
 		/>
 	</TabPage>
 	<!--进度条-->
+	<!--bar-skin:Gradient-colors = "[0xffff00,0xFF9300]"-->
 	<Progress>
 		<ProgerssBar
 			w="590"
@@ -300,8 +309,10 @@
 			skin:Paint-corners="[10]"
 			skin:Paint-alpha="0.2"
 
-			bar-skin:Gradient-colors = "[0xffff00,0xFF9300]"
+			bar-skin:Gradient-colors = "[0x99ff00,0xffff00,0xFF0000]"
+			bar-skin:Gradient-ratios = "[0x00, 0x44]"
 			bar-skin:Gradient-corners="[10]"
+			bar-skin:Gradient-rotation="0"
 		/>
 	</Progress>
 		

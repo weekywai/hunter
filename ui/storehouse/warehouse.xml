@@ -100,7 +100,7 @@
 			<Bmp skinName="'xingxing'" />
 		</HBox>-->
 		
-		<Text name="'weaponName'" text="'这是一把枪'" widthPt="100" heightPt="10" topPt="12"  format-size="30" align="'center,middle'"/>
+		<Text name="'weaponName'" text="'这是一把枪'" widthPt="100" heightPt="10" topPt="12" leftPt="12" format-size="30" align="'center,middle'"/>
 		
 		<Widget name="'weaponBmp'" leftPt="15" topPt="25"/>
 		<!--<Bmp name="'weaponBmp'" skinName="'qiang1'" leftPt="15" topPt="25"/>-->
@@ -118,9 +118,10 @@
 			</HBox>		
 		</Widget>-->
 		
-		<HBox widthPt="100" heightPt="100" leftPt="37" topPt="76" childPadding="10" align="'top,left'">
+		<HBox widthPt="100" heightPt="100" leftPt="20" topPt="74" childPadding="10" align="'left'">
 			<Text text="'LV:'" defaults="'Gold2'" format-size="20" align="'center,middle'"/>
-			<Text name="'strengthenLv'" text="'4/5'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>			
+			<Text name="'strengthenLv'" text="'4/5'" defaults="'Gold2'" format-size="20" align="'left,middle'"/>	
+			<Progress name="'expValue'" value="100" widthPt="50" h="12" topPt="1.2" defaults="'ProgerssBar'" />
 		</HBox>
 		
 		<Widget widthPt="80" heightPt="20" leftPt="12" topPt="80" >
@@ -128,14 +129,16 @@
 		
 			<HBox childPadding="0" align="'top,left'" >
 				<Button name="'dressBtn'" defaults="'Givebtn,HightLight'" text="'装备'" />
-				<Button name="'strengthenBtn'" defaults="'Givebtn,HightLight'" text="'强化'" />	
+				<Button name="'strengthenBtn'" defaults="'Givebtn,HightLight'" text="'升级'" />	
 				<Button name="'decomposeBtn'" text="'分解'" defaults="'Givebtn,HightLight'"  />	
 				<Button name="'rechargeOneBtn'" text="'购买弹夹'" defaults="'Givebtn,HightLight'"  />
 				<!--<Button name="'rechargeBtn'" text="'补满子弹'" defaults="'Givebtn,HightLight'"  />-->											
 				<!--<Text name="'bulletTxt'" defaults="'Green'" text="'子弹数 0/0'" />-->				
 			</HBox>
-			<Text name="'dressedBmp'" skinName="'storeBtn2'" text="'已装备'" leftPt="0" topPt="0" defaults="'Gold2'" format-size="28" align="'center,middle'" mouseEnabled="false" />
+			<!--<Text name="'dressedBmp'" skinName="'storeBtn2'" text="'已装备'" leftPt="0" topPt="0" defaults="'Gold2'" format-size="28" align="'center,middle'" mouseEnabled="false" />-->
 			<Text name="'maxStrengthenBmp'" skinName="'storeBtn2'" text="'强化满级'" leftPt="24" topPt="0" defaults="'Gold2'" format-size="28" align="'center,middle'" mouseEnabled="false" />
+			<!--<Text name="'needExp'" defaults="'Blue'" leftPt="10" topPt="99" text="'升级还需经验'"/>-->
+			<!--<Text name="'needAllExp'" defaults="'Blue'" leftPt="54" topPt="99" text="'满级还需经验'"/>-->
 			
 		</Widget>
 		
@@ -175,12 +178,12 @@
 	<HBox name="'weaponPanel'" bottomPt="11" widthPt="100" heightPt="100" childPadding="30" align="'bottom,center'">
 		<HBox childPadding="5" align="'top,left'">
 			<Text text="'使\n用\n中'" defaults="'RedShadow'" />
-			<Button name="'startWeapon'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+			<Button name="'startWeapon'" skinName="'forgeImg12'" defaults="'mainEquipBtn'" label-visible="false" align="''"/>
 		</HBox>
 		<HBox childPadding="5" align="'top,left'">
 			<Text text="'备\n用'" defaults="'YellowShadow'" />
-			<Button name="'weapon1'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
-			<Button name="'weapon2'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
+			<Button name="'weapon1'" skinName="'forgeImg12'" defaults="'mainEquipBtn'" label-visible="false" align="''"/>
+			<Button name="'weapon2'" skinName="'forgeImg12'" defaults="'mainEquipBtn'" label-visible="false" align="''"/>
 		</HBox>		
 	</HBox>	
 			

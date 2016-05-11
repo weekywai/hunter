@@ -32,12 +32,11 @@
 		</VBox>
 	</Widget>
 </HBox>-->
-
-<Widget widthPt="100" skinName="'storeBtn8'">
-	<Radio name="'weaponRadio'" defaults="'storeScroll'"  group="'group2'" widthPt="100" >
+<Widget skinName="'storeListBtn1'">
+	<Radio name="'weaponRadio'" defaults="'oneList'"  group="'group2'" widthPt="100" align="''">
 		<HBox name="'weaponBmp'" widthPt="100" align="'middle,center'">
 			<Text name="'text'" text="''" defaults="'OftenD'" mouseEnabled="false"/>
 			<!--<Bmp skinName="'qiang1'" leftPt="20" topPt="10" scaleX="0.35" scaleY="0.35" mouseEnabled="false"/>-->
 		</HBox>
-	</Radio>	
+	</Radio>
 </Widget>
