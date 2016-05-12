@@ -45,6 +45,7 @@ class BattleResolver extends Component
 	
 	private var _hitTime:Int = 3;
 	private var _injureTime:Int = 2;
+	private var _victory:Bool;
 	public function new() 
 	{
 		super();
@@ -116,12 +117,18 @@ class BattleResolver extends Component
 		//trace(_gameMap.enemies.length);
 		if (MapInfoManager.instance.getRoomInfo(Std.parseInt(_gameMap.mapData.mapId)).MissionType==RoomMissionType.Kill_All) 
 		{
-			trace("enemies.length: "+_gameMap.enemies.length);
+			//trace("enemies.length: "+_gameMap.enemies.length);
 			if (_gameMap.enemies.length <= 0) {
-				SfxManager.playBMG(BGMType.Victory);
-				trace("Send Victory"+ " len:"+_gameMap.enemies.length);
-				PlayerUtils.getPlayer().notify(MsgActor.Victory);
-				GameProcess.root.notify(MsgStartup.BattleClear);
+				if (!_victory)
+				{
+					SfxManager.playBMG(BGMType.Victory);
+					trace("Send Victory"+ " len:"+_gameMap.enemies.length);
+					PlayerUtils.getPlayer().notify(MsgActor.Victory);
+					GameProcess.root.notify(MsgStartup.BattleClear);
+				}
+				_victory = true;
+			}else {
+				_victory = false;
 			}
 		}
 		

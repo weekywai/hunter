@@ -28,7 +28,9 @@ import com.metal.ui.BaseCmd;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
 import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.utils.BagUtils;
+import com.particleSystem.ASTypes.B;
 import de.polygonal.core.event.IObservable;
+import haxe.ds.ArraySort;
 import haxe.ds.IntMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
@@ -227,7 +229,32 @@ class WarehouseCmd extends BaseCmd
 	{
 		_equipPanel.visible = true;
 		_materialPanel.visible = false;
-		for (item in itemMap) {
+		//排序方式颜色品质
+		var list:Array<ItemBaseInfo> = Lambda.array(itemMap);
+		list.sort(function(a, b) {
+			if (a.Color == b.Color)
+				return 0;	
+			if (a.Color > b.Color)
+				return 1;
+			else 
+				return -1;
+		});
+		for (item in list) {
+			if (item.vo != null) {
+				trace(item.vo.Equip);
+				if (item.vo.Equip) 
+				{
+					trace(item.ID);
+					equipGoods(item.ID, true);
+					updataPad(item.ID);
+				}else{
+					equipGoods(item.ID);
+				}
+			}else {
+				equipGoods(item.ID);
+			}
+		}
+		/*for (item in itemMap) {
 			if (item.vo != null) {
 				//默认显示第一条项目
 				if (item.vo.Equip) 
@@ -240,7 +267,7 @@ class WarehouseCmd extends BaseCmd
 			}else {
 				equipGoods(item.ID);
 			}
-		}
+		}*/
 	}
 	/**材料栏*/
 	private function updateMaterialPanel()
@@ -255,7 +282,7 @@ class WarehouseCmd extends BaseCmd
 	
 	private function findItem(itemId:Int):ItemBaseInfo
 	{
-		var info:ItemBaseInfo;
+		var info:ItemBaseInfo; 
 		switch(_openType) {
 		case ItemType.IK2_ARM:	
 			info = _asmInfo.get(itemId);
@@ -356,7 +383,9 @@ class WarehouseCmd extends BaseCmd
 		
 		if (tempInfo.Kind == ItemType.IK2_GON||tempInfo.Kind == ItemType.IK2_ARM) 
 		{
-			var weaponLv = EquipProp.Strengthen(tempInfo, (tempInfo.vo!=null)?tempInfo.vo.strLv:0);
+			var weaponLv = EquipProp.Strengthen(tempInfo, (tempInfo.vo != null)?tempInfo.vo.strLv:0);
+			var exp = _widget.getChildAs("expValue", Progress);
+			var expTxt = _widget.getChildAs("strengthenLv", Text);
 			if(tempInfo.vo!=null){
 				//强化键
 				if (tempInfo.vo.strLv >= tempInfo.MaxStrengthenLevel)
@@ -435,9 +464,11 @@ class WarehouseCmd extends BaseCmd
 				_dressBtn.disabled = false;
 				_strengthenBtn.visible = true;
 				//_maxStrengthenBtn.visible=!_maxStrengthenBmp.visible;
-				_widget.getChildAs("expValue", Progress).max = tempInfo.MaxStrengthenLevel;
-				_widget.getChildAs("expValue", Progress).value = tempInfo.vo.strLv;
-				_widget.getChildAs("strengthenLv", Text).text = "" + tempInfo.vo.strLv + "/" + tempInfo.MaxStrengthenLevel;
+				
+				exp.visible = false;
+				exp.max = tempInfo.MaxStrengthenLevel;
+				exp.value = tempInfo.vo.strLv;
+				expTxt.text = "" + tempInfo.vo.strLv + "/" + tempInfo.MaxStrengthenLevel;
 			
 				
 				_decomposeBtn.visible = false;
@@ -475,6 +506,8 @@ class WarehouseCmd extends BaseCmd
 					};*/
 				}			
 			}else {//未获得
+				exp.visible = false;
+				expTxt.text = "";
 				_strengthenBtn.visible = false;
 				_dressBtn.visible = false;
 				_rechargeOneBtn.visible = false;
@@ -566,7 +599,7 @@ class WarehouseCmd extends BaseCmd
 			//trace("click _startWeapon:"+vo);
 			notifyRoot(MsgNet.UpdateBag, { type:2, data:vo } );
 			
-			//notify(MsgUIUpdate.UpdateModel);
+			notify(MsgUIUpdate.UpdateModel);
 			finishChioce();			
 		};
 		_weapon1.onPress = function (e)

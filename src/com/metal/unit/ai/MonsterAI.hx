@@ -47,7 +47,7 @@ class MonsterAI extends BaseAiControl
 	{
 		super.onInitComponent();
 		_monsterInfo = owner.getPropertyByCls(MonsterInfo);
-		//trace(_id + ">>" + _monsterInfo.AiType);
+		//trace(_id + ">>" + _monsterInfo);
 		_monsterRoot = AiFactory.instance.createAI(_monsterInfo.AiType);
 		_actor = owner.getComponent(UnitActor);
 		

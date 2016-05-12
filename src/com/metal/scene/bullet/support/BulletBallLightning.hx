@@ -54,7 +54,7 @@ class BulletBallLightning extends BulletEntity
 	{
 		super.setInfo(info);
 		//判断资源类型
-		switch (info.buffMovieType) {
+		switch (info.fileType) {
 			case EffectAniType.Image:
 				imageBullet();
 			case EffectAniType.Texture://2
@@ -180,7 +180,7 @@ class BulletBallLightning extends BulletEntity
 	}
 	//}/** 启动效果 */
 	override function commitEffect():Void {
-		_effectReq.Key = info.effId;
+		_effectReq.Key = info.effimg;
 		_effectReq.x = x;
 		_effectReq.y = y + 50;
 		owner.notify(MsgEffect.Create, _effectReq);

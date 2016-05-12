@@ -50,12 +50,11 @@ class PlayerUtils
 		var weaponId:Int;
 		if(id==0){
 			var info:PlayerInfo = getSchedual().playerInfo;
-			//weaponId = info.getProperty(PlayerProp.WEAPON);111
 			weaponId = BagUtils.bag.getItemByKeyId(info.data.WEAPON).ID;
 		}else {
 			weaponId = id;
 		}
-		//trace("Playerinfo: " + weaponId);
+		trace("Playerinfo: " + weaponId);
 		var subID = GoodsProtoManager.instance.getSubID(weaponId);
 		var action = 0;
 		switch(subID) {
@@ -69,8 +68,8 @@ class PlayerUtils
 				action = 0;
 		}
 		//武器ID公式 id = subID * 100 + Id2
-		//return action + (weaponId - subID * 100);
-		return Math.floor(action/4)+1;
+		return action + (weaponId - subID * 100);
+		//return Math.floor(action/4)+1;
 	}
 	
 	private static function getSchedual():GameSchedual

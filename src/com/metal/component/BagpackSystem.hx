@@ -40,9 +40,6 @@ class BagpackSystem extends Component
 		return _playerInfo;
 	}
 	
-	private var _weapons:Array<Dynamic>;
-	private var _armors:Array<Dynamic>;
-	
 	private var _isInitData:Bool = false;
 	
 	public function new() 
@@ -52,8 +49,6 @@ class BagpackSystem extends Component
 	override function onInitComponent():Void 
 	{
 		super.onInitComponent();
-		//_weapons = RemoteSqlite.instance.request(TableType.Item, "Kind", ItemType.IK2_GON);
-		//_armors = RemoteSqlite.instance.request(TableType.Item, "Kind", ItemType.IK2_ARM);
 	}
 	
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
@@ -160,6 +155,7 @@ class BagpackSystem extends Component
 				{
 					if(j.ID==item.ID){
 						item.vo = j;
+						//trace(item.vo.Equip);
 						itemArr.push(item);
 					}
 				}

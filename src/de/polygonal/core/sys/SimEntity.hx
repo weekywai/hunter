@@ -156,6 +156,7 @@ class SimEntity extends Entity implements IObservable
 	public function getProperty<T>(field:String, ?val:Dynamic):Null<T> 
 	{
 		var temp = Lambda.find(propMap, function(e) {
+			
 			if(val!=null){
 				if (Reflect.field(e, field) == val)
 					return true;
@@ -169,8 +170,8 @@ class SimEntity extends Entity implements IObservable
 	}
 	public function getPropertyByCls<T>(cls:Class<T>):Null<T> 
 	{
-		var temp = Lambda.find(propMap, function(e){
-			if (Type.typeof(e) == Type.typeof(cls))
+		var temp = Lambda.find(propMap, function(e) {
+			if (Std.is(e, cls))
 				return true;
 			return false;
 		});

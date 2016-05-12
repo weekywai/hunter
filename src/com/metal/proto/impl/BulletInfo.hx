@@ -19,7 +19,7 @@ class BulletInfo
 	/**子弹大小*/
 	public var size:Int;
 	/**子弹行为*/
-	public var behavior:Int;
+	public var effectType:Int;
 	/**BUFF挂载目标*/
 	public var buffTarget:Int;
 	/**挂载BUFF ID*/
@@ -27,11 +27,11 @@ class BulletInfo
 	/**BUFF持续时间*/
 	public var buffTime:Int;
 	/**动画类型**/
-	public var buffMovieType:Int;
+	public var fileType:Int;
 	/**子弹资源*/
 	public var img:String;
 	/**特效资源*/
-	public var effId:Int;
+	public var effimg:Int;
 	/**是否贯穿**/
 	public var isThrough:Int;
 	/**预警资源*/
@@ -43,19 +43,19 @@ class BulletInfo
 	
 	public function readXml(data:Dynamic):Void
 	{
-		Id = data.ID;
+		Id = data.Id;
 		type = data.type;
 		param = data.param;
 		speed = data.speed;
 		size = data.size;
-		behavior = data.effecttype;
+		effectType = data.effectType;
 		buffTarget = data.bufftarget;
-		buffId = data.buffid;
+		buffId = data.buffId;
 		buffTime = data.bufftime;
 		img = data.img;
-		isThrough = data.IsThrough;
-		buffMovieType = data.IsXml;
-		effId = data.effimg;
+		isThrough = data.isThrough;
+		fileType = data.fileType;
+		effimg = data.effimg;
 		warning = data.warning;
 	}
 }

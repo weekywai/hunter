@@ -21,8 +21,6 @@ package com.metal.message;
 	UpdateScore,			//更新分数
 	//UpdateUI,           	//更新界面数据
 	UpdateResources,    	//更新角色资源
-	OpenThrough,        	//战斗结束打开关卡
-	OpenCopy,            	//战斗结束打开副本
 	NewBieUI,           	 	//新手战斗UI
 	UpdateThumb,           	 	//更新预览
 	NewBie,					//新手引导

@@ -19,7 +19,7 @@ class BulletManager
 	public function new() 
 	{
 		_data = new IntMap();	
-		var req = RemoteSqlite.instance.request(TableType.BattlePrepar);
+		var req = RemoteSqlite.instance.request(TableType.Bullet);
 		for (i in req) 
 		{
 			var info:BulletInfo = new BulletInfo();

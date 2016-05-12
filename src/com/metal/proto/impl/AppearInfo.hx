@@ -42,19 +42,20 @@ class AppearInfo
 		EnAt = parsePoint(data.EnAt);
 		Enter = data.Enter;
 	}
-	/*private function parseList(data:String):Array<Int>
+	private function parseList(data:Dynamic):Array<Int>
 	{
+		var str = Std.string(data);
 		var temp = [];
 		var ary = [];
-		data = data.substring(1, data.length - 1);
-		temp = data.split(",");
+		str = str.substring(1, str.length - 1);
+		temp = str.split(",");
 		for (i in temp) 
 		{
 			ary.push(StringUtils.GetInt(i));
 		}
 		return ary;
-	}*/
-	private function parseList(data:Dynamic):Array<Int>
+	}
+	/*private function parseList(data:Dynamic):Array<Int>
 	{
 		if (data == "")
 			return null;
@@ -65,7 +66,7 @@ class AppearInfo
 			temp.push(StringUtils.GetInt(ary[i]));
 		}
 		return temp;
-	}
+	}*/
 	private function parsePoint(data:Dynamic):Array<Point>
 	{
 		var ary:Array<Point> = new Array();

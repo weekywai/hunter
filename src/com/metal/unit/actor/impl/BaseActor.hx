@@ -602,7 +602,7 @@ class BaseActor extends GameBoardItem implements IActor
 		y = userData.y;
 	}
 	private function Notify_BornPos(userData:Dynamic):Void { 
-		trace(userData);
+		//trace(userData);
 		_keepActive = true;
 	}
 //}

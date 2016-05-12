@@ -48,7 +48,7 @@ class BulletFire extends BulletEntity
 		_count = 0;
 		_angle = 0;
 		canRemove = false;
-		switch (info.buffMovieType) {
+		switch (info.fileType) {
 			case EffectAniType.Image:
 				xmlFire();// imageBullet();
 			case EffectAniType.Texture://2

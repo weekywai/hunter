@@ -371,6 +371,7 @@ class GameMap extends Component
 				//case UnitModelType.Unit, UnitModelType.Npc, UnitModelType.Boss, UnitModelType.Elite://, UnitModelType.Block:
 					//if(data.type ==UnitModelType.Block)
 						//trace(data.id);
+						
 					res = MonsterManager.instance.getInfo(data.id).res;
 					//trace(res);
 			}

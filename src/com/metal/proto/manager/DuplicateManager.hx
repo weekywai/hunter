@@ -19,14 +19,15 @@ class DuplicateManager
 	public function new() 
 	{
 		_data = new IntMap();
-		_duplicateArr = new Array();
+		_duplicateArr = [];
+		var arr = [];
 		var req = RemoteSqlite.instance.request(TableType.Stage);
 		for (i in req) 
 		{
 			var info:DuplicateInfo = new DuplicateInfo();
 			info.readXml(i);
 			_data.set(info.Id, info);
-			var arr = [];
+			
 			if ((info.Id - 1) % 5 == 0)
 			{
 				if (arr.length > 0)

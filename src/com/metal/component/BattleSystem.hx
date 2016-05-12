@@ -182,7 +182,7 @@ class BattleSystem extends Component
 		_missionType = MapInfoManager.instance.getRoomInfo(Std.parseInt(currentRoomId())).MissionType;		
 	}
 	var conditionTypeArr:Array<Int>;
-	var conditionArr:Array<String>;
+	var conditionArr:Array<Float>;
 	/**通关评级条件*/
 	private function findGradeCondition(duplicateInfo:DuplicateInfo)
 	{
@@ -193,7 +193,7 @@ class BattleSystem extends Component
 		}
 		var gradeCondition:GradeConditionInfo;
 		conditionTypeArr = new Array();
-		conditionArr = new Array();
+		conditionArr = [];
 		for (i in duplicateInfo.GradeCondition) 
 		{
 			gradeCondition = GradeConditionManager.instance.getGradeConditionInfo(Std.parseInt(i));
@@ -214,11 +214,11 @@ class BattleSystem extends Component
 			switch (conditionTypeArr[i]) 
 			{
 				case BattleGradeConditionType.Hp:
-					reachArr.push(hpPercent > Std.parseFloat(conditionArr[i]));
+					reachArr.push(hpPercent > conditionArr[i]);
 				case BattleGradeConditionType.RebornTime:
-					reachArr.push(rebornTime < Std.parseInt(conditionArr[i]));
+					reachArr.push(rebornTime < conditionArr[i]);
 				case BattleGradeConditionType.TimeCost:
-					reachArr.push(_usedtime < Std.parseInt(conditionArr[i]));					
+					reachArr.push(_usedtime < conditionArr[i]);					
 				default:	
 					trace("There is no this type, please check the xml");
 			}

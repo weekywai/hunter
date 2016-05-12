@@ -44,7 +44,7 @@ class BulletNormal extends BulletEntity
 	{
 		super.setInfo(info);
 		//判断资源类型
-		switch (info.buffMovieType) {
+		switch (info.fileType) {
 			case EffectAniType.Image:
 				imageBullet();
 			case EffectAniType.Texture://2

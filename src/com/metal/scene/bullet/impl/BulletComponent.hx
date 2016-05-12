@@ -59,9 +59,10 @@ class BulletComponent extends Component
 	private function cmd_create(userData:Dynamic):Void
 	{
 		var req:BulletRequest = userData;
+		//trace(req.info);
 		//if (req.info == null)//bug
 			//return;
-		var bullet:IBullet = BulletFactory.instance.createBullet(req.info.behavior);
+		var bullet:IBullet = BulletFactory.instance.createBullet(req.info.effectType);
 		//trace(bullet);
 		//trace(bullets.size());
 		bullets.add(bullet);

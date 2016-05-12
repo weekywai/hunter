@@ -13,7 +13,7 @@ class GradeConditionInfo
 	/**描述*/
 	public var Description:String;
 	/**条件限定数值*/
-	public var Condition:String;
+	public var Condition:Float;
 	//条件描述=txt1+conditional+txt2
 	public var Txt1:String;
 	public var Txt2:String;

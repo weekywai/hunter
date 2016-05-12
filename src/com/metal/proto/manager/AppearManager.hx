@@ -19,7 +19,7 @@ class AppearManager
 	public function new() 
 	{
 		_data = new IntMap();
-		var req = RemoteSqlite.instance.request(TableType.Appear);
+		var req = RemoteSqlite.instance.request(TableType.MonsterAppear);
 		for (i in req) 
 		{
 			var info:AppearInfo = new AppearInfo();

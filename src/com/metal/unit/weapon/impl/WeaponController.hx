@@ -6,6 +6,7 @@ import com.metal.config.PlayerPropType;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI2;
 import com.metal.player.utils.PlayerUtils;
+import com.metal.proto.ProtoUtils;
 import com.metal.proto.impl.ItemProto.EquipInfo;
 import com.metal.proto.impl.SkillInfo;
 import com.metal.proto.manager.GoodsProtoManager;
@@ -15,6 +16,7 @@ import com.metal.unit.stat.IStat;
 import com.metal.unit.weapon.api.AttackTypeList;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
 import com.metal.unit.weapon.skill.BaseSkill;
+import com.metal.utils.BagUtils;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
 import de.polygonal.core.sys.MsgCore;
@@ -32,7 +34,7 @@ class WeaponController extends Component
 	/**武器等级*/
 	public var bulletLevel(default, null):Int = 1;
 	private var _curBulletLv:Int = 1;
-	private var _curWeaponId:Int;
+	private var _curWeaponKeyId:Int;
 	
 	public function new() 
 	{
@@ -59,7 +61,7 @@ class WeaponController extends Component
 	{
 		super.onInitComponent();
 		//_curWeaponId = PlayerUtils.getInfo().getProperty(PlayerProp.WEAPON);111
-		_curWeaponId = PlayerUtils.getInfo().data.WEAPON;
+		_curWeaponKeyId = PlayerUtils.getInfo().data.WEAPON;
 	}
 	
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
@@ -86,6 +88,7 @@ class WeaponController extends Component
 		var playerInfo = PlayerUtils.getInfo();
 		createWeapon(WeaponType.Shoot, skillInfo);
 		createWeapon(WeaponType.Melee, skillInfo);
+		//trace()
 		createWeapon(WeaponType.Grenade, SkillManager.instance.getInfo(playerInfo.data.SKILL1));
 		var skill2 = playerInfo.data.SKILL2;
 		if (skill2 != 0) {
@@ -105,9 +108,9 @@ class WeaponController extends Component
 	{
 		var weapon:BaseWeapon = _weaponUsing.get(userData.type);
 		if(userData.id != null)
-			_curWeaponId = userData.id;
+			_curWeaponKeyId = userData.id;
 		else
-			_curWeaponId = PlayerUtils.getInfo().data.WEAPON;
+			_curWeaponKeyId = PlayerUtils.getInfo().data.WEAPON;
 			//_curWeaponId = PlayerUtils.getInfo().getProperty(PlayerProp.WEAPON);111
 		weapon.initInfo(getSkill());
 	}
@@ -208,7 +211,8 @@ class WeaponController extends Component
 		//if(weaponId==-1)
 			//weaponId = PlayerUtils.getInfo().getProperty(PlayerProp.WEAPON);
 		//身上的装备
-		var weapon:EquipInfo = cast GoodsProtoManager.instance.getItemById(_curWeaponId,false);
+		var weapon:EquipInfo = ProtoUtils.castType(BagUtils.bag.getItemByKeyId(_curWeaponKeyId));
+		//var weapon:EquipInfo = cast GoodsProtoManager.instance.getItemById(_curWeaponKeyId,false);
 		//var weapon:WeaponInfo = cast GoodsProtoManager.instance.getItemById(101);
 		var skillID:Int = weapon.SubId * 100 + weapon.Color * 10 + _curBulletLv;
 		var skill:SkillInfo = SkillManager.instance.getInfo(skillID);

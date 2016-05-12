@@ -56,6 +56,7 @@ class ThroughCmd extends BaseCmd
 	{
 		_duplicateArr = DuplicateManager.instance.getDuplicateArr().copy();
 		_duplicateArr.shift();
+		
 		_scrollPanel = _widget.getChildAs("scrollPanel", Widget);
 		if (_scrollPanel.numChildren > 0) _scrollPanel.removeChildren();
 		trace(_duplicateArr.length);

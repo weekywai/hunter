@@ -177,7 +177,7 @@ class BattleResultCmd extends BaseCmd
 		{
 			if (num == 1)
 			{
-				notify(MsgUIUpdate.OpenCopy);
+				sendMsg(MsgUI.EndlessCopy);
 			}else
 			{
 				notify(MsgView.NewBie, 17);
@@ -187,7 +187,7 @@ class BattleResultCmd extends BaseCmd
 		}else {
 			if (nn == 1)
 			{
-				notify(MsgUIUpdate.OpenThrough);
+				sendMsg(MsgUI.Through);
 			}else
 			{
 				notifyRoot(MsgView.NewBie, 14);

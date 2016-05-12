@@ -65,7 +65,7 @@ class BulletMissile1 extends BulletEntity
 		//判断资源类型
 		_dir = "up";
 		canRemove = false;
-		switch (info.buffMovieType) {
+		switch (info.fileType) {
 			case EffectAniType.Image:
 				imageBullet();
 			case EffectAniType.Texture:
@@ -237,7 +237,7 @@ class BulletMissile1 extends BulletEntity
 	}
 	/** 启动效果 */
 	override function commitEffect():Void {
-		_effectReq.Key = info.effId;
+		_effectReq.Key = info.effimg;
 		_effectReq.x = x;
 		_effectReq.y = y + 125;
 		owner.notify(MsgEffect.Create, _effectReq);

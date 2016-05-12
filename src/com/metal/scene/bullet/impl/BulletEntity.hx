@@ -149,7 +149,7 @@ class BulletEntity extends ViewPhysics implements IBullet
 	
 	/** 启动效果 */
 	private function commitEffect():Void {
-		_effectReq.Key = info.effId;
+		_effectReq.Key = info.effimg;
 		_effectReq.x = x;
 		_effectReq.y = y;
 		owner.notify(MsgEffect.Create, _effectReq);

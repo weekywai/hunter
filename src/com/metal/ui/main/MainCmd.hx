@@ -1,18 +1,14 @@
 package com.metal.ui.main;
-import com.metal.component.BagpackSystem;
-import com.metal.component.GameSchedual;
 import com.metal.config.BagType;
 import com.metal.config.EquipProp;
-import com.metal.config.PlayerPropType;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
-import com.metal.enums.BagInfo;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
+import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.ProtoUtils;
 import com.metal.proto.impl.PlayerInfo;
-import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.StrengthenInfo;
 import com.metal.proto.manager.ModelManager;
 import com.metal.ui.BaseCmd;
@@ -50,10 +46,6 @@ class MainCmd extends BaseCmd
 		switch(type){
 			case MsgUIUpdate.UpdateModel:
 				cmd_UpdateModel(userData);
-			case MsgUIUpdate.OpenThrough:
-				openThrough();
-			case MsgUIUpdate.OpenCopy:
-				openCopy();
 		}
 	}
 	override function onInitComponent():Void 
@@ -64,24 +56,18 @@ class MainCmd extends BaseCmd
 		sendMsg(MsgUI2.Loading, false);
 		super.onInitComponent();
 		
-		initFileData();
-		
-		//showModel();
+		/**初始化文件数据读取*/
+		showModel();
+		updatePlayerType(null);
 		onClick();
-		
-		
 	}
 	
-	/**初始化文件数据读取*/
-	private function initFileData():Void
-	{
-		showModel();
-	}
 	override function onClose():Void 
 	{
 		dispose();
 		super.onClose();
 	}
+	
 	override function onDispose():Void 
 	{
 		//if (_model != null && _model.parent!=null)
@@ -92,17 +78,6 @@ class MainCmd extends BaseCmd
 		super.onDispose();
 	}
 	
-	/*打开关卡界面*/
-	private function openThrough():Void
-	{
-		sendMsg(MsgUI.Through);
-		
-	}
-	/**单开副本模式界面*/
-	private function openCopy():Void
-	{
-		sendMsg(MsgUI.EndlessCopy);
-	}
 	override function onShow():Void 
 	{
 		sendMsg(MsgUI2.Loading, false);
@@ -224,6 +199,9 @@ class MainCmd extends BaseCmd
 	/** 展示模型 */
 	private function showModel():Void 
 	{
+		if (_model != null && _model.parent != null) 
+			_model.parent.removeChild(_model);
+		_model = null;
 		var info = PlayerUtils.getInfo();
 		var modelInfo = ModelManager.instance.getProto(info.data.ROLEID);
 		var modelContainer:Widget = _widget.getChildAs("modelStage", Widget);
@@ -231,35 +209,17 @@ class MainCmd extends BaseCmd
 		_model = new SpriteActor(ResPath.getModelRoot("player", modelInfo.res), 'model',1.7, modelInfo.skin);
 		//_model = new SpriteActor('model/player/M0001/', 'model',1.7);
 		var id = PlayerUtils.getUseWeaponId();
-		//_model.setAttachment("gun_1", "gun_" + id);
+		_model.setAttachment("gun_1", "gun_" + id);
 		
 		modelContainer.addChild(_model);
 		_model.point(112, 39);
 		_model.setAnimation('idle_1');
-		
-		updatePlayerType(null);
-		
 	}
 	
 	/**更换模型数据*/
 	private function cmd_UpdateModel(data:Dynamic):Void
 	{
-		if (_model != null && _model.parent != null) 
-			_model.parent.removeChild(_model);
-		_model = null;
-		
-		var info = PlayerUtils.getInfo();
-		//trace(info.getProperty(PlayerProp.ROLEID));
-		var modelInfo = ModelManager.instance.getProto(info.data.ROLEID);
-		var modelContainer:Widget = _widget.getChildAs("modelStage", Widget);
-		//trace(modelInfo.skin);
-		_model = new SpriteActor(ResPath.getModelRoot("player", modelInfo.res), 'model',1.7, modelInfo.skin);
-		if(modelContainer.numChildren>0)modelContainer.removeChildren();
-		_model.point(112, 39);
-		modelContainer.addChild(_model);
-		var id = PlayerUtils.getUseWeaponId();
-		//_model.setAttachment("gun_1", "gun_" + id);
-		_model.setAnimation('idle_1');
+		showModel();
 		updatePlayerType(data);
 	}
 	/**更新角色属性*/
@@ -276,6 +236,7 @@ class MainCmd extends BaseCmd
 		if (rightBtn.numChildren > 0) rightBtn.removeChildren();
 		if (weapon != null && weapon.ResId != null)
 		{
+			//trace(playerInfo.data.WEAPON+"::"+weapon.ID +">>"+weapon.ResId);
 			var weaponIco = UIBuilder.create(Box, { 
 							skinName:'forgeImg12',
 							children : [

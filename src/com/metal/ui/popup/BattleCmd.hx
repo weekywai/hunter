@@ -44,18 +44,18 @@ class BattleCmd extends BaseCmd
 	public function setGradeCondition(data:DuplicateInfo)
 	{
 		var gradeCondition:GradeConditionInfo;
-		var num:String="";
+		var num:String= "";
 		for (i in 0...data.GradeCondition.length) 
 		{
 			gradeCondition = GradeConditionManager.instance.getGradeConditionInfo(Std.parseInt(data.GradeCondition[i]));
 			switch (gradeCondition.ConditionType) 
 			{
 				case BattleGradeConditionType.Hp:
-					num =Std.string(Std.parseFloat(gradeCondition.Condition)*100);					
+					num = gradeCondition.Condition*100 +"";					
 				case BattleGradeConditionType.RebornTime:					
-					num = gradeCondition.Condition;
+					num = gradeCondition.Condition +"";	
 				case BattleGradeConditionType.TimeCost:
-					num = CountDown.changeSenForTxt(Std.parseInt(gradeCondition.Condition));					
+					num = CountDown.changeSenForTxt(Std.int(gradeCondition.Condition));					
 				default:	
 					trace("There is no this type, please check the xml");
 			}
