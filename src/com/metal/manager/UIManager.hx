@@ -201,54 +201,53 @@ class UIManager extends SimEntity
 	private function cmd_oneNews(data:Dynamic):Void
 	{
 		_mainView.show("news");
-		addComponent(new NewsCmd());
+		addPanel(NewsCmd);
 	}
 	private function cmd_GameNoviceCourse(data:Dynamic):Void
 	{
 		//trace("cmd_GameNoviceCourse");
-		addComponent(new NoviceCourseCmd());
+		addPanel(NoviceCourseCmd);
 	}
 	/**闯关*/
 	private function cmd_Through(data:Dynamic):Void
 	{
 		_mainView.show("through");
-		addComponent(new ThroughCmd());
+		addPanel(ThroughCmd);
 	}
 	/**无尽副本（无尽、护甲、武器、金钱）*/
 	private function cmd_EndlessCopy(data:Dynamic):Void
 	{
 		_mainView.show("endless");
-		addComponent(new EndlessCopyCmd());
+		addPanel(EndlessCopyCmd);
 	}
 	/**购买宝箱*/
 	private function cmd_TreasureHunt(data:Dynamic):Void
 	{
 		_mainView.show('treasureHunt');
-		addComponent(new TreasureHuntCmd());
+		addPanel(TreasureHuntCmd);
 	}
 	/**购买钻石*/
 	private function cmd_BuyDiamonds(data:Dynamic):Void
 	{
 		_mainView.show('diamonds');
-		addComponent(new BuyDiamondsCmd());
+		addPanel(BuyDiamondsCmd);
 	}
 	/**购买金币*/
 	private function cmd_BuyGold(data:Dynamic):Void
 	{
-		trace("cmd_BuyGold");
 		_mainView.show('golds');
-		addComponent(new BuyGoldCmd());
+		addPanel(BuyGoldCmd);
 	}
 	/*时装*/
 	private function cmd_LatestFashion(data:Dynamic):Void
 	{
 		_mainView.show('latestFashion');
-		addComponent(new LatestFahionCmd());
+		addPanel(LatestFahionCmd);
 	}
 	private function cmd_Forge(data:Dynamic):Void
 	{
 		_mainView.show("forge");
-		addComponent(new ForgeCmd(data));
+		addPanel(ForgeCmd, [data]);
 	}
 	
 	private function cmd_Control(data:Dynamic):Void
@@ -269,8 +268,7 @@ class UIManager extends SimEntity
 			if(control==null)
 				control = UIBuilder.buildFn('ui/fight/fight.xml')();
 			control.show();
-			cotroller = new ControllCmd();
-			addComponent(cotroller);
+			cotroller = addPanel(ControllCmd);
 			cotroller.showBossPanel(_showBossData);
 		}else {
 			var control = UIBuilder.get("controller");
@@ -288,64 +286,63 @@ class UIManager extends SimEntity
 	private function cmd_MainPanel(data:Dynamic):Void
 	{
 		_mainView = UIBuilder.getAs("allView", MainStack);
-		addComponent(new TopViewCmd());
-		addComponent(new MainCmd());
+		addPanel(TopViewCmd);
+		addPanel(MainCmd);
 	}
 	/**仓库*/
 	private function cmd_WarehousePanel(data:Dynamic):Void
 	{
 		_mainView.show("warehouse");
-		addComponent(new WarehouseCmd(data));
+		addPanel(WarehouseCmd,[data]);
 	}
 	/**技能解锁*/
 	private function cmd_Skill(data:Dynamic):Void
 	{
 		_mainView.show("skill");
-		addComponent(new SkillCmd(data));
+		addPanel(SkillCmd,[data]);
 	}
 	/**胜利结算界面*/
 	private function cmd_BattleResult(data:Dynamic):Void
 	{
 		cmd_Tips( { type:TipsType.overcome, msg:""} );
-		addComponent(new BattleResultCmd(data));
+		addPanel(BattleResultCmd,[data]);
 	}
 	/**失败结算界面*/
 	private function cmd_BattleFailure(data:Dynamic):Void
 	{
 		cmd_Tips( { type:TipsType.failure, msg:"" } );
-		addComponent(new BattleFailureCmd());
+		addPanel(BattleFailureCmd);
 	}
 	/*买活*/
 	private function cmd_RevivePanel(data:Dynamic):Void
 	{
 		var count = Std.int(data * 10);
 		cmd_Tips( { type:TipsType.resurrection, msg:"是否花费" + count + "钻石购买复活？" } );
-		var repawn = new ResurrectionCmd(count);
-		addComponent(repawn);
+		addPanel(ResurrectionCmd,[count]);
 	}
 	/**暂停游戏*/
 	private function cmd_StopGame(data:Dynamic):Void
 	{
 		cmd_Tips( { type:TipsType.resurrection, msg:"是否继续游戏" } );
-		addComponent(new StopGame());
+		addPanel(StopGame);
 	}
 	/**奖励界面*/
 	private function cmd_Reward(data:Dynamic):Void
 	{
 		_mainView.show("reward");
-		addComponent(new RewardCmd(data));
+		addPanel(RewardCmd,[data]);
 	}
 	/**任务界面*/
 	private function cmd_Task(data:Dynamic):Void
 	{
 		_mainView.show("activity");
-		addComponent(new TaskCmd(data));
+		addPanel(TaskCmd,[data]);
 	}
 	/**游戏设置*/
 	private function cmd_GameSet():Void
 	{
 		_mainView.show("gameSet");
-		addComponent(new GameSetCmd());
+		addPanel(GameSetCmd);
 	}
 	
 	private function cmd_Battle(data:Dynamic):Void
@@ -425,6 +422,16 @@ class UIManager extends SimEntity
 	{
 		if (_mainView.numChildren > 0)
 			_mainView.clear();
+	}
+	
+	private function addPanel(cls:Class<Dynamic>, args:Array<Dynamic> = null):Dynamic
+	{
+		if (getComponent(cls) == null) {
+			if (args == null)	
+				args = [];
+			return addComponent(Type.createInstance(cls, args));
+		}
+		return null;
 	}
 	
 	private function onAndroidBack() {

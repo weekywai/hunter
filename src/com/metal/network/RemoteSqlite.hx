@@ -1,8 +1,10 @@
 package com.metal.network;
 
 import com.metal.config.ItemType;
+import flash.utils.ByteArray;
 import haxe.db.ResultSet;
 import haxe.ds.StringMap;
+import openfl.Assets;
 import openfl.filesystem.File;
 import haxe.db.Sqlite;
 import haxe.db.Connection;
@@ -27,15 +29,24 @@ class RemoteSqlite
 			if(!sys.FileSystem.exists(filePath)){
 				sys.io.File.saveBytes(filePath, Assets.getBytes("proto/proto.db"));
 			}
+			
 			userPath = File.applicationStorageDirectory.nativePath + "/null";
-			if(!sys.FileSystem.exists(filePath)){
-				sys.io.File.saveBytes(filePath, Assets.getBytes("proto/null"));
+			if (!sys.FileSystem.exists(userPath)) {
+				/*Assets.loadBytes ("proto/null.db", function(bytes:ByteArray) {
+					trace(bytes.length);
+					if (bytes.length != 0)
+						sys.io.File.saveBytes(userPath, bytes);
+				});*/
+				var b = Assets.getBytes("proto/null.db");
+				trace(b.length);
+				sys.io.File.saveBytes(userPath, b);
 			}
 		#else
 			filePath = "proto/proto.db";
 			userPath = "proto/null";
 		#end
 		
+		//trace(Assets.getBytes("proto/a").length);
 		_data = Sqlite.open(userPath);
 		_cnx = Sqlite.open(filePath);
 		//readDb();

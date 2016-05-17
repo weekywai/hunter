@@ -241,7 +241,7 @@ class WarehouseCmd extends BaseCmd
 		});
 		for (item in list) {
 			if (item.vo != null) {
-				trace(item.vo.Equip);
+				//trace(item.vo.Equip);
 				if (item.vo.Equip) 
 				{
 					trace(item.ID);

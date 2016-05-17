@@ -36,6 +36,7 @@ class TableType
 	public static var GoldShop:String = "prop_gold_shop";
 	public static var Text:String = "prop_text";
 	public static var News:String = "prop_news";
+	public static var RamName:String = "randomName";
 	
 	//null 数据表Profile
 	public static var P_Active:String = "active";

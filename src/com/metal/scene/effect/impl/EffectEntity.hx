@@ -28,6 +28,7 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override private function onDispose():Void 
 	{
+		trace("dispose: "+this);
 		if(scene!=null)
 			scene.clearRecycled(Type.getClass(this));
 		info = null;

@@ -40,7 +40,7 @@ class GoodsProtoManager
 	{
 		var request = RemoteSqlite.instance.request(TableType.Item, "ID", key);
 		if (Lambda.empty(request))
-			return null;
+			return 0;
 		return request[0].Kind;
 	}
 	

@@ -36,8 +36,6 @@ class LoginRegistCmd extends BaseCmd
 	}
 	override function onInitComponent():Void 
 	{
-		parseProto(ResPath.getProto("randomlynamed"), RandomNameManager);
-		
 		_widget = UIBuilder.get("loginStart");
 		super.onInitComponent();
 		//regist = UIBuilder.get("regists");
@@ -148,12 +146,5 @@ class LoginRegistCmd extends BaseCmd
 		GameProcess.instance.initGame();
 		dispose();
 		//UIBuilder.get("loginStart").free(true);
-	}
-	
-	
-	private function parseProto(source:String, manager:Dynamic)
-	{
-		var xml = Xml.parse(Assets.getText(source));
-		manager.instance.appendXml(xml);
 	}
 }

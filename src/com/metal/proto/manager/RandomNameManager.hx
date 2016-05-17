@@ -1,4 +1,6 @@
 package com.metal.proto.manager;
+import com.metal.config.TableType;
+import com.metal.network.RemoteSqlite;
 import com.metal.proto.impl.RandomNameInfo;
 import haxe.ds.IntMap;
 import haxe.xml.Fast;
@@ -10,19 +12,26 @@ import haxe.xml.Fast;
 class RandomNameManager
 {
 	public static var instance(default, null):RandomNameManager = new RandomNameManager();
-	private var _protpRandom:IntMap<RandomNameInfo>;
+	private var _data:IntMap<RandomNameInfo>;
 	public function new() 
 	{
-		_protpRandom = new IntMap();
+		_data = new IntMap();
+		var req = RemoteSqlite.instance.request(TableType.RamName);
+		for (i in req) 
+		{
+			var info:RandomNameInfo = new RandomNameInfo();
+			info.readXml(i);
+			_data.set(info.id, info);
+		}
 	}
 	public function getRandomProtp(key:Int):RandomNameInfo
 	{
-		return _protpRandom.get(key);
+		return _data.get(key);
 	}
 	public function appendXml(data:Xml):Void
 	{
 		
-		var source:Fast = new Fast(data);
+		/*var source:Fast = new Fast(data);
 		source = source.node.root;
 		
 		var Randomlynamed:Fast;
@@ -31,7 +40,7 @@ class RandomNameManager
 			var info:RandomNameInfo ;
 			info = new RandomNameInfo();
 			info.readXml(Randomlynamed);
-			_protpRandom.set(info.id, info);
-		}
+			_data.set(info.id, info);
+		}*/
 	}
 }

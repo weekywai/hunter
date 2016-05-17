@@ -48,7 +48,7 @@ class LoadSource
 	public function new() 
 	{
 		_praseProto = new Map();
-		_praseProto.set("prop_actor", ActorPropertyManager);
+		/*_praseProto.set("prop_actor", ActorPropertyManager);
 		_praseProto.set("prop_item", GoodsProtoManager);
 		_praseProto.set("prop_quest", QuestsManager);
 		_praseProto.set("prop_stage", DuplicateManager);
@@ -76,7 +76,7 @@ class LoadSource
 		_praseProto.set("prop_task", TaskManager);
 		_praseProto.set("prop_gold_shop", Gold_Manager);
 		_praseProto.set("prop_text", NoviceManager);
-		_praseProto.set("prop_news", NewsManager);
+		_praseProto.set("prop_news", NewsManager);*/
 		parseProto();
 	}
 	

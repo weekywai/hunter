@@ -18,11 +18,11 @@ class RandomNameInfo
 	{
 		
 	}
-	public function readXml(data:Fast):Void
+	public function readXml(data:Dynamic):Void
 	{
-		id = XmlUtils.GetInt(data, "ID");
-		Surname = XmlUtils.GetString(data, "Surname");
-		Name = XmlUtils.GetString(data, "Name");
+		id = data.ID;
+		Surname = data.Surname;
+		Name = data.Name;
 	}
 	
 }

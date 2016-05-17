@@ -227,6 +227,6 @@ class GameProcess implements IObserver
 	private function preload():Void 
 	{
 		new SfxManager();
-		RandomNameManager.instance.appendXml(Xml.parse(Assets.getText(ResPath.getProto("randomlynamed"))));
+		RandomNameManager.instance;
 	}
 }

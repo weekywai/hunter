@@ -46,7 +46,7 @@ class ViewDropItem extends ViewObject
 			return;
 		super.update();
 		// random fly icon
-		if (_actor.isRunMap) {
+		/*if (_actor.isRunMap) {
 			if (!_dispear){
 				if (_actor.x <= _bounds.left) {
 					_actor.x = _bounds.left;	
@@ -68,7 +68,7 @@ class ViewDropItem extends ViewObject
 			}
 			_actor.x+=vx;
 			_actor.y+=vy;
-		}
+		}*/
 	}
 	
 	override private function Notify_PostBoot(userData:Dynamic):Void
