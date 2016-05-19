@@ -135,9 +135,9 @@ class UnitStat extends Component implements IStat
 			var score:Int = ScoreManager.instance.getInfo(_info.ScoreType).Score;
 			//trace("score " + _socre + " rate: "+targetStat.ScoreRate());
 			score = Math.round(score * ScoreRate());
-			GameProcess.root.notify(MsgItr.Score, score);
+			GameProcess.instance.notify(MsgItr.Score, score);
 			if (_actor.faction == BoardFaction.Boss || _actor.faction == BoardFaction.Boss1) {
-				GameProcess.root.notify(MsgItr.KillBoss);
+				GameProcess.instance.notify(MsgItr.KillBoss);
 			}
 			DC.log(owner.name + " Destroyed hp: " + hp + " score: "+score);
 			notify(MsgActor.Destroying);

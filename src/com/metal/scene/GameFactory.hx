@@ -107,11 +107,11 @@ class GameFactory extends Component
 		var monster:MonsterInfo = MonsterManager.instance.getInfo(id);
 		//trace(monster.ID+" monster :"+ monster.FixedType);
 		//通过关卡计算怪物ATK HP
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		
 		var model:ModelInfo = ModelManager.instance.getProto(monster.res);
 		//检测闯关或副本 获取需要根据角色等级
-		var level:Int = (battle.currentStage().DuplicateType == 9)?battle.TotalKillBoss():battle.currentStage().Id;
+		var level:Int = (battle.currentStage().DuplicateType == 9)?battle.TotalKillBoss:battle.currentStage().Id;
 		//trace(level);
 		var actor:ActorPropertyInfo = ActorPropertyManager.instance.getProto(level);
 		monster.MaxHp = Math.round(actor.DPS * model.rate1);
@@ -167,7 +167,6 @@ class GameFactory extends Component
 	private function createView(entity:SimEntity, modelType:Int):Void
 	{
 		var view:Dynamic = null;
-		
 		switch(modelType) {
 			case 0: view = new ViewDropItem();//掉落物品
 			

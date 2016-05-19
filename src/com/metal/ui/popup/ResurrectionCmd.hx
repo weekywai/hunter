@@ -64,7 +64,7 @@ class ResurrectionCmd extends BaseCmd
 	{
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		//trace("" + battle.currentStage().DuplicateType);
 		_widget.getParent("popup").free();
 		if (battle.currentStage().DuplicateType == 9)

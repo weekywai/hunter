@@ -278,9 +278,9 @@ class UIManager extends SimEntity
 	}
 	private function cmd_playInfo(data:Dynamic=null):Void
 	{
-		//cast(GameProcess.root.getComponent(PlayShowCmd), PlayShowCmd).onNotify();
-		//GameProcess.root.notify(MsgNet.QuestList, packet);
-		//GameProcess.root.notify(MsgCreate.Player);
+		//cast(GameProcess.instance.getComponent(PlayShowCmd), PlayShowCmd).onNotify();
+		//GameProcess.instance.notify(MsgNet.QuestList, packet);
+		//GameProcess.instance.notify(MsgCreate.Player);
 	}
 	/*主界面*/
 	private function cmd_MainPanel(data:Dynamic):Void
@@ -349,7 +349,7 @@ class UIManager extends SimEntity
 	{
 		
 		var duplicate = DuplicateManager.instance.getProtoDuplicateByID(data);
-		GameProcess.root.notify(MsgStartup.GameInit, duplicate);
+		GameProcess.instance.notify(MsgStartup.GameInit, duplicate);
 		cmd_Control(true);
 		UIBuilder.get("main").free();
 	}

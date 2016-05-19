@@ -49,7 +49,7 @@ class ForgetBase
 	}
 	private function notifyRoot(type:Int,userData:Dynamic = null)
 	{
-		GameProcess.root.notify(type, userData);
+		GameProcess.instance.notify(type, userData);
 	}
 	private function notify(type:Int,userData:Dynamic = null)
 	{

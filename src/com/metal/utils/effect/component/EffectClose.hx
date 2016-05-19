@@ -36,7 +36,7 @@ class EffectClose extends BaseEffect
 			src:this.back
 		});
 		//拿到特效层
-		cast(GameProcess.root.findChild(UIManager), UIManager).effLayer.addChild(draw);
+		cast(GameProcess.instance.findChild(UIManager), UIManager).effLayer.addChild(draw);
 		draw.x = Std.int((Lib.current.stage.stageWidth - panel.w)/2);
 		draw.y = Std.int((Lib.current.stage.stageHeight - panel.h)/2);
 		var temp_x:Int = Std.int((Lib.current.stage.stageWidth / 2));

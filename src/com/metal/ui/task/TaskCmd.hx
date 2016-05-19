@@ -57,7 +57,7 @@ class TaskCmd extends BaseCmd
 		/*主线任务*/
 		var task1 = _widget.getChildAs("task1", VBox);
 		if (task1.numChildren > 0) task1.removeChildren();
-		var questInfo:IntMap<QuestInfo> = cast(GameProcess.root.getComponent(TaskSystem), TaskSystem).taskMap;
+		var questInfo:IntMap<QuestInfo> = cast(GameProcess.instance.getComponent(TaskSystem), TaskSystem).taskMap;
 		//trace("questInfo==="+questInfo);
 		for (i in questInfo.keys())
 		{

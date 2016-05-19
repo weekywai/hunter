@@ -61,7 +61,7 @@ class SkillCmd extends BaseCmd
 		_widget.getChildAs("skillImg1", Button).onRelease = skillImg_Click1;
 		_widget.getChildAs("skill_Btn1", Button).disabled = true;
 		
-		var skillshow = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).skillData;
+		var skillshow = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).skillData;
 		var i:Int = 2;
 		for (n in skillshow) 
 		{

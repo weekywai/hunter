@@ -72,7 +72,7 @@ class TriggerComponent extends Component
 				//trace("id"+_info.custom.resolve("id"));
 				key = _actor.x >= _info.x;
 				if (key) {
-					GameProcess.root.notify(MsgView.NewBie, Std.parseInt(_info.custom.resolve("id")));
+					GameProcess.instance.notify(MsgView.NewBie, Std.parseInt(_info.custom.resolve("id")));
 					dispose();
 				};
 			case TriggerType.VictoryPlace:
@@ -83,7 +83,7 @@ class TriggerComponent extends Component
 					//直接胜利
 					SfxManager.playBMG(BGMType.Victory);
 					PlayerUtils.getPlayer().notify(MsgActor.Victory);
-					GameProcess.root.notify(MsgStartup.BattleClear);
+					GameProcess.instance.notify(MsgStartup.BattleClear);
 					dispose();
 				};
 			case TriggerType.ShowMonster:
@@ -179,7 +179,7 @@ class TriggerComponent extends Component
 							trace("Send Victory");
 							PlayerUtils.getPlayer().notify(MsgActor.Victory);
 						}
-						GameProcess.root.notify(MsgStartup.BattleClear);
+						GameProcess.instance.notify(MsgStartup.BattleClear);
 						dispose();
 						return;
 					}

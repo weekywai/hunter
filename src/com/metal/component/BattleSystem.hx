@@ -3,6 +3,7 @@ import com.haxepunk.HXP;
 import com.metal.config.BattleGradeConditionType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.RoomMissionType;
+import com.metal.enums.UIUpdateType;
 import com.metal.manager.ResourceManager;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgItr;
@@ -35,33 +36,23 @@ class BattleSystem extends Component
 {
 
 	/**宝箱数量*/
-	private var _chestNum(default, default):Int; 
+	private var _chestNum:Int; 
 	/**副本信息*/
 	private var _duplicateInfo:DuplicateInfo;
 	/**该副本的房间列表*/
 	private var _roomArray:Array<String>;
 	private var _finishRoom:StringMap<Bool>;
 	/**副本进度**/
-	private var _curMap:Int = 0;
-	public var curMap(get, null):Int;
-	private function get_curMap():Int
-	{
-		return _curMap;
-	}
+	public var curMap(default, null):Int = 0;
+	//分数
+	public var Score(default, null):Int = 0;
+	//金币获取
+	public var Gold(default, null):Int = 0;
+	//杀boss数
+	public var TotalKillBoss(default, null):Int;
+	private var _clear:Bool;
 	private var _endGame:Bool = false;
 	private var _talks:IntMap<Array<String>>;
-	//分数
-	public var _socre:Int;
-	public function Score():Int {
-		return _socre;
-	}
-	//杀boss数
-	public var _totalKillBoss:Int;
-	public function TotalKillBoss():Int {
-		return _totalKillBoss;
-	}
-	private var _clear:Bool;
-	
 	/**倒计时的显示文档*/
 	private var _countDown:Int;
 	private var _timer:Timer;
@@ -120,7 +111,7 @@ class BattleSystem extends Component
 	/**获取当前房间ID*/
 	public function currentRoomId():String
 	{
-		return _roomArray[_curMap];
+		return _roomArray[curMap];
 	}
 	
 	public function currentStage():DuplicateInfo
@@ -156,6 +147,8 @@ class BattleSystem extends Component
 				cmd_BattleClear(userData);
 			case MsgItr.Score:
 				cmd_Score(userData);
+			case MsgItr.Gold:
+				cmd_Gold(userData);
 			case MsgItr.KillBoss:
 				cmd_KillBoss(userData);
 			case MsgStartup.NewBieGame:
@@ -249,9 +242,9 @@ class BattleSystem extends Component
 				//0:start 1:end
 			}
 		}
-		_curMap = 0;
-		_totalKillBoss = 0;
-		_socre = 0;
+		curMap = 0;
+		TotalKillBoss = 0;
+		Score = 0;
 		
 		
 		var info:PlayerInfo = PlayerUtils.getInfo();
@@ -274,7 +267,7 @@ class BattleSystem extends Component
 		if (_duplicateInfo.DuplicateType != 9) {
 			GameProcess.SendUIMsg(MsgUI2.InitThumb, _roomArray.length);
 		}
-		Actuate.tween(this, 0.5, { } ).onComplete(GameProcess.root.notify, [MsgView.NewBie, 6]);
+		Actuate.tween(this, 0.5, { } ).onComplete(GameProcess.instance.notify, [MsgView.NewBie, 6]);
 	}
 	private function cmd_FinishMap(userData:Dynamic):Void
 	{
@@ -302,7 +295,7 @@ class BattleSystem extends Component
 	private function cmd_BattleClear(userData:Dynamic)
 	{
 		trace("cmd_BattleClear");
-		var count = _curMap;
+		var count = curMap;
 		count++;
 		if (count < _roomArray.length) {
 			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, 1);
@@ -318,14 +311,14 @@ class BattleSystem extends Component
 	
 	private function cmd_TransitionMap(userData:Dynamic):Void
 	{
-		_curMap++;
+		curMap++;
 		//trace(_roomArray);
-		if (_curMap < _roomArray.length) {
+		if (curMap < _roomArray.length) {
 			GameProcess.SendUIMsg(MsgUI2.FinishBattleTip, -1);
 			Animator.start(this, "", EffectType.SCREEN_CLOSE_EAT, null, true, changeMap);
 			//changeMap();
 		}
-		else if (_curMap >= _roomArray.length-1){
+		else if (curMap >= _roomArray.length-1){
 			//notify(MsgStartup.Reset);
 			_duplicateInfo.setRate(rate(userData));
 			var result:Int = 0;
@@ -349,9 +342,9 @@ class BattleSystem extends Component
 		{
 			_finishRoom.set(i, false);
 		}
-		_curMap = 0;
-		_totalKillBoss = 0;
-		_socre = 0;
+		curMap = 0;
+		TotalKillBoss = 0;
+		Score = 0;
 		
 		var info:PlayerInfo = PlayerUtils.getInfo();
 		var hpMax = info.data.MAX_HP;
@@ -366,11 +359,11 @@ class BattleSystem extends Component
 	private function cmd_Start(userData:Dynamic):Void
 	{
 		if (_duplicateInfo.DuplicateType != 9 ) {
-			if(_duplicateInfo.BossName=="" && _curMap == 0){
+			if(_duplicateInfo.BossName=="" && curMap == 0){
 				if (_talks.exists(0)){
 					GameProcess.SendUIMsg(MsgUI2.Dilaogue, _talks.get(0));
 				}
-			}else if (_duplicateInfo.BossName != "" && _curMap == 2) {
+			}else if (_duplicateInfo.BossName != "" && curMap == 2) {
 				if (_talks.exists(0))
 					GameProcess.SendUIMsg(MsgUI2.Dilaogue, _talks.get(0));
 			}
@@ -379,12 +372,18 @@ class BattleSystem extends Component
 	
 	private function cmd_Score(userData:Dynamic):Void
 	{
-		_socre += userData;
-		GameProcess.NotifyUI(MsgUIUpdate.UpdateScore, _socre);
+		Score += userData;
+		GameProcess.NotifyUI(MsgUIUpdate.Update, {type:UIUpdateType.Score, data:Score});
+	}
+	private function cmd_Gold(userData:Dynamic):Void
+	{
+		//trace(userData);
+		Gold += userData;
+		GameProcess.NotifyUI(MsgUIUpdate.Update, {type:UIUpdateType.Gold, data:Gold});
 	}
 	private function cmd_KillBoss(userData:Dynamic):Void
 	{
-		_totalKillBoss++;
+		TotalKillBoss++;
 		_clear = true;
 	}
 	//发送房间号给地图

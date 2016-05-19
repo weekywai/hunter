@@ -4,9 +4,12 @@ import com.haxepunk.HXP;
 import com.metal.config.ItemType;
 import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
+import com.metal.enums.UIUpdateType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgItr;
 import com.metal.message.MsgPlayer;
+import com.metal.message.MsgStat;
+import com.metal.message.MsgUIUpdate;
 import com.metal.proto.impl.BattlePrepareInfo;
 import com.metal.proto.manager.BattlePrepareManager;
 import com.metal.proto.manager.GoodsProtoManager;
@@ -183,45 +186,6 @@ class MTActor extends BaseActor
 				transition(ActorState.Jump);
 			}
 		}
-		
-		// JUMP
-		//if (stateID == ActorState.Jump || stateID != ActorState.DoubleJump)
-		//{
-			////normal jump
-			//if (isGrounded) {
-				////trace("isground");
-				//velocity.y = -_jumpHeight; 
-				//_jumped = 1;
-				//_doublejump = true;
-			//}else {
-				//if(_jumped==0){
-				//_jumped = 2;
-				//_doublejump = true;
-				//}
-			//}
-			///*弹墙
-			//if (_model.collide(UnitModelType.Solid, x - 1, y) != null && _jumped==0 ) 
-			//{ 
-				//velocity.y = -_jumpHeight;		//jump up
-				//velocity.x = _maxSpeed.x * 2;	//move right fast
-				//_jumped = 1;		//so we don't "use up" or double jump
-			//}
-			////same as above
-			//if (_model.collide(UnitModelType.Solid, x + 1, y) != null && _jumped==0 ) 
-			//{
-				//velocity.y = -_jumpHeight; 
-				//velocity.x = -_maxSpeed.x * 2;
-				//_jumped = 1;
-			//}
-			//*/
-			//
-			////set double jump to false
-			//if (!isGrounded && _jumped > 1 && _doublejump) {
-				//transition(ActorState.DoubleJump);
-				//velocity.y = -_jumpHeight;
-				//_doublejump = false;
-			//}
-		//}
 	}
 	
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
@@ -251,17 +215,18 @@ class MTActor extends BaseActor
 		if (item.parent!=null) {
 			var itemInfo:ItemBaseInfo = item.getProperty("Kind");
 			if (itemInfo != null && itemInfo.Kind == ItemType.IK2_GOLD) {
+				GameProcess.instance.notify(MsgItr.Gold, 10);
 				item.notify(MsgActor.Destroying);
-				return;
+			}else{
+				DC.log("pickup item" + itemInfo.ID);
+				var itemKind2:Int = GoodsProtoManager.instance.getItemLittleKind(itemInfo.ID);
+				if (itemKind2 == ItemType.IK2_BUFF) {
+					var info:BattlePrepareInfo = BattlePrepareManager.instance.getProtoBattlePrepareByID(itemInfo.ID);
+					trace("pickup buff itemId:"+ itemInfo.ID + " SkillID: " + info.SkillId);
+					notify(MsgPlayer.ItemSkill, info.SkillId);
+				}
+				item.notify(MsgActor.Destroy);
 			}
-			DC.log("pickup item" + itemInfo.ID);
-			var itemKind2:Int = GoodsProtoManager.instance.getItemLittleKind(itemInfo.ID);
-			if (itemKind2 == ItemType.IK2_BUFF) {
-				var info:BattlePrepareInfo = BattlePrepareManager.instance.getProtoBattlePrepareByID(itemInfo.ID);
-				trace("pickup buff itemId:"+ itemInfo.ID + " SkillID: " + info.SkillId);
-				notify(MsgPlayer.ItemSkill, info.SkillId);
-			}
-			item.notify(MsgActor.Destroy);
 		}
 	}
 	
@@ -336,7 +301,7 @@ class MTActor extends BaseActor
 		//trace("Victory Escape:"+(HXP.camera.x + HXP.width) +">>>" + x);
 		if (x >= HXP.camera.x + HXP.width) {
 			//TODO only one execute
-			//GameProcess.root.notify(MsgStartup.TransitionMap);
+			//GameProcess.instance.notify(MsgStartup.TransitionMap);
 		}else {
 			if (onWall) {
 				transition(ActorState.Jump);

@@ -8,7 +8,6 @@ import com.metal.component.GameSchedual;
 import com.metal.component.RewardSystem;
 import com.metal.component.TaskSystem;
 import com.metal.component.TriggerSystem;
-import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
 import com.metal.manager.ResourceManager;
 import com.metal.manager.UIManager;
@@ -26,11 +25,10 @@ import com.metal.scene.bullet.impl.BulletComponent;
 import com.metal.scene.effect.impl.EffectComponent;
 import de.polygonal.core.es.MainLoop;
 import de.polygonal.core.event.IObservable;
-import de.polygonal.core.event.IObserver;
+import de.polygonal.core.sys.MsgCore;
 import de.polygonal.core.sys.SimEntity;
 import de.polygonal.core.time.Timebase;
 import motion.actuators.SimpleActuator;
-import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
@@ -46,16 +44,13 @@ import hxtelemetry.HxTelemetry;
  * ...
  * @author weeky
  */
-class GameProcess implements IObserver
+class GameProcess extends MainLoop
 {
 	public static var instance(default, null):GameProcess = new GameProcess();
-	
-	public var tick(default, null):MainLoop;
 	
 	public static var rootStage(default, null):Sprite;
 	public static var gameStage(default, null):Sprite;
 	
-	public static var root(default, null):SimEntity;
 	public static var UIRoot(default, null):SimEntity;
 	/** send message to UIManager */
 	public static function SendUIMsg(type:Int, userData:Dynamic = null)
@@ -78,12 +73,14 @@ class GameProcess implements IObserver
 	//private var onDrawId:Int = 0;
 	private var _debugTxt:TextField;
 	private var _fps:FPS;
-	private var _loop:MainLoop;
 	private var _board:SimEntity;
 	private var _render:Bool = false;
-	public function new() {}
+	public function new() {
+		super();
+	}
 	
-	public function init(stage:Stage, container:Sprite)
+	public function onInit(container:Sprite)
+	//public function init(stage:Stage, container:Sprite)
 	{
 		console = new DevCheat();
 		preload();
@@ -99,26 +96,21 @@ class GameProcess implements IObserver
 		#end
 		
 		initEngine();
-		root = new SimEntity("Game", true, true);
 		UIRoot = new UIManager();
-		root.addComponent(new GameSchedual());
+		addComponent(new GameSchedual());
 		
-		root.add(UIRoot);
-		_loop = new MainLoop();
-		_loop.add(root);
-		root.outgoingMessage.o = rootStage;
-		//trace(StringTools.hex(MsgView.SetParent)+"-"+ (MsgView.SetParent>>8));
-		root.sendMessageToChildren(MsgView.SetParent, true);
+		add(UIRoot);
+		outgoingMessage.o = rootStage;
+		sendMessageToChildren(MsgView.SetParent, true);
 		
 		//#if !mobile
 		_debugTxt = new TextField();
 		_debugTxt.defaultTextFormat = new TextFormat(null, 18, 0xffffff);
 		_debugTxt.y = 40;
 		_debugTxt.autoSize = TextFieldAutoSize.LEFT;
-		stage.addChild(_debugTxt);
+		rootStage.stage.addChild(_debugTxt);
 		_fps = new FPS(10, 65, 0xffffff);
-		stage.addChild(_fps);
-		Timebase.attach(this);
+		rootStage.stage.addChild(_fps);
 		
 		#if actuate_manual_time
 		SimpleActuator.getTime = function() { return Timebase.stamp(); }
@@ -128,11 +120,11 @@ class GameProcess implements IObserver
 	/** after login */
 	public function initGame():Void
 	{
-		root.addComponent(new BagpackSystem());
-		root.addComponent(new GameFactory());
-		root.addComponent(new TaskSystem());
-		root.addComponent(new BattleSystem());
-		root.addComponent(new RewardSystem());
+		addComponent(new BagpackSystem());
+		addComponent(new GameFactory());
+		addComponent(new TaskSystem());
+		addComponent(new BattleSystem());
+		addComponent(new RewardSystem());
 		//TODO 发送启动
 		trace("initGame");
 		new LoadSource();
@@ -154,8 +146,9 @@ class GameProcess implements IObserver
 		gameStage.addChild(render);
 		_render = true;
 	}
-	public function onUpdate(type:Int, source:IObservable, userData:Dynamic)
+	override function propagateTick(dt:Float) 
 	{
+		super.propagateTick(dt);
 		rootStage.stage.setChildIndex(_debugTxt, rootStage.stage.numChildren - 1);
 		rootStage.stage.setChildIndex(_fps, rootStage.stage.numChildren - 1);
 		_debugTxt.text = "fps: " + Timebase.fps + " Mem:" + HXP.round(System.totalMemory / 1024 / 1024, 2) + "MB";
@@ -165,19 +158,18 @@ class GameProcess implements IObserver
 		//if (onDrawId == 0)
 			SimpleActuator.stage_onEnterFrame (null);
 		#end
-		if (_render)
-			update();
 	}
-	private function update()
+	
+	override function propagateDraw(alpha:Float) 
 	{
-		render.updateEngine();
-		//#if actuate_manual_update
-		//SimpleActuator.stage_onEnterFrame (null);
-		//#end
-		
-		#if telemetry
-		HXT.advance_frame();
-		#end
+		super.propagateDraw(alpha);
+		if (_render){
+			render.updateEngine();
+			
+			#if telemetry
+			HXT.advance_frame();
+			#end
+		}
 	}
 	
 	public function startGame():Void
@@ -192,7 +184,7 @@ class GameProcess implements IObserver
 		_board.addComponent(new EffectComponent());
 		_board.addComponent(new BattleResolver());
 		_board.drawable = true;
-		root.add(_board);
+		add(_board);
 		//onDrawId = 1;
 		
 		#if debug
@@ -208,20 +200,20 @@ class GameProcess implements IObserver
 		HXP.scene.end();
 		ResourceManager.instance.unLoadAll();
 		
-		//var gamebord:Entity = root.findChild("GameBoard");
-		//root.remove(_board);
+		//var gamebord:Entity = findChild("GameBoard");
+		//remove(_board);
 	}
 	
 	public function pauseGame(pause:Bool)
 	{
-		render.paused = pause;
-		_loop.paused = pause;
-		if(!pause)
-			render.updateEngine();
+		//render.paused = pause;
+		this.paused = pause;
+		//if(!pause)
+			//render.updateEngine();
 	}
 	public function isPausing():Bool
 	{
-		return render.paused;
+		return paused;
 	}
 	
 	private function preload():Void 

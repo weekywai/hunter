@@ -33,7 +33,7 @@ class BaseCmd extends Component
 	
 	private function notifyRoot(type:Int, userData:Dynamic=null):Void 
 	{
-		GameProcess.root.notify(type, userData);
+		GameProcess.instance.notify(type, userData);
 	}
 	
 	private function onDisplay(e:Event):Void

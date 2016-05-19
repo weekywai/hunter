@@ -176,7 +176,7 @@ class FileUtils
 	/**活跃度*/
 	private static function setActive(type:Int):Void
 	{
-		var activeInfo:IntMap<LiveNessInfo> = cast GameProcess.root.getComponent(RewardSystem).getLiveNesss();
+		var activeInfo:IntMap<LiveNessInfo> = cast GameProcess.instance.getComponent(RewardSystem).getLiveNesss();
 		var activeMap:IntMap<ActiveVo> = new IntMap();
 		for (key in activeInfo.keys())
 		{
@@ -205,7 +205,7 @@ class FileUtils
 	/**消息*/
 	private static function setNewsInfo(type:Int):Void
 	{
-		/*var newsInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).newMapInfo;
+		/*var newsInfo = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).newMapInfo;
 		var newsMap:IntMap<Int> = new IntMap();
 		//trace("save news:");
 		for (key in newsInfo.keys())
@@ -233,7 +233,7 @@ class FileUtils
 	private static function setTask(type:Int):Void
 	{
 		trace("setTask");
-		/*var taskInfo = GameProcess.root.getComponent(TaskSystem).taskMap;
+		/*var taskInfo = GameProcess.instance.getComponent(TaskSystem).taskMap;
 		var taskMap:IntMap<TaskVo> = new IntMap();
 		for (key in taskInfo.keys())
 		{	
@@ -264,7 +264,7 @@ class FileUtils
 	/**背包*/
 	private static function setBagData(type:Int):Void
 	{
-		var bagInfo:BagInfo = GameProcess.root.getComponent(BagpackSystem).bagData;
+		var bagInfo:BagInfo = GameProcess.instance.getComponent(BagpackSystem).bagData;
 		//for (i in 0...bagInfo.itemArr.length) 
 		//{
 			//if (bagInfo.itemArr[i].backupIndex!=-1) 
@@ -274,7 +274,7 @@ class FileUtils
 		//}
 		//trace("Map1: "+bagInfo.backupWeaponArr.get(1).keyId);
 		//trace("Map2: "+bagInfo.backupWeaponArr.get(2).keyId);
-		//trace("keyId: "+cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.itemArr[0].keyId+",backup: "+cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).equipBagData.itemArr[0].backupIndex);
+		//trace("keyId: "+cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).equipBagData.itemArr[0].keyId+",backup: "+cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).equipBagData.itemArr[0].backupIndex);
 		saveMap(type, bagInfo.itemArr);
 	}
 	/**获取背包数据*/

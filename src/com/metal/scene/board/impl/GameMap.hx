@@ -104,7 +104,7 @@ class GameMap extends Component
 	override public function initComponent(owner:SimEntity):Void 
 	{
 		super.initComponent(owner);
-		_schedual = GameProcess.root.getComponent(GameSchedual);
+		_schedual = GameProcess.instance.getComponent(GameSchedual);
 	}
 	override public function onUpdate(type:Int, source:IObservable, userData:Dynamic):Void 
 	{
@@ -148,7 +148,7 @@ class GameMap extends Component
 	
 	private function cmd_loadMap(userData:Dynamic):Void
 	{
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		var mapId =  battle.currentRoomId();
 		
 		trace("mapId:" + mapId);

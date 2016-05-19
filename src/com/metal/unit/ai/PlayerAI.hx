@@ -87,7 +87,7 @@ class PlayerAI extends BaseAiControl
 		_playerInputData.Victory = true; //through animation
 		_stop = true;
 		//trace("victory");
-		GameProcess.root.notify(MsgStartup.PauseCountDown, true);
+		GameProcess.instance.notify(MsgStartup.PauseCountDown, true);
 	}
 	
 	private function findClose(ary:Array<Entity>):Entity
@@ -141,7 +141,7 @@ class PlayerAI extends BaseAiControl
 	{
 		timeCount++;
 		//每10帧寻找一次瞄准点
-		if (timeCount>=10) 
+		if (timeCount>=5) 
 		{
 			timeCount = 0;
 			_playerInputData.SelfPoint.x = _actor.x;

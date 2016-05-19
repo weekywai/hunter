@@ -21,7 +21,7 @@ class UnitUtils
 	public static function createUnit(type:String, id:Int, faction:Int, x:Float, y:Float, ai:String = null):SimEntity {
 		//var now = Lib.getTimer();
 		//DC.beginProfile("createUnit");
-		var manager:GameSchedual = GameProcess.root.getComponent(GameSchedual);
+		var manager:GameSchedual = GameProcess.instance.getComponent(GameSchedual);
 		//trace(id+">>"+type);
 		var entity:SimEntity = manager.createSimEntity(type, id);
 		_index++;
@@ -42,7 +42,7 @@ class UnitUtils
 	}
 	
 	public static function createDropItem(type:String, id:Int, faction:Int, x:Float, y:Float):SimEntity {
-		var manager:GameSchedual = GameProcess.root.getComponent(GameSchedual);
+		var manager:GameSchedual = GameProcess.instance.getComponent(GameSchedual);
 		var entity:SimEntity = manager.createSimEntity(type, id);
 		entity.notify(MsgActor.InitFaction, {"faction":faction, "id":id});
 		// 更新位置
@@ -52,7 +52,7 @@ class UnitUtils
 	}
 	
 	public static function createNPC(type:String, id:Int, faction:Int, x:Float, y:Float):SimEntity {
-		var manager:GameSchedual = GameProcess.root.getComponent(GameSchedual);
+		var manager:GameSchedual = GameProcess.instance.getComponent(GameSchedual);
 		var entity:SimEntity = manager.createSimEntity(type, id);
 		entity.notify(MsgActor.InitFaction, {"faction":faction, "id":id});
 		// 更新位置

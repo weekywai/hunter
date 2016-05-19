@@ -87,7 +87,7 @@ class DevCheat
 			unit.id = Std.parseInt(args[0]);
 			unit.x = HXP.width * 0.5 + HXP.camera.x;
 			unit.y = HXP.height * 0.5;
-			GameProcess.root.notify(MsgBoard.CreateUnit, unit);
+			GameProcess.instance.notify(MsgBoard.CreateUnit, unit);
 		}
 		
 		//Network.instance.NetworkSendPacket(Client_GM_CMD.SNew(input));
@@ -105,7 +105,7 @@ class DevCheat
 		}
 		trace(input + "   ::===");
 		
-		GameProcess.root.notify(MsgMission.Add, args);
+		GameProcess.instance.notify(MsgMission.Add, args);
 	}
 	/**跳过登录*/
 	private function cmd_Login(args:Array<String>):Void
@@ -136,7 +136,7 @@ class DevCheat
 				newArr.push(goodsInfo.ID);
 			}
 		}
-		GameProcess.root.notify(MsgNet.UpdateBag, { type:1, data:newArr } );
+		GameProcess.instance.notify(MsgNet.UpdateBag, { type:1, data:newArr } );
 	}
 	
 	private function cmd_Regist(args:Array<String>):Void 
@@ -159,7 +159,7 @@ class DevCheat
 		var input:String = "";
 		GameProcess.SendUIMsg(MsgUI.BattleFailure);
 		GameProcess.SendUIMsg(MsgUI2.Control, false);
-		GameProcess.root.notify(MsgStartup.Finishbattle);
+		GameProcess.instance.notify(MsgStartup.Finishbattle);
 	}
 	
 	private function cmd_ShowEntity(args:Array<String>):Void 

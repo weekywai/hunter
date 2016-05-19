@@ -36,7 +36,7 @@ class NewsCmd extends BaseCmd
 	}
 	private function initNews():Void
 	{
-		var newMapInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).newMapInfo;
+		var newMapInfo = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).newMapInfo;
 		//trace(_newMapInfo);
 		var newsVBox = _widget.getChildAs("newsVBox", VBox);
 		if (newsVBox.numChildren > 0) newsVBox.removeChildren();

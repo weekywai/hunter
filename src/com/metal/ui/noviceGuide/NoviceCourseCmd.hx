@@ -123,7 +123,7 @@ class NoviceCourseCmd extends BaseCmd
 				UIBuilder.get("main").free();
 				
 				//打开新手引导关卡
-				GameProcess.root.notify(MsgStartup.GameInit, DuplicateManager.instance.getProtoDuplicateByID(0));
+				GameProcess.instance.notify(MsgStartup.GameInit, DuplicateManager.instance.getProtoDuplicateByID(0));
 				sendMsg(MsgUI2.Control, true);
 				notify(MsgUIUpdate.NewBieUI);
 				dispose();

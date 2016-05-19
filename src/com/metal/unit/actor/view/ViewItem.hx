@@ -79,7 +79,7 @@ class ViewItem extends ViewActor
 			//播放爆炸特效
 			var vo:EffectRequest = new EffectRequest();
 			vo.setInfo(this, EffectAniType.Boom1);
-			GameProcess.root.notify(MsgEffect.Create, vo);
+			GameProcess.instance.notify(MsgEffect.Create, vo);
 			
 			//停留到死亡后的骨骼 无需循环flase
 			setAction(ActionType.dead_1, false);

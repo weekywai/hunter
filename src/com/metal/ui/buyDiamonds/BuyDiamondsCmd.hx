@@ -71,8 +71,8 @@ class BuyDiamondsCmd extends BaseCmd
 			//trace(Diamond_Manager.instance.getProto(btnNum).Gold);
 			var diamond:Gold_Info = DiamondManager.instance.getProto(btnNum);
 			var zuanshi:Int = Std.int(diamond.Gold + diamond.Gold * (diamond.Proportion / 100));
-			GameProcess.root.notify(MsgPlayer.UpdateGem, zuanshi);
-			GameProcess.root.notify(MsgMission.Update, { type:"forge", data: { id:5 }} );
+			GameProcess.instance.notify(MsgPlayer.UpdateGem, zuanshi);
+			GameProcess.instance.notify(MsgMission.Update, { type:"forge", data: { id:5 }} );
 		}
 	}
 	

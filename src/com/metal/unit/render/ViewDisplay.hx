@@ -2,6 +2,7 @@ package com.metal.unit.render;
 
 import com.haxepunk.Entity;
 import com.haxepunk.Graphic;
+import com.haxepunk.HXP;
 import com.haxepunk.Mask;
 import com.metal.config.UnitModelType;
 import de.polygonal.core.event.IObservable;
@@ -74,5 +75,18 @@ class ViewDisplay extends Entity implements IObserver
 	private function notifyParent(type:Int, userData:Dynamic = null) {
 		if (owner != null)
 			owner.notifyParent(type, userData);
+	}
+	
+	//@:getter(onCamera)
+	override function get_onCamera():Bool 
+	{
+		if (_scene == null)
+		{
+			return false;
+		}
+		else
+		{
+			return collideRect(x, y, _scene.camera.x - halfWidth, _scene.camera.y, HXP.width + halfWidth, HXP.height);
+		}
 	}
 }

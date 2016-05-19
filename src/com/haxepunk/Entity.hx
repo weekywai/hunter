@@ -438,7 +438,7 @@ class Entity extends Tweener
 	 * If the Entity collides with the camera rectangle.
 	 */
 	public var onCamera(get, null):Bool;
-	private inline function get_onCamera():Bool
+	private function get_onCamera():Bool
 	{
 		if (_scene == null)
 		{

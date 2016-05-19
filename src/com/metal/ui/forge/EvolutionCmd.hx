@@ -93,7 +93,7 @@ class EvolutionCmd extends ForgetBase
 		/**初始化进阶材料*/
 		meterailArr = [];
 		selectMeterail = [];
-		var bag:BagInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).bagData;
+		var bag:BagInfo = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).bagData;
 		for (j in 0...bag.itemArr.length)
 		{
 			if (bag.itemArr[j].ID == goodsInfo.ID && bag.itemArr[j].keyId!=goodsInfo.keyId) 

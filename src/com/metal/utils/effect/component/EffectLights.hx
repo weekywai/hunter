@@ -39,7 +39,7 @@ class EffectLights extends BaseEffect
 		//var rect:Rectangle = panel.getBounds(null);
 		//拿到特效层
 		
-		//cast(GameProcess.root.child(UIManager), UIManager).effLayer.addChild(maxSprite);
+		//cast(GameProcess.child(UIManager), UIManager).effLayer.addChild(maxSprite);
 	
 		
 		//

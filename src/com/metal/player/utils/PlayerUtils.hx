@@ -74,6 +74,6 @@ class PlayerUtils
 	
 	private static function getSchedual():GameSchedual
 	{
-		return untyped GameProcess.root.getComponent(GameSchedual);
+		return untyped GameProcess.instance.getComponent(GameSchedual);
 	}
 }

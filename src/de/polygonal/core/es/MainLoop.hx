@@ -21,6 +21,7 @@ package de.polygonal.core.es;
 import de.polygonal.core.es.Entity in E;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
+import de.polygonal.core.sys.SimEntity;
 import de.polygonal.core.time.Time;
 import de.polygonal.core.time.Timebase;
 import de.polygonal.core.time.TimebaseEvent;
@@ -32,7 +33,7 @@ using de.polygonal.core.es.EntitySystem;
 /**
 	The top entity responsible for updating the entire entity hierachy
 **/
-class MainLoop extends Entity implements IObserver
+class MainLoop extends SimEntity implements IObserver
 {
 	public var paused = false;
 	
@@ -45,7 +46,7 @@ class MainLoop extends Entity implements IObserver
 	
 	public function new()
 	{
-		super(MainLoop.ENTITY_NAME, true);
+		super(MainLoop.ENTITY_NAME, true, true);
 		Timebase.setTimeSource(new Time());
 		Timebase.init();
 		Timebase.attach(this);

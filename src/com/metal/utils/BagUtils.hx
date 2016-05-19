@@ -28,7 +28,7 @@ class BagUtils
 	private static function get_bag():BagInfo
 	{
 		if (_bag == null)
-			_bag = GameProcess.root.getComponent(BagpackSystem).bagData;
+			_bag = GameProcess.instance.getComponent(BagpackSystem).bagData;
 		return _bag;
 	}
 	

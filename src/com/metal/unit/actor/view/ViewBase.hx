@@ -74,6 +74,9 @@ class ViewBase extends AbstractAvatar
 			return;
 		if (graphic != null) {
 			graphic.active = graphic.visible = onCamera;
+			//可能需要放出此判断
+			//if (graphic.active)
+				//setAction(ActorState.GetAction(_actor.stateID));
 		}
 			
 		//trace(_actor.x + "::" + _actor.y);

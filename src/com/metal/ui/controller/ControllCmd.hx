@@ -6,7 +6,6 @@ import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.GuideText;
-import com.metal.config.ItemType;
 import com.metal.config.PlayerPropType;
 import com.metal.config.ResPath;
 import com.metal.config.RoomMissionType;
@@ -14,6 +13,7 @@ import com.metal.config.SfxManager;
 import com.metal.config.StageType;
 import com.metal.enums.BagInfo;
 import com.metal.enums.MapVo;
+import com.metal.enums.UIUpdateType;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgBoard;
@@ -24,12 +24,11 @@ import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
-import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.impl.ItemProto.ItemBaseInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.impl.GameMap;
-import com.metal.ui.warehouse.WarehouseCmd;
 import com.metal.unit.actor.api.ActorState;
 import com.metal.unit.stat.PlayerStat;
 import com.metal.unit.weapon.impl.WeaponFactory.WeaponType;
@@ -78,6 +77,8 @@ class ControllCmd extends BaseCmd
 	private var _mpBar:Progress;
 	private var _hptext:Text;
 	private var _mptext:Text;
+	private var _diamondtxt:Text;
+	private var _goldtxt:Text;
 	private var _bossHp:Text;
 	private var _socre:Text;
 	private var _center:Widget;
@@ -131,7 +132,7 @@ class ControllCmd extends BaseCmd
 		_usingTipArr = new Array();
 		_weaponInfoArr = new Array();
 		_lastWeaponIndex = 0;
-		var gameSchedual:GameSchedual = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual);
+		var gameSchedual:GameSchedual = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual);
 		
 		for (i in 0..._weaponNum) 
 		{
@@ -167,10 +168,10 @@ class ControllCmd extends BaseCmd
 		}
 		if (!setModel) return;
 		//修改人物模型和参数
-		var bagData:BagInfo = GameProcess.root.getComponent(BagpackSystem).bagData;
+		var bagData:BagInfo = GameProcess.instance.getComponent(BagpackSystem).bagData;
 		bagData.setBackup(_weaponInfoArr[_lastWeaponIndex],  _weaponInfoArr[index].vo.sortInt);
 		notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.WEAPON, data: _weaponInfoArr[index]} );
-		GameProcess.root.notify(MsgPlayer.ChangeWeapon, { type:WeaponType.Shoot } );	
+		GameProcess.instance.notify(MsgPlayer.ChangeWeapon, { type:WeaponType.Shoot } );	
 		notify(MsgUIUpdate.UpdateBullet, _weaponInfoArr[index]);
 		
 		_lastWeaponIndex = index;
@@ -195,7 +196,7 @@ class ControllCmd extends BaseCmd
 		_mapW = 0;
 		_controlTime = 0;
 		_onShowgo = false;
-		_battle = GameProcess.root.getComponent(BattleSystem);
+		_battle = GameProcess.instance.getComponent(BattleSystem);
 		_holdFire = false;
 		_attackBtn = _widget.getChildAs("attackBtn", Button);
 		_jumpBtn = _widget.getChildAs("jumpBtn", Button);
@@ -210,7 +211,7 @@ class ControllCmd extends BaseCmd
 		
 		_bulletTxt=_widget.getChildAs("bulletTxt", Text);
 		//判断是否隐藏技能锁
-		var skillshow = GameProcess.root.getComponent(GameSchedual).skillData;
+		var skillshow = GameProcess.instance.getComponent(GameSchedual).skillData;
 		_skillBtns = [];
 		for (i in 0...5) 
 		{
@@ -234,6 +235,8 @@ class ControllCmd extends BaseCmd
 		_mptext = _widget.getChildAs("mpPercent", Text);
 		_bossHp = _widget.getChildAs("mpPercent", Text);
 		_socre = _widget.getChildAs("score", Text);
+		_diamondtxt = _widget.getChildAs("diamond", Text);
+		_goldtxt = _widget.getChildAs("gold", Text);
 		if (!Input.multiTouchSupported) {
 			if (HXP.stage != null) HXP.stage.addEventListener(MouseEvent.MOUSE_DOWN, thumb_mouseDown);
 		}
@@ -293,14 +296,14 @@ class ControllCmd extends BaseCmd
 		}
 		_hpBar.alpha += addnum1;
 	}
-	private function touchAera()
+	/*private function touchAera()
 	{
 		_center.x = 0;
 		_center.y = Lib.current.stage.stageHeight * 0.4;
 		_center.w = Lib.current.stage.stageWidth * 0.6;
 		_center.h = Lib.current.stage.stageHeight * 0.6;
 		_center.alpha = 0.4;
-	}
+	}*/
 	/**暂停游戏*/
 	private function stopGame(e:MouseEvent):Void
 	{
@@ -309,14 +312,42 @@ class ControllCmd extends BaseCmd
 		sendMsg(MsgUI2.StopGame);
 	}
 	
+	public function showBossPanel(userData):Void 
+	{
+		if (userData == null)
+		{
+			if(_bossPanel!=null)
+				_widget.getChild("BossPanel").removeChild(_bossPanel);
+			return;
+		}
+		if(_bossPanel == null)
+			_bossPanel = UIBuilder.buildFn("ui/fight/bossBar.xml")();
+		else {
+			var ico = _bossPanel.getChild("ico");
+			if (ico != null)
+				_bossPanel.removeChild(ico);
+		}
+		
+		var icon = UIBuilder.create(Bmp, {
+			name:"ico",
+			src:ResPath.getIconPath(userData, ResPath.ModelIcon),
+			rightPt:14,
+			topPt:24
+		});
+		_bossPanel.addChild(icon);
+		trace("Boss name:"+_battle.currentStage().BossName);
+		_bossPanel.getChildAs("name", Text).text = _battle.currentStage().BossName;
+		_widget.getChild("BossPanel").addChild(_bossPanel);
+	}
+	
 	/**接收UIManager消息，需要继承转发给 widget 更新数据*/
 	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void {
 		
 		switch(type){
 			case MsgUIUpdate.UpdateInfo:
 				cmd_UpdateInfo(userData);
-			case MsgUIUpdate.UpdateScore:
-				cmd_updateScore(userData);
+			case MsgUIUpdate.Update:
+				cmd_Update(userData);
 			case MsgUI2.SkillCD:
 				cmd_SkillCD(userData);
 			//case MsgUI.BossPanel:
@@ -345,6 +376,172 @@ class ControllCmd extends BaseCmd
 				cmd_UpdateBullet(userData);			
 		}
 	}
+	private function cmd_UpdateInfo(userData):Void 
+	{
+		if (_playerInfo == null) return;
+		_hpBar.value =  stat.hp / stat.hpMax * 100;
+		_mpBar.value =  stat.mp / stat.mpMax * 100;
+		_hptext.text = Std.string(stat.hp);
+		_mptext.text = Std.string(stat.mp);
+		_diamondtxt.text = Std.string(_playerInfo.data.GEM);
+	}
+	
+	private function cmd_Update(userData)
+	{
+		switch(userData.type) { 
+			case UIUpdateType.Gold:
+				_goldtxt.text = Std.string(userData.data);
+			case UIUpdateType.Score:
+				_socre.text = Std.string(userData.data);
+			default:
+		}
+	}
+	
+	private function cmd_NewBieUI(userData)
+	{
+		_widget.getChildAs("stopGame", Button).visible = false;
+	}
+	
+	private function cmd_BossInfoUpdate(userData):Void
+	{
+		if (_bossPanel == null)
+			return;
+		_bossPanel.getChildAs("bossHP", Progress).value = userData.percent;
+		_bossPanel.getChildAs("hpPercent", Text).text = Std.string(userData.hp < 0?0:userData.hp);
+	}
+	
+	private function cmd_AssignPlayer()
+	{
+		_player = PlayerUtils.getPlayer();
+		stat = _player.getComponent(PlayerStat);
+		_jumpBtn.onPress = onJumpPress;
+		_knifeBtn.onPress = onKnifePress;
+		_attackBtn.onPress = onAttackPress;
+		_attackBtn.onRelease = onAttackRelease;
+		_jumpBtn.onPress = onJumpPress;
+		_knifeBtn.onPress = onKnifePress;
+		_hpBar.addEventListener(Event.ENTER_FRAME, shine1);
+		_mpBar.addEventListener(Event.ENTER_FRAME, shine);
+		cmd_UpdateInfo(null);
+		cmd_UpdateBullet(stat.weapon);
+		var map = EntityUtil.findBoardComponent(GameMap);
+		notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(map.mapData.mapId)).MissionType);
+	}
+	
+	private function cmd_SkillCD(userData:Dynamic):Void
+	{
+		var time:Int = userData.time;
+		var timeStr:String = Std.string(time != 0?time:"");
+		var id:Int = userData.id;
+		var index:Int = -1;
+		if (id == _playerInfo.data.SKILL1)  index = 0;
+		else if (id == _playerInfo.data.SKILL2) index = 1;
+		else if (id == _playerInfo.data.SKILL3) index = 2;
+		else if (id == _playerInfo.data.SKILL4) index = 3;
+		else if (id == _playerInfo.data.SKILL5) index = 4;
+		if (index == -1)
+			return;
+		_skillBtns[index].text = timeStr;
+		if (time == 0) _skillBtns[index].disabled = false;
+	}
+	
+	//private function cmd_UpdateThumb(userData:Dynamic):Void
+	//{
+		//if (_battle.currentStage().DuplicateType == 9)
+			//return;
+		//var player = _thumb.getChild("thumbPlayer");
+		//if (_count == 0){
+			//_count = userData;
+			//updateThumb();
+		//}else {
+			////_count = _count - 1;
+		//}
+		//var holder = _thumb.getChild("thumbHolder");
+		//var slice = _slice / _count;
+		//Actuate.tween(_thumb.getChild("thumbPlayer"), 0.5, { x:player.x + slice } );
+	//}
+	
+	private function cmd_InitThumb(userData:Dynamic):Void
+	{
+		//trace("cmd_InitThumb");
+		if (_battle.currentStage().DuplicateType == StageType.Endless)
+			return;
+		//隐藏关卡进度条
+		_thumb.visible = false;
+		var count:Int = userData;
+		var holder = _thumb.getChild("thumbHolder");
+		_slice = holder.w / count;
+		for(i in 0...count){
+			var bmp = UIBuilder.create(Bmp, { skinName:"fightThumb2", x:_slice * i + _slice } );
+			holder.addChild(bmp);
+		}
+		var mapData:MapVo = EntityUtil.findBoardComponent(GameMap).mapData;
+		_mapW = mapData.map.fullWidth;
+		_runKey = mapData.runKey;
+		
+	}
+	private function cmd_UpdateMissionTxt(userData:Dynamic):Void
+	{
+		//trace("cmd_UpdateMissionTxt");
+		switch (userData) 
+		{
+			case RoomMissionType.Kill_All:
+				_mission.text = " 目标：消灭所有敌人";
+			case RoomMissionType.Reach_Destination:
+				_mission.text = " 目标：到达终点";
+			case RoomMissionType.Survive:
+				_mission.text = " 目标：在指定时间内存活";
+			default:				
+		} 
+		
+		_mission.label.alpha = 0.01;
+		Actuate.tween(_mission.label, 2, { alpha:1 } );	
+	}
+	private function cmd_Start(userData:Dynamic):Void
+	{
+		trace("cmd_Start");
+		//_battle = GameProcess.instance.getComponent(BattleSystem);
+		for (btn in _skillBtns) 
+		{
+			btn.text = "";
+			btn.disabled = false;
+		}		
+		GameProcess.instance.notify(MsgStartup.PauseCountDown, false);
+		//notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(EntityUtil.findBoardComponent(GameMap).mapData.mapId)).MissionType);
+		//trace("notify(MsgUIUpdate.UpdateMissionTxt");
+		//_skill0Btn.text = _skill1Btn.text = _skill2Btn.text = _skill3Btn.text = _skill4Btn.text = "";
+		//_skill0Btn.disabled = _skill1Btn.disabled = _skill2Btn.disabled = _skill3Btn.disabled = _skill4Btn.disabled = false;
+	}
+	private function cmd_FinishBattleTip(userData:Dynamic):Void
+	{
+		var tipPanel = _widget.getChild("tips");
+		var tips1 = _widget.getChildAs("passTips1",Bmp);
+		var tips2 = _widget.getChildAs("passTips2", Bmp);
+		tipPanel.topPt = 0;
+		if (userData == 0) {
+			tipPanel.visible = true;
+			tips1.visible = true;
+			Actuate.tween(tips1, 0.2, { leftPt:-100 }).ease(Quad.easeIn).reverse().onComplete(function() {
+				Actuate.transform(tips1, 0.2).color(0xffffff).reverse();
+			});
+			Actuate.tween(tips2, 0.2, { leftPt:200 }).ease(Quad.easeIn).reverse().onComplete(function() {
+				Actuate.transform(tips2, 0.2).color(0xffffff).reverse();
+			});
+		}else if (userData == 1) {
+			tipPanel.visible = true;
+			tipPanel.topPt = -10;
+			tips1.visible = false;
+			Actuate.tween(tips2, 0.2, { leftPt:-100 }).ease(Quad.easeIn).reverse().onComplete(function() {
+				Actuate.transform(tips2, 0.2).color(0xffffff).reverse();
+			});
+		}else {
+			tipPanel.visible = false;
+		}
+	}
+	private function cmd_SetInputEnable(userData:Dynamic)
+	{
+		_inputEnable = userData;
+	}
 	private function cmd_UpdateCountDown(userData:Dynamic):Void
 	{
 		var countDown:Int = userData;
@@ -371,14 +568,14 @@ class ControllCmd extends BaseCmd
 					SfxManager.playBMG(BGMType.Victory);
 					PlayerUtils.getPlayer().notify(MsgActor.Victory);
 					trace("MsgActor.Victory");
-					GameProcess.root.notify(MsgStartup.BattleClear);
+					GameProcess.instance.notify(MsgStartup.BattleClear);
 					trace("MsgStartup.BattleClear");
 				}else {
 					//通知角色死亡
 					PlayerUtils.getPlayer().notify(MsgActor.Destroying);
 					//战斗结束
 					sendMsg(MsgUI.BattleFailure);
-					GameProcess.root.notify(MsgStartup.Finishbattle);
+					GameProcess.instance.notify(MsgStartup.Finishbattle);
 				}								
 			}
 		}
@@ -628,194 +825,6 @@ class ControllCmd extends BaseCmd
 		}
 	}
 	
-	
-	private function cmd_UpdateInfo(userData):Void 
-	{
-		if (_playerInfo == null) return;
-		_hpBar.value =  stat.hp / stat.hpMax * 100;
-		_mpBar.value =  stat.mp / stat.mpMax * 100;
-		_hptext.text = Std.string(stat.hp);
-		_mptext.text = Std.string(stat.mp);
-	}
-	
-	private function cmd_updateScore(userData)
-	{
-		_socre.text = Std.string(userData);
-	}
-	
-	private function cmd_NewBieUI(userData)
-	{
-		_widget.getChildAs("stopGame", Button).visible = false;
-	}
-	
-	
-	public function showBossPanel(userData):Void 
-	{
-		if (userData == null)
-		{
-			if(_bossPanel!=null)
-				_widget.getChild("BossPanel").removeChild(_bossPanel);
-			return;
-		}
-		if(_bossPanel == null)
-			_bossPanel = UIBuilder.buildFn("ui/fight/bossBar.xml")();
-		else {
-			var ico = _bossPanel.getChild("ico");
-			if (ico != null)
-				_bossPanel.removeChild(ico);
-		}
-		
-		var icon = UIBuilder.create(Bmp, {
-			name:"ico",
-			src:ResPath.getIconPath(userData, ResPath.ModelIcon),
-			rightPt:14,
-			topPt:24
-		});
-		_bossPanel.addChild(icon);
-		trace("Boss name:"+_battle.currentStage().BossName);
-		_bossPanel.getChildAs("name", Text).text = _battle.currentStage().BossName;
-		_widget.getChild("BossPanel").addChild(_bossPanel);
-	}
-	private function cmd_BossInfoUpdate(userData):Void
-	{
-		if (_bossPanel == null)
-			return;
-		_bossPanel.getChildAs("bossHP", Progress).value = userData.percent;
-		_bossPanel.getChildAs("hpPercent", Text).text = Std.string(userData.hp < 0?0:userData.hp);
-	}
-	
-	private function cmd_AssignPlayer()
-	{
-		_player = PlayerUtils.getPlayer();
-		stat = _player.getComponent(PlayerStat);
-		_jumpBtn.onPress = onJumpPress;
-		_knifeBtn.onPress = onKnifePress;
-		_attackBtn.onPress = onAttackPress;
-		_attackBtn.onRelease = onAttackRelease;
-		_jumpBtn.onPress = onJumpPress;
-		_knifeBtn.onPress = onKnifePress;
-		_hpBar.addEventListener(Event.ENTER_FRAME, shine1);
-		_mpBar.addEventListener(Event.ENTER_FRAME, shine);
-		cmd_UpdateInfo(null);
-		cmd_UpdateBullet(stat.weapon);
-		var map = EntityUtil.findBoardComponent(GameMap);
-		notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(map.mapData.mapId)).MissionType);
-	}
-	
-	private function cmd_SkillCD(userData:Dynamic):Void
-	{
-		var time:Int = userData.time;
-		var timeStr:String = Std.string(time != 0?time:"");
-		var id:Int = userData.id;
-		var index:Int = -1;
-		if (id == _playerInfo.data.SKILL1)  index = 0;
-		else if (id == _playerInfo.data.SKILL2) index = 1;
-		else if (id == _playerInfo.data.SKILL3) index = 2;
-		else if (id == _playerInfo.data.SKILL4) index = 3;
-		else if (id == _playerInfo.data.SKILL5) index = 4;
-		if (index == -1)
-			return;
-		_skillBtns[index].text = timeStr;
-		if (time == 0) _skillBtns[index].disabled = false;
-	}
-	
-	//private function cmd_UpdateThumb(userData:Dynamic):Void
-	//{
-		//if (_battle.currentStage().DuplicateType == 9)
-			//return;
-		//var player = _thumb.getChild("thumbPlayer");
-		//if (_count == 0){
-			//_count = userData;
-			//updateThumb();
-		//}else {
-			////_count = _count - 1;
-		//}
-		//var holder = _thumb.getChild("thumbHolder");
-		//var slice = _slice / _count;
-		//Actuate.tween(_thumb.getChild("thumbPlayer"), 0.5, { x:player.x + slice } );
-	//}
-	
-	private function cmd_InitThumb(userData:Dynamic):Void
-	{
-		//trace("cmd_InitThumb");
-		if (_battle.currentStage().DuplicateType == StageType.Endless)
-			return;
-		//隐藏关卡进度条
-		_thumb.visible = false;
-		var count:Int = userData;
-		var holder = _thumb.getChild("thumbHolder");
-		_slice = holder.w / count;
-		for(i in 0...count){
-			var bmp = UIBuilder.create(Bmp, { skinName:"fightThumb2", x:_slice * i + _slice } );
-			holder.addChild(bmp);
-		}
-		var mapData:MapVo = EntityUtil.findBoardComponent(GameMap).mapData;
-		_mapW = mapData.map.fullWidth;
-		_runKey = mapData.runKey;
-		
-	}
-	private function cmd_UpdateMissionTxt(userData:Dynamic):Void
-	{
-		//trace("cmd_UpdateMissionTxt");
-		switch (userData) 
-		{
-			case RoomMissionType.Kill_All:
-				_mission.text = " 目标：消灭所有敌人";
-			case RoomMissionType.Reach_Destination:
-				_mission.text = " 目标：到达终点";
-			case RoomMissionType.Survive:
-				_mission.text = " 目标：在指定时间内存活";
-			default:				
-		} 
-		
-		_mission.label.alpha = 0.01;
-		Actuate.tween(_mission.label, 2, { alpha:1 } );	
-	}
-	private function cmd_Start(userData:Dynamic):Void
-	{
-		trace("cmd_Start");
-		//_battle = GameProcess.root.getComponent(BattleSystem);
-		for (btn in _skillBtns) 
-		{
-			btn.text = "";
-			btn.disabled = false;
-		}		
-		GameProcess.root.notify(MsgStartup.PauseCountDown, false);
-		//notify(MsgUIUpdate.UpdateMissionTxt, MapInfoManager.instance.getRoomInfo(Std.parseInt(EntityUtil.findBoardComponent(GameMap).mapData.mapId)).MissionType);
-		//trace("notify(MsgUIUpdate.UpdateMissionTxt");
-		//_skill0Btn.text = _skill1Btn.text = _skill2Btn.text = _skill3Btn.text = _skill4Btn.text = "";
-		//_skill0Btn.disabled = _skill1Btn.disabled = _skill2Btn.disabled = _skill3Btn.disabled = _skill4Btn.disabled = false;
-	}
-	private function cmd_FinishBattleTip(userData:Dynamic):Void
-	{
-		var tipPanel = _widget.getChild("tips");
-		var tips1 = _widget.getChildAs("passTips1",Bmp);
-		var tips2 = _widget.getChildAs("passTips2", Bmp);
-		tipPanel.topPt = 0;
-		if (userData == 0) {
-			tipPanel.visible = true;
-			tips1.visible = true;
-			Actuate.tween(tips1, 0.2, { leftPt:-100 }).ease(Quad.easeIn).reverse().onComplete(function() {
-				Actuate.transform(tips1, 0.2).color(0xffffff).reverse();
-			});
-			Actuate.tween(tips2, 0.2, { leftPt:200 }).ease(Quad.easeIn).reverse().onComplete(function() {
-				Actuate.transform(tips2, 0.2).color(0xffffff).reverse();
-			});
-		}else if (userData == 1) {
-			tipPanel.visible = true;
-			tipPanel.topPt = -10;
-			tips1.visible = false;
-			Actuate.tween(tips2, 0.2, { leftPt:-100 }).ease(Quad.easeIn).reverse().onComplete(function() {
-				Actuate.transform(tips2, 0.2).color(0xffffff).reverse();
-			});
-		}else {
-			tipPanel.visible = false;
-		}
-	}
-	private function cmd_SetInputEnable(userData:Dynamic)
-	{
-		_inputEnable = userData;
-	}
 	//private function updateThumb():Void
 	//{
 		//var holder = _thumb.getChild("thumbHolder");

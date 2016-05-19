@@ -124,7 +124,7 @@ class BattleResolver extends Component
 					SfxManager.playBMG(BGMType.Victory);
 					trace("Send Victory"+ " len:"+_gameMap.enemies.length);
 					PlayerUtils.getPlayer().notify(MsgActor.Victory);
-					GameProcess.root.notify(MsgStartup.BattleClear);
+					GameProcess.instance.notify(MsgStartup.BattleClear);
 				}
 				_victory = true;
 			}else {

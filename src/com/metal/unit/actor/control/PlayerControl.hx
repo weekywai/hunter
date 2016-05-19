@@ -2,6 +2,7 @@ package com.metal.unit.actor.control;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
 import com.metal.config.PlayerPropType;
+import com.metal.config.UnitModelType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgPlayer;
@@ -188,6 +189,7 @@ class PlayerControl extends Component
 		if (!_inputEnable) return;
 		var target:Point = userData.target;
 		var melee:Bool = userData.melee;
+		//if (owner.name != UnitModelType.Vehicle) {
 		if(target != null){
 			if (_actor.x < target.x) {
 				if (_actor.dir != Direction.RIGHT) 
@@ -202,9 +204,8 @@ class PlayerControl extends Component
 				}
 				_actor.dir = Direction.LEFT;
 			}
-		}else {
-			
 		}
+		//}
 		
 		if(melee){
 			notify(MsgPlayer.Attack, { type:WeaponType.Melee});

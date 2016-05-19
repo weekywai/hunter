@@ -85,7 +85,7 @@ class RewardCmd extends BaseCmd
 	private function setData(data:Dynamic):Void
 	{
 		if (_unparent) return;
-		var rewardComp:RewardSystem = GameProcess.root.getComponent(RewardSystem);
+		var rewardComp:RewardSystem = GameProcess.instance.getComponent(RewardSystem);
 		
 		//************连续登陆签到**************//
 		var reward1 = _widget.getChildAs("reward1", VBox);
@@ -127,8 +127,8 @@ class RewardCmd extends BaseCmd
 						var diamond:Int = (10 * i + 10);
 						notifyRoot(MsgPlayer.UpdateMoney, gold);
 						notifyRoot(MsgPlayer.UpdateGem, diamond);
-						//GameProcess.root.notify(MsgPlayer.UpdateMoney, jinbi);
-						//GameProcess.root.notify(MsgPlayer.UpdateGem, zuanshi);
+						//GameProcess.instance.notify(MsgPlayer.UpdateMoney, jinbi);
+						//GameProcess.instance.notify(MsgPlayer.UpdateGem, zuanshi);
 						getBtn.disabled = true;
 						getBtn.text = "已领取";
 						notifyRoot(MsgMission.UpdateReward, {type:"online",data:i});

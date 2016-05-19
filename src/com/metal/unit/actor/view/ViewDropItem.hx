@@ -46,6 +46,11 @@ class ViewDropItem extends ViewObject
 			return;
 		super.update();
 		// random fly icon
+		if (_actor.isRunMap && _actor.isGrounded){
+			_actor.x -= 13;
+			if (!onCamera)
+				notify(MsgActor.Destroy);
+		}
 		/*if (_actor.isRunMap) {
 			if (!_dispear){
 				if (_actor.x <= _bounds.left) {
@@ -92,12 +97,13 @@ class ViewDropItem extends ViewObject
 	{
 		super.Notify_EnterBoard(userData);
 		if (_actor.isRunMap){
-			_actor._gravity = 0;
-			//animateCircle();
+			/*_actor._gravity = 0;
 			Actuate.tween(this,10,{}).onComplete(function() { 
 				_dispear = true; 
 				_bounds.inflate(400, 300);
-			});
+			});*/
+			var motion:MotionPath = new MotionPath().bezier(_actor.x, _actor.y, _actor.x, _actor.y * 0.3, 1);// .line(posx, posy);
+			Actuate.motionPath(_actor, 0.3, { x:motion.x, y:motion.y } );
 		} else {
 			
 			factor();
@@ -114,10 +120,10 @@ class ViewDropItem extends ViewObject
 		var posx = _actor.x + curX;
 		var posy = _actor.y;
 		//trace("factor :" +posx+"::"+ _actor.x + "::"+_actor.y);
-		var motion:MotionPath = new MotionPath().bezier(posx, posy, posx - curX *ran*0.3, posy * ran*0.2, 1);// .line(posx, posy);
+		var motion:MotionPath = new MotionPath().bezier(posx, posy, posx - curX *ran*0.3, posy * ran*0.15, 1);// .line(posx, posy);
 		Actuate.motionPath(_actor, ran * 0.4 + 0.2, { x:motion.x, y:motion.y } ).ease(Linear.easeNone).onComplete(function() { 
 			if (collide("solid", x, y) != null) 
-				_actor._gravity = _actor._gravity * 3;
+				_actor._gravity = _actor._gravity * 2;
 		} );
     }
 	
@@ -129,7 +135,7 @@ class ViewDropItem extends ViewObject
 	override function Notify_Destorying(userData:Dynamic):Void 
 	{
 		//trace("drop item destorying");
-		Actuate.tween(_actor, 0.6, { y:_actor.y-150 } ).onComplete(notify,[MsgActor.Destroy]);
+		Actuate.tween(_actor, 0.6, { y:_actor.y - 150 } ).onComplete(notify, [MsgActor.Destroy]);
 		super.Notify_Destorying(userData);
 		//notify( MsgActor.Destroy);
 	}

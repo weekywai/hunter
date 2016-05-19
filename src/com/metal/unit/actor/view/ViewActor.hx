@@ -1,5 +1,6 @@
 package com.metal.unit.actor.view;
 import com.haxepunk.Entity;
+import com.haxepunk.Graphic;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import com.metal.config.ResPath;
@@ -106,7 +107,7 @@ class ViewActor extends ViewBase
 		if (isDisposed || _isFree)
 			return;
 		if (_model != null){
-			_model.update();
+			_spine.active = onCamera;
 			_model.color = _colorT.color;
 		}
 		/*

@@ -45,7 +45,7 @@ class DecompositionCmd extends ForgetBase
 		super.setData(data);
 		var listPanel:Widget = _widget.getChildAs("listPanel", Widget);
 		if (listPanel.numChildren > 0) listPanel.removeChildren();
-		var bagInfo = GameProcess.root.getComponent(BagpackSystem).bagData;
+		var bagInfo = GameProcess.instance.getComponent(BagpackSystem).bagData;
 		var num:Int = 0;
 		for (item in bagInfo.itemArr)
 		{	

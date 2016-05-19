@@ -108,7 +108,7 @@ class StrengthenCmd extends ForgetBase
 		//强化材料显示
 		var listPanel:Widget = _widget.getChildAs("listPanel", Widget);
 		if (listPanel.numChildren > 0) listPanel.removeChildren();
-		metarialArr = GameProcess.root.getComponent(BagpackSystem).bagData.getUpgradeMaterial(_goodsInfo);
+		metarialArr = GameProcess.instance.getComponent(BagpackSystem).bagData.getUpgradeMaterial(_goodsInfo);
 		consumptionArr = [];
 		var panelNum:Int = 0;
 		for (i in 0...metarialArr.length)

@@ -217,7 +217,7 @@ class BaseActor extends GameBoardItem implements IActor
 		if (!isInBoard()) return;
 		if (_model == null) return;
 		
-		_model.active = (_keepActive)?_keepActive:_model.onCamera;
+		//_model.active = (_keepActive)?_keepActive:_model.onCamera;
 		_keepActive = false;
 		if (stateID == ActorState.Destroyed)
 			return;
@@ -225,6 +225,13 @@ class BaseActor extends GameBoardItem implements IActor
 		if (_state != null)
 			_state.update(this);
 		stateTime += timeDelta;
+		isGrounded = false;
+		if (_model.collideTypes(_collides, x, y + 1) != null) 
+		//if (_model.collide(UnitModelType.Solid, x, y + 1) != null) 
+		{
+			isGrounded = true;
+		}
+		
 		onState();
 		
 		gravity();
@@ -232,10 +239,6 @@ class BaseActor extends GameBoardItem implements IActor
 		maxspeed(false, true);
 		if (velocity.y < 0 && stateID != ActorState.Jump && stateID != ActorState.DoubleJump) { gravity(); gravity(); }
 		
-		if (isGrounded && velocity.x == 0) {
-			//trace("stand");	
-			//transition(ActorState.Stand);
-		}
 		motion();
 		acceleration.x = 0;
 		super.onTick(timeDelta);
@@ -248,12 +251,7 @@ class BaseActor extends GameBoardItem implements IActor
 		//if (Math.abs(velocity.x) > _maxSpeed.x) {
 			friction(true, false);
 		//}
-		isGrounded = false;
-		if (_model.collideTypes(_collides, x, y + 1) != null) 
-		//if (_model.collide(UnitModelType.Solid, x, y + 1) != null) 
-		{
-			isGrounded = true;
-		}
+		
 		
 		//if (isGrounded) 
 		//{
@@ -573,6 +571,7 @@ class BaseActor extends GameBoardItem implements IActor
 		//trace("Destroying" + acceleration );
 		//_model.type = "";
 	}
+	
 	private function Notify_Destroy(userData:Dynamic):Void
 	{
 		//transition(ActorState.Destroyed);

@@ -41,7 +41,7 @@ class BattleFailureCmd extends BaseCmd
 		main.show();
 		_widget.getParent("popup").free();
 		sendMsg(MsgUI.MainPanel);
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		var duplicateInfo = battle.currentStage();
 		if (duplicateInfo.DuplicateType == 9)
 		{

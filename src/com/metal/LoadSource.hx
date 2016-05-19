@@ -94,8 +94,8 @@ class LoadSource
 		}*/
 		isLoaded = true;
 		//trace("MsgNet.AssignAccount");
-		//GameProcess.root.notify(MsgNet.AssignAccount);
-		GameProcess.root.notify(MsgPlayer.UpdateInitFileData, null);
+		//GameProcess.instance.notify(MsgNet.AssignAccount);
+		GameProcess.instance.notify(MsgPlayer.UpdateInitFileData, null);
 	}
 	
 	

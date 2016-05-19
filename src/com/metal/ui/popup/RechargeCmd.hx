@@ -54,7 +54,7 @@ class RechargeCmd extends BaseCmd
 			_widget.getChild("suerBtn").visible = false;
 			return;
 		}
-		var tempInfo = GameProcess.root.getComponent(BagpackSystem).equipBagData.getItemByKeyId(PlayerUtils.getInfo().WEAPON);
+		var tempInfo = GameProcess.instance.getComponent(BagpackSystem).equipBagData.getItemByKeyId(PlayerUtils.getInfo().WEAPON);
 		notifyRoot(MsgNet.BuyFullClip, { weapon:tempInfo, noTip:true} );
 		notify(MsgUIUpdate.UpdateBullet, tempInfo);
 		//notifyRoot(MsgPlayer.UpdateMoney, -_price);

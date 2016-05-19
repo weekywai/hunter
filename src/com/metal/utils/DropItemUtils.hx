@@ -48,8 +48,8 @@ class DropItemUtils
 	 * */
 	public static function bossDrop(duplicateInfo:DuplicateInfo):Array<Array<Int>>
 	{
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
-		var total:Int =  battle.TotalKillBoss();
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
+		var total:Int =  battle.TotalKillBoss;
 		if (total == 0) return [];
 		var arrNum:Int = Math.floor(Math.random() * 2);
 		var dropArr:Array<Array<Int>> = [];

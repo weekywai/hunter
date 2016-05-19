@@ -52,7 +52,7 @@ class Main extends Sprite
 		var unique_id:String = SessionData.generateID("example_app_");
 		var crashDumper = new CrashDumper(unique_id);
 		#end
-		GameProcess.instance.init(stage, this);
+		GameProcess.instance.onInit(this);
 	}
 	
 

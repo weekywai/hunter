@@ -10,6 +10,7 @@ package com.metal.message;
 	Melee, 			//近身
 	Destory,
 	Score,
+	Gold,
 	KillBoss,
 	AddLockEnemey
 	

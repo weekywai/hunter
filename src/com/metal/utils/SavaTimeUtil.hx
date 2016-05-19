@@ -85,7 +85,7 @@ class SavaTimeUtil
 	{
 		if (currTime != null && currTime.length > 0)
 		{
-			//var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
+			//var _playInfo = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).playerInfo;
 			var nowDate = Date.now();
 			if (currTime[0] >= nowDate.getFullYear())
 			{
@@ -109,7 +109,7 @@ class SavaTimeUtil
 								}
 								if (minutes / 5 >= 1)
 								{
-									//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( _playInfo.getProperty(PlayerProp.POWER) + Math.floor(minutes / 5),PlayerProp.POWER);
+									//cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( _playInfo.getProperty(PlayerProp.POWER) + Math.floor(minutes / 5),PlayerProp.POWER);
 									//latestFlag = true;
 									//upDate_Vit(null);
 									
@@ -118,13 +118,13 @@ class SavaTimeUtil
 							{
 								//加满
 								//latestFlag = true;
-								//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
+								//cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
 								//upDate_Vit(null);
 							}
 						}else
 						{
 							//latestFlag = true;
-							//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
+							//cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
 							//upDate_Vit(null);
 							//加满体力
 						}
@@ -132,7 +132,7 @@ class SavaTimeUtil
 				}else
 				{
 					//latestFlag = true;
-					//cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
+					//cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).updatePlayerInfo( 200, PlayerProp.POWER);
 					//upDate_Vit(null);
 					//加满体力
 				}
@@ -155,7 +155,7 @@ class SavaTimeUtil
 						//trace(nowDate.getDate() + "     ::  " + currTime[2]);
 						if (nowDate.getDate()-currTime[2] >= 1)
 						{
-							var infoMap = cast(GameProcess.root.getComponent(RewardSystem), RewardSystem).getLiveNesss();
+							var infoMap = cast(GameProcess.instance.getComponent(RewardSystem), RewardSystem).getLiveNesss();
 							FileUtils.setFileData(infoMap, FilesType.Active);
 							return true;
 						}else

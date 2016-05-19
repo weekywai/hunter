@@ -34,23 +34,23 @@ class STCallBack
 			case NetProtocol.ST_HINT_TEXT:  //服务器主动下发的公告栏消息
 				GameProcess.SendUIMsg(MsgUI.HintPanel, packet);
 			case NetProtocol.ST_ENTER_SCENE: //进入游戏获取角色信息
-				GameProcess.root.notify(MsgNet.AssignAccount, packet);
+				GameProcess.instance.notify(MsgNet.AssignAccount, packet);
 			case NetProtocol.ST_PARTNER_VAL: //角色或伙伴属性有更新
-				GameProcess.root.notify(MsgNet.UpdateInfo, packet);
+				GameProcess.instance.notify(MsgNet.UpdateInfo, packet);
 			case NetProtocol.ST_SET_VAL: //角色资源有更新
-				GameProcess.root.notify(MsgNet.UpdateResources, packet);
+				GameProcess.instance.notify(MsgNet.UpdateResources, packet);
 			case NetProtocol.ST_QUEST_COMPLETE: //任务有更新
-				//GameProcess.root.notify(MsgNet.UpdateTask, packet);
+				//GameProcess.instance.notify(MsgNet.UpdateTask, packet);
 			case NetProtocol.ST_QUEST_LIST: //刷新任务列表
-				GameProcess.root.notify(MsgNet.QuestList, packet);
+				GameProcess.instance.notify(MsgNet.QuestList, packet);
 			case NetProtocol.PT_STRENGTHEN: //更新强化
-				//GameProcess.root.notify(MsgNet.Intensify, packet);
+				//GameProcess.instance.notify(MsgNet.Intensify, packet);
 			case NetProtocol.PT_LEVELUP_EQUIP: //更新进阶
-				//GameProcess.root.notify(MsgNet.Advance, packet);
+				//GameProcess.instance.notify(MsgNet.Advance, packet);
 			case NetProtocol.ST_OPEN_STAGE: //更新开启副本
-				GameProcess.root.notify(MsgNet.OpenStage, packet);
+				GameProcess.instance.notify(MsgNet.OpenStage, packet);
 			case NetProtocol.PT_BUY_GOLD: //购买金币返回
-				GameProcess.root.notify(MsgNet.BuyGold, packet);
+				GameProcess.instance.notify(MsgNet.BuyGold, packet);
 			default:
 		}	
 	}

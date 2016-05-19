@@ -109,7 +109,7 @@ class TopViewCmd extends BaseCmd
 		_widget.getChildAs("huntBtn", Button).onPress = huntBtn_click;
 		_widget.getChildAs("payBtn", Button).onPress = payBtn_click;
 		if (LoginFileUtils.Id != "null"){
-			var newbieList:Array<Int> = GameProcess.root.getComponent(GameSchedual).newbieList;
+			var newbieList:Array<Int> = GameProcess.instance.getComponent(GameSchedual).newbieList;
 			if (!Lambda.has(newbieList, NoviceOpenType.NoviceText5))
 				_widget.getChildAs("hintBtn", Button).visible = true;
 		}
@@ -133,7 +133,7 @@ class TopViewCmd extends BaseCmd
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
 		
-		var _playInfo = cast(GameProcess.root.getComponent(GameSchedual), GameSchedual).playerInfo;
+		var _playInfo = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).playerInfo;
 		if (_playInfo.data.POWER >= _maxPower)
 		{
 			sendMsg(MsgUI.Tips, { msg:"体力已达上限", type:TipsType.tipPopup} );

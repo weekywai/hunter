@@ -82,7 +82,7 @@ class GainGoodsCmd extends BaseCmd
 				panel.addChild(bg);
 			}
 		}
-		GameProcess.root.notify(MsgNet.UpdateBag, { type:1, data:data } );
+		GameProcess.instance.notify(MsgNet.UpdateBag, { type:1, data:data } );
 	}
 	override function onDispose():Void 
 	{

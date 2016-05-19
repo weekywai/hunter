@@ -109,7 +109,7 @@ class ViewBoard extends Component
 		#end
 		
 		runLayer(_curMap.mapId);
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		var roomInfo:MapRoomInfo = MapInfoManager.instance.getRoomInfo(Std.parseInt(battle.currentRoomId()));
 		_bgSound = SfxManager.getEnumType(roomInfo.Round);
 		SfxManager.playBMG(_bgSound,2);

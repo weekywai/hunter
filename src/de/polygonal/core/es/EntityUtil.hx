@@ -139,7 +139,7 @@ class EntityUtil
 	 * */
 	public static function findBoardComponent<T:Component>(c:Class<T>):T
 	{
-		var e = GameProcess.root.findChild("GameBoard");
+		var e = GameProcess.instance.findChild("GameBoard");
 		//var e = EntitySystem.findByName("GameBoard");
 		if (e == null ) throw new Error("GameBoard entity is null");
 		return untyped cast(e, SimEntity).getComponent(c);

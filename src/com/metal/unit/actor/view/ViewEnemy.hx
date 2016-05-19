@@ -132,8 +132,7 @@ class ViewEnemy extends ViewActor
 		if (isDisposed || _isFree)
 			return;
 		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded){
-			_actor.x -= 15;
-			trace("roll");
+			_actor.x -= 13;
 		}
 		super.update();
 		
@@ -203,7 +202,7 @@ class ViewEnemy extends ViewActor
 	{
 		super.Notify_Injured(userData);
 		//受击特效
-		//trace(type+" "+ _info.ID);
+		//trace(type+" "+ _info.hit);
 		if (_info.hit != 0) 
 			startEffect(_info.hit);
 		//文字特效
@@ -238,7 +237,7 @@ class ViewEnemy extends ViewActor
 	
 	private function onDropItem()
 	{
-		/*var rate =  GameProcess.root.getComponent(BattleSystem).BuffRate();
+		/*var rate =  GameProcess.instance.getComponent(BattleSystem).BuffRate();
 		//trace(dropRan);
 		if (Math.random() <= 0.2*rate) {
 			var index:Int = 0;
@@ -277,7 +276,7 @@ class ViewEnemy extends ViewActor
 		item.Precent = 1;
 		var drop = [];
 		//var num:Int = 1;
-		var num:Int = Std.int(Math.random() * 6)+1;
+		var num:Int = Std.int(Math.random() * 2)+1;
 		for(i in 0...num)
 		    drop.push(item);
 		createDropItem(drop);

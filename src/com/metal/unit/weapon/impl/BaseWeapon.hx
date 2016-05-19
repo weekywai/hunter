@@ -91,7 +91,7 @@ class BaseWeapon extends Component implements IWeapon
 		//每秒60帧
 		//shootTime = skillInfo.CDTime * 60;
 		//weaponID = PlayerUtils.getInfo().getProperty(PlayerProp.WEAPON);111
-		var weapon = ProtoUtils.castType(GameProcess.root.getComponent(BagpackSystem).bagData.getItemByKeyId(PlayerUtils.getInfo().data.WEAPON));
+		var weapon = ProtoUtils.castType(GameProcess.instance.getComponent(BagpackSystem).bagData.getItemByKeyId(PlayerUtils.getInfo().data.WEAPON));
 		weaponID = weapon.ID;
 		bulletReq.critPor = weapon.CritPor;
 	}

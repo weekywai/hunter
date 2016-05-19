@@ -1,10 +1,8 @@
 package com.metal.unit.actor.view;
+import com.haxepunk.Graphic;
 import com.metal.config.SfxManager;
 import com.metal.message.MsgBullet;
-import com.metal.message.MsgEffect;
-import com.metal.scene.effect.api.EffectRequest;
 import haxe.Timer;
-import motion.Actuate;
 import openfl.geom.Point;
 import spinehaxe.Bone;
 import spinehaxe.Event;
@@ -71,7 +69,6 @@ class ViewMachine extends ViewEnemy
 			_bulletReq.targetY = _player.y;
 			for (i in 0..._skill.num) 
 			{
-				//Actuate.
 				_timers.push(Timer.delay(createBullet, Std.int(_skill.interval * 1000 * i)));
 				//_timers.push(TweenX.tweenFunc(createBullet,[],[],0).delay(_skill.interval * i));
 			}
@@ -85,6 +82,8 @@ class ViewMachine extends ViewEnemy
 	
 	override public function update() 
 	{
+		//if (onCamera)
+			//trace(graphic.active +">>"+ cast(_model, Graphic).active);
 		super.update();
 		/*if(_attcking)
 		{

@@ -13,8 +13,8 @@ package com.metal.message;
 	Skill,      			//技能解锁
 	Reward,      			//奖励界面
 	BossInfoUpdate,			//boss属性更新
-	UpdateInfo,				//更新角色属性
-	UpdateMoney,			//更新金币
+	UpdateInfo,				//更新角色属性 
+	Update,					//更新 {type:UIUpdateType,data:}
 	UpdateModel,          	//更新模型
 	UpdataReturnBtn,     	//返回按钮状态更新
 	ClearMainView,     		//清除返回按钮记录
@@ -22,7 +22,7 @@ package com.metal.message;
 	//UpdateUI,           	//更新界面数据
 	UpdateResources,    	//更新角色资源
 	NewBieUI,           	 	//新手战斗UI
-	UpdateThumb,           	 	//更新预览
+	UpdateThumb,           	 	//更新预览 
 	NewBie,					//新手引导
 	ForgeUpdate,			//锻造
 	UpdateCountDown,		//更新倒计时

@@ -49,7 +49,7 @@ class ViewNPC extends ViewActor
 	{
 		//super.Notify_Destorying(userData);
 		trace("npc drop !!!!!!!!!!!!");
-		var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		var items = battle.currentStage().DropItem;
 		//trace("items=="+items);
 		var ran = Math.round(Math.random() * (items.length-1));

@@ -1,9 +1,7 @@
 package com.metal.unit.stat;
 import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
-import com.metal.component.GameSchedual;
 import com.metal.config.ItemType;
-import com.metal.config.PlayerPropType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgInput;
 import com.metal.message.MsgPlayer;
@@ -11,10 +9,10 @@ import com.metal.message.MsgStartup;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUIUpdate;
-import com.metal.proto.ProtoUtils;
-import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
+import com.metal.proto.ProtoUtils;
 import com.metal.proto.impl.BuffInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.manager.BuffManager;
 import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.proto.manager.SkillManager;
@@ -47,6 +45,7 @@ class PlayerStat extends Component implements IStat
 	public var mpMax(default, null):Int;
 	public var mp(default, default):Int;
 	public var atk(default, null):Int;
+	
 	private var _damageModify:Array<Int>;
 	public function damageModify():Array<Int> { return _damageModify; };
 	public var speedAdd(default, null):Float = 1;
@@ -405,7 +404,7 @@ class PlayerStat extends Component implements IStat
 		trace("cmd_ChangeWeapon");
 		_playerInfo = PlayerUtils.getInfo();
 		atk = _playerInfo.data.FIGHT;
-		weapon = ProtoUtils.castType(GameProcess.root.getComponent(BagpackSystem).bagData.getItemByKeyId(_playerInfo.data.WEAPON));
+		weapon = ProtoUtils.castType(GameProcess.instance.getComponent(BagpackSystem).bagData.getItemByKeyId(_playerInfo.data.WEAPON));
 	}
 	private function cmd_UpdateMp(userData)
 	{
@@ -423,14 +422,14 @@ class PlayerStat extends Component implements IStat
 	private function Notify_Victory(userData)
 	{
 		Actuate.tween(this, 2.5, { } ).onComplete(function() { 
-			GameProcess.root.notify(MsgStartup.TransitionMap, { hp:hp / hpMax, times:respawnTotal } );
+			GameProcess.instance.notify(MsgStartup.TransitionMap, { hp:hp / hpMax, times:respawnTotal } );
 		} );
 	}
 	private function Notify_Soul(userData:Dynamic):Void 
 	{
 		respawnTotal++;
 		if (respawnTotal >= 10) {
-			var battle:BattleSystem = GameProcess.root.getComponent(BattleSystem);
+			var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 			if (battle.currentStage().DuplicateType == 9)
 			{
 				GameProcess.SendUIMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
