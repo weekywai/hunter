@@ -61,9 +61,7 @@ class BaseActor extends GameBoardItem implements IActor
 	public var onWall:Bool;
 	
 	//{interface
-	private var _bindPlayerID:Int = -1;
-	public var bindPlayerID(get, null):Int;
-	private function get_bindPlayerID():Int { return _bindPlayerID; }
+	public var bindPlayerID(default, null):Int = -1;
 	public var stateID(get, null):Int;
 	private function get_stateID():Int { return _state.id; }
 	public function canTransition(targetStateID:Int):Bool {
@@ -92,8 +90,7 @@ class BaseActor extends GameBoardItem implements IActor
 		}
 		return _dir; 
 	}
-	public var radarRange(get, null):Int;
-	private function get_radarRange():Int{ return 0; }
+	public var radarRange(default, null):Int = 0;
 	//public function getProperty(key:String):String { return null; }
 	//}
 	
@@ -440,9 +437,9 @@ class BaseActor extends GameBoardItem implements IActor
 			//if(!attack)
 				transition(ActorState.Stand);
 		}
-		//trace(name);
+		trace(name);
 		if (name == Std.string(ActionType.dead_1)) {
-			trace("destory");
+			//trace("destory");
 			notify(MsgActor.Destroy);
 		}
 	}
@@ -451,7 +448,7 @@ class BaseActor extends GameBoardItem implements IActor
 	{
 		super.Notify_InitFaction(userData);
 		//trace(userData.id);
-		_bindPlayerID = userData.id;
+		bindPlayerID = userData.id;
 		switch(faction) {
 			case BoardFaction.Player,BoardFaction.Block, BoardFaction.Enemy, BoardFaction.Npc, BoardFaction.Vehicle, BoardFaction.Boss, BoardFaction.Elite, BoardFaction.Machine:
 				_gravity = 0.6;

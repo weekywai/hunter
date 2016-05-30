@@ -447,7 +447,8 @@ class GameMap extends Component
 			var bornPos:Point = (appearArr!=null)?appearArr[0][j]:appearInfo.BornAt[j];
 			j++;
 			if (createPos == null || bornPos == null)
-				throw ("createPos:" + appearInfo.EnAt + " bornPos:" + appearInfo.BornAt + ">>>"+j);
+				throw ("createPos:" + appearInfo.EnAt + " bornPos:" + appearInfo.BornAt + ">>>" + j);
+				trace(vo.id);
 			entity = createEntity(monsterInfo.ModelType, createPos, vo.id);
 			entity.notify(MsgActor.BornPos, bornPos);
 			notify(MsgBoard.AssignUnit, entity);

@@ -13,7 +13,7 @@ interface IActor extends IBoardItem extends IDisposer
 	/**
 	 * 绑定的玩家,  >=0 是玩家  <0 非玩家
 	 */
-	var bindPlayerID(get, null):Int;
+	var bindPlayerID(default, null):Int;
 	
 	/**
 	 * ActorState枚举

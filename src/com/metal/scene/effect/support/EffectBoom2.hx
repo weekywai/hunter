@@ -27,7 +27,7 @@ class EffectBoom2 extends EffectBoom1
 	
 	override public function start(req:EffectRequest):Void 
 	{
-		trace("boom2" );
+		//trace("boom2" );
 		_attacker = req.attacker;
 		info = EffectManager.instance.getProto(req.Key);
 		x = req.x - req.width * 0.3;

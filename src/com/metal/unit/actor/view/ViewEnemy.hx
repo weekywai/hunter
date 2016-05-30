@@ -133,6 +133,8 @@ class ViewEnemy extends ViewActor
 			return;
 		if (_actor.isRunMap && _actor.stateID == ActorState.Destroying && _actor.isGrounded){
 			_actor.x -= 13;
+			if (!onCamera)
+				notify(MsgActor.Destroy);
 		}
 		super.update();
 		

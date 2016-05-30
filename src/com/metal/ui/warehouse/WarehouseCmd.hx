@@ -465,7 +465,7 @@ class WarehouseCmd extends BaseCmd
 				_strengthenBtn.visible = true;
 				//_maxStrengthenBtn.visible=!_maxStrengthenBmp.visible;
 				
-				exp.visible = false;
+				exp.visible = true;
 				exp.max = tempInfo.MaxStrengthenLevel;
 				exp.value = tempInfo.vo.strLv;
 				expTxt.text = "" + tempInfo.vo.strLv + "/" + tempInfo.MaxStrengthenLevel;

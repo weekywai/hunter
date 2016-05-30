@@ -21,9 +21,10 @@ class Main extends ru.stablex.ui.Theme{
     static public function main () : Void {
         //due to bug in openfl-html5 we need to set font name manually
 		#if android
-		FONT = new Font("/system/fonts/DroidSansFallback.ttf").fontName;
+		//FONT = new Font("/system/fonts/DroidSansFallback.ttf").fontName;
+		FONT = Assets.getFont("font/DroidSansFallback.ttf").fontName;
 		#else
-		FONT = '黑体';
+		FONT = Assets.getFont("font/DroidSansFallback.ttf").fontName;
 		#end
        // FONT = #if html5 'Roboto Regular' #else Main.getFontName('fonts/regular.ttf') #end;
     }//function main()

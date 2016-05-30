@@ -212,6 +212,7 @@ class TriggerComponent extends Component
 	/**此方法 只在B段地图控制出场怪物数据的处理*/
 	private function cmd_Destory(userData:Dynamic):Void
 	{
+		trace(type);
 		if (_info == null) return;
 		var id:Int = userData.id;
 		switch(type){
@@ -230,7 +231,7 @@ class TriggerComponent extends Component
 					}
 				}
 			case TriggerType.ClearUnLock:
-				//trace(_info.arrInfo+">> id "+ id);
+				trace(_info.arrInfo+">> id "+ id);
 				_info.arrInfo.remove(id);
 				if (_info.arrInfo.length == 0) {
 					_info.showKey = true;

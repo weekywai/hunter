@@ -28,9 +28,9 @@
 			<Text name="'hpPercent'" defaults="'YellowShadow'" format-size="18" text="'1000'" leftPt="60" topPt="34"/>
 			<Text name="'mpPercent'" defaults="'YellowShadow'" format-size="18" text="'10000'" leftPt="53" topPt="49"/>
 			<!--钻石-->
-			<Text topPt="18" leftPt="46" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>	
+			<Text name="'diamond'" topPt="18" leftPt="46" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>	
 			<!--金币-->
-			<Text topPt="18" leftPt="70" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>
+			<Text name="'gold'" topPt="18" leftPt="70" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>
 			<Text name="'bulletTxt'" topPt="70" leftPt="60" text="'子弹: 60/无限'" defaults="'TopMenu,Font'" format-size="25"/>	
 		</Widget>		
 		<Text name="'score'" widthPt="100" text="'0'" leftPt="10" topPt="-100" defaults="'Yellow'" />

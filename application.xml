@@ -34,7 +34,7 @@
 	<!--<haxelib name="format" />-->
 	<haxelib name="dconsole" />
 	<haxelib name="bitmapFont" />
-	<haxelib name="crashdumper" unless="flash"/>
+	<!--<haxelib name="crashdumper" unless="flash"/>-->
 	<haxelib name="HxTelemetry" if="telemetry"/>
 	<haxedef name="HXCPP_STACK_LINE" unless="flash"/>
 	<haxedef name="HXCPP_STACK_TRACE" unless="flash"/>
@@ -50,7 +50,7 @@
 	<!-- assets -->
 	<assets path="assets" rename="" include="*.xml" />
 	<assets path="assets/ui" rename="ui" include="*.gif|*.png|*.jpg|*.xml|*.css|*.bin|*.ttf"/>
-	<assets path="assets/proto" rename="proto" include="*.xml|*.bin|*.json|*.txt|*.db"/>
+	<assets path="assets/proto" rename="proto" include="*.xml|*.bin|*.json|*.txt|*.db|*"/>
 	
 	<!--<assets path="assets/particles" rename="particles" include="*.plist|*.png" />-->
 	<assets path="assets/model" rename="model" include="*.png|*.jpg|*.xml|*.plist|*.bin|*.atlas|*.json"/>
