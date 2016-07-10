@@ -317,6 +317,11 @@
 	</Progress>
 		
 	<Button>
+		<!--<login 
+			skin = "loginBtn1"
+			skinHovered = "loginBtn1"
+			skinPressed = "loginBtn1"
+		/>-->
 	</Button>
 	
 	<!--<Control>

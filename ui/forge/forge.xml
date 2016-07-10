@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Widget id="'forge'" name="'forge'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
 	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
-		<Text name="'tipsName'" text="'强 化'" defaults="'Tip'" topPt="6" />
+		<Text name="'tipsName'" text="'强 化'" defaults="'Tip'" topPt="0" />
 	</VBox>
 	<!--装备背景-->
 	<Widget skinName= "'forgeImg6'" leftPt="0" topPt="20" widthPt="100" heightPt="100">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Widget id="'news'" name="'news'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
 	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
-		<Text name="'tipsName'" text="'消 息'" defaults="'Tip'" topPt="6" />
+		<Text name="'tipsName'" text="'消 息'" defaults="'Tip'" topPt="0" />
 	</VBox>
 	<Scroll id="'newsTrun'" name="'Storehouse'" topPt="15" heightPt="75" defaults="'Screen,Level1'">
 		<VBox name="'newsVBox'" widthPt="100" childPadding="0" >

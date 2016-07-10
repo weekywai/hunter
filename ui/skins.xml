@@ -267,6 +267,7 @@
 	<fightImg13:Img src="'ui/fight/sheji.png'" />
 	<fightImg14:Img src="'ui/fight/jinengsuo.png'" />
 	<fightImg15:Img src="'ui/fight/zanting.png'" />
+	<fightImg16:Img src="'ui/fight/change.png'" />
 	<fightThumb1:Img src="'ui/fight/renwu.png'" />
 	<fightThumb2:Img src="'ui/fight/qiang.png'" />
 	

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Widget name="'overcomeName'" id="'overcome'" widthPt="100" heightPt="100" skinName="'bgWin'">
+<Widget name="'overcome'" id="'overcome'" widthPt="100" heightPt="100" skinName="'bgWin'">
 	<VBox widthPt="100" heightPt="100">
 		<Bmp skinName="'alertImg3'" />
 		<Box skinName="'alertImg6'" >

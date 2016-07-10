@@ -44,9 +44,6 @@
 				"
 				/>
 			<Bmp skinName="'mainImg4'" leftPt="38" topPt="36" mouseEnabled="false" />
-			<!--<ViewStack id="'aaaa'" wrap="true" widthPt="100" h="500" trans:Fade-duration="1" overflow="false">-->
-				
-			<!--</ViewStack>-->
 		</Widget>
 		<Widget skinName="'mainImg3'">
 			<Radio name="'leftDownBtn_1'" defaults="'RaidoDown'" group="'group1'" leftPt="22" topPt="11" on-click="
@@ -58,7 +55,6 @@
 				vs.show('leftDownBtn');
 				"/>
 			<Bmp skinName="'mainImg5'" leftPt="38" topPt="30" mouseEnabled="false"/>
-			
 		</Widget>
 	</VBox>
 	
@@ -73,7 +69,6 @@
 				vs.show('rightUpBtn');
 				"/>
 			<Bmp skinName="'mainImg7'" scaleX="-1" leftPt="73" topPt="37" mouseEnabled="false" />
-			
 		</Widget>
 		<Widget skinName="'mainImg3'" >
 			<Radio name="'rightDownBtn_1'" defaults="'RaidoDown'" group="'group1'" leftPt="22" topPt="12" on-click="

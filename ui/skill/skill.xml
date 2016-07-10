@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Widget id="'skill'" name="'skill'" widthPt="100" heightPt="100" skinName="'viewBgImg'">
 	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
-		<Text name="'tipsName'" text="'技 能'" defaults="'Tip'" topPt="6" />
+		<Text name="'tipsName'" text="'技 能'" defaults="'Tip'" topPt="0" />
 	</VBox >
 	<HBox align="'center,top'" topPt="19" childPadding="-33">
 		<VBox name="'skill1'" skinName="'skillImg1'" align="'center,middle'" >

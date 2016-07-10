@@ -15,7 +15,7 @@
 		<Button defaults="'TurnPage,HightLight'" scaleY="-1" on-click="#Scroll(houseTrun).scrollY-=156;" />
 	</VBox>-->
 	<VBox widthPt="100" skinName="'TipBgImg'" leftPt="27" topPt="0">
-		<Text name="'tipsName'" text="'仓 库'" defaults="'Tip'" topPt="6" />
+		<Text name="'tipsName'" text="'仓 库'" defaults="'Tip'" topPt="0" />
 	</VBox>
 	<VBox widthPt="100" heightPt="100" leftPt="2" topPt="22" align="'top,left'">
 		<!--<Widget skinName="'storeBtn6'">

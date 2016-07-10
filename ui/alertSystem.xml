@@ -4,7 +4,7 @@
     <ViewStack wrap="true" widthPt="100" heightPt="100"  on-display="$this.show(@content);"   >
 		<Box id="'systemPopup'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
 			<Widget skinName="'SuerPopupBg'" w="718" h="332">
-				<Button name="'noBtn'" rightPt="7" topPt="90" text="'退出'"
+				<Button name="'noBtn'" rightPt="7" topPt="90" text="'否'"
 					defaults="'submitBtn,HightLight'" 
 				/>
 				<Button name="'yesBtn'" leftPt="7" topPt="90" text="'是'"

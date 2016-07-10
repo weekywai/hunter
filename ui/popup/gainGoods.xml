@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Box id="'gainGoods'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
+<Box id="'gainGoods'" name="'gainGoods'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
 	<Widget w="1024" h="539" skinName="'SuerPopupBg'">
 		<!--<HBox name="'panel'" childPadding="10" widthPt="100" heightPt="100"></HBox>-->
 		<Widget name="'panel'" widthPt="1024" heightPt="539"></Widget>

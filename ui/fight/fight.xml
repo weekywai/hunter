@@ -20,18 +20,18 @@
 				skin:Paint-color="0x111122" bar-skin:Gradient-colors = "[0xF6D47B,0xFFFF00,0xFFEB96, 0x777700,0x544607]" />
 			</VBox>
 			
-			<Bmp skinName="'fightImg9'" />
+			
 			<!--角色头像-->
-			<!--<Bmp widthPt="100" skinName="'fightImg10'" leftPt="9.8" topPt="15"/>-->
-			<!--头像位置 leftPt="7" topPt="0"/>-->
+			<Bmp name="'icon'" widthPt="100" leftPt="12" topPt="10"/>
+			<Bmp skinName="'fightImg9'" />
 			<!--角色资料-->
-			<Text name="'hpPercent'" defaults="'YellowShadow'" format-size="18" text="'1000'" leftPt="60" topPt="34"/>
-			<Text name="'mpPercent'" defaults="'YellowShadow'" format-size="18" text="'10000'" leftPt="53" topPt="49"/>
+			<Text name="'hpPercent'" defaults="'YellowShadow'" format-size="18" text="''" leftPt="60" topPt="32"/>
+			<Text name="'mpPercent'" defaults="'YellowShadow'" format-size="18" text="''" leftPt="53" topPt="45"/>
 			<!--钻石-->
-			<Text name="'diamond'" topPt="18" leftPt="46" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>	
+			<Text name="'diamond'" topPt="15" leftPt="46" text="''" defaults="'TopMenu,Font'" format-size="18"/>	
 			<!--金币-->
-			<Text name="'gold'" topPt="18" leftPt="70" text="'0'" defaults="'TopMenu,Font'" format-size="18"/>
-			<Text name="'bulletTxt'" topPt="70" leftPt="60" text="'子弹: 60/无限'" defaults="'TopMenu,Font'" format-size="25"/>	
+			<Text name="'gold'" topPt="15" leftPt="70" text="''" defaults="'TopMenu,Font'" format-size="18"/>
+			<Text name="'bulletTxt'" topPt="66" leftPt="50" text="'子弹: 无限'" defaults="'TopMenu,Font'" format-size="25"/>	
 		</Widget>		
 		<Text name="'score'" widthPt="100" text="'0'" leftPt="10" topPt="-100" defaults="'Yellow'" />
 		
@@ -113,6 +113,7 @@
 		</Box>
 		<!--左侧技能栏-->	
 		<VBox widthPt="100" heightPt="100" leftPt="0" topPt="30" childPadding="20" align="'top,left'">
+			
 			<Widget skinName="'fightImg19'" widthPt="100">
 				<Button name="'skill1'" skinName="'fightImg19'" defaults="'jinengBtn6,HightLight'" widthPt="100" >	
 					<Bmp name="'lock'" skinName="'skillImg9'" scaleX="0.9" scaleY="0.9" mouseEnabled="false" />
@@ -123,23 +124,26 @@
 		
 		<!--换枪栏-->
 		<Widget widthPt="100" heightPt="100">
-			<HBox name="'weaponPanel'" bottomPt="1" widthPt="100" heightPt="100" childPadding="30" align="'bottom,center'">
-				<Widget skinName="'forgeImg12'">
-					<Button name="'weapon0'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
-					<Text name="'usingTip0'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10"/>
+			<HBox bottomPt="1" widthPt="100" heightPt="100" childPadding="30" align="'bottom,center'">
+				<Widget bottomPt="1" skinName="'forgeImg12'">
+					<Button name="'weapon'"  defaults="'mainEquipBtn'" on-click="#ViewStack(equipPanel).show('weapon');" align="''"/>
+					<Bmp skinName="'fightImg16'" topPt="16" leftPt="30" mouseEnabled="false" />
 				</Widget>
-				
-				<Widget skinName="'forgeImg12'">
-					<Button name="'weapon1'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
-					<Text name="'usingTip1'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10" />
-				</Widget>
-				
-				<Widget skinName="'forgeImg12'">
-					<Button name="'weapon2'" skinName="'forgeImg12'" defaults="'mainEquipBtn'"/>
-					<Text name="'usingTip2'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10" />
-				</Widget>			
-				
 			</HBox>
+			<ViewStack id="'equipPanel'" bottomPt="16" widthPt="100" heightPt="100" trans:Fade-duration="0.1">
+				<Widget name="'kong'"></Widget>
+				<HBox name="'weapon'" widthPt="100" heightPt="100" childPadding="30" align="'bottom,center'">
+					<Button name="'weapon1'" skinName="'forgeImg12'" defaults="'mainEquipBtn'" label-visible="false" align="''">
+						<Text name="'state'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10"/>
+					</Button>
+					<Button name="'weapon2'" skinName="'forgeImg12'" defaults="'mainEquipBtn'" label-visible="false" on-click="#ViewStack(equipPanel).back();" align="''">
+						<Text name="'state'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10"/>
+					</Button>
+					<Button name="'weapon3'" skinName="'forgeImg12'" defaults="'mainEquipBtn'" label-visible="false" on-click="#ViewStack(equipPanel).back();" align="''">
+						<Text name="'state'" text="'使用中'" defaults="'RedShadow'" format-size="30" topPt="35" leftPt="10"/>
+					</Button>
+				</HBox>
+			</ViewStack>
 		</Widget>
 		
 	</Widget>

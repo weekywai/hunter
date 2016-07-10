@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Box id="'flagTip'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
+<Box id="'buyTip'" name="'buyTip'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
 	<Widget skinName="'SuerPopupBg'" w="1023" h="542">
 		<Button name="'noBtn'" rightPt="7" topPt="90" text="'否'"
 			defaults="'submitBtn,HightLight'" 
