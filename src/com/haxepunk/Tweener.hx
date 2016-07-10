@@ -5,6 +5,8 @@ import com.haxepunk.Tween;
 /**
  * Abstract class used to add the ability to add tweens.
  */
+//@:build(com.haxepunk.utils.HPEntityMacro.build())
+//@:autoBuild(com.haxepunk.utils.HPEntityMacro.build())
 class Tweener
 {
 	public var active:Bool;

@@ -6,7 +6,6 @@ import com.metal.config.ItemType;
 import com.metal.config.PlayerPropType.PlayerProp;
 import com.metal.config.PropertyType;
 import com.metal.config.SfxManager;
-import com.metal.enums.BagInfo;
 import com.metal.enums.NoviceOpenType;
 import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgMission;
@@ -28,9 +27,7 @@ import com.metal.ui.BaseCmd;
 import com.metal.ui.forge.ForgeCmd.ForgeUpdate;
 import com.metal.ui.forge.component.DetailAnalysis;
 import com.metal.utils.BagUtils;
-import com.particleSystem.ASTypes.B;
 import de.polygonal.core.event.IObservable;
-import haxe.ds.ArraySort;
 import haxe.ds.IntMap;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Bmp;
@@ -50,8 +47,7 @@ using com.metal.proto.impl.ItemProto;
  */
 class WarehouseCmd extends BaseCmd
 {
-	private var _openType:Int =ItemType.IK2_GON;
-	private var _bagInfo:BagInfo;
+	private var _openType:Int = ItemType.IK2_GON;
 	private var _panel:VBox;
 	/**枪*/
 	private var _gunInfo:IntMap<ItemBaseInfo>;
@@ -121,8 +117,8 @@ class WarehouseCmd extends BaseCmd
 			_openType = ItemType.IK2_ARM;
 		else if(data == BagType.OPENTYPE_WEAPON)
 			_openType = ItemType.IK2_GON;
-		else
-			_openType = ItemType.IK2_GON_PROMOTED;
+		//else
+			//_openType = ItemType.IK2_GON_PROMOTED;
 		super();
 	}
 	
@@ -142,7 +138,8 @@ class WarehouseCmd extends BaseCmd
 		switch(type) {
 			case MsgUIUpdate.Warehouse:
 				setData();
-				showWeaponPanel();
+				if (_openType==ItemType.IK2_GON) 
+					showWeaponPanel();
 				updataPad(userData);
 		}
 	}
@@ -150,7 +147,7 @@ class WarehouseCmd extends BaseCmd
 	private function initUI():Void
 	{
 		_panel = _widget.getChildAs("scrollPanel", VBox);
-		_bagInfo = BagUtils.bag;
+		BagUtils.bag;
 		
 		getItem();		
 		setData();
@@ -196,7 +193,7 @@ class WarehouseCmd extends BaseCmd
 		//物品需要更新	
 		_materialInfo = BagUtils.getItemArrByType(ItemType.IK2_GON_PROMOTED);
 		
-		for (equipItem in _bagInfo.itemArr)
+		for (equipItem in BagUtils.bag.itemArr)
 		{
 			//trace(equipItem.ID+" "+ equipItem.vo.Equip);
 			if (equipItem.Kind == ItemType.IK2_ARM) 
@@ -231,6 +228,7 @@ class WarehouseCmd extends BaseCmd
 		_materialPanel.visible = false;
 		//排序方式颜色品质
 		var list:Array<ItemBaseInfo> = Lambda.array(itemMap);
+		//color sort
 		list.sort(function(a, b) {
 			if (a.Color == b.Color)
 				return 0;	
@@ -239,44 +237,25 @@ class WarehouseCmd extends BaseCmd
 			else 
 				return -1;
 		});
-		for (item in list) {
-			if (item.vo != null) {
-				//trace(item.vo.Equip);
-				if (item.vo.Equip) 
-				{
-					trace(item.ID);
-					equipGoods(item.ID, true);
-					updataPad(item.ID);
-				}else{
-					equipGoods(item.ID);
-				}
-			}else {
+		for (i in 0...list.length) {
+			var item = list[i];
+			if(i==0)//default first show
+				updataPad(item.ID);
+			if (item.vo != null && item.vo.Equip) {
+				equipGoods(item.ID, true);
+			} else {
 				equipGoods(item.ID);
 			}
 		}
-		/*for (item in itemMap) {
-			if (item.vo != null) {
-				//默认显示第一条项目
-				if (item.vo.Equip) 
-				{
-					equipGoods(item.ID, true);
-					updataPad(item.ID);
-				}else{
-					equipGoods(item.ID);
-				}
-			}else {
-				equipGoods(item.ID);
-			}
-		}*/
 	}
 	/**材料栏*/
 	private function updateMaterialPanel()
 	{
-		var item:ItemBaseInfo = _bagInfo.getItem(ItemType.AdvanceMaterial_1);
+		var item:ItemBaseInfo = BagUtils.bag.getItem(ItemType.AdvanceMaterial_1);
 		_materialNum1.text = "X " + (item == null?0:item.itemNum);
-		item= _bagInfo.getItem(ItemType.AdvanceMaterial_2);
+		item= BagUtils.bag.getItem(ItemType.AdvanceMaterial_2);
 		_materialNum2.text =  "X " + (item == null?0:item.itemNum);
-		item= _bagInfo.getItem(ItemType.AdvanceMaterial_3);
+		item= BagUtils.bag.getItem(ItemType.AdvanceMaterial_3);
 		_materialNum3.text= "X " + (item == null?0:item.itemNum);
 	}
 	
@@ -297,30 +276,38 @@ class WarehouseCmd extends BaseCmd
 		}
 		return info;
 	}
-	/*更新滚动条一个项目*/
+	/**添加滚动条一个项目*/
 	private function equipGoods(itemId:Int,showDefault:Bool=false)
 	{
 		var _info:ItemBaseInfo = findItem(itemId);
 		
-		var oneGoods = UIBuilder.buildFn("ui/storehouse/OneList.xml")( );
+		var oneGoods:Widget = UIBuilder.buildFn("ui/storehouse/OneList.xml")( );
+		oneGoods.name = itemId + "";
 		oneGoods.skinName = GoodsProtoManager.instance.getColorSrc(_info.ID, 4);
 		var weaponRadio:Radio = oneGoods.getChildAs("weaponRadio", Radio);
-		if (showDefault) weaponRadio.down();
 		weaponRadio.onPress = function(e) {
 			updataPad(itemId);
 		};
+		if (showDefault) weaponRadio.down();
 		var text:Text = oneGoods.getChildAs("text", Text);
 		if(_info.vo!=null)
 			if (_info.vo.Equip || _info.vo.sortInt !=-1) 
 				text.text = "已装备";
 				
-		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + _info.ResId + '.png', x:0, y:0 } );
-		img.mouseEnabled = false;
+		var img:Bmp = UIBuilder.create(Bmp, { src:'icon/' + _info.ResId + '.png', x:0, y:0, mouseEnabled:false} );
+		//img.mouseEnabled = false;
 		
 		var weaponShow:Widget = oneGoods.getChild("weaponBmp");
 		weaponShow.addChild(img);
 		//这里还差一个品质底图颜色
 		_panel.addChild(oneGoods);
+	}
+	
+	private function updateListItem(itemId:String, equip:Bool)
+	{
+		var oneGoods:Widget = _panel.getChildAs(itemId, Widget);
+		var text:Text = oneGoods.getChildAs("text", Text);
+		text.text = equip?"已装备":"";
 	}
 	/**生成展示的XML信息映射*/
 	private function getItem() {
@@ -383,6 +370,7 @@ class WarehouseCmd extends BaseCmd
 		
 		if (tempInfo.Kind == ItemType.IK2_GON||tempInfo.Kind == ItemType.IK2_ARM) 
 		{
+			var playerInfo = PlayerUtils.getInfo();
 			var weaponLv = EquipProp.Strengthen(tempInfo, (tempInfo.vo != null)?tempInfo.vo.strLv:0);
 			var exp = _widget.getChildAs("expValue", Progress);
 			var expTxt = _widget.getChildAs("strengthenLv", Text);
@@ -432,7 +420,6 @@ class WarehouseCmd extends BaseCmd
 					_maxStrengthenBmp.visible = false;
 					_strengthenBtn.text = "升级";
 					_strengthenBtn.onPress = function(e) {
-						var playerInfo = PlayerUtils.getInfo();
 						if (playerInfo.data.GOLD<strengthenMoney) 
 						{
 							sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup } );
@@ -447,7 +434,7 @@ class WarehouseCmd extends BaseCmd
 							notifyRoot(MsgMission.Forge, 6);
 							//notify(MsgUIUpdate.UpdateModel);
 							sendMsg(MsgUI.Tips, { msg:"强化成功", type:TipsType.tipPopup } );
-							notifyRoot(MsgNet.UpdateBag, { type:2, data:tempInfo.vo } );
+							BagUtils.bag.updateGoods(tempInfo.vo);
 							/*if (_currentInfo.vo.Equip) {
 								if (_currentInfo.Kind == ItemType.IK2_ARM) 
 								{
@@ -473,13 +460,14 @@ class WarehouseCmd extends BaseCmd
 				
 				_decomposeBtn.visible = false;
 				//装备键
-				if (tempInfo.vo.Equip ||tempInfo.vo.sortInt!=-1) 
+				if (tempInfo.vo.Equip || tempInfo.vo.sortInt!=-1) 
 				{
 					if (tempInfo.Kind == ItemType.IK2_GON && tempInfo.vo.sortInt !=-1) {
 						_dressBtn.text = "卸下";
 						_dressBtn.onPress = function(e) {
-							_bagInfo.setBackup(null, tempInfo.vo.sortInt);
+							BagUtils.bag.setBackup(null, tempInfo.vo.sortInt);
 							finishChioce();
+							updateListItem(Std.string(tempInfo.ID), false);
 						}
 					}else {
 						_dressBtn.text = "已装备";
@@ -489,17 +477,22 @@ class WarehouseCmd extends BaseCmd
 					//_decomposeBtn.onPress=function (e) { sendMsg(MsgUI.Tips, { msg:"装备中,不可分解!", type:TipsType.tipPopup } ); };
 				}else 
 				{
+					//_dressBtn.refresh();
 					_dressBtn.text = "装备";
 					_dressBtn.onPress = function(e) {	
 						SfxManager.getAudio(AudioType.t001).play();
 						if (_currentInfo.Kind == ItemType.IK2_GON) {
-							changeWeapon(_currentInfo);	
-							
+							changeWeapon(_currentInfo);
 						}else if (_currentInfo.Kind == ItemType.IK2_ARM){
-							notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.ARMOR, data:_currentInfo } );
+							var item = BagUtils.bag.getItemByKeyId(playerInfo.data.ARMOR);
+							trace(playerInfo.data.ARMOR);
+							if (item!=null)
+								updateListItem(Std.string(item.ID), false);
+							updateListItem(Std.string(_currentInfo.ID), true);
+							notifyRoot(MsgNet.UpdateBag, { type:2, data:_currentInfo.vo } );
 						}
-						equipGoods(_currentInfo.ID, true);
 					}
+					_dressBtn.refresh();
 					//分解
 					/*_decomposeBtn.onPress = function (e) { 
 						sendMsg(MsgUI.Tips, { msg:"分解可获得进阶材料\n确定分解所选择的装备？", type:TipsType.buyTip, callback:callBackFun} );
@@ -513,9 +506,8 @@ class WarehouseCmd extends BaseCmd
 				_rechargeOneBtn.visible = false;
 				_decomposeBtn.text = "100钻石获得";
 				_decomposeBtn.visible = true;
-				_decomposeBtn.onPress = function (e) { 
-					var _playerInfo = PlayerUtils.getInfo();
-					if (_playerInfo.data.GEM < 100)
+				_decomposeBtn.onPress = function (e) {
+					if (playerInfo.data.GEM < 100)
 					{
 						sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
 						return;
@@ -538,11 +530,6 @@ class WarehouseCmd extends BaseCmd
 				_widget.getChildAs("item2", Text).visible = true;
 				_widget.getChildAs("description2", Text).text = tempInfo.OneClip+"/"+tempInfo.StartClip;
 				//_widget.getChildAs("description2", Text).text = tempInfo.vo.Bullets+"/"+tempInfo.vo.Clips;
-				
-				//_widget.getChildAs("item3", Text).text="特性";
-				//_widget.getChildAs("description3", Text).text = Std.string(tempInfo.Characteristic);	
-				_widget.getChildAs("item3", Text).visible = false;
-				_widget.getChildAs("description3", Text).text = "";
 			}
 			else if (tempInfo.Kind == ItemType.IK2_ARM) 
 			{
@@ -559,14 +546,12 @@ class WarehouseCmd extends BaseCmd
 				_widget.getChildAs("item2", Text).visible = false;
 				_widget.getChildAs("description2", Text).text = "";
 				
-				//_widget.getChildAs("item3", Text).text = "特性";
-				_widget.getChildAs("item3", Text).visible = false;
-				//_widget.getChildAs("description3", Text).text = Std.string(tempInfo.Characteristic);
-				_widget.getChildAs("description3", Text).text = "";
-			}	
-			
+			}
+			//_widget.getChildAs("item3", Text).text="特性";
+			//_widget.getChildAs("description3", Text).text = Std.string(tempInfo.Characteristic);	
+			_widget.getChildAs("item3", Text).visible = false;
+			_widget.getChildAs("description3", Text).text = "";
 		}
-			
 	}
 	
 	override function onClose():Void 
@@ -590,26 +575,31 @@ class WarehouseCmd extends BaseCmd
 			setChiocing(_weapon1, _weapon1.y);
 			setChiocing(_weapon2, _weapon1.y);
 		}	
-		
+		var str:String = Std.string(tempInfo.ID);
 		_startWeapon.onPress = function (e)
-		{			
+		{		
+			if (_startWeapon.text != "")
+				updateListItem(_startWeapon.text, false);
 			//notifyRoot(MsgView.NewBie,NoviceOpenType.NoviceText11);
-			var vo:GoodsVo = tempInfo.vo;
-			vo.Equip = true;
-			//trace("click _startWeapon:"+vo);
-			notifyRoot(MsgNet.UpdateBag, { type:2, data:vo } );
-			
+			updateListItem(str, true);
+			notifyRoot(MsgNet.UpdateBag, { type:2, data:tempInfo.vo } );
 			notify(MsgUIUpdate.UpdateModel);
 			finishChioce();			
 		};
 		_weapon1.onPress = function (e)
 		{
-			_bagInfo.setBackup(tempInfo, 1);
+			if (_weapon1.text != "")
+				updateListItem(_weapon1.text, false);
+			BagUtils.bag.setBackup(tempInfo, 1);
+			updateListItem(str, true);
 			finishChioce();
 		};
 		_weapon2.onPress = function (e)
 		{
-			_bagInfo.setBackup(tempInfo, 2);
+			if (_weapon2.text != "")
+				updateListItem(_weapon2.text, false);
+			BagUtils.bag.setBackup(tempInfo, 2);
+			updateListItem(str, true);
 			finishChioce();
 		};
 	}
@@ -618,6 +608,7 @@ class WarehouseCmd extends BaseCmd
 	{
 		SfxManager.getAudio(AudioType.t001).play();
 		choicing = false;
+		
 		if(_startWeapon.tip!=null)
 			_startWeapon.tip.hide();
 		setData();
@@ -627,7 +618,7 @@ class WarehouseCmd extends BaseCmd
 	}
 
 	/**选择提示效果*/
-	private function setChiocing(widget:Widget,originY:Float)
+	private function setChiocing(widget:Button,originY:Float)
 	{
 		if (!choicing) {
 			if (widget.y != originY) {
@@ -644,31 +635,29 @@ class WarehouseCmd extends BaseCmd
 			widget.tween(0.2, { y:originY }, "Quad.easeIn").onComplete(setChiocing, [widget, originY]);
 		}		
 	}
-	/*显示装备栏**/
+	/**显示装备栏**/
 	private function showWeaponPanel()
 	{
 		//trace("showWeaponPanel");	
 		_weaponPanel.visible = true;
-		var equips = _bagInfo.getEquiped();
-		var weapon = Lambda.find(equips, function(e) {
-			if (e.Kind == ItemType.IK2_GON)
-				return true;
-			return false;
-		});
+		var weapon = BagUtils.bag.getItemByKeyId(PlayerUtils.getInfo().data.WEAPON);
 		//trace(weapon.ID);
 		setWeaponBmp(weapon, _startWeapon);
-		setWeaponBmp(_bagInfo.backupWeaponArr.get(1) , _weapon1);
-		setWeaponBmp(_bagInfo.backupWeaponArr.get(2), _weapon2);
+		setWeaponBmp(BagUtils.bag.backupWeaponArr.get(1) , _weapon1);
+		setWeaponBmp(BagUtils.bag.backupWeaponArr.get(2), _weapon2);
 	}
 	/**武器图片*/
 	public function setWeaponBmp(tempInfo:ItemBaseInfo,widget:Button)
 	{
+		//remove data & bmp
 		widget.label.text = "";
 		var weaponBmp = widget.getChild("weaponBmp");
+		widget.onPress = function (e){};
 		if (weaponBmp != null) 
 			widget.removeChild(weaponBmp);
 		if (tempInfo == null) 
 			return;
+			
 		weaponBmp = UIBuilder.create(Bmp, {
 			name:"weaponBmp",
 			src:'icon/' + tempInfo.ResId + '.png', 
@@ -680,7 +669,7 @@ class WarehouseCmd extends BaseCmd
 		widget.onPress = function (e)
 		{
 			var btn:Button = e.currentTarget;
-			trace(btn.label.text);
+			//trace(btn.label.text);
 			if (btn.label.text != "")
 			{
 				var itemId = Std.parseInt(btn.label.text);
@@ -757,9 +746,9 @@ class WarehouseCmd extends BaseCmd
 	{
 		var levelUpItemId:Int = oldInfo.LevelUpItemID;
 		if (levelUpItemId == -1) return;
-		var _playerInfo:PlayerInfo = PlayerUtils.getInfo();
+		var playerInfo:PlayerInfo = PlayerUtils.getInfo();
 		var materialInfo:AdvanceInfo = AdvanceManager.instance.getProtpAdvance(levelUpItemId);
-		if (_playerInfo.data.GOLD < materialInfo.NeedGold)
+		if (playerInfo.data.GOLD < materialInfo.NeedGold)
 		{
 			sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup } );
 			return;
@@ -770,7 +759,7 @@ class WarehouseCmd extends BaseCmd
 		var materialArr:Array<Array<Int>> = desti.analysis(materialInfo.Mat);	
 		for (i in 0...materialArr.length)
 		{	
-			if (_bagInfo.getItem(materialArr[i][0])==null || _bagInfo.getItem(materialArr[i][0]).itemNum<materialArr[i][1])
+			if (BagUtils.bag.getItem(materialArr[i][0])==null || BagUtils.bag.getItem(materialArr[i][0]).itemNum<materialArr[i][1])
 			{
 				sendMsg(MsgUI.Tips, { msg:"材料不足\n分解可获得进阶材料", type:TipsType.tipPopup } );
 				return;
@@ -798,7 +787,7 @@ class WarehouseCmd extends BaseCmd
 		}
 		if (newInfo.vo.sortInt!=-1) 
 		{
-			_bagInfo.setBackup(newInfo,  newInfo.vo.sortInt);
+			BagUtils.bag.setBackup(newInfo,  newInfo.vo.sortInt);
 			showWeaponPanel();
 		}
 			

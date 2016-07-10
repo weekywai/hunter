@@ -34,7 +34,6 @@ class GainGoodsCmd extends BaseCmd
 	private function suerBtn_click(e):Void
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('popup').free();
 		dispose();
 	}
 	/**设置数据，显示获得物品*/
@@ -86,6 +85,7 @@ class GainGoodsCmd extends BaseCmd
 	}
 	override function onDispose():Void 
 	{
+		UIBuilder.get("popup").free();
 		_widget = null;
 		super.onDispose();
 	}

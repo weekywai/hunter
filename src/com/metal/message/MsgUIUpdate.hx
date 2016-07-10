@@ -19,7 +19,7 @@ package com.metal.message;
 	UpdataReturnBtn,     	//返回按钮状态更新
 	ClearMainView,     		//清除返回按钮记录
 	UpdateScore,			//更新分数
-	//UpdateUI,           	//更新界面数据
+	SkillCD,           		//技能冷却到数
 	UpdateResources,    	//更新角色资源
 	NewBieUI,           	 	//新手战斗UI
 	UpdateThumb,           	 	//更新预览 

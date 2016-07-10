@@ -1,12 +1,15 @@
 package com.haxepunk.tmx;
 
 import com.haxepunk.Entity;
+import com.haxepunk.Graphic;
 import com.haxepunk.Graphic.TileType;
 import com.haxepunk.graphics.Graphiclist;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.Tilemap;
+import com.haxepunk.masks.Circle;
 import com.haxepunk.masks.Grid;
 import com.haxepunk.masks.Masklist;
+import com.haxepunk.masks.Polygon;
 import com.haxepunk.masks.SlopedGrid;
 import com.haxepunk.tmx.TiledRenderer;
 import com.haxepunk.tmx.TmxMap;
@@ -211,6 +214,60 @@ class TmxEntity extends Entity
 	{
 		if (map.getObjectGroup(collideLayer) == null)
 		{
+			return;
+		}
+		var objectGroup:TmxObjectGroup = map.getObjectGroup(collideLayer);
+		//_objMask = [];
+		_maskEntity = [];
+		var e:Entity, debug_graphic:Graphic = null;
+		// Loop through objects
+		for (object in objectGroup.objects){ // :TmxObject
+			//_objMask.push(object.shapeMask);
+			
+			if (Std.is(object.shapeMask, Circle)) {
+#if debug
+				debug_graphic = com.haxepunk.graphics.Image.createCircle(cast(object.shapeMask, Circle).radius, 0xff0000, .6);
+#end
+				e = new Entity(0, 0, debug_graphic, object.shapeMask);
+			}else if (Std.is(object.shapeMask, Polygon)) {
+#if debug
+				debug_graphic = com.haxepunk.graphics.Image.createPolygon(cast object.shapeMask, 0xff0000, .6);
+#end
+				e = new Entity(0, 0, debug_graphic, object.shapeMask);
+			}else { // rect
+				debug_graphic = com.haxepunk.graphics.Image.createRect(object.shapeMask.width, object.shapeMask.height, 0xff0000, .6);
+#if debug
+				e = new Entity(object.x, object.y, debug_graphic);
+#else
+				e = new Entity(object.x, object.y);
+#end
+				e.setHitboxTo(debug_graphic);
+			}
+#if debug
+			debug_graphic.x = object.x;
+			debug_graphic.y = object.y;
+#end
+			
+			//trace(object.shapeMask.x +">>" + object.shapeMask.y);
+			e.type = typeName;
+			_maskEntity.push(e);
+			this.type = typeName;
+		}
+	}
+	private var _maskEntity:Array<Entity>;
+	//private var _objMask:Array<Mask>;
+	override public function added():Void 
+	{
+		super.added();
+		if (_maskEntity != null){
+			scene.addList(_maskEntity);
+		}
+	}
+	
+	public function loadObjectMask_bak(collideLayer:String = "objects", typeName:String = "solidObject")
+	{
+		if (map.getObjectGroup(collideLayer) == null)
+		{
 #if debug
 				trace("ObjectGroup '" + collideLayer + "' doesn't exist");
 #end
@@ -218,22 +275,10 @@ class TmxEntity extends Entity
 		}
 		var objectGroup:TmxObjectGroup = map.getObjectGroup(collideLayer);
 		var masks_ar = new Array<Dynamic>();
-#if debug
-		var debug_graphics_ar = new Array<Graphic>();
-#end
 		// Loop through objects
 		for(object in objectGroup.objects){ // :TmxObject
 			masks_ar.push(object.shapeMask);
-#if debug
-			debug_graphics_ar.push(object.debug_graphic);
-#end
 		}
-#if debug
-		if(debugObjectMask){
-			var debug_graphicList = new Graphiclist(debug_graphics_ar);
-			this.addGraphic(debug_graphicList);
-		}
-#end
 		var maskList = new Masklist(masks_ar);
 		this.mask = maskList;
 		this.type = typeName;
@@ -312,6 +357,7 @@ class TmxEntity extends Entity
 				_cacheMaps.remove(key);
 			}
 		}
+		_maskEntity = null;
 		_cacheMaps = null;
 		super.removed();
 	}

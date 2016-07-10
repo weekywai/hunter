@@ -4,6 +4,7 @@
  * For questions mail me at heardtheword@gmail.com
  ******************************************************************************/
 package com.haxepunk.tmx;
+import com.haxepunk.masks.Grid;
 import com.haxepunk.masks.Polygon;
 import com.haxepunk.math.Vector;
 import flash.geom.Point;
@@ -58,12 +59,11 @@ class TmxObject
 		custom = new TmxPropertySet();
 		for (node in source.nodes.properties)
 			custom.extend(node);
-
+		//trace(source.name);
 		// create shape, cannot do ellipses, only circles
 		if (source.hasNode.ellipse) {
-			//if (width == 0 || height == 0)
-				//return;
 			var radius = Std.int(((width < height)? width : height)/2);
+			//shapeMask = new com.haxepunk.masks.Circle(radius);
 			shapeMask = new com.haxepunk.masks.Circle(radius, x, y);
 
 #if debug
@@ -74,17 +74,17 @@ class TmxObject
 		}else if (source.hasNode.polygon) { // polygon
 			var points = parsePolygon(source);
 			shapeMask = new Polygon(points);
-
+			shapeMask.x = x;
+			shapeMask.y = y;
 #if debug
 			debug_graphic = com.haxepunk.graphics.Image.createPolygon(cast shapeMask, 0xff0000, .6);
 			debug_graphic.x = x;
 			debug_graphic.y = y;
 #end
 		}else { // rect
-			//if (width == 0 || height == 0)
-				//return;
 			shapeMask = new com.haxepunk.masks.Hitbox(width, height, x, y);
-
+			//trace(width + ">>" + height);
+			//trace(shapeMask);
 #if debug
 			//TODO [DEBUG]:Atlases using BitmapData will not be managed
 			width = (width == 0)?2:width;

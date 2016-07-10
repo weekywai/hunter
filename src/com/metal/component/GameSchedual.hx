@@ -1,7 +1,6 @@
 package com.metal.component ;
 import com.metal.config.EquipProp;
-import com.metal.config.FilesType;
-import com.metal.config.PlayerPropType;
+import com.metal.config.PlayerPropType.PlayerProp;
 import com.metal.config.SfxManager;
 import com.metal.config.TableType;
 import com.metal.enums.BagInfo;
@@ -15,18 +14,16 @@ import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.network.RemoteSqlite;
 import com.metal.proto.ProtoUtils;
+import com.metal.proto.impl.GuideManager;
 import com.metal.proto.impl.MapStarInfo;
 import com.metal.proto.impl.NewsInfo;
 import com.metal.proto.impl.PlayerInfo;
-import com.metal.proto.manager.GoodsProtoManager;
 import com.metal.proto.manager.PlayerModelManager;
 import com.metal.scene.GameFactory;
 import com.metal.utils.FileUtils;
-import com.metal.utils.LoginFileUtils;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.Component;
 import de.polygonal.core.sys.SimEntity;
-import de.polygonal.core.time.Timebase;
 import haxe.ds.IntMap;
 
 using com.metal.proto.impl.ItemProto;
@@ -55,8 +52,6 @@ class GameSchedual extends Component
 	
 	private var _factory:GameFactory;
 	
-	/**新手帮助记录*/
-	public var newbieList:Array<Int> ;
 	private var _isInitData:Bool = false;
 	
 	public function new() 
@@ -122,7 +117,6 @@ class GameSchedual extends Component
 		//GameProcess.NotifyUI(MsgUIUpdate.UpdateUI);
 		playerInfo = FileUtils.getPlayerInfo();
 		trace("init playerInfo:" +playerInfo);
-		setNewBie();
 	}
 	
 	/**更新角色属性 并存储*/
@@ -307,14 +301,13 @@ class GameSchedual extends Component
 	/**新手引导*/
 	private function cmd_NewBie(userData:Dynamic):Void
 	{
-		//return;
+		return;
 		/**是否已打开*/
-		if(LoginFileUtils.Id!="null")
-			if (!Lambda.has(newbieList, userData)) {
-				GameProcess.SendUIMsg(MsgUI2.GameNoviceCourse, userData);
-				newbieList.push(userData);
-				LoginFileUtils.saveNewBie(newbieList);
-			}
+		if (!GuideManager.instance.checkGuide(userData)) {
+			GameProcess.SendUIMsg(MsgUI2.GameNoviceCourse, userData);
+			GameProcess.NotifyUI(MsgUI2.GameNoviceCourse, userData);
+			GuideManager.instance.setGuide(userData);
+		}
 	}
 	private function saveInfo(data:Dynamic)
 	{
@@ -322,12 +315,5 @@ class GameSchedual extends Component
 		var o = { };
 		Reflect.setProperty(o, Std.string(data.type), data.data);
 		RemoteSqlite.instance.updateProfile(TableType.P_Info, o);
-	}
-	public function setNewBie()
-	{
-		//return newbieList = [1];
-		//if(LoginFileUtils.Id!="null")
-		newbieList = LoginFileUtils.getNewBie();//记录已打开过的新手界面
-		trace("before_newbieList="+newbieList);
 	}
 }

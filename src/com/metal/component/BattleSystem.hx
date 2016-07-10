@@ -233,7 +233,7 @@ class BattleSystem extends Component
 		
 		_talks = new IntMap();
 		if (_duplicateInfo.DuplicateType != 9) {
-			if(_duplicateInfo.BossFeatures!=""){
+			if (_duplicateInfo.BossFeatures!=null && _duplicateInfo.BossFeatures != "") {
 				var ary = _duplicateInfo.BossFeatures.split("|");
 				for (j in 0...ary.length) 
 				{

@@ -4,6 +4,7 @@ import com.metal.config.SfxManager;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgUI;
 import com.metal.message.MsgUI2;
+import openfl.events.Event;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
 
@@ -33,8 +34,7 @@ class StopGame extends BaseCmd
 	{
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent("popup").free();
-		
+		UIBuilder.get("popup").free();
 		dispose();
 	}
 	/*退出游戏*/
@@ -42,16 +42,16 @@ class StopGame extends BaseCmd
 	{
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
+		UIBuilder.get("popup").free();
 		var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 		//trace("" + battle.currentStage().DuplicateType);
-		_widget.getParent("popup").free();
 		if (battle.currentStage().DuplicateType == 9)
 		{
 			sendMsg(MsgUI.BattleResult, battle.currentStage());//胜利界面
 		}else
 		{
 			sendMsg(MsgUI.BattleFailure);
-			
+			trace("MsgUI.BattleFailure" + owner);
 		}
 		notifyRoot(MsgStartup.Finishbattle);
 		sendMsg(MsgUI2.Control, false);

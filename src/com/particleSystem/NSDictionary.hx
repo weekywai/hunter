@@ -23,7 +23,7 @@ class NSDictionary
 		var dictstring = Assets.getText(path);
 
 		var dict = new NSDictionary();
-			dict.parse(Xml.parse(dictstring).firstElement());
+		dict.parse(Xml.parse(dictstring).firstElement());
 
 		dict.logAll();
 

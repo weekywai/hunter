@@ -59,19 +59,26 @@ class EffectText extends EffectEntity
 			//Actuate.transform (_bmpTxt, 0.4).color (0);
 			Actuate.tween(_bmpTxt, 0.4, { size:50 } ).ease (Elastic.easeOut).onUpdate(function() {
 				//trace(_bmpTxt.scaleX+"-"+_bmpTxt.scale);
+				if (isDisposed) return;
 				_bmpTxt.x = -_bmpTxt.textWidth*_bmpTxt.fontScale*0.2;
 				_bmpTxt.y = -_bmpTxt.textHeight*_bmpTxt.fontScale*0.4;
 			});
 			//Actuate.timer(0.5).onComplete (recycle);
-			Actuate.tween(_bmpTxt, 0.5, { alpha:0 }, false).delay(0.4).onComplete(recycle);
+			Actuate.tween(_bmpTxt, 0.5, { alpha:0 }, false).delay(0.4).onComplete(onComplete);
 		}else {
 			_bmpTxt.color = 0xFF0000;
-			Actuate.timer(0.8).onComplete (recycle);
+			Actuate.timer(0.8).onComplete (onComplete);
 			//Actuate.tween(_bmpTxt,0.8, {}).onComplete(function() {
 				//recycle();
 			//});
 		}
 		addGraphic(_bmpTxt);
+	}
+	private function onComplete()
+	{
+		if (isDisposed)
+			return;
+		recycle();
 	}
 	override function recycle():Void 
 	{

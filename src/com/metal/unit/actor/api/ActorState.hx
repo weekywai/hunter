@@ -40,7 +40,7 @@ class ActorState
 	public static inline var DoubleJump:Int = 3;
 	public static inline var Move:Int = 4;
 	public static inline var Relax:Int = 5;
-	public static inline var Squat:Int = 6;
+	public static inline var Freeze:Int = 6;
 	
 	// 以上状态可以射击
 	public static inline var Enter:Int = 7;

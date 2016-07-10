@@ -61,7 +61,6 @@ class RechargeCmd extends BaseCmd
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
 		
-		_widget.getParent("popup").free();
 		dispose();
 	}
 	/*退出购买*/
@@ -69,8 +68,7 @@ class RechargeCmd extends BaseCmd
 	{
 		GameProcess.instance.pauseGame(false);
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent("popup").free();
-		
+		UIBuilder.get("popup").free();
 		dispose();
 	}
 }

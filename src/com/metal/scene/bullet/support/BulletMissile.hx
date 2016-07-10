@@ -21,8 +21,8 @@ import openfl.geom.Point;
 class BulletMissile extends BulletEntity
 {
 
-	private var _bullet:Image;
-	private var _bullet2:TextrueSpritemap;
+	private var _bulletImg:Image;
+	private var _bulletTex:TextrueSpritemap;
 	private var _bullectAngle:Float;
 	private var _speed:Int;
 	/**运动轨迹辅助参数**/
@@ -48,12 +48,12 @@ class BulletMissile extends BulletEntity
 
 	override private function onDispose():Void 
 	{
-		if(_bullet!=null)
-			_bullet.destroy();
-		_bullet = null;
-		if(_bullet2!=null)
-			_bullet2.destroy();
-		_bullet2 = null;
+		if(_bulletImg!=null)
+			_bulletImg.destroy();
+		_bulletImg = null;
+		if(_bulletTex!=null)
+			_bulletTex.destroy();
+		_bulletTex = null;
 		_offset = false;
 		super.onDispose();
 	}
@@ -75,51 +75,55 @@ class BulletMissile extends BulletEntity
 	
 	private function imageBullet():Void
 	{
-		if (_bullet != null)
-			_bullet.destroy();
-		_bullet = new Image(ResPath.getBulletRes(info.img));
-		_bullet.centerOrigin();
-		var box = Image.createCircle(Std.int(_bullet.height * 0.25));
+		if (_bulletImg != null)
+			_bulletImg.destroy();
+		_bulletImg = new Image(ResPath.getBulletRes(info.img));
+		_bulletImg.centerOrigin();
+		var box = Image.createCircle(Std.int(_bulletImg.height * 0.25));
 		box.centerOO();
-		box.originX  += (_bullet.width / 2);
+		box.originX  += (_bulletImg.width / 2);
 		setHitboxTo(box);
-		graphic = _bullet; 
+		graphic = _bulletImg; 
 	}
 	
 	private function xmlBullet():Void
 	{
 		var eff:TextureAtlasFix = TextureAtlasFix.loadTexture(ResPath.getBulletRes(info.img));
-		if (_bullet2 == null){
-			_bullet2 = new TextrueSpritemap(eff);
+		if (_bulletTex == null){
+			_bulletTex = new TextrueSpritemap(eff);
 		}else {
-			_bullet2.resetTexture(eff);
+			_bulletTex.resetTexture(eff);
+			_bulletTex.x = _bulletTex.y = 0;
 		}
-		_bullet2.add("blast", eff.getReginCount(), 25);
+		_bulletTex.add("blast", eff.getReginCount(), 25);
 		//_bullet2.animationEnd.add(onComplete);
 		if (eff.ox != 0 || eff.oy != 0) {
-			_bullet2.originX = eff.ox ;// - _bullet2.width * 0.5;
-			_bullet2.originY = eff.oy;
-			_bullet2.scale = eff.scale;
+			_bulletTex.originX = eff.ox ;// - _bullet2.width * 0.5;
+			_bulletTex.originY = eff.oy;
+			_bulletTex.scale = eff.scale;
 			_offset = true;
 		}else {
-			_bullet2.centerOrigin();
+			_bulletTex.centerOrigin();
 		}
-		graphic = _bullet2;
-		var box = Image.createCircle(Std.int(_bullet2.height * 0.15));
-		if (eff.ox != 0 || eff.oy != 0) {
-			box.originX = eff.ox;// -_bullet2.width * 0.5;
-			box.originY = eff.oy;// -_bullet2.height * 0.5;
-		}else {
+		graphic = _bulletTex;
+		var box = Image.createCircle(Std.int(_bulletTex.height * 0.15));
+		//if (eff.ox != 0 || eff.oy != 0) {
+			//box.originX = eff.ox;// -_bullet2.width * 0.5;
+			//box.originY = eff.oy;// -_bullet2.height * 0.5;
+		//}else {
 			box.centerOO();
-		}
+		//}
+		//_box = box;
 		//trace("eff.ox: "+eff.ox);
 		//trace("eff.oy: "+eff.oy);
 		setHitboxTo(box);
-		_bullet2.play("blast", true);
+		_bulletTex.play("blast", true);
+		//addGraphic(_box);
 	}
 	
 	override public function start(req:BulletRequest):Void 
 	{
+		//trace("missile");
 		super.start(req);
 		x = req.x ;// - HXP.camera.x;// - _bullet2.width;
 		y = req.y ;// + HXP.camera.y;// - _bullet2.height;
@@ -130,21 +134,14 @@ class BulletMissile extends BulletEntity
 		_bullectAngle = req.bulletAngle;
 		initRunInfo(dirKey);
 		t0 = 0;
-		//_bullet.centerOrigin();
-		//_bullet.centerOO();
-		if (_bullet != null) {
-			_bullet.centerOrigin();
-			_bullet.angle = _angle;
+		if (_bulletImg != null) {
+			_bulletImg.centerOrigin();
+			_bulletImg.angle = _angle;
 		}
-		if (_bullet2 != null) {
-			var tempA:Float = dirKey?65:155;
-			_bullet2.angle = tempA;
-			if (_offset) 
-				_bullet2.x -= dirKey?_bullet2.width * 0.5:-_bullet2.width * 0.5;
-			else
-				_bullet2.centerOO();
+		if (_bulletTex != null) {
+			_bulletTex.angle = dirKey?65:155;
 		}
-		SfxManager.getAudio(AudioType.Missile).play(0.5);
+		SfxManager.getAudio(AudioType.Missile).play(0.4);
 	}
 	override public function update():Void 
 	{
@@ -169,11 +166,11 @@ class BulletMissile extends BulletEntity
 		y = _fightPoint.y + (( (t0 * -ySpeed)) + (((g * t0) * t0) / 2));
 		if (dirKey) 
 		{
-			_bullet2.angle = Math.atan(( ySpeed - g * t0) / Math.abs(xSpeed)) / Math.PI * 180 ;
+			_bulletTex.angle = Math.atan(( ySpeed - g * t0) / Math.abs(xSpeed)) / Math.PI * 180 ;
 		}else 
 		{
 			//水平翻转
-			_bullet2.angle =(180- Math.atan(( ySpeed - g * t0) / Math.abs(xSpeed)) / Math.PI * 180 );
+			_bulletTex.angle =(180- Math.atan(( ySpeed - g * t0) / Math.abs(xSpeed)) / Math.PI * 180 );
 		}
 		//trace("_bullet2.angle: "+_bullet2.angle);
 		//trace("_bullet2.originX: "+_bullet2.originX);
@@ -214,7 +211,8 @@ class BulletMissile extends BulletEntity
 	{
 		var vc:Float, i:Int, e:Entity;
 		
-		if (collideEntity != null) return;
+		if (collideEntity != null)
+			return;
 		
 		if ((e = collideTypes(_collideTypes, x, y)) != null) {
 			if(e.type == UnitModelType.Solid ||e.type == UnitModelType.Player || e.type == UnitModelType.Vehicle){
@@ -229,4 +227,9 @@ class BulletMissile extends BulletEntity
 		}
 	}
 	
+	override function commitEffect():Void 
+	{
+		HXP.screen.shake(3, 0.2);
+		super.commitEffect();
+	}
 }

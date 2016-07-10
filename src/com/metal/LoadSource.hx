@@ -32,7 +32,6 @@ import com.metal.proto.manager.SkillManager;
 import com.metal.proto.manager.TaskManager;
 import com.metal.proto.manager.QuestsManager;
 import com.metal.proto.manager.TreasuerHuntManager;
-import com.metal.utils.LoginFileUtils;
 import openfl.Assets;
 
 
@@ -47,8 +46,8 @@ class LoadSource
 	public var isLoaded(default, null):Bool = false;
 	public function new() 
 	{
-		_praseProto = new Map();
-		/*_praseProto.set("prop_actor", ActorPropertyManager);
+		/*_praseProto = new Map();
+		_praseProto.set("prop_actor", ActorPropertyManager);
 		_praseProto.set("prop_item", GoodsProtoManager);
 		_praseProto.set("prop_quest", QuestsManager);
 		_praseProto.set("prop_stage", DuplicateManager);

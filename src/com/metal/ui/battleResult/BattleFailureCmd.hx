@@ -24,14 +24,8 @@ class BattleFailureCmd extends BaseCmd
 	{
 		super.onInitComponent();
 		SfxManager.getAudio(AudioType.t001).play();
-		_widget = UIBuilder.get("failure");
-		setData();
+		_widget = UIBuilder.get("failture");
 		_widget.getChildAs("suerBtn", Button).onRelease = suerBtn_click;
-	}
-	/*设置数据*/
-	private function setData():Void
-	{
-		
 	}
 	
 	private function suerBtn_click(e):Void

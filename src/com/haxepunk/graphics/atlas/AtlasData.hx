@@ -8,7 +8,6 @@ import flash.display.Sprite;
 import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.geom.Matrix;
-import openfl.display.Tilesheet;
 
 /**
  * Abstract representing either a `String`, a `AtlasData` or a `BitmapData`.

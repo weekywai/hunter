@@ -12,8 +12,8 @@ import com.metal.message.MsgUI2;
 import com.metal.message.MsgUIUpdate;
 import com.metal.message.MsgView;
 import com.metal.player.utils.PlayerUtils;
+import com.metal.proto.impl.GuideManager;
 import com.metal.ui.BaseCmd;
-import com.metal.utils.LoginFileUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Button;
@@ -90,6 +90,7 @@ class TopViewCmd extends BaseCmd
 		//时装	
 		_widget.getChildAs("rightBtn", Button).onPress = function(e)
 			{
+				trace("click fashion");
 				latestFlag = false;
 				if (!latestFlag)
 				{
@@ -108,11 +109,9 @@ class TopViewCmd extends BaseCmd
 		_widget.getChildAs("BuyGoldBtn", Button).onPress = BuyGoldBtn_click;
 		_widget.getChildAs("huntBtn", Button).onPress = huntBtn_click;
 		_widget.getChildAs("payBtn", Button).onPress = payBtn_click;
-		if (LoginFileUtils.Id != "null"){
-			var newbieList:Array<Int> = GameProcess.instance.getComponent(GameSchedual).newbieList;
-			if (!Lambda.has(newbieList, NoviceOpenType.NoviceText5))
-				_widget.getChildAs("hintBtn", Button).visible = true;
-		}
+		
+		if (!GuideManager.instance.checkGuide(NoviceOpenType.NoviceText5))
+			_widget.getChildAs("hintBtn", Button).visible = true;
 	}
 	private function onBackBtn(e)
 	{ 
@@ -181,6 +180,7 @@ class TopViewCmd extends BaseCmd
 	/**打开购买宝箱界面*/
 	public function huntBtn_click(e):Void
 	{
+		trace("huntBtn_click");
 		sendMsg(MsgUI.TreasureHunt);
 		UpdataFashionBtn(false);
 		notifyRoot(MsgView.NewBie, NoviceOpenType.NoviceText5);

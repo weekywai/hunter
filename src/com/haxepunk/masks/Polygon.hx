@@ -118,6 +118,7 @@ class Polygon extends Hitbox
 	 */
 	override private function collideHitbox(hitbox:Hitbox):Bool
 	{
+		//trace("collideHitbox");
 		var offset:Float,
 			offsetX:Float = _parent.x + _x - hitbox._parent.x,
 			offsetY:Float = _parent.y + _y - hitbox._parent.y;

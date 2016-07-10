@@ -71,26 +71,29 @@ class BagpackSystem extends Component
 		switch(userData.type) {
 			case 0: _bagData.removeGoods(userData.data);
 			case 1: _bagData.addGoods(userData.data);
-			case 2:	
-				var vo:GoodsVo = userData.data;
-				updateInfo(vo);
+			case 2:	updateEquip(userData);
 		}
 	}
-	private function updateInfo(equip:GoodsVo)
+	private function updateEquip(userData:Dynamic)
 	{
+		var equip:GoodsVo = userData.data;
 		var keyId:Int=0, propType:PlayerProp =null;
 		if (equip.Kind == ItemType.IK2_GON) {
-			keyId = playerInfo.data.WEAPON;
+			if(equip.keyId!=playerInfo.data.WEAPON)
+				keyId = playerInfo.data.WEAPON;
 			propType = PlayerProp.WEAPON;
 		}else if (equip.Kind == ItemType.IK2_ARM) {
-			keyId = playerInfo.data.ARMOR;
+			if(equip.keyId!=playerInfo.data.ARMOR)
+				keyId = playerInfo.data.ARMOR;
 			propType = PlayerProp.ARMOR;
 		}
+		
 		var item = bagData.getItemByKeyId(keyId);
-		if (item == null)
-			return;
-		item.vo.Equip = false;
-		_bagData.updateGoods(item.vo); 	//RemoteSqlite.instance.updateProfile(TableType.P_Goods, { Equip:0 }, { keyId:playerInfo.data.WEAPON } );
+		if (item != null){
+			item.vo.Equip = false;
+			_bagData.updateGoods(item.vo); 	//RemoteSqlite.instance.updateProfile(TableType.P_Goods, { Equip:0 }, { keyId:playerInfo.data.WEAPON } );
+		}
+		equip.Equip = true;
 		_bagData.updateGoods(equip); 	//RemoteSqlite.instance.updateProfile(TableType.P_Goods, { Equip:1 }, { keyId:equip.keyId } );
 		notify(MsgNet.UpdateInfo, { type:propType, data:bagData.getItemByKeyId(equip.keyId) } );
 		GameProcess.NotifyUI(MsgUIUpdate.Warehouse, equip.ID);

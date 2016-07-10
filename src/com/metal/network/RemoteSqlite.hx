@@ -38,12 +38,12 @@ class RemoteSqlite
 						sys.io.File.saveBytes(userPath, bytes);
 				});*/
 				var b = Assets.getBytes("proto/null.db");
-				trace(b.length);
+				
 				sys.io.File.saveBytes(userPath, b);
 			}
 		#else
 			filePath = "proto/proto.db";
-			userPath = "proto/null";
+			userPath = "proto/null.db";
 		#end
 		
 		//trace(Assets.getBytes("proto/a").length);

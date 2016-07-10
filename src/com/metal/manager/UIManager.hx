@@ -21,7 +21,7 @@ import com.metal.ui.latestFashion.LatestFahionCmd;
 import com.metal.ui.main.MainCmd;
 import com.metal.ui.main.TopViewCmd;
 import com.metal.ui.news.NewsCmd;
-import com.metal.ui.noviceGuide.NoviceCourseCmd;
+import com.metal.ui.noviceGuide.GuideCmd;
 import com.metal.ui.popup.PopupCmd;
 import com.metal.ui.popup.ResurrectionCmd;
 import com.metal.ui.popup.StopGame;
@@ -42,6 +42,7 @@ import openfl.system.System;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Floating;
 import ru.stablex.ui.widgets.MainStack;
+import ru.stablex.ui.widgets.Widget;
 
 enum TipsType
 {
@@ -49,7 +50,7 @@ enum TipsType
 	tipPopup;
 	onBattle;
 	overcome;
-	failure;
+	failture;
 	buyTip;
 	resurrection;
 	gainGoods;
@@ -91,8 +92,7 @@ class UIManager extends SimEntity
 		UIBuilder.regClass('com.metal.GameProcess');
 		UIBuilder.regClass('com.metal.message.MsgUI');
 		UIBuilder.regClass('com.metal.config.SfxManager');
-		UIBuilder.regClass('com.metal.config.AudioType');
-		
+		UIBuilder.regClass('com.metal.config.SfxManager.AudioType');
 		
 		//注册自定义事件
 		UIBuilder.regEvent('textChange',  'openfl.events.Event.CHANGE',                        'openfl.events.Event');
@@ -103,13 +103,14 @@ class UIManager extends SimEntity
 		UIBuilder.init('ui/defaults.xml');
 		UIBuilder.regSkins('ui/skins.xml');
 		
-		//_root = UIBuilder.create(Widget, { id:"UIRoot", w:1280, h:720 } );
+		//_root = UIBuilder.create(Floating, { id:"UIRoot", w:1280, h:720 } );
 		//root.addChild(_root);
-		
+		//UIBuilder.save(root);
 		if (_root == null){
 			_root = UIBuilder.buildFn('ui/root.xml')();
 			_root.show();
 		}
+		
 		_popup = UIBuilder.buildFn('ui/alert.xml');
 		_alert = UIBuilder.buildFn('ui/alertSystem.xml');
 		_loading = UIBuilder.buildFn('ui/loading.xml')({msg:"加载中"});
@@ -118,9 +119,6 @@ class UIManager extends SimEntity
         UIBuilder.buildFn('ui/index.xml')().show();
 		addComponent(new LoginRegistCmd());
 		addComponent(new DialogueCmd());
-		#if android
-		Input.onAndroidBack = onAndroidBack;
-		#end
 		
 	}
 	override function onMsg(type:Int, sender:Entity) 
@@ -206,7 +204,7 @@ class UIManager extends SimEntity
 	private function cmd_GameNoviceCourse(data:Dynamic):Void
 	{
 		//trace("cmd_GameNoviceCourse");
-		addPanel(NoviceCourseCmd);
+		addPanel(GuideCmd);
 	}
 	/**闯关*/
 	private function cmd_Through(data:Dynamic):Void
@@ -310,7 +308,7 @@ class UIManager extends SimEntity
 	/**失败结算界面*/
 	private function cmd_BattleFailure(data:Dynamic):Void
 	{
-		cmd_Tips( { type:TipsType.failure, msg:"" } );
+		cmd_Tips( { type:TipsType.failture, msg:"" } );
 		addPanel(BattleFailureCmd);
 	}
 	/*买活*/
@@ -405,6 +403,7 @@ class UIManager extends SimEntity
 		
 		if (data.callback != null){
 			var tipCmd:TipCmd = new TipCmd();
+			tipCmd.initComponent(this);
 			tipCmd.callbackFun.addOnce(data.callback);
 		}
 	}
@@ -449,18 +448,24 @@ class UIManager extends SimEntity
 	
 	private function exitApp(e:Bool)
 	{
-		if (e)
+		trace("exitApp"+e);
+		if (e){
+			trace("exitApp");
+			Input.closeApp = true;
 			System.exit(0);
+		}
+		else{
+			
+		}
 	}
 	
 	override function onTick(dt:Float, post:Bool):Void 
 	{
 		super.onTick(dt, post);
-		#if debug
-		if (Input.check(Key.BACKSPACE)) {
-			trace("press");
+		//#if debug
+		if (Input.check(Key.ESCAPE)) {
 			onAndroidBack() ;
 		}
-		#end
+		//#end
 	}
 }

@@ -2,6 +2,7 @@ package com.haxepunk;
 
 import com.haxepunk.graphics.atlas.Atlas;
 import com.haxepunk.graphics.Image;
+import com.metal.GameProcess;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -152,9 +153,10 @@ class Screen
 			var sx:Int = Std.random(_shakeMagnitude*2+1) - _shakeMagnitude;
 			var sy:Int = Std.random(_shakeMagnitude*2+1) - _shakeMagnitude;
 
-			x += sx - _shakeX;
-			y += sy - _shakeY;
-
+			//x += sx - _shakeX;
+			//y += sy - _shakeY;
+			GameProcess.gameStage.x += _shakeX;
+			GameProcess.gameStage.y += _shakeX;
 			_shakeX = sx;
 			_shakeY = sy;
 
@@ -163,8 +165,10 @@ class Screen
 		}
 		else if (_shakeX != 0 || _shakeY != 0)
 		{
-			x -= _shakeX;
-			y -= _shakeY;
+			//x -= _shakeX;
+			//y -= _shakeY;
+			GameProcess.gameStage.x = 0;
+			GameProcess.gameStage.y = 0;
 			_shakeX = _shakeY = 0;
 		}
 	}

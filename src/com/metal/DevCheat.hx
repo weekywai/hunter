@@ -35,9 +35,6 @@ class DevCheat
 	private function init()
 	{
 		DC.init();
-		#if !debug
-		DC.setProfilerKey(192);
-		#end
 		//DC.showConsole();
 		//DC.showMonitor();
 		DC.registerCommand(cmd_GM, "GM", "", "Type GM [command-name] for more info");

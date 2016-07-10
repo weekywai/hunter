@@ -9,6 +9,7 @@ import com.metal.enums.RunVo;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgStartup;
 import com.metal.message.MsgView;
+import com.metal.particle.Explosion;
 import com.metal.proto.impl.MapRoomInfo;
 import com.metal.proto.manager.MapInfoManager;
 import com.metal.scene.board.impl.GameBoard;
@@ -24,7 +25,6 @@ import openfl.tiled.TiledMap;
  */
 class ViewBoard extends Component
 {
-	private var _board:GameBoard;
 	private var _curMap:MapVo;
 	private var _bgSound:Dynamic;
 	#if spriteTileMap
@@ -35,17 +35,10 @@ class ViewBoard extends Component
 		super();
 	}
 	
-	override function onInitComponent():Void 
-	{
-		super.onInitComponent();
-		_board = owner.getComponent(GameBoard);
-	}
-	
 	override function onDispose():Void 
 	{
 		_bgSound = null;
 		super.onDispose();
-		_board = null;
 		_curMap = null;
 		HXP.scene.removeAll();
 		#if spriteTileMap
@@ -170,13 +163,11 @@ class ViewBoard extends Component
 		}
 	}
 	
-	
 	public function stopLayer():Void
 	{
 		for (total in 0...MapVo.nLen) {
 			_curMap.getEntityByLayer(total).stopRunLayer();
 		}
 	}
-	
 	
 }

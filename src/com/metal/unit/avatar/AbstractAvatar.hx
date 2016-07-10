@@ -1,6 +1,7 @@
 package com.metal.unit.avatar;
 
 import com.haxepunk.Graphic;
+import com.haxepunk.HXP;
 import com.haxepunk.Mask;
 import com.haxepunk.Tween.TweenType;
 import com.haxepunk.tweens.TweenEvent;
@@ -16,6 +17,7 @@ import com.metal.unit.render.ViewDisplay;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.MsgCore;
 import de.polygonal.core.sys.SimEntity;
+import motion.Actuate;
 
 /**
  * ...
@@ -59,21 +61,30 @@ class AbstractAvatar extends ViewDisplay
 	public function setCallback(fun:Dynamic) { }
 	public function startChangeColor():Void
 	{
-		if (_colorT != null)
-			_colorT.start();
+		if (_colorT != null) {
+			//_colorT.start();
+			
+		}
+		if (_model != null) {
+			_model.color = 0xFF0000;
+			Actuate.tween(_model, 0.1, {} ).onComplete(function(){
+				if (isDisposed) return;
+				_model.color = _recolor;
+			});
+		}
 	}
 	//设置受击闪红
 	private function changeColor(tune:Int = 0xff0000):Void
 	{
-		var _tuneColor:Int = tune;
 		_recolor = _model.color;
 		_colorT = new ColorTween(TweenType.Persist);
-		_colorT.tween(0.1, _recolor, _tuneColor, 0, 0.6);
+		/*_colorT.tween(0.3, _recolor, tune, 0, 0.6);
 		_colorT.addEventListener(TweenEvent.FINISH, function(e){
-			_colorT.color = -1;
+			_colorT.color = _recolor;
+			//_colorT.color = -1;
 		});
 		_colorT.cancel();
-		addTween(_colorT);
+		addTween(_colorT);*/
 	}
 	
 	//{Notify

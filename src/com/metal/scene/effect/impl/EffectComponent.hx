@@ -70,8 +70,8 @@ class EffectComponent extends Component
 	
 	private function cmd_recycle(userData:Dynamic):Void
 	{
-		var effect:IEffect = userData;
-		var r = _recycles.remove(effect);
+		//var effect:IEffect = userData;
+		var r = _recycles.remove(userData);
 		//trace("create Effect " + r);
 	}
 }

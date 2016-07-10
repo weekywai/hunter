@@ -3,6 +3,7 @@ package com.haxepunk;
 import com.haxepunk.Entity;
 import com.haxepunk.Tweener;
 import com.haxepunk.graphics.atlas.AtlasData;
+import haxe.ds.IntMap;
 import openfl.display.Sprite;
 import openfl.geom.Point;
 
@@ -46,6 +47,7 @@ class Scene extends Tweener
 		_classCount = new Map<String,Int>();
 		_recycled = new Map<String,Entity>();
 		_entityNames = new Map<String,Entity>();
+		_mNextEntityId = 0;
 	}
 
 	/**
@@ -308,7 +310,7 @@ class Scene extends Tweener
 	{
 		var e:Entity;
 		var keys = _recycled.keys();
-		/*for (k in keys)
+		for (k in keys)
 		{
 			e = _recycled.get(k);
 			if (e == null) {
@@ -316,11 +318,11 @@ class Scene extends Tweener
 				continue;
 			}
 			clearRecycled(Type.getClass(e));
-		}*/
-		for (e in _recycled) 
+		}
+		/*for (e in _recycled) 
 		{
 			clearRecycled(Type.getClass(e));
-		}
+		}*/
 	}
 
 	/**
@@ -1039,6 +1041,7 @@ class Scene extends Tweener
 				_recycled.set(e._class, e);
 			}
 			HXP.clear(_recycle);
+			//trace(Lambda.count(_recycled));
 		}
 	}
 
@@ -1208,4 +1211,7 @@ class Scene extends Tweener
 
 	private var _recycled:Map<String,Entity>;
 	private var _entityNames:Map<String,Entity>;
+	
+	//private var _eGroup:IntMap;
+	private var _mNextEntityId:Int;
 }

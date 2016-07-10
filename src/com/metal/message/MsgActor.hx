@@ -24,11 +24,11 @@ package com.metal.message;
 	Escape,				//逃跑
 	Victory,			//胜利
 	Destroying,			//死亡动作
-	OpenStage,          //更新副本开启
 	Destroy,			//完成死亡
 	Soul,				//灵魂状态
 	Respawn,            //复活
 	AttackStatus,       //攻击状态 
-	Enter				//进场
+	Enter,				//进场
+	//Fall				//跌落坑
 ]))
 class MsgActor{}

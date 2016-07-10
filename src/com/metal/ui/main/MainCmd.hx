@@ -12,7 +12,7 @@ import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.impl.StrengthenInfo;
 import com.metal.proto.manager.ModelManager;
 import com.metal.ui.BaseCmd;
-import com.metal.ui.noviceGuide.NoviceCourseCmd;
+import com.metal.ui.noviceGuide.GuideCmd;
 import com.metal.utils.BagUtils;
 import de.polygonal.core.event.IObservable;
 import ru.stablex.ui.UIBuilder;
@@ -35,7 +35,7 @@ class MainCmd extends BaseCmd
 	
 	private var _model:SpriteActor;
 	private var _mainTLView:Widget;
-	private var novCmd:NoviceCourseCmd ;
+	private var novCmd:GuideCmd ;
 	public static var main_cmd:MainCmd = new MainCmd();
 	public function new() 
 	{

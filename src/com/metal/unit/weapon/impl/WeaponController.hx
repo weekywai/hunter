@@ -5,6 +5,7 @@ import com.metal.config.MsgType.GameMsgType;
 import com.metal.config.PlayerPropType;
 import com.metal.message.MsgPlayer;
 import com.metal.message.MsgUI2;
+import com.metal.message.MsgUIUpdate;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.proto.ProtoUtils;
 import com.metal.proto.impl.ItemProto.EquipInfo;
@@ -144,7 +145,7 @@ class WeaponController extends Component
 			if (mp < 0) {
 				trace("changeSkill");	
 				GameProcess.SendUIMsg(MsgUI2.ScreenMessage, GameMsgType.SkillFreeze);
-				GameProcess.SendUIMsg(MsgUI2.SkillCD, {time:0, id:userData});
+				GameProcess.NotifyUI(MsgUIUpdate.SkillCD, {time:0, id:userData});
 				return;
 			}
 		}
@@ -181,7 +182,7 @@ class WeaponController extends Component
 		//trace(userData+">>"+isItem);
 		if(Main.config.get("console")=="true"){
 			cast(weapon, BaseSkill).isItem = true;
-			GameProcess.SendUIMsg(MsgUI2.SkillCD, {time:0, id:userData});
+			GameProcess.NotifyUI(MsgUIUpdate.SkillCD, {time:0, id:userData});
 		}else {
 			cast(weapon, BaseSkill).isItem = isItem;
 		}

@@ -46,7 +46,6 @@ class BagUtils
 		return typeChinaArr[type];
 	}
 	
-	
 	/**创建模拟数据**/
 	public static function creatTestData():Void
 	{

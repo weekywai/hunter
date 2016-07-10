@@ -165,7 +165,7 @@ class PlayerStat extends Component implements IStat
 		//注意备用子弹是否无限
 		if (weapon.vo.Bullets<userData) 
 		{
-			if (weapon.vo.Clips>0) 
+			if (weapon.vo.Clips>0 || weapon.ClipCost==0) 
 			{
 				//通知换弹夹动作
 				notify(MsgPlayer.Reload);
@@ -176,14 +176,19 @@ class PlayerStat extends Component implements IStat
 	private function cmd_reloadClip(userData:Dynamic)
 	{
 		//注意备用子弹是否无限
-		if (weapon.vo.Clips >= weapon.OneClip - weapon.vo.Bullets) 
-		{
-			weapon.vo.Clips -= weapon.OneClip - weapon.vo.Bullets;
+		if(weapon.ClipCost!=0){
+			if (weapon.vo.Clips >= weapon.OneClip - weapon.vo.Bullets) 
+			{
+				weapon.vo.Clips -= weapon.OneClip - weapon.vo.Bullets;
+				weapon.vo.Bullets = weapon.OneClip;
+			}else 
+			{
+				weapon.vo.Bullets += weapon.vo.Clips;
+				weapon.vo.Clips = 0;
+			}
+		}else{
+			weapon.vo.Clips = -1;
 			weapon.vo.Bullets = weapon.OneClip;
-		}else 
-		{
-			weapon.vo.Bullets += weapon.vo.Clips;
-			weapon.vo.Clips = 0;
 		}
 		//通知界面更新
 		GameProcess.NotifyUI(MsgUIUpdate.UpdateBullet, weapon);
@@ -353,7 +358,7 @@ class PlayerStat extends Component implements IStat
 			DC.log("Player IsDestroyed hp: " + hp);
 			//trace("notify(MsgActor.Destroying) ");
 			//trace("_actor.stateID: "+_actor.stateID);
-			notify(MsgActor.Destroying);			
+			notify(MsgActor.Destroying);
 			for (key in _buffs.keys()) 
 			{
 				var list = _buffs.get(key);
@@ -428,7 +433,7 @@ class PlayerStat extends Component implements IStat
 	private function Notify_Soul(userData:Dynamic):Void 
 	{
 		respawnTotal++;
-		if (respawnTotal >= 10) {
+		/*if (respawnTotal >= 2) {
 			var battle:BattleSystem = GameProcess.instance.getComponent(BattleSystem);
 			if (battle.currentStage().DuplicateType == 9)
 			{
@@ -437,9 +442,10 @@ class PlayerStat extends Component implements IStat
 			{
 				GameProcess.SendUIMsg(MsgUI.BattleFailure);
 			}
-		} else {
+			GameProcess.instance.notify(MsgStartup.Finishbattle);
+		} else {*/
 			GameProcess.SendUIMsg(MsgUI.RevivePanel, respawnTotal);
-		}
+		//}
 		//notify(MsgActor.ExitBoard);
 	}
 	

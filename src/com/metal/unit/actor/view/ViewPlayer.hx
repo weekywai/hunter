@@ -135,8 +135,8 @@ class ViewPlayer extends ViewActor
 		super.Notify_PostBoot(userData);
 		
 		//trace("boot" );
-		_backArmBone = getBone("L UpperArm");
-		_frontArmBone = getBone("R UpperArm");
+		_backArmBone = getBone("L_upperarm");
+		_frontArmBone = getBone("R_upperarm");
 		_headBone = getBone("head");
 		
 		originBackRo = _backArmBone.rotation;
@@ -157,7 +157,7 @@ class ViewPlayer extends ViewActor
 		setGunHitbox("texiao");
 		HXP.scene.add(_melee);
 		_meleeAnimation = getAnimation("cut_1").clone();
-		//_throwBombAnimation= getAnimation("throwBomb_1").clone();
+		_throwBombAnimation= getAnimation("throwBomb_1").clone();
 		_meleeCollides = [UnitModelType.Unit];
 	}
 	
@@ -216,7 +216,7 @@ class ViewPlayer extends ViewActor
 	private function Notify_ThrowBomb(userData:Dynamic):Void
 	{		
 		trace("ThrowBomb");
-		//animationState().setAnimation(1, _throwBombAnimation, false);
+		animationState().setAnimation(1, _throwBombAnimation, false);
 	}
 	
 	private function Notify_Aim(userData:Dynamic):Void

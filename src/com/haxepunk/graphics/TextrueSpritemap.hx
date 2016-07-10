@@ -65,6 +65,7 @@ class TextrueSpritemap extends Image
 	
 	override public function destroy() 
 	{
+		//trace("destroy ");
 		if(animationEnd!=null)
 		animationEnd.removeAll();
 		animationEnd = null;
@@ -112,6 +113,8 @@ class TextrueSpritemap extends Image
 	 */
 	override public function updateBuffer(clearBefore:Bool = false)
 	{
+		if (isDestory)
+			return;
 		if (blit)
 		{
 			// get position of the current frame

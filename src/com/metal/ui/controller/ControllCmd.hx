@@ -2,7 +2,6 @@ package com.metal.ui.controller;
 import com.haxepunk.HXP;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Touch;
-import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.GuideText;
@@ -11,7 +10,6 @@ import com.metal.config.ResPath;
 import com.metal.config.RoomMissionType;
 import com.metal.config.SfxManager;
 import com.metal.config.StageType;
-import com.metal.enums.BagInfo;
 import com.metal.enums.MapVo;
 import com.metal.enums.UIUpdateType;
 import com.metal.manager.UIManager.TipsType;
@@ -49,6 +47,7 @@ import ru.stablex.ui.widgets.BmpText;
 import ru.stablex.ui.widgets.Button;
 import ru.stablex.ui.widgets.Progress;
 import ru.stablex.ui.widgets.Text;
+import ru.stablex.ui.widgets.ViewStack;
 import ru.stablex.ui.widgets.Widget;
 using com.metal.enums.Direction;
 /**
@@ -111,13 +110,9 @@ class ControllCmd extends BaseCmd
 	
 	private var _holdFire:Bool;
 	
-	private var _weaponArr:Array<Button>;
-	
-	private var _usingTipArr:Array<Text>;
 	/**表示有3个装备格*/
-	private var _weaponNum:Int = 3;
+	private var _weapon:Button;
 	private var _weaponInfoArr:Array<ItemBaseInfo>;
-	private	var _lastWeaponIndex:Int;
 	
 	private var _mission:Text;
 		
@@ -128,53 +123,55 @@ class ControllCmd extends BaseCmd
 	}
 	function setWeaponPanel()
 	{
-		_weaponArr = new Array();
-		_usingTipArr = new Array();
 		_weaponInfoArr = new Array();
-		_lastWeaponIndex = 0;
-		var gameSchedual:GameSchedual = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual);
-		
-		for (i in 0..._weaponNum) 
-		{
-			_weaponArr.push(_widget.getChildAs("weapon" + i, Button));
-			_usingTipArr.push(_widget.getChildAs("usingTip" + i, Text));
-		}		
+		_weapon = _widget.getChildAs("weapon", Button);	
 		//设置首发武器
 		var weaponInfo:ItemBaseInfo = BagUtils.bag.getItemByKeyId(_playerInfo.data.WEAPON);
-		_weaponInfoArr.push(weaponInfo);
-		//WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[0]);
-		_weaponArr[0].onPress = function(e) { setUsingWeapon(0); };
+		setWeaponBmp(weaponInfo, _weapon);
 		//设置备用武器
-		for (i in 1..._weaponNum) 
+		var weaponBtn:Button;
+		var i:Int = 1;
+		while (i <= 3)
 		{
+			weaponBtn = _widget.getChildAs("weapon" + i, Button);
 			weaponInfo = BagUtils.bag.backupWeaponArr.get(i);
-			_weaponInfoArr.push(weaponInfo);
 			if (weaponInfo!=null) 
 			{
-				_weaponArr[i].onPress = function(e) {setUsingWeapon(i);	};
+				setWeaponBmp(weaponInfo, weaponBtn);
+				weaponBtn.label.text = Std.string(i);
+				weaponBtn.onPress = function(e){
+					var btn:Button = e.currentTarget;
+					onWeaponHandler(btn);
+				}
+				_weaponInfoArr.push(weaponInfo);
+				
+			}else {
+				weaponBtn.free(true);
 			}
-			//WarehouseCmd.setWeaponBmp(weaponInfo, _weaponArr[i]);
+			i++;
 		}
-		
-		//首次设置武器，不更换人物模型，因为别处已更改
-		setUsingWeapon(0,false);
 	}
 	
-	function setUsingWeapon(index:Int,setModel:Bool=true)
+	private function onWeaponHandler(w:Button)
 	{
-		for (i in 0..._weaponNum) 
-		{
-			_usingTipArr[i].visible = (i==index);
-		}
-		if (!setModel) return;
-		//修改人物模型和参数
-		var bagData:BagInfo = GameProcess.instance.getComponent(BagpackSystem).bagData;
-		bagData.setBackup(_weaponInfoArr[_lastWeaponIndex],  _weaponInfoArr[index].vo.sortInt);
-		notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.WEAPON, data: _weaponInfoArr[index]} );
-		GameProcess.instance.notify(MsgPlayer.ChangeWeapon, { type:WeaponType.Shoot } );	
-		notify(MsgUIUpdate.UpdateBullet, _weaponInfoArr[index]);
+		var panel:ViewStack = UIBuilder.getAs("equipPanel", ViewStack);
+		panel.back();
 		
-		_lastWeaponIndex = index;
+		var index = Std.parseInt(w.label.text);
+		
+		//记录旧装备keyID
+		var keyId:Int = _playerInfo.data.WEAPON;
+		var backInfo:ItemBaseInfo = BagUtils.bag.getItemByKeyId(keyId);
+		var curInfo:ItemBaseInfo = BagUtils.bag.backupWeaponArr.get(index);
+		
+		BagUtils.bag.setBackup(backInfo, index);
+		notifyRoot(MsgNet.UpdateBag, { type:2, data:curInfo.vo } );
+		
+		setWeaponBmp(curInfo, _weapon);
+		setWeaponBmp(backInfo, w);
+		
+		PlayerUtils.getPlayer().notify(MsgPlayer.ChangeWeapon, { type:WeaponType.Shoot } );	
+		notify(MsgUIUpdate.UpdateBullet, _weaponInfoArr[index]);
 	}
 	
 	override function onInitComponent():Void 
@@ -210,20 +207,6 @@ class ControllCmd extends BaseCmd
 		_afterScaleY = _timeLimit.label.y - _timeLimit.label.height / 2;
 		
 		_bulletTxt=_widget.getChildAs("bulletTxt", Text);
-		//判断是否隐藏技能锁
-		var skillshow = GameProcess.instance.getComponent(GameSchedual).skillData;
-		_skillBtns = [];
-		for (i in 0...5) 
-		{
-			var btn:Button = _widget.getChildAs("skill" + i, Button);
-			_skillBtns.push(btn);
-			if (i == 0) {
-				btn.onRelease = onSkillHandler;
-			}else {
-				btn.onRelease = (skillshow[i - 1] == 0)?onSkillBuy:onSkillHandler;
-				btn.getChild("lock").visible = (skillshow[i - 1] == 0);
-			}
-		}
 		
 		_tips = _widget.getChild("tips");
 		
@@ -242,13 +225,8 @@ class ControllCmd extends BaseCmd
 		}
 		
 		_playerInfo = PlayerUtils.getInfo();
-		var icon = UIBuilder.create(Bmp, {
-			widthPt:100,
-			src:ResPath.getIconPath(Std.string(_playerInfo.res), ResPath.ModelIcon),
-			leftPt:7,
-			topPt:0
-		});
-		_widget.getChild("playerBar").addChild(icon);
+		var icon:Bmp = _widget.getChildAs("icon", Bmp);
+		icon.src = ResPath.getIconPath(Std.string(_playerInfo.res), ResPath.ModelIcon);
 		super.onInitComponent();
 		
 		_widget.getChildAs("stopGame", Button).onRelease = stopGame;
@@ -259,8 +237,11 @@ class ControllCmd extends BaseCmd
 	}
 	private function cmd_UpdateBullet(userData:Dynamic)
 	{
-		if(userData!=null)
-		_bulletTxt.text = "子弹数 "+userData.vo.Bullets+"/"+userData.vo.Clips;
+		if (userData != null){
+			var clip:String = (userData.vo.Clips ==-1)?"无限":userData.vo.Clips;
+			_bulletTxt.text = "子弹数 "+userData.vo.Bullets+"/"+clip;
+		}
+		
 	}
 	//mp闪烁效果
 	var addnum:Float = 0;
@@ -328,18 +309,40 @@ class ControllCmd extends BaseCmd
 				_bossPanel.removeChild(ico);
 		}
 		
-		var icon = UIBuilder.create(Bmp, {
-			name:"ico",
-			src:ResPath.getIconPath(userData, ResPath.ModelIcon),
-			rightPt:14,
-			topPt:24
-		});
+		var icon = iconCreate(ResPath.getIconPath(userData, ResPath.ModelIcon), 14,24);
 		_bossPanel.addChild(icon);
 		trace("Boss name:"+_battle.currentStage().BossName);
 		_bossPanel.getChildAs("name", Text).text = _battle.currentStage().BossName;
 		_widget.getChild("BossPanel").addChild(_bossPanel);
 	}
-	
+	/**武器图片*/
+	private function setWeaponBmp(tempInfo:ItemBaseInfo, widget:Button)
+	{
+		var icon = widget.getChildAs("icon", Bmp);
+		if (tempInfo == null) {
+			if (icon != null) 
+				widget.removeChild(icon);
+			return;
+		}
+		
+		if (icon != null) {
+			icon.src = 'icon/' + tempInfo.ResId + '.png';
+			icon.refresh();
+		}else{
+			icon = iconCreate('icon/' + tempInfo.ResId + '.png', 6, 12);
+			widget.addChild(icon);
+		}
+	}
+	/**图标生成*/
+	private function iconCreate(res:String, leftPt:Float =0, topPt:Float = 0):Bmp
+	{
+		return UIBuilder.create(Bmp, {
+			name:"icon",
+			src:res, 
+			leftPt:leftPt,
+			topPt:topPt
+		});
+	}
 	/**接收UIManager消息，需要继承转发给 widget 更新数据*/
 	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void {
 		
@@ -348,7 +351,7 @@ class ControllCmd extends BaseCmd
 				cmd_UpdateInfo(userData);
 			case MsgUIUpdate.Update:
 				cmd_Update(userData);
-			case MsgUI2.SkillCD:
+			case MsgUIUpdate.SkillCD:
 				cmd_SkillCD(userData);
 			//case MsgUI.BossPanel:
 				//cmd_bossFight(userData);
@@ -420,6 +423,20 @@ class ControllCmd extends BaseCmd
 		_attackBtn.onRelease = onAttackRelease;
 		_jumpBtn.onPress = onJumpPress;
 		_knifeBtn.onPress = onKnifePress;
+		//判断是否隐藏技能锁
+		var skillshow = GameProcess.instance.getComponent(GameSchedual).skillData;
+		_skillBtns = [];
+		for (i in 0...5) 
+		{
+			var btn:Button = _widget.getChildAs("skill" + i, Button);
+			_skillBtns.push(btn);
+			if (i == 0) {
+				btn.onRelease = onSkillHandler;
+			}else {
+				btn.onRelease = (skillshow[i - 1] == 0)?onSkillBuy:onSkillHandler;
+				btn.getChild("lock").visible = (skillshow[i - 1] == 0);
+			}
+		}
 		_hpBar.addEventListener(Event.ENTER_FRAME, shine1);
 		_mpBar.addEventListener(Event.ENTER_FRAME, shine);
 		cmd_UpdateInfo(null);
@@ -431,6 +448,7 @@ class ControllCmd extends BaseCmd
 	private function cmd_SkillCD(userData:Dynamic):Void
 	{
 		var time:Int = userData.time;
+		
 		var timeStr:String = Std.string(time != 0?time:"");
 		var id:Int = userData.id;
 		var index:Int = -1;
@@ -442,6 +460,7 @@ class ControllCmd extends BaseCmd
 		if (index == -1)
 			return;
 		_skillBtns[index].text = timeStr;
+		trace("cmd_SkillCD>> " + time + " index:"+index);
 		if (time == 0) _skillBtns[index].disabled = false;
 	}
 	
@@ -625,6 +644,7 @@ class ControllCmd extends BaseCmd
 		if (Input.multiTouchSupported) {
 			Input.touchPoints(onTouch);
 			if(!Lambda.has(Input.touchOrder, touchID)) {
+			//if(!Input.touches.exists(touchID)) {
 				touchID = -1;
 				currentPoint = _wheel.cPoint;
 			}
@@ -670,7 +690,7 @@ class ControllCmd extends BaseCmd
 		btn.disabled = true;
 		switch(btn.name) {
 			case "skill0":
-				_player.notify(MsgInput.UIInput, {type:ActorState.Skill, data:PlayerPropType.SKILL1});
+				_player.notify(MsgInput.UIInput, { type:ActorState.Skill, data:PlayerPropType.SKILL1 } );
 				//_player.notify(MsgPlayer.ChangeSkill, _playerInfo.getProperty(PlayerPropType.SKILL1));
 			case "skill1":
 				_player.notify(MsgInput.UIInput, {type:ActorState.Skill, data:PlayerPropType.SKILL2});

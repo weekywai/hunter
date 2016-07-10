@@ -9,10 +9,10 @@ import openfl.events.Event;
 import openfl.Lib;
 import ru.stablex.ui.UIBuilder;
 import ru.stablex.ui.widgets.Floating;
-//#if !neko
-//import crashdumper.CrashDumper;
-//import crashdumper.SessionData;
-//#end
+#if crashdumper
+import crashdumper.CrashDumper;
+import crashdumper.SessionData;
+#end
 
 /**
  * 
@@ -47,11 +47,12 @@ class Main extends Sprite
 		inited = true;
 		config = ConfigInfo.readXml(Assets.getText("config.xml"));
 		//trace(Type.typeof(config.get("console")));
-		//#if !neko
-		//CrashDumper.writeFile = true;// cast config.get("crashLog");
-		//var unique_id:String = SessionData.generateID("example_app_");
-		//var crashDumper = new CrashDumper(unique_id);
-		//#end
+		#if crashdumper
+		CrashDumper.writeFile = true;// cast config.get("crashLog");
+		var unique_id:String = SessionData.generateID("example_app_");
+		var crashDumper = new CrashDumper(unique_id);
+		//throw "err";
+		#end
 		GameProcess.instance.onInit(this);
 	}
 	

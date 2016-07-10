@@ -2,6 +2,8 @@ package com.metal;
 import com.haxepunk.Engine;
 import com.haxepunk.HXP;
 import com.haxepunk.Sfx;
+import com.haxepunk.utils.Input;
+import com.haxepunk.utils.Key;
 import com.metal.component.BagpackSystem;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
@@ -24,15 +26,12 @@ import com.metal.scene.board.view.ViewBoard;
 import com.metal.scene.bullet.impl.BulletComponent;
 import com.metal.scene.effect.impl.EffectComponent;
 import de.polygonal.core.es.MainLoop;
-import de.polygonal.core.event.IObservable;
-import de.polygonal.core.sys.MsgCore;
 import de.polygonal.core.sys.SimEntity;
 import de.polygonal.core.time.Timebase;
 import motion.actuators.SimpleActuator;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
-import openfl.display.Stage;
 import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -70,7 +69,6 @@ class GameProcess extends MainLoop
 	public static var HXT:HxTelemetry;
 	#end
 	
-	//private var onDrawId:Int = 0;
 	private var _debugTxt:TextField;
 	private var _fps:FPS;
 	private var _board:SimEntity;
@@ -82,7 +80,7 @@ class GameProcess extends MainLoop
 	public function onInit(container:Sprite)
 	//public function init(stage:Stage, container:Sprite)
 	{
-		console = new DevCheat();
+		//console = new DevCheat();
 		preload();
 		rootStage = container;
 		gameStage = new Sprite();
@@ -142,38 +140,37 @@ class GameProcess extends MainLoop
 		//render.scaleX = render.scaleY = Main.Scale;
 		//DC.log("scale :" + render.scaleX + " : " +_stageWidth +":"+ baseGameWidth+" h:"+_stageHeight +":"+ baseGameHeight);
 		HXP.scene = new GameScene();
-		//rootStage.addChildAt(render, 0);
 		gameStage.addChild(render);
-		_render = true;
+		render.updateEngine();
 	}
 	override function propagateTick(dt:Float) 
 	{
 		super.propagateTick(dt);
-		rootStage.stage.setChildIndex(_debugTxt, rootStage.stage.numChildren - 1);
-		rootStage.stage.setChildIndex(_fps, rootStage.stage.numChildren - 1);
+		//rootStage.stage.setChildIndex(_debugTxt, rootStage.stage.numChildren - 1);
+		//rootStage.stage.setChildIndex(_fps, rootStage.stage.numChildren - 1);
 		_debugTxt.text = "fps: " + Timebase.fps + " Mem:" + HXP.round(System.totalMemory / 1024 / 1024, 2) + "MB";
 		//+ "\nrealDelta:" + TimeBase.timeDelta + "\ngameDelta:" +Timebase.gameTimeDelta;
 		//+ "\nRealTime::" + Timebase.realTime + "\nGameTime:" +Timebase.gameTime;
 		#if actuate_manual_update
-		//if (onDrawId == 0)
 			SimpleActuator.stage_onEnterFrame (null);
 		#end
+		#if telemetry
+		HXT.advance_frame();
+		#end
+		//Input.update();
 	}
 	
 	override function propagateDraw(alpha:Float) 
 	{
 		super.propagateDraw(alpha);
-		if (_render){
+		//if (_render){
 			render.updateEngine();
-			
-			#if telemetry
-			HXT.advance_frame();
-			#end
-		}
+		//}
 	}
 	
 	public function startGame():Void
 	{
+		_render = true;
 		_board = new SimEntity("GameBoard");
 		_board.addComponent(new GameBoard());
 		_board.addComponent(new GameMap());
@@ -185,8 +182,6 @@ class GameProcess extends MainLoop
 		_board.addComponent(new BattleResolver());
 		_board.drawable = true;
 		add(_board);
-		//onDrawId = 1;
-		
 		#if debug
         HXP.console.enable();
 		#end
@@ -199,7 +194,7 @@ class GameProcess extends MainLoop
 		Sfx.stopAllSound();
 		HXP.scene.end();
 		ResourceManager.instance.unLoadAll();
-		
+		_render = false;
 		//var gamebord:Entity = findChild("GameBoard");
 		//remove(_board);
 	}

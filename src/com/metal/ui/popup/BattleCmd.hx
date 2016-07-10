@@ -24,22 +24,19 @@ import signals.Signal1;
  */
 class BattleCmd extends BaseCmd
 {
-	public var callbackFun:Signal1<Dynamic>;
+	public var callbackFun:Signal1<Bool>;
 	private var _data:Dynamic;
 	public function new() 
 	{
 		super();
-		
+		callbackFun = new Signal1();
 	}
 	override function onInitComponent():Void 
 	{
 		SfxManager.getAudio(AudioType.t001).play();
 		_widget = UIBuilder.get("onBattle");
-		callbackFun = new Signal1();
 		onEnabel();
 		super.onInitComponent();
-		
-		
 	}
 	public function setGradeCondition(data:DuplicateInfo)
 	{
@@ -136,26 +133,23 @@ class BattleCmd extends BaseCmd
 	{	
 		SfxManager.getAudio(AudioType.Btn).play();
 		callbackFun.dispatch(false);
-		
-		_widget.getParent("popup").free();
 		dispose();
 	}
 	/*是*/
 	private function yesBtn_click(e):Void
 	{
+		trace("click yesBtn_click");
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent("popup").free();
 		//sendMsg(MsgUI2.Loading, true);
+		trace(callbackFun.numListeners);
 		callbackFun.dispatch(true);
+		//trace(callbackFun.numListeners);
 		dispose();
 	}
-	override function onClose():Void 
-	{
-		
-		super.onClose();
-	}
+	
 	override function onDispose():Void 
 	{
+		UIBuilder.get("popup").free();
 		callbackFun = null;
 		_widget = null;
 		super.onDispose();

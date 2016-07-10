@@ -28,7 +28,7 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override private function onDispose():Void 
 	{
-		trace("dispose: "+this);
+		//trace("dispose: "+this +">>"+this._scene);
 		if(scene!=null)
 			scene.clearRecycled(Type.getClass(this));
 		info = null;
@@ -37,9 +37,8 @@ class EffectEntity extends ViewDisplay implements IEffect
 	
 	override public function removed():Void 
 	{
-		//if(graphic!=null)
-			//graphic.pause();
 		info = null;
+		//trace("remove " + this);
 		super.removed();
 	}
 	

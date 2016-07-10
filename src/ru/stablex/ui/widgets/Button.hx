@@ -138,7 +138,9 @@ class Button extends Text{
         *
         */
         static private function _onRelease (e:MouseEvent) : Void {
+			
             var btn : Button = cast(e.currentTarget, Button);
+			btn.removeOrder();
 			btn.touchId = -1;
             if (btn.disabled) {
                 return;
@@ -171,12 +173,16 @@ class Button extends Text{
 		
 	static private function _onTouchBegin(e:TouchEvent):Void 
 	{
+		//trace(Input.touchOrder+">>"+e.touchPointID);
 		if (Lambda.has(Input.touchOrder, e.touchPointID))
 			return;
 		Input.touchOrder.push(e.touchPointID);
 		var btn : Button = cast(e.currentTarget, Button);
 		if (btn.touchId == -1) btn.touchId = e.touchPointID;
 		if (btn.touchId != e.touchPointID) return;
+		
+		//if (Input.touches.exists(btn.touchId))
+			//return;
 		if (btn.disabled) {
 			return;
 		}
@@ -187,29 +193,17 @@ class Button extends Text{
 		//var event = new MouseEvent(MouseEvent.MOUSE_DOWN, e.bubbles, e.cancelable, e.localX, e.localY, e.relatedObject);
 		btn.onPress(e);
 	}
-	/*
-	static private function _onTouchEnd(e:TouchEvent):Void 
+	
+	override public function free(recursive:Bool = true):Void 
 	{
-		_touchId = -1;
-		 var btn : Button = cast(e.currentTarget, Button);
-		if (btn.disabled) {
-			return;
-		}
-		if( !btn.pressed ) return;
-		if( btn.hovered ){
-			btn._switchIco(btn._icoHovered);
-		}else{
-			btn._switchIco(btn._ico);
-		}
-		if( btn.hovered ){
-			btn._switchSkin(btn.skinHovered);
-		}else{
-			btn._switchSkin(btn.skin);
-		}
-		btn.pressed = false;
-		btn.onRelease(e);
+		removeOrder();
+		super.free(recursive);
 	}
-	*/
+	private function removeOrder()
+	{
+		if(touchId!=-1)
+			Input.touchOrder.remove(touchId);
+	}
     /**
     * Constructor
     * By default `.padding` = 2, `.childPadding` = 5 and `.mouseChildren` = false

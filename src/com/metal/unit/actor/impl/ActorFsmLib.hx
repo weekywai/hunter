@@ -25,7 +25,6 @@ class ActorFsmLib
 		_actorFsm.addState(new ActorStateMelee(), ActorState.Melee, false, [ActorState.Stand,ActorState.Skill,ActorState.Destroying,ActorState.Destroyed, ActorState.Soul]);
 		_actorFsm.addState(new ActorStateThrowBomb(), ActorState.ThrowBomb, false, [ActorState.Stand,ActorState.Skill,ActorState.Destroying,ActorState.Destroyed, ActorState.Soul]);
 		_actorFsm.addState(new ActorStateSkill(), ActorState.Skill, false, [ActorState.Move, ActorState.Stand, ActorState.Jump, ActorState.Injured, ActorState.Destroying,ActorState.Destroyed, ActorState.Soul]);
-		//_actorFsm.addState(new ActorStateInjured(), ActorState.Injured, true);
 		_actorFsm.addState(new ActorStateDestroying(), ActorState.Destroying, false, [ActorState.Soul, ActorState.Destroyed, ActorState.Stand, ActorState.Revive]);
 		_actorFsm.addState(new ActorStateDestroyed(), ActorState.Destroyed, false);
 		_actorFsm.addState(new ActorStateVictory(), ActorState.Victory, false);

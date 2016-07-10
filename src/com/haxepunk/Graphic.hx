@@ -154,7 +154,8 @@ class Graphic
 	/**
 	 * Removes the graphic from the scene
 	 */
-	public function destroy() { }
+	private var isDestory:Bool = false;
+	public function destroy() { isDestory = true; }
 
 	/**
 	 * Renders the graphic to the screen buffer.

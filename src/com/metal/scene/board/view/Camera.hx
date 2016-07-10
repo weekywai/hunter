@@ -152,9 +152,9 @@ class Camera extends Component
 			case RIGHT:
 				_actor.x = _limitBoundary.right - rangeX;
 			case TOP:
-				_actor.y = _limitBoundary.top + rangeY;
+				//_actor.y = _limitBoundary.top + rangeY;
 			case BOTTOM://掉沟里
-				_actor.y = _limitBoundary.bottom - rangeY;
+				//_actor.y = _limitBoundary.bottom - rangeY;
 			default:
 		}
 		return true;

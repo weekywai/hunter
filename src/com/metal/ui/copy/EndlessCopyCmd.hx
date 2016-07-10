@@ -83,8 +83,10 @@ class EndlessCopyCmd extends BaseCmd
 	}
 	private function callBackFun(flag:Bool):Void
 	{
+		//trace("BattleCmd callback " + flag);
 		if(flag)
 		{
+			trace("BattleCmd callback " + flag);
 			var _playInfo = PlayerUtils.getInfo();
 			var _duplicateInfo:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
 			if (_playInfo.data.POWER >= _duplicateInfo.NeedPower) {

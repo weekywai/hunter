@@ -18,6 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 package de.polygonal.core.es;
 
+import de.polygonal.core.es.EntityMacro;
 import de.polygonal.core.es.EntityMessage;
 import de.polygonal.core.es.EntityMessageQue;
 import de.polygonal.core.util.Assert.assert;
@@ -40,7 +41,8 @@ using de.polygonal.core.es.EntitySystem;
 	BIT_STOP_PROPAGATION,
 	BIT_MARK_FREE,
 	BIT_IS_GLOBAL,
-	BIT_NO_PARENT
+	BIT_NO_PARENT,
+	//BIT_INIT
 ], true, false))
 @:build(de.polygonal.core.es.EntityMacro.build())
 @:autoBuild(de.polygonal.core.es.EntityMacro.build())
@@ -110,6 +112,7 @@ class Entity
 		this.name = name;
 		
 		Es.register(this, isGlobal);
+		//trace(ENTITY_TYPE);
 	}
 	
 	/**
@@ -297,7 +300,20 @@ class Entity
 		
 		return value;
 	}
-	
+	/** init */
+	private var _initialized:Bool =false;
+	public var initialized(get, set):Bool;
+	private function get_initialized():Bool
+	{
+		//return mBits & BIT_INIT == 0;
+		return _initialized;
+	}
+	private function set_initialized(value:Bool):Bool
+	{
+		//value ? mBits &= ~BIT_INIT : mBits |= BIT_INIT;
+		_initialized = value;
+		return value;
+	}
 	/**
 		An incoming message.
 		

@@ -163,6 +163,7 @@ class Masklist extends Hitbox
 					if (p.minY < t) t = p.minY;
 					if (p.maxX > r) r = p.maxX;
 					if (p.maxY > b) b = p.maxY;
+					//trace(l + ">>" + t + ">>" + r + ">>" + b);
 				}
 			} 
 			else if ((h = cast(m, Hitbox)) != null)
@@ -171,6 +172,7 @@ class Masklist extends Hitbox
 				if (h.y < t) t = h.y;
 				if (h.x + h.width > r) r = h.x + h.width;
 				if (h.y + h.height > b) b = h.y + h.height;
+				//trace(h.width + " L:" + l + " T:" + t + " R:" + r + " B:" + b);
 			}
 		}
 

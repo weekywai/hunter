@@ -31,7 +31,6 @@ typedef PlayerVo = {
 	var ARMOR:Int;	//战斗力
 	var SOUNDS:Int;	//战斗力
 	var BGM:Int;	//战斗力
-	var NEWBIE:String;	//战斗力
 }
 /**
  * ...
@@ -42,7 +41,6 @@ class PlayerInfo
 	//public var PlayerPartner:PartnerInfo; //自己的信息(角色在伙伴数据库的信息)
 	//public var Partner:Array<PartnerInfo>; //伙伴的信息和属性
 	public var data:PlayerVo;
-	public var Newbie:Array<Int>;
 	
 	public var res:Int = 1001;
 	public var vehicle:Int = 2001;

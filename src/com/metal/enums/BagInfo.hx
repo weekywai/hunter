@@ -49,12 +49,14 @@ class BagInfo
 		var oldBackup:ItemBaseInfo = backupWeaponArr.get(index);
 		if (oldBackup != null) {
 			oldBackup.vo.sortInt = -1;
+			oldBackup.vo.Equip = false;
 			RemoteSqlite.instance.updateProfile(TableType.P_Goods, oldBackup.vo, {ID:oldBackup.ID});
 		}
 		
 		backupWeaponArr.set(index, weapon);
 		if(weapon!=null){
 			weapon.vo.sortInt = index;
+			weapon.vo.Equip = true;
 			RemoteSqlite.instance.updateProfile(TableType.P_Goods, weapon.vo, { ID:weapon.ID } );
 		}
 		//trace("index: "+index);

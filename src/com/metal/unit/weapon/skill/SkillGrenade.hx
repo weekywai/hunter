@@ -35,8 +35,8 @@ class SkillGrenade extends BaseSkill
 		bulletReq.y = _avatar.y - _avatar.halfHeight;
 		bulletReq.dir = _actor.dir;
 		bulletCount = maxBulletCount;
-		trace("bulletReq: "+bulletReq.renderType);
-		trace("onShoot");
+		//trace("bulletReq: "+bulletReq.renderType);
+		//trace("onShoot");
 		notify(MsgActor.ThrowBomb);	
 		if (_actor.stateID == ActorState.Enter) {
 			//bulletReq.targetX = bulletReq.x;
@@ -50,7 +50,7 @@ class SkillGrenade extends BaseSkill
 		super.onTick(timeDelta);
 		if (_actor.throwBomb) 
 		{
-			trace("bulletReq: "+bulletReq.renderType);
+			trace("bulletReq: "+shootTime);
 			notifyParent(MsgBullet.Create, bulletReq);
 			_actor.throwBomb = false;
 		}

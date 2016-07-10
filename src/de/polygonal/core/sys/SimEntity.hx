@@ -21,7 +21,6 @@ class SimEntity extends Entity implements IObservable
 {
 	public var compMap(default, null):Sll<Component>;
 	public var propMap(default, null):List<Dynamic>;
-	private var _initialized:Bool;
 	
 	public var keyId:Int;
 	
@@ -51,7 +50,6 @@ class SimEntity extends Entity implements IObservable
 		super(id, isGlobal);
 		compMap = new Sll();
 		propMap = new List();
-		_initialized = false;
 		if(autoInit)
 			init();
 	}
@@ -74,7 +72,7 @@ class SimEntity extends Entity implements IObservable
 			return cast c;
 		compMap.append(c);
 		attach(c);
-		if (_initialized){
+		if (initialized){
 			c.initComponent(this);
 			c.onUpdate(MsgCore.PROCESS, this, null);
 		}
@@ -198,8 +196,8 @@ class SimEntity extends Entity implements IObservable
 	*/
 	public function init()
 	{
-		if (!_initialized) {
-			_initialized = true;
+		if (!initialized) {
+			initialized = true;
 			var comp:Component;
 			var node = compMap.head;
 			while(node!=null)
@@ -247,7 +245,8 @@ class SimEntity extends Entity implements IObservable
 			comp = node.val;
 			if (comp == null) 
 				continue;
-			comp.onTick(dt);
+			if(comp.isInit)
+				comp.onTick(dt);
 			node = node.next;
 		}
 	}
@@ -260,7 +259,8 @@ class SimEntity extends Entity implements IObservable
 			comp = node.val;
 			if (comp == null) 
 				continue;
-			comp.onDraw();
+			if(comp.isInit)
+				comp.onDraw();
 			node = node.next;
 		}
 	}

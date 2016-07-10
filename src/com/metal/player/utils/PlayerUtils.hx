@@ -68,8 +68,8 @@ class PlayerUtils
 				action = 0;
 		}
 		//武器ID公式 id = subID * 100 + Id2
-		return action + (weaponId - subID * 100);
-		//return Math.floor(action/4)+1;
+		//return action + (weaponId - subID * 100);
+		return Math.floor(action/4)+1;
 	}
 	
 	private static function getSchedual():GameSchedual

@@ -1,37 +1,31 @@
 package com.metal.utils;
 import com.metal.component.BagpackSystem;
-import com.metal.component.GameSchedual;
 import com.metal.component.RewardSystem;
-import com.metal.component.TaskSystem;
 import com.metal.config.FilesType;
-import com.metal.config.PlayerPropType;
 import com.metal.config.TableType;
 import com.metal.enums.BagInfo;
 import com.metal.network.RemoteSqlite;
-import com.metal.proto.impl.ItemProto.GoodsVo;
-import com.metal.proto.impl.PlayerInfo;
 import com.metal.player.utils.PlayerUtils;
-import com.metal.proto.impl.ItemProto.ItemBaseInfo;
+import com.metal.proto.impl.ItemProto.GoodsVo;
 import com.metal.proto.impl.LiveNessInfo;
 import com.metal.proto.impl.MapStarInfo;
-import com.metal.proto.impl.NewbieInfo;
 import com.metal.proto.impl.NewsInfo;
+import com.metal.proto.impl.PlayerInfo;
 import com.metal.proto.impl.QuestInfo;
 import com.metal.proto.manager.LiveNessManager;
 import com.metal.proto.manager.NewsManager;
 import com.metal.proto.manager.QuestsManager;
-//import crashdumper.hooks.openfl.HookOpenFL;
 import haxe.Serializer;
 import haxe.Unserializer;
 import haxe.ds.IntMap;
 import sys.FileSystem;
-import sys.io.File;
 import sys.io.FileOutput;
+import sys.io.File;
+//import crashdumper.hooks.openfl.HookOpenFL;
 
 #if openfl_legacy
 	import openfl.utils.SystemPath;
 #else
-	import lime.system.System;
 #end
 
 #if (openfl >= "2.0.0")
@@ -39,9 +33,6 @@ import sys.io.FileOutput;
 	import openfl.utils.ByteArray;
 	import openfl.events.UncaughtErrorEvent;
 #else
-	import nme.Lib;
-	import nme.utils.ByteArray;
-	import flash.events.UncaughtErrorEvent;
 #end
 /**
  * ...储存数据
@@ -154,7 +145,7 @@ class FileUtils
 	{
 		#if sys
 		var filePath:String = _path + LoginFileUtils.Id;
-		var f:FileOutput = File.write( filePath, false );
+		var f:FileOutput = sys.io.File.write( filePath, false );
 		f.writeString(data);
 		f.close();
 		#end
@@ -204,8 +195,6 @@ class FileUtils
 				setNewsInfo(fileType);
 			case FilesType.StageStar:
 				setMapStarData(fileType);
-			case FilesType.Newbie:
-				setNewbieData(fileType);
 		}
 	}
 	
@@ -385,24 +374,6 @@ class FileUtils
 		return MapStarInfo.instance.dataMap;
 	}
 	
-	/**新手指引记录*/
-	private static function setNewbieData(type:Int):Void
-	{		
-		//trace("setNewbieData");
-		saveMap(type, NewbieInfo.instance.dataArr);
-	}
-	/**新手指引记录*/
-	public static function getNewbieData():Array<Int>
-	{		
-		parseData();
-		if (_data == null)
-			return null;
-		var currArr:Array<Int> = FilesType.fileMap.get(FilesType.Newbie);		
-		if (currArr != null ) NewbieInfo.instance.dataArr = currArr;
-		//trace("getNewbieData"+NewbieInfo.instance.dataArr);
-		return NewbieInfo.instance.dataArr;
-	}
-	
 	/*设置单个背包数据属性*/
 	private static function setItemData(_itemInfo:Dynamic,dyna:Dynamic):Void
 	{
@@ -477,8 +448,7 @@ class FileUtils
 							WEAPON:0,
 							ARMOR:0,
 							SOUNDS:1,
-							BGM:1,
-							NEWBIE:""
+							BGM:1
 		}
 		return playerInfo;
 	}

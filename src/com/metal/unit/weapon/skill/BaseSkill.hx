@@ -3,6 +3,7 @@ package com.metal.unit.weapon.skill;
 import com.metal.config.PlayerPropType;
 import com.metal.message.MsgStat;
 import com.metal.message.MsgUI2;
+import com.metal.message.MsgUIUpdate;
 import com.metal.player.utils.PlayerUtils;
 import com.metal.unit.weapon.impl.BaseWeapon;
 
@@ -27,7 +28,7 @@ class BaseSkill extends BaseWeapon
 		if (isShooting) {
 			if (bulletCount <= 0)
 				notify_ShootStop(null);
-				//trace(shootTime);
+				
 			//shootTime--;
 			if (shootTime <= 0) {
 				shootTime = skillInfo.CDTime * 60;
@@ -41,7 +42,7 @@ class BaseSkill extends BaseWeapon
 			shootTime--;
 			if(shootTime%60==0){
 				_cdTime--;
-				GameProcess.SendUIMsg(MsgUI2.SkillCD, { time:_cdTime, id:skillInfo.Id } );
+				GameProcess.NotifyUI(MsgUIUpdate.SkillCD, { time:_cdTime, id:skillInfo.Id } );
 			}
 			if (shootTime<=0)
 				onCDTime();
@@ -52,7 +53,7 @@ class BaseSkill extends BaseWeapon
 	{
 		super.notify_Reborn(userData);
 		_cdTime = 0;
-		GameProcess.SendUIMsg(MsgUI2.SkillCD, { time:_cdTime, id:skillInfo.Id } );
+		GameProcess.NotifyUI(MsgUIUpdate.SkillCD, { time:_cdTime, id:skillInfo.Id } );
 	}
 	/**创建发射*/
 	private function onShoot():Void { }

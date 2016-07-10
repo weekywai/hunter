@@ -107,6 +107,7 @@ class MainLoop extends SimEntity implements IObserver
 		{
 			e = a[i];
 			
+			//if (e.mBits & (E.BIT_SKIP_TICK | E.BIT_MARK_FREE | E.BIT_NO_PARENT | E.BIT_INIT) == 0)
 			if (e.mBits & (E.BIT_SKIP_TICK | E.BIT_MARK_FREE | E.BIT_NO_PARENT) == 0)
 				e.onTick(dt, p[i]);
 		}
@@ -123,6 +124,7 @@ class MainLoop extends SimEntity implements IObserver
 		{
 			e = a[i];
 			
+			//if (e.mBits & (E.BIT_SKIP_DRAW | E.BIT_MARK_FREE | E.BIT_NO_PARENT | E.BIT_INIT) == 0)
 			if (e.mBits & (E.BIT_SKIP_DRAW | E.BIT_MARK_FREE | E.BIT_NO_PARENT) == 0)
 				e.onDraw(alpha, p[i]);
 		}

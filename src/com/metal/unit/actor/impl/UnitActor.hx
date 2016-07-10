@@ -70,7 +70,7 @@ class UnitActor extends BaseActor
 	}
 	override function Notify_Destroy(userData:Dynamic):Void 
 	{
-		trace(bindPlayerID);
+		//trace(bindPlayerID);
 		if(bindPlayerID!= 10201){
 			notifyParent(MsgItr.Destory, { key:owner.keyId, id:bindPlayerID } );
 		//notifyParent(MsgItr.Destory, owner.keyId);

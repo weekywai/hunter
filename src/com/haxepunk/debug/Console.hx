@@ -205,7 +205,7 @@ class Console
 	public function enable(?trace_capture:TraceCapture, toggleKey=Key.TILDE)
 	{
 		this.toggleKey = toggleKey;
-
+		trace(toggleKey);
 		// Quit if the console is already enabled.
 		if (_enabled) return;
 

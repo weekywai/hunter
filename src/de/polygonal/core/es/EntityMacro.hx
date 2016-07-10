@@ -31,7 +31,7 @@ import sys.io.File;
 class EntityMacro
 {
 	#if macro
-	inline public static var FILE = ".de.polygonal.core.es.entity_macro";
+	inline public static var FILE = ".de.polygonal.core.entity_macro";
 	#end
 	
 	macro public static function build():Array<Field>

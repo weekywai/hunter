@@ -93,6 +93,7 @@ class BulletMissile1 extends BulletEntity
 			_bullet2 = new TextrueSpritemap(eff);
 		}else{
 			_bullet2.resetTexture(eff);
+			_bullet2.x = _bullet2.y = 0;
 		}
 		_bullet2.add("blast", eff.getReginCount(), 25);
 		if (eff.ox != 0 || eff.oy != 0) {
@@ -121,6 +122,7 @@ class BulletMissile1 extends BulletEntity
 	override public function start(req:BulletRequest):Void 
 	{
 		//trace("req " + req);
+		//trace("missile1");
 		super.start(req);
 		_req = req;
 		_speed = req.info.speed;
@@ -231,12 +233,14 @@ class BulletMissile1 extends BulletEntity
 			_hitInfo.renderType = BattleResolver.resolveAtk(_hitInfo.critPor);
 			owner.notify(MsgItr.BulletHit, _hitInfo);
 		}
+		
 		commitEffect();
 		//scene.remove(this);
 		recycle();
 	}
 	/** 启动效果 */
 	override function commitEffect():Void {
+		HXP.screen.shake(3, 0.2);
 		_effectReq.Key = info.effimg;
 		_effectReq.x = x;
 		_effectReq.y = y + 125;

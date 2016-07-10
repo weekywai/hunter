@@ -80,6 +80,7 @@ class ViewDisplay extends Entity implements IObserver
 	//@:getter(onCamera)
 	override function get_onCamera():Bool 
 	{
+		//super.get_onCamera();
 		if (_scene == null)
 		{
 			return false;

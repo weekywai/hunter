@@ -1,7 +1,6 @@
 package com.metal.scene.board.impl;
 
 import com.haxepunk.HXP;
-import com.haxepunk.tmx.TmxPropertySet;
 import com.metal.component.BattleSystem;
 import com.metal.component.GameSchedual;
 import com.metal.config.MapLayerType;
@@ -277,15 +276,6 @@ class GameMap extends Component
 		BindNPC();
 		BindDropItem();
 		BindLoopEntity(0);
-	}
-	private function getPropSet(id:Int,type:String=null):TmxPropertySet 
-	{
-		var propSet:TmxPropertySet = new TmxPropertySet();
-		var strID = "<property name='id' value='" + id + "'/>";
-		var strType = (type!=null)?"<property name='type' value='" + type + "'/>":"";
-		var fast = new Fast(Xml.parse(strID + strType));
-		propSet.extend(fast);
-		return propSet;
 	}
 	
 	/**解析事件对象层**/

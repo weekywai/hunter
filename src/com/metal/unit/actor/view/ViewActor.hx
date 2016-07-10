@@ -106,9 +106,10 @@ class ViewActor extends ViewBase
 	override public function update():Void {
 		if (isDisposed || _isFree)
 			return;
-		if (_model != null){
+		if (_model != null) {
+			//_spine.update();
 			_spine.active = onCamera;
-			_model.color = _colorT.color;
+			//_model.color = _colorT.color;
 		}
 		/*
 		if (_skeleton.useMask) {

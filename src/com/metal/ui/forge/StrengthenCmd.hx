@@ -237,9 +237,9 @@ class StrengthenCmd extends ForgetBase
 				_goodsInfo.strExp += allExp;
 				numExp(_goodsInfo.strLv);
 				
-				if (_goodsInfo.vo.Equip==1)
+				if (_goodsInfo.vo.Equip)
 				{
-					_goodsInfo.vo.Equip = 0;
+					_goodsInfo.vo.Equip = false;
 					if (_goodsInfo.Kind == ItemType.IK2_GON)
 					{
 						trace("weapon");

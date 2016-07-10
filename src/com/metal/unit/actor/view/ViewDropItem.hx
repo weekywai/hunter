@@ -37,6 +37,7 @@ class ViewDropItem extends ViewObject
 	override public function onDispose():Void 
 	{
 		Actuate.stop(this);
+		Actuate.stop(_actor);
 		_bounds = null;
 		super.onDispose();
 	}

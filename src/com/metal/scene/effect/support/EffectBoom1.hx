@@ -83,7 +83,6 @@ class EffectBoom1 extends EffectEntity
 			//}, Math.floor(boomEffectArray.length*170*0.85));
 		//_effect.angle = req.angle-90;
 		//super.start(req);
-		
 	}
 	private function effectTween(tex:TextrueSpritemap, name:String)
 	{

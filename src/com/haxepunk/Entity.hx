@@ -24,6 +24,7 @@ abstract SolidType(Either<String, Array<String>>)
 /**
  * Main game Entity class updated by `Scene`.
  */
+
 @:allow(com.haxepunk.Mask)
 @:allow(com.haxepunk.Scene)
 class Entity extends Tweener

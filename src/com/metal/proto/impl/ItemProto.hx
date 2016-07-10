@@ -60,6 +60,7 @@ typedef GoodsVo = {
 	@:optional var Equip:Bool;
 	@:optional var Bullets:Int;
 	@:optional var Clips:Int;
+	@:optional var ClipsCost:Int;
 	/**唯一主键*/
 	@:optional var keyId:Int;
 	/**处于备用枪背包的第几个位置*/

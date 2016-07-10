@@ -104,7 +104,7 @@ class UnitStat extends Component implements IStat
 	
 	private function cmd_ChangeSpeed(userData:Dynamic):Void
 	{
-		trace("setp1");
+		//trace("setp1");
 		speedAdd = userData[0];
 		shootspanAdd = userData[1];
 	}
@@ -127,7 +127,7 @@ class UnitStat extends Component implements IStat
 	{
 		hp = Std.int(hp - userData.damage);
 		if (ActorState.IsDestroyed(_actor.stateID)){
-			trace("IsDestroyed");
+			//trace("IsDestroyed");
 			return;
 		}
 		//trace(hp + ">>" + userData);

@@ -27,7 +27,7 @@ class PopupCmd extends BaseCmd
 	private function noBtn_click(e):Void
 	{	
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('alertSystem').free(); callbackFun.dispatch(false);
+		callbackFun.dispatch(false);
 		dispose();
 		
 	}
@@ -35,7 +35,7 @@ class PopupCmd extends BaseCmd
 	private function yesBtn_click(e):Void
 	{
 		SfxManager.getAudio(AudioType.Btn).play();
-		_widget.getParent('alertSystem').free(); callbackFun.dispatch(true);
+		callbackFun.dispatch(true);
 		dispose();
 	}
 	
@@ -43,6 +43,7 @@ class PopupCmd extends BaseCmd
 	{
 		callbackFun.removeAll();
 		callbackFun = null;
+		UIBuilder.get("alertSystem").free();
 		_widget = null;
 		super.onDispose();
 	}

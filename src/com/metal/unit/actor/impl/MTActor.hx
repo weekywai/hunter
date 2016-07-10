@@ -51,8 +51,7 @@ class MTActor extends BaseActor
 	override public function onTick(timeDelta:Float) 
 	{
 		super.onTick(timeDelta);
-		if (ActorState.IsDestroyed(stateID))
-			return;
+		if (!canTick()) return;
 		if (isVictory)
 			return;
 			//trace(_model);
@@ -65,6 +64,14 @@ class MTActor extends BaseActor
 		//e = _model.collide("boss", x, y);
 		//trace("collide Boss: " + e);
 	}
+	
+	override function checkFall() 
+	{
+		notify(MsgActor.Soul);
+		x = _lastPos.x;
+		y = _lastPos.y;
+	}
+	
 	override function Notify_Attack(userData:Dynamic):Void 
 	{
 		//trace("stateID: " + stateID);
@@ -82,14 +89,15 @@ class MTActor extends BaseActor
 		trace("Notify_Melee");
 		transition(ActorState.Melee);
 	}
+	
 	override function Notify_ThrowBomb(userData:Dynamic):Void 
 	{
 		trace("Notify_ThrowBomb");
 		//trace("stateID: " + stateID);
 		if (owner.name == UnitModelType.Vehicle) 
 			return;
-		//if (stateID == ActorState.Melee || stateID == ActorState.ThrowBomb) return;
-		//transition(ActorState.ThrowBomb);
+		if (stateID == ActorState.Melee || stateID == ActorState.ThrowBomb) return;
+			transition(ActorState.ThrowBomb);
 	}
 	override function Notify_Jump(userData:Dynamic):Void 
 	{
@@ -147,6 +155,7 @@ class MTActor extends BaseActor
 		//陷阱
 		if (_model.collide(UnitModelType.Trap,x,y)!=null )
 		{
+			//trace("collide Trap!");
 			if (!cast(_stat, PlayerStat).istrapping) 
 			{
 				trace("collide Trap!");
@@ -157,14 +166,7 @@ class MTActor extends BaseActor
 		{
 			cast(_stat, PlayerStat).istrapping = false;
 		}
-		//落地
-		isGrounded = false;
-		var e = _model.collideTypes(_collides, x, y + 1);
-		if (e != null) 
-		//if (_model.collide(UnitModelType.Solid, x, y + 1) != null) 
-		{
-			isGrounded = true;
-		}
+		
 		if (isGrounded) 
 		{		
 			if (velocity.y > 0) {				
@@ -291,6 +293,7 @@ class MTActor extends BaseActor
 	
 	override function Notify_Respawn(userData:Dynamic):Void 
 	{
+		//trace(_lastPos + " now pos : "+x+":"+y);
 		super.Notify_Respawn(userData);
 		transition(ActorState.Stand);
 	}

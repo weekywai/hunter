@@ -45,4 +45,5 @@ class TableType
 	public static var P_Map:String = "map";
 	public static var P_Task:String = "task";
 	public static var P_News:String = "news";
+	public static var P_Guide:String = "guide";
 }

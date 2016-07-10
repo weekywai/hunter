@@ -47,7 +47,7 @@ class Buff extends Component
 	{
 		_info = info.buffInfo;
 		_maxTime = info.time;
-		_remainTime = _maxTime * 60;
+		_remainTime = (_maxTime / 1000) * 60;
 		_damage = info.damage;
 		_stat = info.stat;
 		switch(_info.kind) {
@@ -170,7 +170,7 @@ class Buff extends Component
 	{
 		var actorRate:Float = _info.EffectScript[0] / 100;
 		var bulletRate:Float = _info.EffectScript[1] / 100;
-		var speed = [bulletRate, bulletRate];
+		var speed = [actorRate, bulletRate];
 		owner.notify(MsgStat.ChangeSpeed, speed);
 	}
 	private function runaway()

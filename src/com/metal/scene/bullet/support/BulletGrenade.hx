@@ -6,6 +6,7 @@ import com.haxepunk.graphics.TextrueSpritemap;
 import com.haxepunk.graphics.atlas.TextureAtlasFix;
 import com.metal.config.ResPath;
 import com.metal.config.SfxManager;
+import com.metal.config.UnitModelType;
 import com.metal.enums.Direction;
 import com.metal.message.MsgItr;
 import com.metal.proto.impl.BulletInfo;
@@ -139,7 +140,10 @@ class BulletGrenade extends BulletEntity
 	
 	override function onCollide():Void 
 	{
-		if (_collides.length > 0) return;
+		if (_collides.length > 0) {
+			HXP.screen.shake(3, 0.2);
+			return;
+		}
 		collideTypesInto(_collideTypes, x, y, _collides);
 		if (_collides.length > 0) {
 			//trace(_collides);
@@ -161,6 +165,8 @@ class BulletGrenade extends BulletEntity
 				}
 			}
 			commitEffect();
+			if (_attackerType == UnitModelType.Player)
+				HXP.screen.shake(7, 0.3);
 			recycle();
 		}
 	}

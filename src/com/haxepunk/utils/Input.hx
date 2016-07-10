@@ -9,7 +9,7 @@ import openfl.ui.MultitouchInputMode;
 import com.haxepunk.HXP;
 import com.haxepunk.ds.Either;
 
-#if (cpp || neko)
+#if openfl_legacy
 	import openfl.events.JoystickEvent;
 #end
 
@@ -108,9 +108,9 @@ class Input
 	 */
 	public static var middleMouseReleased:Bool;
 	
-#if android
-	public dynamic static function onAndroidBack() : Void {}
-#end
+//#if android
+	public static var closeApp:Bool = false;
+//#end
 
 #end
 
@@ -339,7 +339,7 @@ class Input
 				HXP.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
 			}
 
-#if (openfl && (cpp || neko))
+#if openfl_legacy
 			HXP.stage.addEventListener(JoystickEvent.AXIS_MOVE, onJoyAxisMove);
 			HXP.stage.addEventListener(JoystickEvent.BALL_MOVE, onJoyBallMove);
 			HXP.stage.addEventListener(JoystickEvent.BUTTON_DOWN, onJoyButtonDown);
@@ -447,6 +447,7 @@ class Input
 				if (touch.released && !touch.pressed)
 				{
 					_touches.remove(touch.id);
+					//trace(_touchOrder+">>"+touch.id);
 					_touchOrder.remove(touch.id);
 				}
 			}
@@ -484,12 +485,12 @@ class Input
 
 	private static function onKeyUp(e:KeyboardEvent = null)
 	{
-		#if android
+		//#if android
 		if (e.keyCode == 27) {
-			e.stopImmediatePropagation ();
-			onAndroidBack();
+			if(!closeApp)
+				e.stopImmediatePropagation ();
 		}
-		#end
+		//#end
 		var code:Int = keyCode(e);
 		if (code == -1) // No key
 			return;
@@ -591,10 +592,11 @@ class Input
 
 	private static function onTouchEnd(e:TouchEvent)
 	{
-		_touches.get(e.touchPointID).released = true;
+		if(_touches.exists(e.touchPointID))
+			_touches.get(e.touchPointID).released = true;
 	}
 
-#if (openfl && (cpp || neko))
+#if openfl_legacy
 
 	private static function onJoyAxisMove(e:JoystickEvent)
 	{

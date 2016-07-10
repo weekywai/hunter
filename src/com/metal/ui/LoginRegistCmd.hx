@@ -62,15 +62,6 @@ class LoginRegistCmd extends BaseCmd
 		{
 			SfxManager.getAudio(AudioType.Btn).play();
 			GMLogin();
-			/*
-			LoginFileUtils.Id = "null";
-			notifyRoot(MsgNet.AssignAccount);
-			_main = UIBuilder.buildFn('ui/mainIndex.xml')( { } );
-			//_main = UIBuilder.getAs("main", Floating);
-			_main.show();
-			GameProcess.instance.initGame();
-			dispose();
-			*/
 		}
 		createPlayer.getChildAs("randName", Button).onPress = randName_click;//点击昵称界面的随机名字按钮
 	}
@@ -109,7 +100,7 @@ class LoginRegistCmd extends BaseCmd
 	private function onLogin(loginData:Dynamic, ?name:String)
 	{
 		sendMsg(MsgUI2.Loading, true);
-		LoginFileUtils.saveLogin(loginData, name);
+		//LoginFileUtils.saveLogin(loginData, name);
 		//notifyRoot(MsgNet.AssignAccount);
 		if(name!=null){
 			PlayerUtils.getInfo().data.NAME = name;

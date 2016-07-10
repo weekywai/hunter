@@ -272,6 +272,7 @@ class ViewEnemy extends ViewActor
 			//掉落物品在此解锁
 			createDropItem(drop);
 		}*/
+		
 		var item = new DropItemInfo();
 		item.ItemId = 10201;
 		item.Num = 1;

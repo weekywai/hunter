@@ -57,7 +57,6 @@ class EffectBoom2 extends EffectBoom1
 			Actuate.timer(i * 0.17).onComplete (effectTween, [boomEff, ""+i]);
 		}
 		//trace("x y " + x + ":" + y);
-		
 	}
 	
 	override public function update():Void 

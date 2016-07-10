@@ -46,6 +46,9 @@ class BaseActor extends GameBoardItem implements IActor
 	
 	private var _keepActive:Bool;
 	private var _doublejump:Bool;
+	private var _lastPos:Point;
+	/**地图高度*/
+	private var _mapHeight:Float;
 	
 	private var _collides:Array<String> = [UnitModelType.Solid, UnitModelType.Block];
 	private var _model:ViewBase;
@@ -68,6 +71,7 @@ class BaseActor extends GameBoardItem implements IActor
 		return _state.canTransition(targetStateID);
 	}
 	public function transition(targetID:Int):Void {
+		//trace("transition");
 		_state = _fsm.transition(_state, targetID, this);
 	}
 	
@@ -80,13 +84,15 @@ class BaseActor extends GameBoardItem implements IActor
 		{
 			if (!isNeedLeftFlip)
 				return _dir;
-			_model.flip = true;
+			if(_model!=null)
+				_model.flip = true;
 		}
 		else if (value == Direction.RIGHT)
 		{
 			if (!isNeedRightFlip)
 				return _dir;
-			_model.flip = false;
+			if(_model!=null)
+				_model.flip = false;
 		}
 		return _dir; 
 	}
@@ -120,6 +126,7 @@ class BaseActor extends GameBoardItem implements IActor
 		_friction = new Point(0.5, 0.5);
 		_maxSpeed = new Point(8, 16);
 		acceleration = new Point();
+		_lastPos = new Point();
 		_jumpHeight = 16;
 		stateTime = 0;
 		_doublejump = false;
@@ -199,6 +206,8 @@ class BaseActor extends GameBoardItem implements IActor
 	private function cmd_PostBoot(userData:Dynamic):Void {
 		//必须设置一种状态
 		transition(ActorState.Stand);
+		var map:GameMap = EntityUtil.findBoardComponent(GameMap);
+		_mapHeight = map.mapData.map.fullHeight;
 	}
 	private function cmd_PostLoad(userData:Dynamic):Void
 	{
@@ -207,17 +216,13 @@ class BaseActor extends GameBoardItem implements IActor
 	}
 	
 	public var isGrounded (default, default):Bool;
-
+	
 	override public function onTick(timeDelta:Float) 
 	{
-		if (isDisposed) return;
-		if (!isInBoard()) return;
-		if (_model == null) return;
-		
+		if (!canTick()) return;
 		//_model.active = (_keepActive)?_keepActive:_model.onCamera;
 		_keepActive = false;
-		if (stateID == ActorState.Destroyed)
-			return;
+		
 		// 更新状态逻辑
 		if (_state != null)
 			_state.update(this);
@@ -227,8 +232,15 @@ class BaseActor extends GameBoardItem implements IActor
 		//if (_model.collide(UnitModelType.Solid, x, y + 1) != null) 
 		{
 			isGrounded = true;
+			_lastPos.setTo(x, y);
 		}
-		
+		var deadHeight = _mapHeight + _model.height;
+		if (y > deadHeight){
+			//trace(HXP.camera.y + ":screen:" + HXP.screen.height + ":model:" + _model.height);
+			//trace("dead "+y + " deadHeight:"+deadHeight);
+			checkFall();
+			return;
+		}
 		onState();
 		
 		gravity();
@@ -240,27 +252,27 @@ class BaseActor extends GameBoardItem implements IActor
 		acceleration.x = 0;
 		super.onTick(timeDelta);
 	}
-		
+	private function canTick():Bool
+	{
+		if (isDisposed || !isInBoard() || _model == null || _state == null || stateID == ActorState.Destroyed)
+			return false;
+		return true;
+	}
+	private function checkFall()
+	{
+		notify(MsgActor.Destroy);
+	}
+	
 	public function onState()
 	{
+		//if(_state==null)
+			//trace()
 		if (ActorState.IsDestroyed(stateID))
 			return;
 		//if (Math.abs(velocity.x) > _maxSpeed.x) {
 			friction(true, false);
 		//}
 		
-		
-		//if (isGrounded) 
-		//{
-			//if (_jumped > 0) {
-				//_jumped = 0;
-				//trace("isGrounded,_jumped = 0");
-				//transition(ActorState.Stand);
-			//}else if (stateID != ActorState.Jump && stateID != ActorState.Attack && velocity.x == 0) {	
-				//transition(ActorState.Stand);
-			//}
-			//
-		//}
 		if (isGrounded) 
 		{		
 			if (velocity.y > 0) {				
@@ -276,6 +288,8 @@ class BaseActor extends GameBoardItem implements IActor
 			}			
 		}
 	}
+	
+	
 	function gravity():Void 
 	{
 		//increase velocity/speed based on gravity
@@ -333,7 +347,6 @@ class BaseActor extends GameBoardItem implements IActor
 			//increase velocity/speed
 			velocity.x += acceleration.x;
 		}
-		
 		//if we should move vertically
 		if ( my )
 		{
@@ -343,7 +356,6 @@ class BaseActor extends GameBoardItem implements IActor
 			//increase velocity/speed
 			velocity.y += acceleration.y;
 		}
-		
 	}
 	/**
 	 * Moves the set entity horizontal at a given speed, checking for collisions and slopes
@@ -373,7 +385,7 @@ class BaseActor extends GameBoardItem implements IActor
 					//increase/decrease positions
 					//if the player is in the way, simply don't move (but don't count it as stopping)
 					if (e.collideTypes(_collides, x + HXP.sign(spdx), y - s) == null) {
-						x += HXP.sign(spdx);
+						x += HXP.sign(spdx) * _stat.speedAdd;
 					}
 					
 					//move up the slope
