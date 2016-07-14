@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class MonsterAppeatManager
 {
-	public static var instance(default, null):MonsterAppeatManager = new MonsterAppeatManager();
+	public static var instance(get, null):MonsterAppeatManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new MonsterAppeatManager();
+		return instance;
+	}
 	private var _data:IntMap<MonsterAppearInfo> ;
 	public function new() 
 	{

@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class LiveNessManager
 {
-	public static var instance(default, null):LiveNessManager = new LiveNessManager();
+	public static var instance(get, null):LiveNessManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new LiveNessManager();
+		return instance;
+	}
 	private var _data:IntMap<LiveNessInfo>;
 	
 	public var LiveNess(get, null):IntMap<LiveNessInfo>;

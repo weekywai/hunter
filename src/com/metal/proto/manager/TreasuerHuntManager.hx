@@ -11,7 +11,13 @@ import haxe.xml.Fast;
  */
 class TreasuerHuntManager
 {
-	public static var instance(default, null):TreasuerHuntManager = new TreasuerHuntManager();
+	public static var instance(get, null):TreasuerHuntManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new TreasuerHuntManager();
+		return instance;
+	}
+	
 	public var _data:IntMap<TreasuerHuntInfo>;
 	public function new() 
 	{

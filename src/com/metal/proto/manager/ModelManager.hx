@@ -12,7 +12,12 @@ import haxe.xml.Fast;
 class ModelManager
 {
 
-	public static var instance(default, null):ModelManager = new ModelManager();
+	public static var instance(get, null):ModelManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new ModelManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<ModelInfo>;
 	

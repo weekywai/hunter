@@ -12,7 +12,12 @@ import haxe.xml.Fast;
  */
 class FilterManager
 {
-	public static var instance(default, null):FilterManager = new FilterManager();
+	public static var instance(get, null):FilterManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new FilterManager();
+		return instance;
+	}
 	
 	private var _data:StringMap<FilterInfo>;
 	public function new() 

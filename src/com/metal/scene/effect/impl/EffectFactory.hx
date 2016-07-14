@@ -17,7 +17,12 @@ import haxe.ds.IntMap;
 using com.metal.enums.EffectEnum.EffectAniType;
 class EffectFactory
 {
-	public static var instance(default, null):EffectFactory = new EffectFactory();
+	public static var instance(get, null):EffectFactory;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new EffectFactory();
+		return instance;
+	}
 	
 	private var _class:IntMap<Class<Entity>>;
 	public function new() 

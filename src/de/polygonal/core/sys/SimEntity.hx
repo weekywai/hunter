@@ -1,6 +1,7 @@
 package de.polygonal.core.sys;
 
 import com.metal.message.MsgUtils;
+import com.metal.ui.controller.ControllCmd;
 import de.polygonal.core.es.Entity;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
@@ -62,12 +63,14 @@ class SimEntity extends Entity implements IObservable
 	public function addComponent<T:Component>(inst:T):T
 	{
 		var c:Component = inst;
+		
 		if (c.owner != null){
 			if (Type.enumEq(c.owner, this))
 				cast c;
 			else 
 				throw "has owner";
 		}
+		
 		if (compMap.contains(c))
 			return cast c;
 		compMap.append(c);

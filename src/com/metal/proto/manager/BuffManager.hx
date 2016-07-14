@@ -12,7 +12,12 @@ import haxe.xml.Fast;
 class BuffManager
 {
 	
-	public static var instance(default, null):BuffManager = new BuffManager();
+	public static var instance(get, null):BuffManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new BuffManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<BuffInfo>;
 	

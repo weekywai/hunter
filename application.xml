@@ -24,7 +24,8 @@
 	
 	<set name="openfl-legacy" />
 	<!--<set name="telemetry" />-->
-	<!--<config:hxtelemetry host="192.168.1.100" allocations="true" />-->
+	<!--<set name="crashdumper" />-->
+	<config:hxtelemetry host="192.168.1.100" allocations="true" />
 	<!-- classpath, haxe libs -->
 	<source path="src" />
 	<haxelib name="openfl" />
@@ -34,10 +35,10 @@
 	<!--<haxelib name="format" />-->
 	<haxelib name="dconsole" />
 	<haxelib name="bitmapFont" />
-	<!--<haxelib name="crashdumper" unless="flash"/>-->
+	<haxelib name="crashdumper" if="crashdumper"/>
 	<haxelib name="HxTelemetry" if="telemetry"/>
-	<haxedef name="HXCPP_STACK_LINE" unless="flash"/>
-	<haxedef name="HXCPP_STACK_TRACE" unless="flash"/>
+	<haxedef name="HXCPP_STACK_LINE" if="crashdumper"/>
+	<haxedef name="HXCPP_STACK_TRACE" if="crashdumper"/>
 	<haxedef name="HXCPP_TELEMETRY" if="telemetry" />
 	
 	

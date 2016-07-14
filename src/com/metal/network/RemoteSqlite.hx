@@ -14,7 +14,13 @@ import haxe.db.Connection;
  */
 class RemoteSqlite
 {
-	public static var instance(default, null):RemoteSqlite = new RemoteSqlite();
+	public static var instance(get, null):RemoteSqlite;
+	static function get_instance():RemoteSqlite
+	{
+		if (instance == null)
+			instance = new RemoteSqlite();
+		return instance;
+	}
 	private var _cnx:Connection;
 	private var _data:Connection;
 	/**记录是否空表*/

@@ -13,7 +13,12 @@ import haxe.xml.Fast;
 class TaskManager
 {
 
-	public static var instance(default, null):TaskManager = new TaskManager();
+	public static var instance(get, null):TaskManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new TaskManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<Task_Info>;
 

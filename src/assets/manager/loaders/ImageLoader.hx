@@ -33,7 +33,11 @@ class ImageLoader extends BaseLoader {
 		#if (flash || html5)
 		data = cast(flashLoader.content, Bitmap).bitmapData;
 		#else
-		data = BitmapData.loadFromBytes(loader.data);
+			#if openfl_legacy
+			data = BitmapData.loadFromBytes(loader.data);
+			#else
+			data = BitmapData.fromBytes(loader.data);
+			#end
 		#end
 	}
 	

@@ -112,10 +112,7 @@ class DecompositionCmd extends ForgetBase
 			sendMsg(MsgUI.Tips, { msg:"选择分解的装备", type:TipsType.tipPopup} );
 		}else
 		{
-			sendMsg(MsgUI.Tips, { msg:"确定分解所选择的装备？", type:TipsType.buyTip, callback:callBackFun} );
-			//var tipCmd:TipCmd = new TipCmd();
-			//tipCmd.initComponent(null);
-			//tipCmd.callbackFun.addOnce(callBackFun);
+			sendMsg(MsgUI.Tips, { msg:"确定分解所选择的装备？", type:TipsType.tipPopup, callback:callBackFun} );
 		}
 	}
 	/**确定分解*/
@@ -156,7 +153,7 @@ class DecompositionCmd extends ForgetBase
 					{
 						var itemInfo = Unserializer.run(Serializer.run(GoodsProtoManager.instance.getItemById(data[0])));
 						goods.push(data[0]);
-						txtStr += itemInfo.itemName+" x" + data[2] + "   ";
+						txtStr += itemInfo.Name+" x" + data[2] + "   ";
 					}
 				}else
 				{

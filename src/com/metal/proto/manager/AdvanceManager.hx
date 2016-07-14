@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class AdvanceManager
 {
-	public static var instance(default, null):AdvanceManager = new AdvanceManager();
+	public static var instance(get, null):AdvanceManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new AdvanceManager();
+		return instance;
+	}
 	private var _data:IntMap<AdvanceInfo>;
 	public function new() 
 	{

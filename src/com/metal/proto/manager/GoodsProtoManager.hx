@@ -12,7 +12,12 @@ using com.metal.proto.impl.ItemProto;
  */
 class GoodsProtoManager
 {
-	public static var instance(default, null):GoodsProtoManager = new GoodsProtoManager();
+	public static var instance(get, null):GoodsProtoManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new GoodsProtoManager();
+		return instance;
+	}
 	var keyIdMap:IntMap<ItemBaseInfo>;
 	
 	public function new() 

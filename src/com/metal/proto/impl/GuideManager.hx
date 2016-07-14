@@ -23,7 +23,12 @@ typedef GuideInfo = {
  */
 class GuideManager
 {
-	public static var instance(default, null):GuideManager = new GuideManager();
+	public static var instance(get, null):GuideManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new GuideManager();
+		return instance;
+	}
 	public var _data:IntMap<GuideInfo>;
 	
 	public function new() 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Box id="'tipPopup'" name="'tipPopup'" widthPt="100" heightPt="100" defaults="'Screen,Level1'">
 	<Widget w="800" h="426" skinName="'SuerPopupBg'">
-	<!--<Widget w="768" h="407" skinName="'SuerPopupBg'">-->
-		
-		<Button name="'noBtn'" rightPt="-3" topPt="6" defaults="'closeBtn,HightLight'"on-click="$this.getParent('popup').free();"/>
-		<Button name="'yesBtn'" rightPt="8" bottomPt="-11" text="'确定'" defaults="'submitBtn,HightLight'" on-click="$this.getParent('popup').free();"/>
+		<Button name="'noBtn'" leftPt="7" bottomPt="-11" text="'取消'"
+			defaults="'submitBtn,HightLight'" 
+		/>
+		<Button name="'yesBtn'" rightPt="7" bottomPt="-11" text="'确定'" defaults="'submitBtn,HightLight'" />
 		<Box widthPt="100" heightPt="100">
 			<Text defaults="'TitleWrite'" label-wordWrap="true" text="@msg" w="760" align="'center,top'"/>
 		</Box>

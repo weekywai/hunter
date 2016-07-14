@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class ScoreManager
 {
-	public static var instance(default, null):ScoreManager = new ScoreManager();
+	public static var instance(get, null):ScoreManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new ScoreManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<ScoreInfo>;
 	

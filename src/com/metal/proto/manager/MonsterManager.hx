@@ -11,7 +11,12 @@ import haxe.xml.Fast;
 class MonsterManager
 {
 
-	public static var instance(default, null):MonsterManager = new MonsterManager();
+	public static var instance(get, null):MonsterManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new MonsterManager();
+		return instance;
+	}
 	
 	public function new() 
 	{

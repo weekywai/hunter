@@ -73,7 +73,7 @@ class EndlessCopyCmd extends BaseCmd
 	/*点击关卡*/
 	private function handler():Void
 	{
-		sendMsg(MsgUI.Tips, { msg:GuideText.Duplicate(taskType), type:TipsType.onBattle} );
+		openTip(TipsType.onBattle, GuideText.Duplicate(taskType));
 		
 		var tipCmd:BattleCmd = new BattleCmd();
 		tipCmd.onInitComponent();
@@ -96,10 +96,7 @@ class EndlessCopyCmd extends BaseCmd
 				dispose();
 			}else
 			{
-				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip, callback:callBackFun_buy} );
-				//var tipCmd:TipCmd = new TipCmd();
-				//tipCmd.onInitComponent();
-				//tipCmd.callbackFun.addOnce(callBackFun_buy);
+				openTip("是否购买体力", callBackFun_buy);
 			}
 		}
 	}

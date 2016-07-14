@@ -57,7 +57,12 @@ class HXP
 	 * Format: Major.Minor.Patch
 	 */
 	public static inline var VERSION:String = "";// HaxelibInfo.version;
-
+	
+	// Global Flash objects.
+	/** The flash stage. */
+	public static var stage:Stage;
+	/** The Engine instance. */
+	public static var engine:Engine;
 	/**
 	 * Flash equivalent: Number.MAX_VALUE
 	 */
@@ -1249,7 +1254,11 @@ class HXP
 	public static function resizeStage (width:Int, height:Int)
 	{
 		#if (cpp || neko)
-		HXP.stage.resize(width, height);
+			#if openfl_legacy
+			HXP.stage.resize(width, height);
+			#else
+			HXP.stage.onWindowResize(HXP.stage.window, width, height);
+			#end
 		resize(width, height);
 		#elseif debug
 		trace("Can only resize the stage in cpp or neko targets.");
@@ -1291,11 +1300,7 @@ class HXP
 	public static var RAD(get, never):Float;
 	private static inline function get_RAD(): Float { return Math.PI / -180; }
 
-	// Global Flash objects.
-	/** The flash stage. */
-	public static var stage:Stage;
-	/** The Engine instance. */
-	public static var engine:Engine;
+	
 
 	// Global objects used for rendering, collision, etc.
 	@:dox(hide) public static var point:Point = new Point();

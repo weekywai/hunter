@@ -78,9 +78,11 @@ class BattleCmd extends BaseCmd
 		_widget.getChildAs("bossFeature", Text).text = "";//"BOSS特性:" + data.BossFeatures;
 		setGradeCondition(data);
 		setStar(data);
+		
 		var panel = _widget.getChildAs("drop", HBox);
 		if (panel.numChildren > 0) panel.removeChildren();
 		//trace(data.PreDuplicateId);
+		
 		if (data.Id > 9000 && data.Id < 9004) {
 			var list = data.DropItem3;
 			if (data.DropItem3.length > 4){
@@ -94,15 +96,16 @@ class BattleCmd extends BaseCmd
 				var oneGoods = createGoods(tempInfo, Std.parseInt(j[1]));
 				panel.addChild(oneGoods);
 			}
-			
 			return;
 		}
+		
 		var oneGoods:Widget = null;
 		var dropArr:Array<Array<Int>> = DropItemUtils.ordinaryDrop(data,true);
 		//trace("dropArr.length: "+dropArr.length);
+		
 		for (i in 0...dropArr.length)
 		{
-			var tempInfo = GoodsProtoManager.instance.getItemById(dropArr[i][0],false);
+			var tempInfo = GoodsProtoManager.instance.getItemById(dropArr[i][0], false);
 			oneGoods = createGoods(tempInfo, dropArr[i][1]);
 			panel.addChild(oneGoods);
 		}
@@ -113,13 +116,13 @@ class BattleCmd extends BaseCmd
 		//品质
 		var quality:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID), x:13, y:13 } );
 		var quality_1:Bmp = UIBuilder.create(Bmp, { src:GoodsProtoManager.instance.getColorSrc(tempInfo.ID, 0), x:5, y:5 } );
-		var oneGoods = UIBuilder.buildFn('ui/popup/oneGoods.xml')( { } );
-		oneGoods.getChildAs("img", Bmp).addChild(quality);
-		oneGoods.getChildAs("img", Bmp).addChild(img);
-		oneGoods.getChildAs("img", Bmp).addChild(quality_1);
+		var oneGoods:Widget = UIBuilder.buildFn('ui/popup/oneGoods.xml')( { } );
+		var ico = oneGoods.getChild("img");
+		ico.addChild(quality);
+		ico.addChild(img);
+		ico.addChild(quality_1);
 		
-		
-		oneGoods.getChildAs("goodsName", Text).text = tempInfo.itemName;
+		oneGoods.getChildAs("goodsName", Text).text = tempInfo.Name;
 		oneGoods.getChildAs("goodsNum", Text).text = "x" + num;
 		return oneGoods;
 	}
@@ -138,10 +141,10 @@ class BattleCmd extends BaseCmd
 	/*是*/
 	private function yesBtn_click(e):Void
 	{
-		trace("click yesBtn_click");
+		//trace("click yesBtn_click");
 		SfxManager.getAudio(AudioType.Btn).play();
 		//sendMsg(MsgUI2.Loading, true);
-		trace(callbackFun.numListeners);
+		//trace(callbackFun.numListeners);
 		callbackFun.dispatch(true);
 		//trace(callbackFun.numListeners);
 		dispose();

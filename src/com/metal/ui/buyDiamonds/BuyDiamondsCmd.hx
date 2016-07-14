@@ -54,10 +54,7 @@ class BuyDiamondsCmd extends BaseCmd
 				SfxManager.getAudio(AudioType.Btn).play();
 				var diamond = DiamondManager.instance.getProto(btnNum);
 				var price:String  = "是否花费人民币" + Std.string(diamond.Price) + "元\n购买" + Std.string(diamond.Gold) +"颗钻石";
-				sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:tipCallback} );
-				//var tipCmd:TipCmd = new TipCmd();
-				//tipCmd.onInitComponent();
-				//tipCmd.callbackFun.addOnce(tipCallback);
+				openTip(price, tipCallback);
 			}
 			_btnList[key] = buyBtn;
 			key++;

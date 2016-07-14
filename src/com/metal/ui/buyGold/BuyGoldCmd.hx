@@ -70,13 +70,12 @@ class BuyGoldCmd extends BaseCmd
 		var price:String = "";
 		if (PlayerUtils.getInfo().data.GEM < Gold_Manager.instance.getProto(btnNum).Price)
 		{
-			sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
+			openTip("钻石不足");
 			return;
 		}
 		
 		price = "是否花费" + Std.string(Gold_Manager.instance.getProto(btnNum).Price) + "颗钻石购买金币";
-		
-		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:callBackFun} );
+		openTip(price, callBackFun);
 	}
 	
 	private function callBackFun(flag:Bool):Void

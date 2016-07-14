@@ -45,7 +45,7 @@ import hxtelemetry.HxTelemetry;
  */
 class GameProcess extends MainLoop
 {
-	public static var instance(default, null):GameProcess = new GameProcess();
+	public static var instance(get, null):GameProcess;// = new GameProcess();
 	
 	public static var rootStage(default, null):Sprite;
 	public static var gameStage(default, null):Sprite;
@@ -73,6 +73,13 @@ class GameProcess extends MainLoop
 	private var _fps:FPS;
 	private var _board:SimEntity;
 	private var _render:Bool = false;
+	
+	static private function get_instance() {
+		if (instance == null)
+			instance = new GameProcess();
+		return instance;
+	}
+	
 	public function new() {
 		super();
 	}

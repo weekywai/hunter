@@ -11,7 +11,13 @@ import haxe.xml.Fast;
  */
 class ForgeManager
 {
-	public static var instance(default, null):ForgeManager = new ForgeManager();
+	public static var instance(get, null):ForgeManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new ForgeManager();
+		return instance;
+	}
+	
 	private var _data:IntMap<StrengthenInfo>;
 	public function new() 
 	{

@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class Gold_Manager
 {
-	public static var instance(default, null):Gold_Manager = new Gold_Manager();
+	public static var instance(get, null):Gold_Manager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new Gold_Manager();
+		return instance;
+	}
 	
 	private var _data:IntMap<Gold_Info>;
 	public var data(get, null):IntMap<Gold_Info>;

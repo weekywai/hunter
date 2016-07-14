@@ -11,7 +11,13 @@ import haxe.xml.Fast;
  */
 class DecompositionManager
 {
-	public static var instance(default, null):DecompositionManager = new DecompositionManager();
+	public static var instance(get, null):DecompositionManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new DecompositionManager();
+		return instance;
+	}
+	
 	private var _data:IntMap<DecompositionInfo>;
 	public function new() 
 	{

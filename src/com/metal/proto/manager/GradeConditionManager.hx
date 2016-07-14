@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class GradeConditionManager
 {
-	public static var instance(default, null):GradeConditionManager = new GradeConditionManager();
+	public static var instance(get, null):GradeConditionManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new GradeConditionManager();
+		return instance;
+	}
 	
 	public function new() 
 	{

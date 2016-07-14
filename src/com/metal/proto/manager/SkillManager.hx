@@ -11,7 +11,13 @@ import haxe.xml.Fast;
  */
 class SkillManager
 {
-	public static var instance(default, null):SkillManager = new SkillManager();
+	public static var instance(get, null):SkillManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new SkillManager();
+		return instance;
+	}
+	
 	public function new() 
 	{
 		_data = new IntMap();

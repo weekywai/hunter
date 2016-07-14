@@ -101,11 +101,9 @@ class SkillCmd extends BaseCmd
 			case 5:
 				price = GuideText.SkillPrice4;
 		}
-		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:callBackFun} );
-		//var tipCmd:TipCmd = new TipCmd();
-		//tipCmd.onInitComponent();
-		//tipCmd.callbackFun.addOnce(callBackFun);
+		openTip(price, callBackFun);
 	}
+	
 	private function callBackFun(flag:Bool):Void
 	{
 		if (flag)

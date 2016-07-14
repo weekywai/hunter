@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class PlayerModelManager
 {
-public static var instance(default, null):PlayerModelManager = new PlayerModelManager();
+	public static var instance(get, null):PlayerModelManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new PlayerModelManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<PlayerModelInfo>;
 	

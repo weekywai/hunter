@@ -10,7 +10,12 @@ import haxe.ds.IntMap;
  */
 class BattlePrepareManager
 {
-	public static var instance(default, null):BattlePrepareManager = new BattlePrepareManager();
+	public static var instance(get, null):BattlePrepareManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new BattlePrepareManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<BattlePrepareInfo>;
 	

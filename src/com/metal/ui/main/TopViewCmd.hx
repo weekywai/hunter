@@ -135,12 +135,9 @@ class TopViewCmd extends BaseCmd
 		var _playInfo = cast(GameProcess.instance.getComponent(GameSchedual), GameSchedual).playerInfo;
 		if (_playInfo.data.POWER >= _maxPower)
 		{
-			sendMsg(MsgUI.Tips, { msg:"体力已达上限", type:TipsType.tipPopup} );
-		}else{
-			sendMsg(MsgUI.Tips, { msg:"是否花费100颗钻石购买100体力", type:TipsType.buyTip, callback:callBackFun} );
-			//var tipCmd:TipCmd = new TipCmd();
-			//tipCmd.onInitComponent();
-			//tipCmd.callbackFun.addOnce(callBackFun);
+			openTip("体力已达上限");
+		}else {
+			openTip("是否花费100颗钻石购买100体力", callBackFun);
 		}
 	}
 	/**确定购买体力*/
@@ -151,7 +148,7 @@ class TopViewCmd extends BaseCmd
 			var _playerInfo = PlayerUtils.getInfo();
 			if (_playerInfo.data.GEM < 100)
 			{
-				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
+				openTip("钻石不足");
 				return;
 			}
 			notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.POWER, data:_maxPower } );

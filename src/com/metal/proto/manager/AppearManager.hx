@@ -12,7 +12,12 @@ import haxe.xml.Fast;
 class AppearManager
 {
 
-	public static var instance(default, null):AppearManager = new AppearManager();
+	public static var instance(get, null):AppearManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new AppearManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<AppearInfo>;
 	

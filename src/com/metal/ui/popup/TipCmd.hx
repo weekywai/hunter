@@ -15,19 +15,17 @@ class TipCmd extends BaseCmd
 {
 	public var callbackFun:Signal1<Dynamic>;
 	private var _data:Dynamic;
-	//public var txt(default, set):String;
 	public function new() 
 	{
 		super();
-		onInitComponent();
 		SfxManager.getAudio(AudioType.t001).play();
 		_widget = UIBuilder.get("tipPopup");
 		callbackFun = new Signal1();
-		onEnabel();
 	}
 	
-	private function onEnabel():Void
+	override function onInitComponent():Void 
 	{
+		super.onInitComponent();
 		_widget.getChildAs("noBtn", Button).onPress = noBtn_click;
 		_widget.getChildAs("yesBtn", Button).onPress = yesBtn_click;
 	}

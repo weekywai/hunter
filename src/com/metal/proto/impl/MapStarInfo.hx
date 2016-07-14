@@ -8,7 +8,12 @@ import haxe.ds.IntMap;
 class MapStarInfo
 {
 	/**dataMap[DuplicateInfo.id]=array(condition1==true,condition2==true,condition3==true)*/
-	public static var instance(default, null):MapStarInfo = new MapStarInfo();
+	public static var instance(get, null):MapStarInfo;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new MapStarInfo();
+		return instance;
+	}
 	public var dataMap:IntMap<Int>;
 	public function new() 
 	{

@@ -72,7 +72,7 @@ class LoginRegistCmd extends BaseCmd
 		var c = str.charAt(str.length-1);
 		if (!charExp.match(c)){
 			//trace("not eng::"+c+" match:"+charExp.match(c));
-			sendMsg(MsgUI.Tips, { msg:"密码只能是英文或数字", type:TipsType.tipPopup} );
+			openTip("密码只能是英文或数字");
 			e.currentTarget.text = str.substr(0, str.length - 1);
 		}
 	}

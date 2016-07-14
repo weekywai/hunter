@@ -55,12 +55,9 @@ class LatestFahionCmd extends BaseCmd
 		SfxManager.getAudio(AudioType.Btn).play();
 		var info = PlayerUtils.getInfo();
 		if (info.data.ROLEID != 1002) {
-			sendMsg(MsgUI.Tips, { msg:"是否立刻充值500元！", type:TipsType.buyTip, callback:buyFun} );
-			//var tipCmd:TipCmd = new TipCmd();
-			//tipCmd.onInitComponent();
-			//tipCmd.callbackFun.addOnce(buyFun);
+			openTip("是否立刻充值500元！", buyFun);
 		}else {
-			sendMsg(MsgUI.Tips, { msg:"你已经获得此装束！", type:TipsType.tipPopup} );
+			openTip("你已经获得此装束！");
 		}
 	}
 	private function buyFun(flag:Bool)
@@ -77,7 +74,7 @@ class LatestFahionCmd extends BaseCmd
 		notify(MsgUIUpdate.UpdateModel);
 		sendMsg(MsgUIUpdate.ClearMainView);
 		notify(MsgUIUpdate.UpdataReturnBtn, true);
-		sendMsg(MsgUI.Tips, { msg:"恭喜你获得此装束！\n生命 +3000    \n攻击 +1000", type:TipsType.tipPopup} );
+		openTip("恭喜你获得此装束！\n生命 +3000    \n攻击 +1000");
 	}
 	override function onClose():Void
 	{

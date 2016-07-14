@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class ActorPropertyManager
 {
-	public static var instance(default, null):ActorPropertyManager = new ActorPropertyManager();
+	public static var instance(get, null):ActorPropertyManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new ActorPropertyManager();
+		return instance;
+	}
 	private var _data:IntMap<ActorPropertyInfo>;
 	public function new() 
 	{

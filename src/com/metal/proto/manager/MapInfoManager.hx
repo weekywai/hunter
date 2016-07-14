@@ -12,7 +12,12 @@ import haxe.xml.Fast;
  */
 class MapInfoManager
 {
-	public static var instance(default, null):MapInfoManager = new MapInfoManager();
+	public static var instance(get, null):MapInfoManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new MapInfoManager();
+		return instance;
+	}
 	
 	public function new() 
 	{

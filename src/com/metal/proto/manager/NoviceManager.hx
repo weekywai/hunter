@@ -11,7 +11,13 @@ import haxe.xml.Fast;
  */
 class NoviceManager
 {
-	public static var instance(default, null):NoviceManager = new NoviceManager();
+	public static var instance(get, null):NoviceManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new NoviceManager();
+		return instance;
+	}
+	
 	private var _data:IntMap<NoviceInfo>;
 	public var novice(get, null):IntMap<NoviceInfo>;
 	private function get_novice():IntMap<NoviceInfo>

@@ -15,7 +15,12 @@ import haxe.xml.Fast;
 class QuestsManager
 {
 
-	public static var instance(default, null):QuestsManager = new QuestsManager();
+	public static var instance(get, null):QuestsManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new QuestsManager();
+		return instance;
+	}
 	private var _data:IntMap<QuestInfo>;
 	var arr:Array<Dynamic>;
 	

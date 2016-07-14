@@ -7,7 +7,12 @@ import com.metal.unit.bevtree.BevNode;
  */
 class AiFactory
 {
-	public static var instance(default, null):AiFactory = new AiFactory();
+	public static var instance(get, null):AiFactory;
+	private static function get_instance():AiFactory {
+		if (instance == null)
+			instance = new AiFactory();
+		return instance; 
+	}
 	
 	public function new() 
 	{

@@ -9,7 +9,12 @@ import haxe.xml.Fast;
  */
 class AdvanceManater
 {
-	public static var instance(default, null):AdvanceManater = new AdvanceManater();
+	public static var instance(get, null):AdvanceManater;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new AdvanceManater();
+		return instance;
+	}
 	private var _protpAdvance:IntMap<AdvanceInfo>;
 	public function new() 
 	{

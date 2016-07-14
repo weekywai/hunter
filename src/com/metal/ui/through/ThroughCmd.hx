@@ -59,7 +59,7 @@ class ThroughCmd extends BaseCmd
 		
 		_scrollPanel = _widget.getChildAs("scrollPanel", Widget);
 		if (_scrollPanel.numChildren > 0) _scrollPanel.removeChildren();
-		trace(_duplicateArr.length);
+		//trace(_duplicateArr.length);
 		var playerInfo = PlayerUtils.getInfo();
 		for (i in 0..._duplicateArr.length)
 		{
@@ -93,7 +93,11 @@ class ThroughCmd extends BaseCmd
 					if (oneInfo.Id <= (playerInfo.data.THROUGH + 1))
 					{
 						if (oneInfo.Id == (playerInfo.data.THROUGH + 1)) {
-							Actuate.effects(handlerBtn, 0.8).filter(GlowFilter, {color:0xFFFFCC, blurX:45,blurY:45, strength:1} ).repeat().reflect();
+#if openfl_legacy
+								Actuate.effects(handlerBtn, 0.8).filter(GlowFilter, {color:0xFFFFCC, blurX:45,blurY:45, strength:1} ).repeat().reflect();
+#else
+							//TODO
+#end
 						}
 						handlerBtn.getChild("lock").free();
 						handlerBtn.onRelease = function(e)
@@ -163,10 +167,11 @@ class ThroughCmd extends BaseCmd
 	/*点击关卡*/
 	public function handler():Void
 	{
-		sendMsg(MsgUI.Tips, { msg:"副本未开启", type:TipsType.onBattle} );
+		openTip(TipsType.onBattle, "副本未开启");
 		
 		var tipCmd:BattleCmd = new BattleCmd();
 		tipCmd.onInitComponent();
+
 		tipCmd.setData(DuplicateManager.instance.getProtoDuplicateByID(checkpoint));
 		tipCmd.callbackFun.addOnce(callBackFun);
 	}
@@ -179,13 +184,14 @@ class ThroughCmd extends BaseCmd
 			var info:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);
 			if (_playInfo.data.POWER >= info.NeedPower) {
 				var power = _playInfo.data.POWER - info.NeedPower;
+				
 				notifyRoot(MsgNet.UpdateInfo, { type:PlayerProp.POWER, data:power } );
 				notify(MsgUIUpdate.Vit, _playInfo);
 				sendMsg(MsgUI.Battle, checkpoint);
 				dispose();
 			}else
 			{
-				sendMsg(MsgUI.Tips, { msg:"是否购买体力", type:TipsType.buyTip, callback:callBackFun_buy} );
+				openTip("是否购买体力", callBackFun_buy);
 			}
 		}
 	}
@@ -197,7 +203,7 @@ class ThroughCmd extends BaseCmd
 			var _playInfo = PlayerUtils.getInfo();
 			if (_playInfo.data.GEM < 100)
 			{
-				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
+				openTip("钻石不足");
 				return;
 			}
 			var duplicate:DuplicateInfo = DuplicateManager.instance.getProtoDuplicateByID(checkpoint);

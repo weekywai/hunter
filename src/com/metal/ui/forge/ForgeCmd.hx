@@ -142,7 +142,7 @@ class ForgeCmd extends BaseCmd
 		_goodsPanel.addChild(quality);
 		_goodsPanel.addChild(img);
 		_goodsPanel.addChild(quality_1);
-		_name.text = goodsData.itemName;
+		_name.text = goodsData.Name;
 		_select.addChild(_goodsPanel);
 	
 		var equipLv:StrengthenInfo = EquipProp.Strengthen(goodsData, goodsData.strLv);

@@ -74,10 +74,10 @@ class TreasureHuntCmd extends BaseCmd
 			_chestInfo = ChestManager.instance.getChest(1);
 			if (_playerInfo.data.GEM < _chestInfo.NeedDiamond)
 			{
-				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
+				openTip("钻石不足");
 				return;
 			}
-			sendMsg(MsgUI.Tips, { msg:"是否花费98钻石购买？", type:TipsType.buyTip, callback:callBackFun} );
+			openTip("是否花费98钻石购买？", callBackFun);
 		}
 		_newbieFun1 = silverBtn.onPress;
 		
@@ -94,10 +94,10 @@ class TreasureHuntCmd extends BaseCmd
 			_chestInfo = ChestManager.instance.getChest(2);
 			if (_playerInfo.data.GEM < _chestInfo.NeedDiamond)
 			{
-				sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
+				openTip("钻石不足");
 				return;
 			}
-			sendMsg(MsgUI.Tips, { msg:"是否花费888钻石购买十连抽？", type:TipsType.buyTip, callback:callBackFun} );
+			openTip("是否花费888钻石购买十连抽？", callBackFun);
 		}
 		_widget.getChild("content").addChild(treasure1);
 		_widget.getChild("content").addChild(treasure2);
@@ -149,7 +149,7 @@ class TreasureHuntCmd extends BaseCmd
 			}
 			
 			notifyRoot(MsgPlayer.UpdateGem, -_chestInfo.NeedDiamond);
-			sendMsg(MsgUI.Tips, { msg:"", type:TipsType.gainGoods} );
+			openTip(TipsType.gainGoods);
 			var gainGoods:GainGoodsCmd = new GainGoodsCmd();
 			gainGoods.onInitComponent();
 			gainGoods.setData(itemIdList);

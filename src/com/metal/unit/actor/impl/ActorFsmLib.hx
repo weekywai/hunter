@@ -7,9 +7,12 @@ import com.metal.unit.actor.api.ActorState;
  */
 class ActorFsmLib 
 {
-	private static var _instance:ActorFsmLib = new ActorFsmLib();
 	public static var instance(get, null):ActorFsmLib;
-	private static function get_instance():ActorFsmLib { return _instance; }
+	private static function get_instance():ActorFsmLib {
+		if ( instance == null)
+			instance = new ActorFsmLib();
+		return instance; 
+	}
 	
 	
 	private var _actorFsm:FStateMachine;

@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class RandomNameManager
 {
-	public static var instance(default, null):RandomNameManager = new RandomNameManager();
+	public static var instance(get, null):RandomNameManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new RandomNameManager();
+		return instance;
+	}
 	private var _data:IntMap<RandomNameInfo>;
 	public function new() 
 	{

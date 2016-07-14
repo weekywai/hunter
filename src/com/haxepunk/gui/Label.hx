@@ -65,7 +65,7 @@ class Label extends Control
 	 * Label defaults parameters affect every components that uses labels, i.e. : Button, ToggleButton, CheckBox, RadioButton, MenuItem, Window.
 	 * Those labels are always accessible using "myComponent.label" and you can change specific Labels apperence any time.
 	 */
-	public static var defaultSize:Float = 8;
+	public static var defaultSize:Int = 8;
 	/**
 	 * Label defaultColor. Tip inFlashDevelop : use ctrl + shift + k to pick a color.
 	 * Label defaults parameters affect every components that uses labels, i.e. : Button, ToggleButton, CheckBox, RadioButton, MenuItem, Window.

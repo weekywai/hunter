@@ -12,7 +12,12 @@ import haxe.xml.Fast;
  */
 class BulletManager
 {
-	public static var instance(default, null):BulletManager = new BulletManager();
+	public static var instance(get, null):BulletManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new BulletManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<BulletInfo>;
 	

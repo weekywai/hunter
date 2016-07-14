@@ -51,7 +51,7 @@ enum TipsType
 	onBattle;
 	overcome;
 	failture;
-	buyTip;
+	//buyTip;
 	resurrection;
 	gainGoods;
 	loading;
@@ -119,7 +119,6 @@ class UIManager extends SimEntity
         UIBuilder.buildFn('ui/index.xml')().show();
 		addComponent(new LoginRegistCmd());
 		addComponent(new DialogueCmd());
-		
 	}
 	override function onMsg(type:Int, sender:Entity) 
 	{
@@ -348,6 +347,7 @@ class UIManager extends SimEntity
 		
 		var duplicate = DuplicateManager.instance.getProtoDuplicateByID(data);
 		GameProcess.instance.notify(MsgStartup.GameInit, duplicate);
+		
 		cmd_Control(true);
 		UIBuilder.get("main").free();
 	}
@@ -391,7 +391,6 @@ class UIManager extends SimEntity
 		var alert:Floating = UIBuilder.getAs("popup", Floating);
 		if (alert != null) 
 			alert.free(true);
-		
 		//trace(alert + "" +data.type + UIBuilder.get(Std.string(data.type)));
 		if (data.type == TipsType.none)
 			return;
@@ -400,7 +399,7 @@ class UIManager extends SimEntity
 			content:Std.string(data.type)
 		});
 		alert.show();
-		
+		//trace("alert : " + data);
 		if (data.callback != null){
 			var tipCmd:TipCmd = new TipCmd();
 			tipCmd.initComponent(this);
@@ -428,6 +427,8 @@ class UIManager extends SimEntity
 		if (getComponent(cls) == null) {
 			if (args == null)	
 				args = [];
+			//if (cls==ControllCmd)
+				//trace(Type.createInstance(cls, args));
 			return addComponent(Type.createInstance(cls, args));
 		}
 		return null;

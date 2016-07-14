@@ -27,7 +27,12 @@ enum WeaponType{
 
 class WeaponFactory
 {
-	public static var instance(default, null):WeaponFactory = new WeaponFactory();
+	public static var instance(get, null):WeaponFactory;
+	private static function get_instance():WeaponFactory {
+		if (instance == null)
+			instance = new WeaponFactory();
+		return instance; 
+	}
 	
 	private var _weaponClass:Map<WeaponType, String>;
 	public function new() 

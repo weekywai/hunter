@@ -12,7 +12,6 @@ import com.metal.config.SfxManager;
 import com.metal.config.StageType;
 import com.metal.enums.MapVo;
 import com.metal.enums.UIUpdateType;
-import com.metal.manager.UIManager.TipsType;
 import com.metal.message.MsgActor;
 import com.metal.message.MsgBoard;
 import com.metal.message.MsgInput;
@@ -35,6 +34,7 @@ import com.metal.utils.CountDown;
 import de.polygonal.core.es.EntityUtil;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.sys.SimEntity;
+import flash.display.Stage;
 import motion.Actuate;
 import motion.easing.Quad;
 import openfl.Lib;
@@ -176,7 +176,7 @@ class ControllCmd extends BaseCmd
 	
 	override function onInitComponent():Void 
 	{
-		//trace("initControl");
+		//super.onInitComponent();
 		_wheel = new Wheel();
 		_maxTouchW = Lib.current.stage.stageWidth * 0.2;
 		status = NONE;
@@ -220,19 +220,26 @@ class ControllCmd extends BaseCmd
 		_socre = _widget.getChildAs("score", Text);
 		_diamondtxt = _widget.getChildAs("diamond", Text);
 		_goldtxt = _widget.getChildAs("gold", Text);
-		if (!Input.multiTouchSupported) {
-			if (HXP.stage != null) HXP.stage.addEventListener(MouseEvent.MOUSE_DOWN, thumb_mouseDown);
-		}
 		
+		if (!Input.multiTouchSupported) {
+			if (HXP.stage != null){
+				//#if openfl_legacy
+					HXP.stage.addEventListener(MouseEvent.MOUSE_DOWN, thumb_mouseDown);
+				//#else
+					//HXP.stage.addEventListener(MouseEvent.MOUSE_DOWN, thumb_mouseDown);
+				//#end
+			}
+		}
+		//return;
 		_playerInfo = PlayerUtils.getInfo();
 		var icon:Bmp = _widget.getChildAs("icon", Bmp);
 		icon.src = ResPath.getIconPath(Std.string(_playerInfo.res), ResPath.ModelIcon);
 		super.onInitComponent();
-		
 		_widget.getChildAs("stopGame", Button).onRelease = stopGame;
 		_thumb = _widget.getChild("thumb");
 		setWeaponPanel();
 		_mission = _widget.getChildAs("mission", Text);
+		//trace("initControl");
 		//cmd_AssignPlayer();
 	}
 	private function cmd_UpdateBullet(userData:Dynamic)
@@ -345,7 +352,7 @@ class ControllCmd extends BaseCmd
 	}
 	/**接收UIManager消息，需要继承转发给 widget 更新数据*/
 	override public function onUpdate(type:Int, sender:IObservable, userData:Dynamic):Void {
-		
+		//return;
 		switch(type){
 			case MsgUIUpdate.UpdateInfo:
 				cmd_UpdateInfo(userData);
@@ -519,7 +526,6 @@ class ControllCmd extends BaseCmd
 	private function cmd_Start(userData:Dynamic):Void
 	{
 		trace("cmd_Start");
-		//_battle = GameProcess.instance.getComponent(BattleSystem);
 		for (btn in _skillBtns) 
 		{
 			btn.text = "";
@@ -626,6 +632,7 @@ class ControllCmd extends BaseCmd
 	
 	override public function onTick(timeDelta:Float) 
 	{
+		//return;
 		super.onTick(timeDelta);
 		if (!isInit) return;
 		if (isDisposed) return;
@@ -722,9 +729,7 @@ class ControllCmd extends BaseCmd
 			case "skill4":
 				price = GuideText.SkillDes4+"\n"+GuideText.SkillPrice4;
 		}
-		sendMsg(MsgUI.Tips, { msg:price, type:TipsType.buyTip, callback:buyFun} );
-		//var tipCmd:TipCmd = new TipCmd();
-		//tipCmd.callbackFun.addOnce(buyFun);
+		openTip(price, buyFun);
 		GameProcess.instance.pauseGame(true);
 	}
 	

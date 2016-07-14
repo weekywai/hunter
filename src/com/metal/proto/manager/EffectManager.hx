@@ -12,7 +12,13 @@ import haxe.xml.Fast;
  */
 class EffectManager
 {
-	public static var instance(default, null):EffectManager = new EffectManager();
+	public static var instance(get, null):EffectManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new EffectManager();
+		return instance;
+	}
+	
 	
 	private var _data:IntMap<EffectInfo>;
 	

@@ -210,7 +210,8 @@ class Engine extends Sprite
 		});
 
 #if !(flash || html5)
-		flash.display.Stage.shouldRotateInterface = function(orientation:Int):Bool {
+	#if openfl_legacy
+		openfl.display.Stage.shouldRotateInterface = function(orientation:Int):Bool {
 			if (HXP.indexOf(HXP.orientations, orientation) == -1) return false;
 			var tmp = HXP.height;
 			HXP.height = HXP.width;
@@ -218,6 +219,9 @@ class Engine extends Sprite
 			resize();
 			return true;
 		}
+	#else
+		//TODO
+	#end
 #end
 	}
 

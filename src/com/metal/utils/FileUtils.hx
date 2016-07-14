@@ -26,8 +26,8 @@ import sys.io.File;
 #if openfl_legacy
 	import openfl.utils.SystemPath;
 #else
+	import lime.system.System;
 #end
-
 #if (openfl >= "2.0.0")
 	import openfl.Lib;
 	import openfl.utils.ByteArray;
@@ -374,50 +374,6 @@ class FileUtils
 		return MapStarInfo.instance.dataMap;
 	}
 	
-	/*设置单个背包数据属性*/
-	private static function setItemData(_itemInfo:Dynamic,dyna:Dynamic):Void
-	{
-		if (dyna != null)
-		{
-			_itemInfo.ItemType = dyna.ItemType;//save_type（ubyte）物品类型（大类）
-			/**物品小类*/
-			_itemInfo.Kind = dyna.Kind;
-			_itemInfo.ID = dyna.ID;//item_id_（int）物品id
-			_itemInfo.itemName = dyna.itemName;//物品名
-			_itemInfo.itemIndex = dyna.itemIndex;//index_（ubyte）物品索引
-			_itemInfo.itemNum = dyna.itemNum;//item_num_（uint）物品数量
-			_itemInfo.itemState = dyna.itemState;//item_bind_（ubyte）物品绑定状态
-			_itemInfo.PickUp = dyna.PickUp;//是否被拾取
-			/**初始品质*/
-			_itemInfo.Color = dyna.InitialQuality;
-			/**初始等级*/
-			_itemInfo.InitialLevel = dyna.InitialLevel;
-			/**图表资源名称*/
-			_itemInfo.ResId = dyna.ResId;
-			/**描述*/
-			_itemInfo.Description = dyna.Description;
-			/**描述*/
-			_itemInfo.Detail = dyna.Detail;
-			//特性
-			_itemInfo.Characteristic = dyna.Characteristic;
-			
-			_itemInfo.SubId = dyna.SubId;//取武器技能与强化等级的字段
-			/**包含经验*/
-			_itemInfo.StrengthenExp = dyna.StrengthenExp;
-			/**背包类型**/
-			_itemInfo.bagType = dyna.bagType;
-			
-			if (_itemInfo.strLv != null) _itemInfo.strLv = dyna.strLv;
-			if(_itemInfo.strExp!=null)_itemInfo.strExp = dyna.strExp;
-			if(_itemInfo.NeedLevel!=null)_itemInfo.NeedLevel = dyna.NeedLevel;
-			if(_itemInfo.Att!=null)_itemInfo.Att = dyna.Att;
-			if(_itemInfo.Hp!=null)_itemInfo.Hp = dyna.Hp;
-			if(_itemInfo.LevelUpItemID!=null)_itemInfo.LevelUpItemID = dyna.LevelUpItemID;
-			if(_itemInfo.MaxStrengthenLevel!=null)_itemInfo.MaxStrengthenLevel = dyna.MaxStrengthenLevel;
-			if(_itemInfo.equipType!=null)_itemInfo.equipType = dyna.equipType;
-			if(_itemInfo.Upgrade!=null)_itemInfo.Upgrade = dyna.Upgrade;
-		}
-	}
 	private static function initPlayer():PlayerInfo
 	{
 		var playerInfo:PlayerInfo = new PlayerInfo();
@@ -452,48 +408,4 @@ class FileUtils
 		}
 		return playerInfo;
 	}
-	/**初始化装备背包*/
-	/*public function initEquipBag():BagInfo
-	{
-		var equipBag:BagInfo = new BagInfo();
-		var items:Array<Int> = [401, 501];
-		playerInfo.setProperty(PlayerProp.WEAPON, items[0]);//101 203 303 403
-		playerInfo.setProperty(PlayerProp.ARMOR, items[1]);//403 503 603 703
-		
-		equipBag.itemArr = new Array<ItemBaseInfo>();
-		equipBag.parnerId = 0;
-		equipBag.bagType = 1;
-		equipBag.maxNum =  20;
-		equipBag.useNum =  itemIdArr.length;
-		trace(playerInfo);
-		for (i in 0...items.length)
-		{
-			var item:ItemBaseInfo = Unserializer.run(Serializer.run(GoodsProtoManager.instance.getItemById(items[i])));
-			item.itemIndex = 1000+i; // 区分装备
-			equipBag.itemArr.push(item);
-			if (item.Kind == ItemType.IK2_ARM) playerInfo.setProperty(PlayerProp.ARMOR, item.ID);
-			else playerInfo.setProperty(PlayerProp.WEAPON, item.ID);
-		}
-		trace("initEquipBag::" + equipBag);
-		return equipBag;
-	}*/
-	/**初始化背包*/
-	/*public function initBag():BagInfo
-	{
-		var bag:BagInfo =  new BagInfo();;
-		var items:Array<Int> = [401, 501, 10011, 10012, 10013, 10014, 10015, 10016, 10007, 10008, 10009, 10010];
-		bag.itemArr = new Array<ItemBaseInfo>();
-		bag.parnerId = 0;
-		bag.bagType = 1;
-		bag.maxNum =  20;
-		bag.useNum =  items.length;
-		for (i in 0...items.length)
-		{
-			var goodsInfo:ItemBaseInfo = Unserializer.run(Serializer.run(GoodsProtoManager.instance.getItemById(items[i])));
-			goodsInfo.itemIndex = i + 1;//背包道具序号
-			bag.itemArr.push(goodsInfo);
-		}
-		trace("initBag::" + bag);
-		return bag;
-	}*/
 }

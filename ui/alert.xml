@@ -6,7 +6,6 @@
 		<meta:include src="ui/popup/onBattle.xml"/>
 		<meta:include src="ui/popup/overcomeView.xml"/>
 		<meta:include src="ui/popup/failureView.xml"/>
-		<meta:include src="ui/popup/buyTip.xml"/>
 		<meta:include src="ui/popup/resurrectionTip.xml"/>
 		<meta:include src="ui/popup/gainGoods.xml"/>
     </ViewStack>

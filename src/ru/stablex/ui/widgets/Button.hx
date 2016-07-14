@@ -191,7 +191,7 @@ class Button extends Text{
 		btn._switchSkin(btn.skinPressed);
 		btn.pressed = true;
 		//var event = new MouseEvent(MouseEvent.MOUSE_DOWN, e.bubbles, e.cancelable, e.localX, e.localY, e.relatedObject);
-		btn.onPress(e);
+		btn.onPress(cast e);
 	}
 	
 	override public function free(recursive:Bool = true):Void 

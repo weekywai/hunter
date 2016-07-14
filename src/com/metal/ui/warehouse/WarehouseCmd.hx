@@ -422,7 +422,7 @@ class WarehouseCmd extends BaseCmd
 					_strengthenBtn.onPress = function(e) {
 						if (playerInfo.data.GOLD<strengthenMoney) 
 						{
-							sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup } );
+							openTip("金币不足");
 						}else 
 						{
 							notifyRoot(MsgPlayer.UpdateMoney, -strengthenMoney);
@@ -433,7 +433,7 @@ class WarehouseCmd extends BaseCmd
 							notifyRoot(MsgMission.Update, { type:"forge", data: { id:3, info:_currentInfo }} );
 							notifyRoot(MsgMission.Forge, 6);
 							//notify(MsgUIUpdate.UpdateModel);
-							sendMsg(MsgUI.Tips, { msg:"强化成功", type:TipsType.tipPopup } );
+							openTip("强化成功");
 							BagUtils.bag.updateGoods(tempInfo.vo);
 							/*if (_currentInfo.vo.Equip) {
 								if (_currentInfo.Kind == ItemType.IK2_ARM) 
@@ -474,7 +474,7 @@ class WarehouseCmd extends BaseCmd
 						_dressBtn.disabled = true;
 					}
 					//装备中，不可分解
-					//_decomposeBtn.onPress=function (e) { sendMsg(MsgUI.Tips, { msg:"装备中,不可分解!", type:TipsType.tipPopup } ); };
+					//_decomposeBtn.onPress=function (e) { openTip("装备中,不可分解!"); };
 				}else 
 				{
 					//_dressBtn.refresh();
@@ -495,7 +495,7 @@ class WarehouseCmd extends BaseCmd
 					_dressBtn.refresh();
 					//分解
 					/*_decomposeBtn.onPress = function (e) { 
-						sendMsg(MsgUI.Tips, { msg:"分解可获得进阶材料\n确定分解所选择的装备？", type:TipsType.buyTip, callback:callBackFun} );
+						openTip("分解可获得进阶材料\n确定分解所选择的装备？", callBackFun);
 					};*/
 				}			
 			}else {//未获得
@@ -509,10 +509,10 @@ class WarehouseCmd extends BaseCmd
 				_decomposeBtn.onPress = function (e) {
 					if (playerInfo.data.GEM < 100)
 					{
-						sendMsg(MsgUI.Tips, { msg:"钻石不足", type:TipsType.tipPopup} );
+						openTip("钻石不足");
 						return;
 					}
-					sendMsg(MsgUI.Tips, { msg:"是否使用100钻石购买装备？", type:TipsType.buyTip, callback:buyCallBack} );
+					openTip("是否使用100钻石购买装备？", buyCallBack);
 				};
 			}
 			if (tempInfo.Kind == ItemType.IK2_GON) {	
@@ -702,7 +702,7 @@ class WarehouseCmd extends BaseCmd
 		decomData(decomInfo);
 		
 		notifyRoot(MsgNet.UpdateBag, { type:0, data:[_currentInfo.ID]} );
-		sendMsg(MsgUI.Tips, { msg:txtStr, type:TipsType.tipPopup } );
+		openTip(txtStr);
 		notifyRoot(MsgMission.Update, {type:"forge",data:{id:13 }} );
 		notifyRoot(MsgMission.Forge, 9);
 		
@@ -750,7 +750,7 @@ class WarehouseCmd extends BaseCmd
 		var materialInfo:AdvanceInfo = AdvanceManager.instance.getProtpAdvance(levelUpItemId);
 		if (playerInfo.data.GOLD < materialInfo.NeedGold)
 		{
-			sendMsg(MsgUI.Tips, { msg:"金币不足", type:TipsType.tipPopup } );
+			openTip("金币不足");
 			return;
 		}
 		
@@ -761,7 +761,7 @@ class WarehouseCmd extends BaseCmd
 		{	
 			if (BagUtils.bag.getItem(materialArr[i][0])==null || BagUtils.bag.getItem(materialArr[i][0]).itemNum<materialArr[i][1])
 			{
-				sendMsg(MsgUI.Tips, { msg:"材料不足\n分解可获得进阶材料", type:TipsType.tipPopup } );
+				openTip("材料不足\n分解可获得进阶材料");
 				return;
 			}
 		}		
@@ -808,7 +808,7 @@ class WarehouseCmd extends BaseCmd
 		
 		setData();
 		updataPad(_currentInfo.ID);
-		sendMsg(MsgUI.Tips, { msg:"进阶成功", type:TipsType.tipPopup } );
+		openTip("进阶成功");
 	}
 	private function getPropertyString(property:Int):String
 	{

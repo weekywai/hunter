@@ -12,7 +12,12 @@ import haxe.xml.Fast;
  */
 class NewsManager
 {
-	public static var instance(default, null):NewsManager = new NewsManager();
+	public static var instance(get, null):NewsManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new NewsManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<NewsInfo>;
 	public var data(get, null):IntMap<NewsInfo>;

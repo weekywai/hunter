@@ -61,7 +61,7 @@ class EvolutionCmd extends ForgetBase
 		widgetPanel.addChild(quality_1);
 		
 		_widget.getChildAs("selectEquip", Button).addChild(widgetPanel);
-		_widget.getChildAs("goodsNames", Text).text = goodsInfo.itemName;
+		_widget.getChildAs("goodsNames", Text).text = goodsInfo.Name;
 		var starPanel:VBox = _widget.getChildAs("starPanel", VBox);
 		if (starPanel.numChildren > 0) starPanel.removeChildren();
 		for (j in 0...goodsInfo.Upgrade)

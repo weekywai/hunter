@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class DuplicateManager
 {
-	public static var instance(default, null):DuplicateManager = new DuplicateManager();
+	public static var instance(get, null):DuplicateManager;
+	static private function get_instance():DuplicateManager {
+		if (instance == null)
+			instance = new DuplicateManager();
+		return instance;
+	}
 	
 	private var _data:IntMap<DuplicateInfo>;
 	private var _duplicateArr:Array<Array<DuplicateInfo>>;

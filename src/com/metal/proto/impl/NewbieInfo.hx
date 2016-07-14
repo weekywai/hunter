@@ -7,7 +7,12 @@ import haxe.ds.IntMap;
  */
 class NewbieInfo
 {
-	public static var instance(default, null):NewbieInfo = new NewbieInfo();
+	public static var instance(get, null):NewbieInfo;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new NewbieInfo();
+		return instance;
+	}
 	public var dataArr:Array<Int>;
 	
 	public function new() 

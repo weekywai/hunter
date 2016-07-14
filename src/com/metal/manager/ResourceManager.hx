@@ -17,7 +17,12 @@ import spinepunk.SpinePunk;
  */
 class ResourceManager
 {
-	static public var instance(default, null):ResourceManager = new ResourceManager();
+	static public var instance(get, null):ResourceManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new ResourceManager();
+		return instance;
+	}
 	static public var PreLoad:Bool = false;
 	
 	private static var _graphicPool:DynamicObjectPool<Graphic>;

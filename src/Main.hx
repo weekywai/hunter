@@ -48,9 +48,9 @@ class Main extends Sprite
 		config = ConfigInfo.readXml(Assets.getText("config.xml"));
 		//trace(Type.typeof(config.get("console")));
 		#if crashdumper
-		CrashDumper.writeFile = true;// cast config.get("crashLog");
-		var unique_id:String = SessionData.generateID("example_app_");
-		var crashDumper = new CrashDumper(unique_id);
+		//CrashDumper.writeFile = true;// cast config.get("crashLog");
+		//var unique_id:String = SessionData.generateID("example_app_");
+		//var crashDumper = new CrashDumper("unique_id");
 		//throw "err";
 		#end
 		GameProcess.instance.onInit(this);

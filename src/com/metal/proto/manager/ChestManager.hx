@@ -11,7 +11,12 @@ import haxe.xml.Fast;
  */
 class ChestManager
 {
-	public static var instance(default, null):ChestManager = new ChestManager();
+	public static var instance(get, null):ChestManager;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new ChestManager();
+		return instance;
+	}
 	private var _data:IntMap<ChestInfo>;
 	public function new() 
 	{

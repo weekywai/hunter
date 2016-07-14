@@ -48,7 +48,12 @@ class BulletFactory
 	/**镭射光*/
 	inline public static var Laser:Int = 12;
 	
-	public static var instance(default, null):BulletFactory = new BulletFactory();
+	public static var instance(get, null):BulletFactory;
+	static private function get_instance() {
+		if (instance == null)
+			instance = new BulletFactory();
+		return instance;
+	}
 	
 	private var _class:IntMap<Class<Entity>>;
 	public function new() 

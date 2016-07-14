@@ -1,5 +1,7 @@
 package com.metal.ui;
 
+import com.metal.manager.UIManager.TipsType;
+import com.metal.message.MsgUI;
 import de.polygonal.core.event.IObservable;
 import de.polygonal.core.event.IObserver;
 import de.polygonal.core.sys.Component;
@@ -55,5 +57,10 @@ class BaseCmd extends Component
 		super.onDispose();
 		if (_widget != null)
 			_widget.free();
+	}
+	/**comm tips panel*/
+	private function openTip(?type:TipsType, msg:String = "", funs:Dynamic = null)
+	{
+		sendMsg(MsgUI.Tips, { msg:msg, type:(type==null)?TipsType.tipPopup:type, callback:funs} );
 	}
 }
